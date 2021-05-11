@@ -71,9 +71,9 @@ object FirestoreService {
 
     private fun configGoogleSignIn(context: Context){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
 
         googleSignInClient = GoogleSignIn.getClient(context, gso)
     }
@@ -102,14 +102,50 @@ object FirestoreService {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    Log.d("TAG", "signInWithCredential:success")
-                } else {
-                    Log.w("TAG", "signInWithCredential:failure", task.exception)
-                }
-            })
+                .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        Log.d("TAG", "signInWithCredential:success")
+                    } else {
+                        Log.w("TAG", "signInWithCredential:failure", task.exception)
+                    }
+                })
+    }
+
+    fun checkIfPhoneExists(phone : String, callback : (Boolean) -> Unit) {
+        db.collection("Users").whereEqualTo("phoneNumber", phone).get()
+                .addOnCompleteListener(OnCompleteListener {
+                    if (it.isSuccessful) {
+                        val document = it.result
+                        if (document?.size()!! > 0) {
+                            Log.i("TAG", " document data: ${document}")
+                            callback(true)
+                        } else {
+                            Log.i("TAG", "checkIfPhoneExists: nothing")
+                            callback(false)
+                        }
+                    } else {
+                        Log.i("TAG", " get failed: ", it.exception)
+                    }
+                })
+    }
+
+    fun checkIfEmailExists(email : String, callback : (Boolean) -> Unit) {
+        db.collection("Users").whereEqualTo("email", email).get()
+                .addOnCompleteListener(OnCompleteListener {
+                    if (it.isSuccessful) {
+                        val document = it.result
+                        if (document?.size()!! > 0) {
+                            Log.i("TAG", " document data: ${document}")
+                            callback(true)
+                        } else {
+                            Log.i("TAG", "checkIfPhoneExists: nothing")
+                            callback(false)
+                        }
+                    } else {
+                        Log.i("TAG", " get failed: ", it.exception)
+                    }
+                })
     }
 
 }
