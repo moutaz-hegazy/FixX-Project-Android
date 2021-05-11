@@ -10,11 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".NavigationBar.NavigationBarActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
