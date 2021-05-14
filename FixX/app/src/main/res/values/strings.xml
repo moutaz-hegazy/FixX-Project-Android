@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">FixX</string>
+    <string name="enterLocation">select location</string>
+    <string name="CustomizeOrderTitle">Customize Order</string>
+    <string name="Delete">delete</string>
+    <string name="Gallery">Gallery</string>
+    <string name="Camera">Camera</string>
+    <string name="DefaultDate">on : Any day</string>
+    <string name="calenderWidget">calender</string>
+    <string name="FromTime">from : Any time</string>
+    <string name="timer">timer</string>
+    <string name="ToTime">To : Any time</string>
+    <string name="OrderDesc">"Write Order description here "</string>
+    <string name="selectTech"><![CDATA[Select Technician >]]></string>
+    <string name="or">------------------- Or -------------------</string>
+    <string name="publishOrder">Publish Order ></string>
 </resources>
