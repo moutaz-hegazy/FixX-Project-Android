@@ -23,6 +23,9 @@ class SpinnerAdapter<T>(private val newContext: Context, private val resource: I
         if(position == 0) {
             tv.setTextColor(Color.GRAY)
             tv.background = getBorders(Color.WHITE,Color.GRAY,0,0,0,5)
+        }else if (position == objects.size -1){
+            tv.setTextColor(Color.BLUE)
+            tv.background = getBorders(Color.WHITE,Color.GRAY,0,5,0,0)
         }else{
             tv.setTextColor(Color.BLACK)
         }

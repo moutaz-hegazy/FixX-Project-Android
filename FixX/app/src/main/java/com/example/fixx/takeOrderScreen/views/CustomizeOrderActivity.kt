@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
+import com.example.fixx.takeOrderScreen.POJOs.Job
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
 import java.net.URI
 import java.text.SimpleDateFormat
@@ -29,8 +30,15 @@ import java.util.*
 class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener ,DateSelected {
 
     private lateinit var binding: ActivityCustomizeOrderBinding
-    private val values = arrayListOf<String>("Select Location", "Home", "Alexandria,elmandara.20th st")
+    private val values = arrayListOf<String>("Select Location","Add new Location")
     private val images = mutableListOf<Bitmap>()
+
+    private var uid : Int? = 13
+    private var selectedLocation : String? = null
+    private var selectedDate = ""
+    private var selectedFromTime = ""
+    private var selectedToTime = ""
+    private var selectedDescription = ""
 
     private val imagesAdapter : ImagesAdapter by lazy {
         ImagesAdapter(images)
@@ -88,7 +96,9 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 calender.set(Calendar.HOUR_OF_DAY,hourOfDay)
                 calender.set(Calendar.MINUTE,minute)
 
-                binding.customizeOrderFromTimeLbl.text = "from : ${SimpleDateFormat("HH:mm").format(calender.time)}"
+                val timeString =  "${SimpleDateFormat("HH:mm").format(calender.time)}"
+                binding.customizeOrderFromTimeLbl.text = "from : ${timeString}"
+                selectedFromTime = timeString
             }
 
             TimePickerDialog(this,timeListener,calender.get(Calendar.HOUR_OF_DAY),calender.get(Calendar.MINUTE),true).show()
@@ -100,12 +110,26 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 calender.set(Calendar.HOUR_OF_DAY,hourOfDay)
                 calender.set(Calendar.MINUTE,minute)
 
-                binding.customizeOrderToTimeLbl.text = "from : ${SimpleDateFormat("HH:mm").format(calender.time)}"
+                val timeString =  "${SimpleDateFormat("HH:mm").format(calender.time)}"
+                binding.customizeOrderToTimeLbl.text = "to : $timeString"
+                selectedToTime = timeString
             }
 
             TimePickerDialog(this,timeListener,calender.get(Calendar.HOUR_OF_DAY),calender.get(Calendar.MINUTE),true).show()
         }
         //---------------------------------------------------------------
+
+        // select Tech configuration.
+        binding.cusomizeOrderSelectTechBtn.setOnClickListener{
+            //select tech.
+        }
+        //---------------------------------------------------------------
+
+        // publish order configuration.
+        binding.customizeOrederPublishBtn.setOnClickListener {
+            
+        }
+        //------------------------------------------------------------------
 
     }
 
@@ -151,6 +175,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     // spinner on item selected.
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Log.i("TAG", "onItemSelected:<<<<<<<<<<<< " + values[position])
+        if(position == values.size - 1){
+            // add new location Logic.
+        }else{
+            selectedLocation = values[position]
+        }
         Toast.makeText(this, values[position], Toast.LENGTH_SHORT).show()
     }
 
@@ -163,5 +192,6 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         val viewFormatter = SimpleDateFormat("dd-MMM-YYYY")
         val viewFormattedDate = viewFormatter.format(calendar.time)
         binding.customizeOrderDateLbl.text = "On : $viewFormattedDate"
+        selectedDate = viewFormattedDate
     }
 }
