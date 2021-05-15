@@ -15,4 +15,5 @@
     <string name="or">------------------- Or -------------------</string>
     <string name="publishOrder">Publish Order ></string>
     <string name="AddImage">add images of the problem</string>
+    <string name="google_maps_api_key" translatable="false">AIzaSyBgzpzh2gKemh-MTHmp4-QVCHK9EDgzu_Y</string>
 </resources>
