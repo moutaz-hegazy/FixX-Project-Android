@@ -1,10 +1,13 @@
 package com.example.project.bottom_navigation_fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
 
 
@@ -36,8 +39,25 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        var rootView = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        val profile = rootView.findViewById(R.id.settingsfragment_profile_linear_layout) as LinearLayout
+        profile.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+
+                openProfileActivity();
+            }
+        })
+        return rootView
     }
+
+    fun openProfileActivity(){
+
+        val intent = Intent (getActivity(), ProfileActivity::class.java)
+        getActivity()?.startActivity(intent)
+
+    }
+
 
     companion object {
         /**

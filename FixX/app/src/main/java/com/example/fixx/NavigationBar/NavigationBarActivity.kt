@@ -1,5 +1,7 @@
 package com.example.fixx.NavigationBar
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.GridView
@@ -17,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_bar)
+        supportActionBar?.hide()
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()
         val settingsFragment = SettingsFragment()
@@ -25,8 +28,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
         bottomnav.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.toolbar_home_item -> makeCurrentFragment(homeFragment)
-                R.id.toolbar_settings_item -> makeCurrentFragment(settingsFragment)
+                R.id.toolbar_home_item ->{
+                    makeCurrentFragment(homeFragment)
+
+
+                }
+                R.id.toolbar_settings_item ->{
+                    makeCurrentFragment(settingsFragment)
+
+
+                }
                 R.id.toolbar_orders_item -> makeCurrentFragment(ordersFragment)
             }
             true
