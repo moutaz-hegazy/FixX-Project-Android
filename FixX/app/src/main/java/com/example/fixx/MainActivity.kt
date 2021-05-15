@@ -1,11 +1,11 @@
 package com.example.fixx
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         signInBtn?.let {
             it.setOnClickListener { event ->
-                val email = emailEditTxt?.text.toString() ?: ""
+                startActivity(Intent(this, ShowTechniciansScreen::class.java))
+                /*val email = emailEditTxt?.text.toString() ?: ""
                 val password = passwordTxt?.text.toString() ?: ""
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this) { task ->
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                                 Toast.makeText(baseContext, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show()
                             }
-                        }
+                        }*/
             }
         }
 
