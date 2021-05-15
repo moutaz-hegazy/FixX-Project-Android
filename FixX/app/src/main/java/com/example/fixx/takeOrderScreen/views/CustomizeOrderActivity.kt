@@ -20,10 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
-import com.example.fixx.takeOrderScreen.POJOs.Job
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
 import kotlinx.android.synthetic.main.activity_customize_order.*
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 

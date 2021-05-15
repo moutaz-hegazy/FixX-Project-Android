@@ -1,4 +1,4 @@
-package com.example.fixx.takeOrderScreen.POJOs
+package com.example.fixx.POJOs
 
 import android.graphics.Bitmap
 
