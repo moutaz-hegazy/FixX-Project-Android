@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.GridView
 import android.widget.Toast
+import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.R
 
 import com.example.project.ServiceAdapter
@@ -32,12 +34,19 @@ class HomeFragment : Fragment() {
     private var gridView: GridView? = null
     private var arrayList : ArrayList<ServiceItem> ? = null
     private var serviceAdapter : ServiceAdapter? =null
+    var button: Button? = null
+    var notificationCounter: NotificationCounter? = null
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+
+
         }
     }
 
@@ -51,12 +60,22 @@ class HomeFragment : Fragment() {
         arrayList = setDataList()
         serviceAdapter = context?.applicationContext?.let { ServiceAdapter(it, arrayList!!) }
         gridView?.adapter = serviceAdapter
+
+        button = rootView.findViewById(R.id.homefragment_notificationcounter_button)
+       notificationCounter =
+              NotificationCounter(rootView.findViewById(R.id.homefragment_notificationcounter_card_view))
         // Inflate the layout for this fragment
 
+        button?.setOnClickListener(View.OnClickListener { notificationCounter!!.increaseNumber() })
         return rootView
     }
 
 
+    fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        var serviceItem : ServiceItem = arrayList!!.get(position)
+        Toast.makeText(context?.applicationContext,serviceItem.name,Toast.LENGTH_LONG).show()
+
+    }
 
     private fun setDataList() : ArrayList<ServiceItem>{
         var arrayList : ArrayList<ServiceItem> = ArrayList()

@@ -12,12 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="1dp"
-        android:paddingLeft="10dp">
+        android:paddingLeft="5dp">
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/homefragment_serviceitem_card_view"
             app:cardElevation = "16dp"
-            app:cardCornerRadius = "40dp"
+            app:cardCornerRadius = "30dp"
             android:layout_margin = "16dp"
             android:foregroundGravity = "center"
             android:layout_width = "180dp"

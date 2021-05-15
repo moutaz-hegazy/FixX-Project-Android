@@ -1,5 +1,7 @@
 package com.example.fixx
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         emailEditTxt = findViewById(R.id.main_email_txt)
         passwordTxt = findViewById(R.id.main_password_txt)
         signInBtn = findViewById(R.id.main_signIn_btn)
