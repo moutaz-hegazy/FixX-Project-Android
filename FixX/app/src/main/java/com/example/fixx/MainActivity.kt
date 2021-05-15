@@ -1,5 +1,7 @@
 package com.example.fixx
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +10,9 @@ import android.widget.EditText
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import android.widget.Toast
 import com.example.fixx.databinding.ActivityMainBinding
+import android.widget.Toast
+import com.example.fixx.databinding.ActivityMainBinding
+import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         emailEditTxt = findViewById(R.id.main_email_txt)
         passwordTxt = findViewById(R.id.main_password_txt)
         signInBtn = findViewById(R.id.main_signIn_btn)
