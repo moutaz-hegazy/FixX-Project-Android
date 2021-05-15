@@ -15,7 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import eg.gov.iti.jets.fixawy.POJOs.Technician
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
@@ -146,6 +148,25 @@ object FirestoreService {
                         Log.i("TAG", " get failed: ", it.exception)
                     }
                 })
+    }
+
+    fun searchForTechnicianByJobAndLocation(job: String, location: String, callback: (MutableList<Technician>) -> Unit) {
+
+        var techniciansList = mutableListOf<Technician>()
+
+        val docRef = db.collection("Users").whereEqualTo("accountType", "technician").whereEqualTo("jobTitle", job).whereArrayContains("workLocations",location)
+        docRef.get().addOnSuccessListener { documentSnapshot ->
+            for (document in documentSnapshot){
+
+                var t = document.toObject<Technician>()
+                techniciansList.add(t)
+                t.id = document.id
+
+                Log.i("TAG1", "searchForTechnicianByJobAndLocation: TECH:: ${t.id}")
+            }
+            callback(techniciansList)
+            Log.i("TAG1", "searchForTechnicianByJobAndLocation: ALL TECHNICIANS $techniciansList")
+        }
     }
 
 }
