@@ -1,18 +1,11 @@
 package com.example.fixx
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import com.example.fixx.databinding.ActivityMainBinding
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
-import androidx.appcompat.app.AppCompatActivity
-import com.example.fixx.Addresses.AddAddressActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
