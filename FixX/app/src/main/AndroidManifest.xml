@@ -14,7 +14,7 @@
         <activity android:name=".takeOrderScreen.views.ImagePickerDialog" android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert">
 
         </activity>
-        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity">
+        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity"></activity>
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity"></activity>
 
         <activity android:name=".NavigationBar.NavigationBarActivity">
