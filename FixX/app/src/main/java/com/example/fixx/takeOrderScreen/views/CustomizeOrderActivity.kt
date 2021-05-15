@@ -22,6 +22,7 @@ import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
 import com.example.fixx.takeOrderScreen.POJOs.Job
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
+import kotlinx.android.synthetic.main.activity_customize_order.*
 import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +45,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         ImagesAdapter(images)
     }
 
+    private lateinit var spinnerAdapter : SpinnerAdapter<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomizeOrderBinding.inflate(layoutInflater)
@@ -56,7 +59,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
         //-----------------------------------------------------------
         // Spinner configuration.
-        val arrayAdapter = SpinnerAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, values)
+        spinnerAdapter = SpinnerAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, values)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.customizeOrderPickLocationSpinner.adapter = adapter
@@ -177,6 +180,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         Log.i("TAG", "onItemSelected:<<<<<<<<<<<< " + values[position])
         if(position == values.size - 1){
             // add new location Logic.
+//            spinnerAdapter.addValue("SHIT")
+//            customizeOrder_pickLocation_spinner.setSelection(spinnerAdapter.getPosition("SHIT"))
         }else{
             selectedLocation = values[position]
         }

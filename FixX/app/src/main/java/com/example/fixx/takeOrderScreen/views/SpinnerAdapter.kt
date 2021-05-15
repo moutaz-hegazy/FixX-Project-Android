@@ -11,10 +11,15 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 
-class SpinnerAdapter<T>(private val newContext: Context, private val resource: Int, private val objects: List<T>)
+class SpinnerAdapter<T>(private val newContext: Context, private val resource: Int, private val objects: MutableList<T>)
     : ArrayAdapter<T>(newContext, resource, objects) {
     override fun isEnabled(position: Int): Boolean {
         return position != 0
+    }
+
+
+    fun addValue(value : T){
+        objects.add(objects.size -1,value)
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
