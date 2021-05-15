@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FixX</string>
+    <string name="google_maps_api_key" translatable="false">AIzaSyBgzpzh2gKemh-MTHmp4-QVCHK9EDgzu_Y</string>
 </resources>

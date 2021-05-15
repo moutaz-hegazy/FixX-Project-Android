@@ -1,14 +1,17 @@
 package com.example.fixx
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.fixx.Addresses.AddAddressActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,11 +40,27 @@ class MainActivity : AppCompatActivity() {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.i("TAG", "createUserWithEmail:success")
                                 val user = auth.currentUser
+
+                                //added by esraa
+                                val addressIntent = Intent(this,AddAddressActivity::class.java)
+                               // addressIntent.putExtra(MainActivity.Mobile, editMobile.getText().toString())
+                                //addressIntent.putExtra(MainActivity.Msg, editMsg.getText().toString())
+                                startActivity(addressIntent)
+
+
+
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("TAG", "createUserWithEmail:failure", task.exception)
                                 Toast.makeText(baseContext, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show()
+
+
+                                //added by esraa
+                                val addressIntent = Intent(this,AddAddressActivity::class.java)
+                                // addressIntent.putExtra(MainActivity.Mobile, editMobile.getText().toString())
+                                //addressIntent.putExtra(MainActivity.Msg, editMsg.getText().toString())
+                                startActivity(addressIntent)
                             }
                         }
             }
