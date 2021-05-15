@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
+import android.widget.Toast
+import com.example.fixx.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -47,6 +49,5 @@ class MainActivity : AppCompatActivity() {
                         }*/
             }
         }
-
     }
 }
