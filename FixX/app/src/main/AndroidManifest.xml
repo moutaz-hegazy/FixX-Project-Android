@@ -33,12 +33,15 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
         <activity android:name=".Addresses.AddAddressActivity"
-            android:label="Add Address"/>
-        <activity android:name=".MainActivity">
+            android:label="Add Address">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".SplashScreen">
+
         </activity>
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen">
         </activity> <!-- added for maps -->
@@ -53,6 +56,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LoadingActivity" />
+        <activity android:name=".HomeActivity" />
 
     </application>
 

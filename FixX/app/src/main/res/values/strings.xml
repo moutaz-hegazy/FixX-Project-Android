@@ -15,5 +15,19 @@
     <string name="or">------------------- Or -------------------</string>
     <string name="publishOrder">Publish Order ></string>
     <string name="AddImage">add images of the problem</string>
-    <string name="google_maps_api_key" translatable="false">AIzaSyBgzpzh2gKemh-MTHmp4-QVCHK9EDgzu_Y</string>
+    <string name="google_maps_api_key">AIzaSyAwP8PF38zhUwteoi3kIZVolt0HCndTktk</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="choose_profile_type">Choose Profile Type</string>
+    <string name="user">User</string>
+    <string name="technician">Technician</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="next">Next</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="loading">Loading...</string>
 </resources>
