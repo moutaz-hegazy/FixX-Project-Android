@@ -30,4 +30,22 @@
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="loading">Loading...</string>
+    <string name="Painter">Painter</string>
+    <string name="Plumber">Plumber</string>
+    <string name="Electrician">Electrician</string>
+    <string name="Carpenter">Carpenter</string>
+    <string name="Tiles_Handyman">Tiles Handyman</string>
+    <string name="Parquet">Parquet</string>
+    <string name="Smith">Smith</string>
+    <string name="Decoration_Stones">Decoration Stones</string>
+    <string name="Alumetal">Alumetal</string>
+    <string name="Air_Conditioner">Air Conditioner</string>
+    <string name="Curtains">Curtains</string>
+    <string name="Glass">Glass</string>
+    <string name="Satellite">Satellite</string>
+    <string name="Gypsum_Works">Gypsum Works</string>
+    <string name="Marble">Marble</string>
+    <string name="Pest_Control">Pest Control</string>
+    <string name="Wood_Painter">Wood Painter</string>
+    <string name="Swimming_pool">pool\n maintain</string>
 </resources>

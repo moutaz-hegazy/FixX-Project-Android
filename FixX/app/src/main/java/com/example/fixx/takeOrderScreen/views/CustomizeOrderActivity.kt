@@ -53,7 +53,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         //Action bar configuration.
         supportActionBar?.apply {
             title = getString(R.string.CustomizeOrderTitle)
-            setBackgroundDrawable(ColorDrawable(Color.BLACK))
+            setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
         //-----------------------------------------------------------
         // Spinner configuration.

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.fixx.POJOs.ServiceItem
 import com.example.fixx.R
 
 class ServiceAdapter(var context : Context , var arrayList: ArrayList<ServiceItem>) : BaseAdapter(){
@@ -21,6 +22,7 @@ class ServiceAdapter(var context : Context , var arrayList: ArrayList<ServiceIte
     override fun getCount(): Int {
         return arrayList.size
     }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         var view: View = View.inflate(context, R.layout.grid_item_list,null)
@@ -28,7 +30,7 @@ class ServiceAdapter(var context : Context , var arrayList: ArrayList<ServiceIte
         var names : TextView = view.findViewById(R.id.homefragment_servicename_text_view)
         var serviceItem : ServiceItem = arrayList.get(position)
         icons.setImageResource(serviceItem.icons!!)
-        names.text= serviceItem.name
+        names.setText(arrayList[position].name ?: R.string.Camera)
         return view
     }
 

@@ -28,16 +28,18 @@
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity"></activity>
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity"></activity>
 
-        <activity android:name=".NavigationBar.NavigationBarActivity"></activity>
+        <activity android:name=".NavigationBar.NavigationBarActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Addresses.MapActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
         <activity android:name=".Addresses.AddAddressActivity"
             android:label="Add Address">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".MainActivity"/>
         <activity android:name=".SplashScreen">
