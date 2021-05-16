@@ -1,4 +1,4 @@
-package com.example.fixx
+package com.example.fixx.POJOs
 
 data class User(
     var phoneNumber: String,

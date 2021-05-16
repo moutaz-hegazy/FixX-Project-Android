@@ -1,4 +1,4 @@
-package com.example.fixx
+package com.example.fixx.POJOs
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

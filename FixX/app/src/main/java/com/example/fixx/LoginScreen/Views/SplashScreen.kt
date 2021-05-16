@@ -1,4 +1,4 @@
-package com.example.fixx
+package com.example.fixx.LoginScreen.Views
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,8 @@ import android.os.Handler
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.fixx.HomeActivity
+import com.example.fixx.R
 
 @Suppress("DEPRECATION")
 class SplashScreen : AppCompatActivity() {
