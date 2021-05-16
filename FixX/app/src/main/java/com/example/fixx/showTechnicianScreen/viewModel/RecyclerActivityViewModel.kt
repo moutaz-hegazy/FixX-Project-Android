@@ -7,20 +7,25 @@ import com.example.fixx.Support.FirestoreService
 import eg.gov.iti.jets.fixawy.POJOs.Technician
 
 
-class RecyclerActivityViewModel : ViewModel() {
+class RecyclerActivityViewModel(private val location : String?, private val jobType : String?) : ViewModel() {
 
     var recyclerListData = MutableLiveData<MutableList<Technician>>()
     var newList : MutableList<Technician> = mutableListOf()
 
+
     var userLocations = mutableListOf<String>()
 
     init {
-        var x = FirestoreService.searchForTechnicianByJobAndLocation("job1", "alex"){
-            Log.i("TAG", " RECYCLER: $it ")
-            newList.addAll(it)
-            recyclerListData.value = newList
+        location?.let{
+            jobType?.let {
+                var x = FirestoreService.searchForTechnicianByJobAndLocation(jobType, location){
+                    Log.i("TAG", " RECYCLER: $it ")
+                    newList.addAll(it)
+                    recyclerListData.value = newList
+                }
+                Log.i("TAG", "new list: ${newList.count()}")
+            }
         }
-        Log.i("TAG", "new list: ${newList.count()}")
     }
 
     fun add(technician: Technician ){
@@ -28,6 +33,4 @@ class RecyclerActivityViewModel : ViewModel() {
         recyclerListData.value = newList
 
     }
-
-
 }

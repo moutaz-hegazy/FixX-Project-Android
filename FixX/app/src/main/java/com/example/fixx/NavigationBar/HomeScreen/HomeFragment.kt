@@ -13,6 +13,7 @@ import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 
 import com.example.project.ServiceAdapter
 import com.example.fixx.POJOs.ServiceItem
+import com.example.fixx.constants.Constants
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,7 +79,7 @@ class HomeFragment : Fragment(){
 
     private fun startCustomizeOrderActivity(position: Int){
         val customizeOrder = Intent(context,CustomizeOrderActivity::class.java)
-        customizeOrder.putExtra("name", arrayList[position].name)
+        customizeOrder.putExtra(Constants.serviceName, arrayList[position].name)
         startActivity(customizeOrder)
     }
 
