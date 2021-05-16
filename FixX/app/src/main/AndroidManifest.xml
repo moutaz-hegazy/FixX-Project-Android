@@ -23,13 +23,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".takeOrderScreen.views.ImagePickerDialog" android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert">
 
-        </activity>
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity"></activity>
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity"></activity>
 
-        <activity android:name=".NavigationBar.NavigationBarActivity">
+        <activity android:name=".NavigationBar.NavigationBarActivity"></activity>
         <activity android:name=".LoginScreen.Views.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

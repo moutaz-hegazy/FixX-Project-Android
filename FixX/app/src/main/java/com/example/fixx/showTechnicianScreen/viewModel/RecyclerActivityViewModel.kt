@@ -3,8 +3,9 @@ package com.example.fixx.showTechnicianScreen.viewModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.Support.FirestoreService
-import eg.gov.iti.jets.fixawy.POJOs.Technician
+
 
 
 class RecyclerActivityViewModel(private val location : String?, private val jobType : String?) : ViewModel() {

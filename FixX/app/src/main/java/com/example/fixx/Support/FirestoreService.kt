@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,7 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import eg.gov.iti.jets.fixawy.POJOs.Technician
+
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 

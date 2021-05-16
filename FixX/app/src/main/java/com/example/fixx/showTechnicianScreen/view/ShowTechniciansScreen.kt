@@ -12,11 +12,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerActivityViewModel
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerViewModelFactory
-import eg.gov.iti.jets.fixawy.POJOs.Technician
+
 import java.lang.IllegalArgumentException
 
 class ShowTechniciansScreen : AppCompatActivity() {
