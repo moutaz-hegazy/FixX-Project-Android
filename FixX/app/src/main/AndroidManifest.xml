@@ -30,6 +30,7 @@
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity"></activity>
 
         <activity android:name=".NavigationBar.NavigationBarActivity">
+        <activity android:name=".LoginScreen.Views.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,9 +44,9 @@
 
         </activity>
         <activity android:name=".MainActivity"/>
-        <activity android:name=".SplashScreen">
+        <!-- <activity android:name=".SplashScreen">
 
-        </activity>
+        </activity> -->
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen">
         </activity> <!-- added for maps -->
         <uses-library
@@ -59,7 +60,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
-        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LoginScreen.Views.RegistrationActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".HomeActivity" />
 

@@ -1,4 +1,4 @@
-package eg.gov.iti.jets.fixawy.POJOs
+package com.example.fixx.POJOs
 
 data class Technician(var phoneNumber: String = "", var accountType: String = "", var name: String = "", var email: String = ""){
     var id : String? = null
