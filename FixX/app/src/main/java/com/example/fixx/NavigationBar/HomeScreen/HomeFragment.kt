@@ -1,20 +1,19 @@
 package com.example.project.bottom_navigation_fragments
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.GridView
-import android.widget.Toast
+import android.widget.*
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.R
+import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 
 import com.example.project.ServiceAdapter
-import com.example.project.ServiceItem
+import com.example.fixx.POJOs.ServiceItem
+import com.example.fixx.constants.Constants
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,13 +25,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(){
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private var gridView: GridView? = null
-    private var arrayList : ArrayList<ServiceItem> ? = null
+    private var arrayList = ArrayList<ServiceItem>()
     private var serviceAdapter : ServiceAdapter? =null
     var button: Button? = null
     var notificationCounter: NotificationCounter? = null
@@ -58,8 +57,16 @@ class HomeFragment : Fragment() {
         gridView = rootView.findViewById(R.id.homefragment_services_grid_view)
         arrayList = ArrayList()
         arrayList = setDataList()
-        serviceAdapter = context?.applicationContext?.let { ServiceAdapter(it, arrayList!!) }
-        gridView?.adapter = serviceAdapter
+        serviceAdapter = context?.applicationContext?.let {
+            ServiceAdapter(it, arrayList)
+        }
+        gridView?.apply {
+            adapter = serviceAdapter
+            setOnItemClickListener { parent, view, position, id ->
+                startCustomizeOrderActivity(position)
+            }
+        }
+
 
         button = rootView.findViewById(R.id.homefragment_notificationcounter_button)
        notificationCounter =
@@ -70,34 +77,33 @@ class HomeFragment : Fragment() {
         return rootView
     }
 
-
-    fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        var serviceItem : ServiceItem = arrayList!!.get(position)
-        Toast.makeText(context?.applicationContext,serviceItem.name,Toast.LENGTH_LONG).show()
-
+    private fun startCustomizeOrderActivity(position: Int){
+        val customizeOrder = Intent(context,CustomizeOrderActivity::class.java)
+        customizeOrder.putExtra(Constants.serviceName, arrayList[position].name)
+        startActivity(customizeOrder)
     }
 
     private fun setDataList() : ArrayList<ServiceItem>{
         var arrayList : ArrayList<ServiceItem> = ArrayList()
 
-        arrayList.add(ServiceItem(R.drawable.painter,"Painter"))
-        arrayList.add(ServiceItem(R.drawable.plumber,"Plumber"))
-        arrayList.add(ServiceItem(R.drawable.electrician,"Electrician"))
-        arrayList.add(ServiceItem(R.drawable.carpenter,"Carpenter"))
-        arrayList.add(ServiceItem(R.drawable.tileshandyman,"Tiles Handyman"))
-        arrayList.add(ServiceItem(R.drawable.parquet,"Parquet"))
-        arrayList.add(ServiceItem(R.drawable.smith,"Smith"))
-        arrayList.add(ServiceItem(R.drawable.masondecorationstones,"Decoration Stones"))
-        arrayList.add(ServiceItem(R.drawable.alumetal,"Alumetal"))
-        arrayList.add(ServiceItem(R.drawable.airconditioner,"Air Conditioner"))
-        arrayList.add(ServiceItem(R.drawable.curtains,"Curtains"))
-        arrayList.add(ServiceItem(R.drawable.glass,"Glass"))
-        arrayList.add(ServiceItem(R.drawable.satellite,"Satellite"))
-        arrayList.add(ServiceItem(R.drawable.gypsumworks,"Gypsum Works"))
-        arrayList.add(ServiceItem(R.drawable.marbleandgranite,"Marble"))
-        arrayList.add(ServiceItem(R.drawable.pestcontrol,"Pest Control"))
-        arrayList.add(ServiceItem(R.drawable.woodpainter,"Wood Painter"))
-        arrayList.add(ServiceItem(R.drawable.swimmingpool,"Swimming pool"))
+        arrayList.add(ServiceItem(R.drawable.painter,R.string.Painter))
+        arrayList.add(ServiceItem(R.drawable.plumber,R.string.Plumber))
+        arrayList.add(ServiceItem(R.drawable.electrician,R.string.Electrician))
+        arrayList.add(ServiceItem(R.drawable.carpenter,R.string.Carpenter))
+        arrayList.add(ServiceItem(R.drawable.tileshandyman,R.string.Tiles_Handyman))
+        arrayList.add(ServiceItem(R.drawable.parquet,R.string.Parquet))
+        arrayList.add(ServiceItem(R.drawable.smith,R.string.Smith))
+        arrayList.add(ServiceItem(R.drawable.masondecorationstones,R.string.Decoration_Stones))
+        arrayList.add(ServiceItem(R.drawable.alumetal,R.string.Alumetal))
+        arrayList.add(ServiceItem(R.drawable.airconditioner,R.string.Air_Conditioner))
+        arrayList.add(ServiceItem(R.drawable.curtains,R.string.Curtains))
+        arrayList.add(ServiceItem(R.drawable.glass,R.string.Glass))
+        arrayList.add(ServiceItem(R.drawable.satellite,R.string.Satellite))
+        arrayList.add(ServiceItem(R.drawable.gypsumworks,R.string.Gypsum_Works))
+        arrayList.add(ServiceItem(R.drawable.marbleandgranite,R.string.Marble))
+        arrayList.add(ServiceItem(R.drawable.pestcontrol,R.string.Pest_Control))
+        arrayList.add(ServiceItem(R.drawable.woodpainter,R.string.Wood_Painter))
+        arrayList.add(ServiceItem(R.drawable.swimmingpool,R.string.Swimming_pool))
 
         return arrayList
     }
@@ -121,4 +127,5 @@ class HomeFragment : Fragment() {
                 }
             }
     }
+
 }

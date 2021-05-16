@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerActivityViewModel
-import eg.gov.iti.jets.fixawy.POJOs.Technician
+
 
 class RecyclerAdapter(val viewModel: RecyclerActivityViewModel, val arrayList: MutableList<Technician>, val context: Context) :
     RecyclerView.Adapter<RecyclerAdapter.TechViewHolder>() {

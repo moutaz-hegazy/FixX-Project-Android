@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_fadingtowhite"
-    tools:context=".SplashScreen">
+    tools:context=".LoginScreen.Views.SplashScreen">
 
     <ImageView
         android:id="@+id/appLogo"
