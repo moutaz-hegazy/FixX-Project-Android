@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -28,7 +29,6 @@ object FirestoreService {
     lateinit var googleSignInClient: GoogleSignInClient
     const val RC_SIGN_IN = 9001
 
-
     fun registerUser(email : String, password : String){
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
@@ -43,7 +43,8 @@ object FirestoreService {
     }
 
 
-    fun loginWithEmailAndPassword(email: String, password: String){
+    fun loginWithEmailAndPassword(email: String, password: String, onFailHandler : ()->Unit){
+        Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(OnCompleteListener<AuthResult>{ task ->
                     if(task.isSuccessful){
@@ -51,6 +52,7 @@ object FirestoreService {
                     }
                     else{
                         Log.i("TAG", "login: error!!!!")
+                        onFailHandler()
                     }
                 })
     }

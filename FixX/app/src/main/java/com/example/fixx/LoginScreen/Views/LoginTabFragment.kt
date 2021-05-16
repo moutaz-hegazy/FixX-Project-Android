@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fixx.HomeActivity
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
+import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.util.regex.Pattern
 
 class LoginTabFragment: Fragment() {
@@ -75,16 +78,18 @@ class LoginTabFragment: Fragment() {
         loginButton?.setOnClickListener(View.OnClickListener {
             email = emailEditText?.text.toString()
             password = passwordEditText?.text.toString()
-            validateLoginForm(email, password)
+//            validateLoginForm(email, password)
 
-            if(email.isEmpty())
+            if (email.isEmpty())
                 emailEditText?.error = "This field is required"
-            if(password.isEmpty())
+            if (password.isEmpty())
                 passwordEditText?.error = "This field is required"
-
-
-            //firebase authenticate login then move to home
-            //checkLogin(email, password)
+            else {
+                Log.i("TAG", "onCreateView: DATA >>>>$email<<<<< , >>>>$password<<<<<")
+                FirestoreService.loginWithEmailAndPassword(email, password) {
+                    Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
+                }
+            }
         })
 
         emailEditText?.translationX = 800F
