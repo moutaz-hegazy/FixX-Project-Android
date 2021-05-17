@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,57 +10,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/add_address_activity_governorate_spinner"
+        <Spinner
+            android:id="@+id/add_address_activity_city_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
-            />
+            android:autofillHints="ChooseCity"
+            android:prompt="@string/app_name" />
 
-        <EditText
-            android:id="@+id/add_address_activity_city_txt"
+        <Spinner
+            android:id="@+id/add_address_activity_area_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/add_address_activity_governorate_spinner"
-            android:layout_margin="10dp"
-            android:background="@drawable/edit_txt_border"
-            android:hint="Enter your city"
-            android:paddingStart="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="10dp" />
-
-        <EditText
-            android:id="@+id/add_address_activity_district_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/add_address_activity_city_txt"
-            android:layout_margin="10dp"
-            android:background="@drawable/edit_txt_border"
-            android:hint="Enter your area"
-            android:paddingStart="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="10dp"/>
+            android:layout_below="@id/add_address_activity_city_spinner"
+            android:layout_marginTop="10dp"
+            android:autofillHints="ChooseArea"
+            android:prompt="@string/app_name" />
 
         <EditText
             android:id="@+id/add_address_activity_building_number_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/add_address_activity_district_txt"
+            android:layout_below="@id/add_address_activity_area_spinner"
             android:layout_margin="10dp"
             android:background="@drawable/edit_txt_border"
-            android:hint="Enter your building number"
+            android:hint="Building Number"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
             android:paddingEnd="10dp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/add_address_activity_floor_txt"
@@ -67,11 +48,11 @@
             android:layout_below="@id/add_address_activity_building_number_txt"
             android:layout_margin="10dp"
             android:background="@drawable/edit_txt_border"
-            android:hint="Enter your floor number"
+            android:hint="Floor "
             android:paddingStart="10dp"
             android:paddingTop="10dp"
             android:paddingEnd="10dp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp" />
 
         <EditText
             android:id="@+id/add_address_activity_notes_txt"
@@ -80,11 +61,11 @@
             android:layout_below="@id/add_address_activity_floor_txt"
             android:layout_margin="10dp"
             android:background="@drawable/edit_txt_border"
-            android:hint="Enter any notes about your location"
+            android:hint="notes about location"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
             android:paddingEnd="10dp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp" />
 
 
         <LinearLayout
