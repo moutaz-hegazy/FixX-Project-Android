@@ -108,20 +108,22 @@
                     android:layout_height="30dp"
                     android:src="@drawable/ic_baseline_location_on_24"
                     android:layout_marginLeft="10dp" />
+
                 <LinearLayout
+                    android:id="@+id/settings_addresses_layOut"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="15dp">
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:text="Addresses"
                         android:textColor="@color/black"
-                        android:text="Addresses"/>
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>

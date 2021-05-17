@@ -9,13 +9,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.Addresses.view.RecycleAdapter
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.activity_my_adresses.*
 
 class MyAdresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
 
-    companion object {
-        const val START_ACTIVITY_2_REQUEST_CODE = 1
-    }
     var myAdresses = mutableListOf<String>()
     private val adapter = RecycleAdapter(myAdresses,this)
 
@@ -27,15 +25,15 @@ class MyAdresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
 
         my_addresses_activity_add_address_btn.setOnClickListener {
             val addAddressIntent = Intent(this, AddAddressActivity::class.java)
-            startActivityForResult(addAddressIntent,START_ACTIVITY_2_REQUEST_CODE);
+            startActivityForResult(addAddressIntent,Constants.START_ADDRESS_ACTIVITY_REQUEST_CODE);
 
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == START_ACTIVITY_2_REQUEST_CODE) {
+        if (requestCode == Constants.START_ADDRESS_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val address = data!!.getStringExtra("address")
+                val address = data!!.getStringExtra(Constants.TRANS_ADDRESS)
                 myAdresses.add(address!!.toString())
 
                showAddressList()

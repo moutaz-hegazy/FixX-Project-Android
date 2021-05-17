@@ -24,30 +24,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".Addresses.MyAdresses">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".takeOrderScreen.views.ImagePickerDialog"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"></activity>
-        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
-        <activity android:name=".NavigationBar.NavigationBarActivity" />
-        <activity
-            android:name=".Addresses.MapActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
-        <activity
-            android:name=".Addresses.AddAddressActivity"
-            android:label="Add Address">
-
-        </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SplashScreen"></activity>
-        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen"></activity> <!-- added for maps -->
 
      
 
@@ -59,11 +35,17 @@
         </activity>
         
 
+        </activity>
+        <activity android:name=".MainActivity">
 
-     
-        
-        
-         <!-- added for maps -->
+        </activity>
+        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen">
+        </activity> <!-- added for maps -->
+        <activity android:name=".Addresses.MyAdresses">
+
+        </activity>
+
+        <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -74,8 +56,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
-
-        <activity android:name=".RegistrationActivity" />
         <activity android:name=".LoginScreen.Views.RegistrationActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".HomeActivity" />
