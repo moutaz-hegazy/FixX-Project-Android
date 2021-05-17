@@ -1,4 +1,4 @@
-package com.example.fixx
+package com.example.fixx.LoginScreen.Views
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,9 +7,16 @@ import android.os.Handler
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.fixx.HomeActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 @Suppress("DEPRECATION")
 class SplashScreen : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -27,7 +34,7 @@ class SplashScreen : AppCompatActivity() {
 
         Handler().postDelayed({
             val intent = if (checkLogin())
-                Intent(this, HomeActivity::class.java)
+                Intent(this, NavigationBarActivity::class.java)
             else
                 Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
@@ -36,7 +43,9 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun checkLogin(): Boolean {
-        //Firebase loggedIn state check...
+        if(FirestoreService.auth.currentUser != null){
+            return true
+        }
         return false
     }
 }

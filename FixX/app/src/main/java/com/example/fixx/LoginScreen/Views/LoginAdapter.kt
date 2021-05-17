@@ -1,9 +1,11 @@
-package com.example.fixx
+package com.example.fixx.LoginScreen.Views
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.fixx.LoginScreen.Views.LoginTabFragment
+import com.example.fixx.LoginScreen.Views.SignUpOnBoardingFragment
 
 @Suppress("DEPRECATION")
 class LoginAdapter: FragmentPagerAdapter {

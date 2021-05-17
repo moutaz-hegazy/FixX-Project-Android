@@ -15,6 +15,7 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -47,6 +48,22 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SplashScreen"></activity>
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen"></activity> <!-- added for maps -->
+
+     
+
+        <activity android:name=".LoginScreen.Views.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+
+
+     
+        
+        
+         <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -59,6 +76,7 @@
             android:value="@string/google_maps_api_key" />
 
         <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LoginScreen.Views.RegistrationActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".HomeActivity" />
     </application>
