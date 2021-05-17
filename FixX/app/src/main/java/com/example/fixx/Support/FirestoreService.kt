@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -29,26 +28,26 @@ object FirestoreService {
     lateinit var googleSignInClient: GoogleSignInClient
     const val RC_SIGN_IN = 9001
 
-    fun registerUser(email : String, password : String){
+    fun registerUser(email : String, password : String, onSuccessHandler: () -> Unit, onFailHandler: () -> Unit){
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
                     if (task.isSuccessful){
-                        val user = auth.currentUser
-                        Log.i("TAG", "register: successfully"+ user.uid)
+                        onSuccessHandler()
                     }
                     else{
-                        Log.i("TAG", "register: error!!!!!!")
+                        onFailHandler()
                     }
                 })
     }
 
 
-    fun loginWithEmailAndPassword(email: String, password: String, onFailHandler : ()->Unit){
+    fun loginWithEmailAndPassword(email: String, password: String, onSuccessHandler : ()->Unit, onFailHandler : ()->Unit){
         Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(OnCompleteListener<AuthResult>{ task ->
                     if(task.isSuccessful){
-                        Log.i("TAG", "login: successfully"+ auth.uid)
+//                        Log.i("TAG", "login: successfully"+ auth.uid)
+                        onSuccessHandler()
                     }
                     else{
                         Log.i("TAG", "login: error!!!!")

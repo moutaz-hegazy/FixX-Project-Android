@@ -8,5 +8,4 @@ data class User(
 ){
     var profilePicture: String? = null
     var locations: List<String>? = null
-    var password: String? = null
 }
