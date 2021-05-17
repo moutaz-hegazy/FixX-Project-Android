@@ -8,5 +8,6 @@ sealed class Constants {
         const val CAMERA_PERMISSION_REQUEST_CODE = 200
         const val LOCATION_TO_TECH = "locationToTech"
         const val JOB_TYPE_TO_TECH = "jobTypeToTech"
+        const val RC_SIGN_IN = 9001
     }
 }

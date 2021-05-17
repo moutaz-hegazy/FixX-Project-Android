@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -26,7 +27,7 @@ object FirestoreService {
     var db = FirebaseFirestore.getInstance()
     var auth = Firebase.auth
     lateinit var googleSignInClient: GoogleSignInClient
-    const val RC_SIGN_IN = 9001
+
 
     fun registerUser(email : String, password : String, onSuccessHandler: () -> Unit, onFailHandler: () -> Unit){
         auth.createUserWithEmailAndPassword(email, password)
@@ -85,33 +86,35 @@ object FirestoreService {
     fun signInWithGoogle(context: Context) {
         configGoogleSignIn(context)
         val signInIntent = googleSignInClient.signInIntent
-        (context as Activity).startActivityForResult(signInIntent, RC_SIGN_IN)
+        (context as Activity).startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
     }
 
-    fun googleSignInRequestResult(requestCode : Int, data : Intent?){
+    fun googleSignInRequestResult(requestCode : Int, data : Intent?, onSuccessHandler: (email : String) -> Unit, onFailHandler: () -> Unit){
 
-        if (requestCode == RC_SIGN_IN ) {
+        if (requestCode == Constants.RC_SIGN_IN ) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 Log.i("TAG", "googleSignInRequestResult: before account ")
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d("TAG", "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
+                Log.i("TAG", "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!, onSuccessHandler, onFailHandler)
             } catch (e: ApiException) {
-                Log.w("TAG", "Google sign in failed", e)
+                Log.i("TAG", "Google sign in failed", e)
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
+    private fun firebaseAuthWithGoogle(idToken: String, onSuccessHandler: (email : String) -> Unit, onFailHandler: () -> Unit) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
                     if (task.isSuccessful) {
-                        val user = auth.currentUser
-                        Log.d("TAG", "signInWithCredential:success")
+                        val userEmail = auth?.currentUser?.email
+                        //Log.d("TAG", "signInWithCredential:success")
+                        onSuccessHandler(userEmail!!)
                     } else {
-                        Log.w("TAG", "signInWithCredential:failure", task.exception)
+                        //Log.w("TAG", "signInWithCredential:failure", task.exception)
+                        onFailHandler()
                     }
                 })
     }
@@ -156,7 +159,7 @@ object FirestoreService {
 
         var techniciansList = mutableListOf<Technician>()
 
-        val docRef = db.collection("Users").whereEqualTo("accountType", "technician").whereEqualTo("jobTitle", job).whereArrayContains("workLocations",location)
+        val docRef = db.collection("Users").whereEqualTo("accountType", "Technician").whereEqualTo("jobTitle", job).whereArrayContains("workLocations",location)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             for (document in documentSnapshot){
 

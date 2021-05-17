@@ -17,7 +17,6 @@ import com.example.fixx.HomeActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
-import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.util.regex.Pattern
 
 class LoginTabFragment: Fragment() {

@@ -7,12 +7,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
-import android.widget.Toast
-import com.example.fixx.databinding.ActivityMainBinding
-import android.widget.Toast
-import com.example.fixx.databinding.ActivityMainBinding
-import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
