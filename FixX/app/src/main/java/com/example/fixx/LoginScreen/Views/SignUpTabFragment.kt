@@ -177,6 +177,7 @@ class SignUpTabFragment: Fragment() {
                                 FirestoreService.saveUserData(technician)
                             }
                             startActivity(Intent(context, NavigationBarActivity::class.java))
+                            activity?.finish()
                         }, onFailHandler = {
                             Toast.makeText(context, "Register fail.",Toast.LENGTH_SHORT).show()
                         })

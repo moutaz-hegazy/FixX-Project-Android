@@ -89,6 +89,7 @@ class LoginTabFragment: Fragment() {
                 FirestoreService.loginWithEmailAndPassword(email, password, onSuccessHandler = {
                     val home = Intent(context, NavigationBarActivity::class.java)
                     startActivity(home)
+                    activity?.finish()
                 },
                     onFailHandler = {
                         Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
