@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:305513197431:android:f347f29f1ee4479c44bb72",
+        "mobilesdk_app_id": "1:305513197431:android:7e2260b85127199644bb72",
         "android_client_info": {
           "package_name": "com.example.fixx"
         }
       },
       "oauth_client": [
         {
-          "client_id": "305513197431-lgbi3l11lglf73bemhsts1lq214ibetm.apps.googleusercontent.com",
+          "client_id": "305513197431-gokks1i33k5arlq26k81vvo3fvi9kmj8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.fixx",
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBgzpzh2gKemh-MTHmp4-QVCHK9EDgzu_Y"
+          "current_key": "AIzaSyA5EyZDBaKKJOj8db2Nn1equZ9f10ivuyY"
         }
       ],
       "services": {

@@ -41,7 +41,9 @@
             android:label="Add Address">
 
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity">
+
+        </activity>
         <!-- <activity android:name=".SplashScreen">
 
         </activity> -->
