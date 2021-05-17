@@ -23,12 +23,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.Addresses.AddAddressActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.activity_add_address.*
 import kotlinx.android.synthetic.main.activity_customize_order.*
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
 import java.text.SimpleDateFormat
@@ -197,12 +199,19 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         var image : Bitmap? = null
         if(resultCode == Activity.RESULT_OK){
             when (requestCode) {
-                Constants.cameraPickerRequestCode -> if (resultCode === RESULT_OK) {
-                    image = data?.extras?.get("data") as? Bitmap
-                }
+                Constants.cameraPickerRequestCode -> image = data?.extras?.get("data") as? Bitmap
 
-                Constants.galleryPickerRequestCode -> if (resultCode === RESULT_OK) {
+                Constants.galleryPickerRequestCode ->
                     image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+
+
+                Constants.START_ADDRESS_MAP_REQUEST_CODE -> {
+                    val newAddress = data?.getStringExtra(Constants.TRANS_ADDRESS)
+                    newAddress?.let {
+                        values.add(values.size-1,it)
+                        spinnerAdapter.notifyDataSetChanged()
+                        customizeOrder_pickLocation_spinner.setSelection(values.size -2)
+                    }
                 }
             }
             image?.let{
@@ -229,14 +238,18 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         Log.i("TAG", "onItemSelected:<<<<<<<<<<<< " + values[position])
         if(position == values.size - 1){
             // add new location Logic.
-//            spinnerAdapter.addValue("SHIT")
-//            customizeOrder_pickLocation_spinner.setSelection(spinnerAdapter.getPosition("SHIT"))
+            customizeOrder_pickLocation_spinner.setSelection(0)
+            startAddressActivity()
         }else{
             selectedLocation = values[position]
         }
         Toast.makeText(this, values[position], Toast.LENGTH_SHORT).show()
     }
 
+    private fun startAddressActivity(){
+        startActivityForResult(Intent(applicationContext, AddAddressActivity::class.java),
+                Constants.START_ADDRESS_MAP_REQUEST_CODE)
+    }
 
     private fun showBottomSheetDialog(){
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_pick, null)

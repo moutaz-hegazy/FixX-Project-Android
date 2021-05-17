@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.android.synthetic.main.activity_add_address.*
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_add_address.*
 class AddAddressActivity : AppCompatActivity() {
 
     companion object {
-        const val START_ACTIVITY_3_REQUEST_CODE = 1
+
 
         var addedAddress = " "
 
@@ -133,11 +134,7 @@ class AddAddressActivity : AppCompatActivity() {
                 }
             }else{
 
-                addedAddress = add_address_activity_city_spinner.selectedItem.toString() + " " + add_address_activity_area_spinner.selectedItem.toString()
-                val intent = Intent().apply {
-                    putExtra("address", addedAddress)
-                }
-                setResult(Activity.RESULT_OK, intent)
+                sendDataBackToPreviousActivity()
                 finish()
             }
         }
@@ -145,13 +142,13 @@ class AddAddressActivity : AppCompatActivity() {
 
     fun initFun() {
         val mapIntent = Intent(this, MapActivity::class.java)
-        startActivityForResult(mapIntent, START_ACTIVITY_3_REQUEST_CODE);
+        startActivityForResult(mapIntent, Constants.START_ADDRESS_MAP_REQUEST_CODE);
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == START_ACTIVITY_3_REQUEST_CODE) {
+        if (requestCode == Constants.START_ADDRESS_MAP_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val address = data!!.getStringArrayExtra("address")
+                val address = data!!.getStringArrayExtra(Constants.TRANS_ADDRESS)
 
                 var found = false
                 for (iterator in cities.indices) {
@@ -269,16 +266,15 @@ class AddAddressActivity : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-        sendDataBackToPreviousActivity()
-        super.onBackPressed()
-    }
-
     private fun sendDataBackToPreviousActivity() {
-        addedAddress = add_address_activity_city_spinner.selectedItem.toString() + " " + add_address_activity_area_spinner.selectedItem.toString()
+        addedAddress = add_address_activity_city_spinner.selectedItem.toString() + ","+
+                add_address_activity_area_spinner.selectedItem.toString() +":,"+
+                add_address_activity_building_number_txt.text + ","+
+                add_address_activity_floor_txt.text + ","+
+                add_address_activity_notes_txt.text
 
         val resultIntent = Intent().apply {
-            putExtra("address", addedAddress)
+            putExtra(Constants.TRANS_ADDRESS, addedAddress)
         }
         setResult(Activity.RESULT_OK, resultIntent)
     }
