@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">FixX</string>
+    <string name="google_maps_api_key">AIzaSyAwP8PF38zhUwteoi3kIZVolt0HCndTktk</string>
     <string name="enterLocation">select location</string>
     <string name="CustomizeOrderTitle">Customize Order</string>
     <string name="Delete">delete</string>
@@ -15,7 +16,6 @@
     <string name="or">------------------- Or -------------------</string>
     <string name="publishOrder">Publish Order ></string>
     <string name="AddImage">add images of the problem</string>
-    <string name="google_maps_api_key">AIzaSyAwP8PF38zhUwteoi3kIZVolt0HCndTktk</string>
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="choose_profile_type">Choose Profile Type</string>
     <string name="user">User</string>

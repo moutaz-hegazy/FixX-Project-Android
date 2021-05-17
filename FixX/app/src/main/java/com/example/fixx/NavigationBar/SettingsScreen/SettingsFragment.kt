@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.example.fixx.Addresses.MyAdresses
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
+import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,23 +43,26 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         var rootView = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        val profile = rootView.findViewById(R.id.settingsfragment_profile_linear_layout) as LinearLayout
-        profile.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
+        rootView.settingsfragment_profile_linear_layout.setOnClickListener {
+            openProfileActivity()
+        }
 
-                openProfileActivity();
-            }
-        })
+        rootView.settings_addresses_layOut.setOnClickListener {
+            openAddressesScreen()
+        }
         return rootView
     }
 
-    fun openProfileActivity(){
+    private fun openProfileActivity(){
 
         val intent = Intent (getActivity(), ProfileActivity::class.java)
         getActivity()?.startActivity(intent)
 
     }
 
+    private fun openAddressesScreen(){
+        startActivity(Intent(context, MyAdresses::class.java))
+    }
 
     companion object {
         /**
