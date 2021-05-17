@@ -1,6 +1,7 @@
 package com.example.fixx.POJOs
 
-data class Technician(var phoneNumber: String = "", var accountType: String = "", var name: String = "", var email: String = ""){
+class Technician(phoneNumber: String = "", accountType: String = "", name: String = "", email: String = "")
+    : Person(phoneNumber, accountType, name, email) {
     var id : String? = null
     var profilePicture: String? = null
     var locations: List<String>? = null

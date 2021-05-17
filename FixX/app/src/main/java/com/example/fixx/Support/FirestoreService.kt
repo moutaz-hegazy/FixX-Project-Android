@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.fixx.POJOs.Job
+import com.example.fixx.POJOs.Person
 import com.example.fixx.POJOs.Technician
+import com.example.fixx.POJOs.User
 import com.example.fixx.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -40,6 +43,23 @@ object FirestoreService {
                 })
     }
 
+    fun fetchUserFromDB(onCompletion : (user : Person?)->Unit) {
+        var userData : Person? = null
+        Log.i("wezza", "fetchUserFromDB: here 1")
+        auth.currentUser?.uid?.let {
+            db.collection("Users").document(it).get().addOnSuccessListener {
+                snapShot ->
+                Log.i("wezza", "fetchUserFromDB: here 2")
+                val type = snapShot.data?.get("accountType") as? String
+                type?.let {
+                    when(it){
+                        "User" -> onCompletion(snapShot.toObject<User>())
+                        "Technician" -> onCompletion(snapShot.toObject<Technician>())
+                    }
+                }
+            }
+        }
+    }
 
     fun loginWithEmailAndPassword(email: String, password: String, onSuccessHandler : ()->Unit, onFailHandler : ()->Unit){
         Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
@@ -56,6 +76,17 @@ object FirestoreService {
                 })
     }
 
+    fun saveJobDetails(job: Job) {
+        val map = HashMap<String, Any?>()
+        job::class.memberProperties.forEach {
+            map[it.name] = (it as KProperty1<Any, Any>).get(job)
+            Log.i("TAG", "save: inside for each  ${it.name} = ${it.get(job)}")
+
+        }
+        db.collection("Jobs").add(map)
+            .addOnSuccessListener { Log.i("TAG", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
+    }
 
     fun saveUserData(user: Any) {
 

@@ -1,5 +1,6 @@
 package com.example.fixx.showTechnicianScreen.view
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
@@ -32,9 +34,17 @@ class ShowTechniciansScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_technicians_screen)
 
-        val location = intent.getStringExtra(Constants.LOCATION_TO_TECH)
-        val jobType = intent.getStringExtra(Constants.JOB_TYPE_TO_TECH)
+        /*
+        * putExtra(Constants.LOCATION_TO_TECH, selectedLocation)
+                        putExtra(Constants.JOB_TYPE_TO_TECH, selectedJobType)
+                        putExtra(Constants.serviceName, serviceName)
+                        putExtra(Constants.TRANS_JOB, job)
+                        putExtra(Constants.TRANS_IMAGES,images)
+        * */
+
         val serviceName = intent.getIntExtra(Constants.serviceName,-1)
+        val job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
+        val images = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES)
         supportActionBar?.apply {
             title = getString(serviceName)
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
@@ -42,7 +52,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
 
         techRecycler = findViewById(R.id.showTechniciansScreen_recyclerView)
         val application = requireNotNull(this).application
-        val factory = RecyclerViewModelFactory(location,jobType)
+        val factory = RecyclerViewModelFactory(job?.location,job?.type)
         try {
             viewModel = ViewModelProvider(this, factory).get(RecyclerActivityViewModel::class.java)
         }catch (error : IllegalArgumentException){
