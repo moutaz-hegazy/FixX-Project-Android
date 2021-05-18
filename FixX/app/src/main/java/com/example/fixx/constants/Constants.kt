@@ -15,5 +15,6 @@ sealed class Constants {
         const val TRANS_ADDRESS = "address"
         const val TRANS_JOB = "TransJob"
         const val  TRANS_IMAGES = "TransImages"
+        const val TRANS_IMAGES_PATHS = "TransImagesPaths"
     }
 }

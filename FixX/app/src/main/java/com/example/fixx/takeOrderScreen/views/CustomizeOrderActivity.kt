@@ -1,16 +1,16 @@
 package com.example.fixx.takeOrderScreen.views
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.TimePickerDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -33,13 +33,11 @@ import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
 import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.firestore.ktx.firestoreSettings
-import kotlinx.android.synthetic.main.activity_add_address.*
 import kotlinx.android.synthetic.main.activity_customize_order.*
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener ,DateSelected {
@@ -47,6 +45,13 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private lateinit var binding: ActivityCustomizeOrderBinding
     private val values = arrayListOf<String>("Select Location", "Add new Location")
     private val images = arrayListOf<Bitmap>()
+
+    private var imagePath : Uri? = null
+
+    private var imagePathsList = arrayListOf<Uri>()
+    private var imagePathsStringArray = arrayListOf<String>()
+
+    private var imagePathsList2 = arrayListOf<Uri>()
 
     private var selectedLocation : String? = null
     private var selectedDate : String = {
@@ -158,11 +163,15 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             //select tech.
             if (validateJobData()) {
                 val job = createNewJob()
+
                 val selectTechIntent =
                     Intent(applicationContext, ShowTechniciansScreen::class.java).apply {
                         putExtra(Constants.serviceName, serviceName)
                         putExtra(Constants.TRANS_JOB, job)
-                        putExtra(Constants.TRANS_IMAGES,images.subList(1,images.size).toTypedArray())
+                        /*putExtra(Constants.TRANS_IMAGES,images.subList(1,images.size).toTypedArray())
+                          putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsList.toTypedArray())*/
+                        putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsStringArray.toTypedArray())
+
                     }
                 startActivity(selectTechIntent)
             }
@@ -175,9 +184,18 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 val job = createNewJob()
                 CustomizeOrderViewModel(job){
                     Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                    Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<<")
+                    Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<< ${job.jobId}")
+                    imagePathsStringArray?.forEach { image ->
+                        imagePathsList2.add(Uri.parse(image))
+                    }
+
+                    FirestoreService.uploadJobImage(imagePathsList2){
+                        listOfImages ->
+                        FirestoreService.updateJob("images", listOfImages, job.jobId)
+                    }
+                    finish()
                 }
-                finish()
+
             }
         }
         //------------------------------------------------------------------
@@ -193,6 +211,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             description = binding.customizeOrderDescriptionTxt.text.toString()
             fromTime = selectedFromTime
             toTime = selectedToTime
+            var parsedJobLocation = location?.substringBefore(":")
+            location = parsedJobLocation
         }
     }
 
@@ -226,10 +246,16 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         var image : Bitmap? = null
         if(resultCode == Activity.RESULT_OK){
             when (requestCode) {
-                Constants.cameraPickerRequestCode -> image = data?.extras?.get("data") as? Bitmap
+                Constants.cameraPickerRequestCode ->{
+                    image = data?.extras?.get("data") as? Bitmap
+                    imagePath = image?.let { getImageUriFromBitmap(this, it) }
+                }
 
-                Constants.galleryPickerRequestCode ->
+                Constants.galleryPickerRequestCode ->{
                     image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+                    imagePath = data?.data
+                }
+
 
 
                 Constants.START_ADDRESS_MAP_REQUEST_CODE -> {
@@ -244,6 +270,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             image?.let{
                 images.add(it)
                 imagesAdapter.notifyDataSetChanged()
+            }
+            //Log.i("TAG", "onActivityResult: will upload  ${imagePath.toString()}")
+            imagePath?.let {
+                imagePathsList.add(it)
+                imagePathsStringArray.add(it.toString())
             }
         }
     }
@@ -379,5 +410,14 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 }
             }
         }
+    }
+
+
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
     }
 }
