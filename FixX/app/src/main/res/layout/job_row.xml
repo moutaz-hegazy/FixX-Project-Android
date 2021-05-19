@@ -13,23 +13,12 @@
         android:background="@drawable/gradient_fadingtowhite">
 
         <TextView
-            android:id="@+id/address_row_address_lbl"
+            android:id="@+id/job_row_job_lbl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/edit_txt_border"
             android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/address_row_options_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:paddingTop="13dp"
-            android:paddingLeft="10dp"
-            android:text="&#8942;"
-            android:textColor="@color/design_default_color_primary_dark"
-            android:textAppearance="?android:textAppearanceLarge" />
 
     </RelativeLayout>
 

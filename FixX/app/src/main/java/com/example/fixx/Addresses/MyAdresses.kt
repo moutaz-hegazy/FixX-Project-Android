@@ -1,16 +1,21 @@
 package com.example.fixx.Addresses
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.LightingColorFilter
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.Addresses.view.RecycleAdapter
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.activity_my_adresses.*
+
 
 class MyAdresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
 
@@ -20,6 +25,11 @@ class MyAdresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_adresses)
+
+        supportActionBar?.apply {
+            title = "My Addresses"
+            setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
+        }
 
         showAddressList()
 
@@ -48,9 +58,11 @@ class MyAdresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
-        myAdresses[position] = "Clicked"
-        adapter.notifyItemChanged(position)
+        Toast.makeText(this, "Long Press to delete", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemLongClick(position: Int) {
+       confirmDeleteDialog(position,myAdresses)
     }
 
     fun showAddressList(){
@@ -64,5 +76,32 @@ class MyAdresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
         }
     }
 
+     fun confirmDeleteDialog(position: Int, list: MutableList<String>){
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle("Confirm Deleting Address")
+        //set message for alert dialog
+        builder.setMessage("Do you want to delete this address?")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton("Yes"){dialogInterface, which ->
+            list.removeAt(position)
+            adapter.notifyItemRemoved(position)
+        }
+        //performing negative action
+        builder.setNegativeButton("No"){dialogInterface, which ->
+
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+         alertDialog.getWindow()!!.setBackgroundDrawableResource(R.drawable.btn_border);
+
+    }
 
 }
+
+

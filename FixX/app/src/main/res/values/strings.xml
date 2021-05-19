@@ -48,4 +48,6 @@
     <string name="Pest_Control">Pest Control</string>
     <string name="Wood_Painter">Wood Painter</string>
     <string name="Swimming_pool">Pool\n maintain</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,6 +2,8 @@ package com.example.fixx.Addresses
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -106,6 +108,11 @@ class AddAddressActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_address)
+
+        supportActionBar?.apply {
+            title = "Add Address" 
+            setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
+        }
 
 
         setCitySpinner()
@@ -268,8 +275,8 @@ class AddAddressActivity : AppCompatActivity() {
     }
 
     private fun sendDataBackToPreviousActivity() {
-        addedAddress = add_address_activity_city_spinner.selectedItem.toString() + ","+
-                add_address_activity_area_spinner.selectedItem.toString() +":,"+
+        addedAddress = add_address_activity_address_name_txt.text.toString() + "," + add_address_activity_city_spinner.selectedItem.toString() + ","+
+                add_address_activity_area_spinner.selectedItem.toString() +":,"+ add_address_activity_street_txt.text + "," +
                 add_address_activity_building_number_txt.text + ","+
                 add_address_activity_floor_txt.text + ","+
                 add_address_activity_notes_txt.text
