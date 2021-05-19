@@ -29,8 +29,8 @@ class RegistrationActivity : AppCompatActivity(){
 
         supportActionBar?.hide()
 
-        tabLayout = findViewById(R.id.tab_layout)
-        viewPager = findViewById(R.id.view_pager)
+        tabLayout = findViewById(R.id.myOrders_tablayout)
+        viewPager = findViewById(R.id.myOrders_viewPager)
 
         google = findViewById(R.id.fab_google)
         facebook = findViewById(R.id.fab_facebook)
@@ -52,7 +52,7 @@ class RegistrationActivity : AppCompatActivity(){
         }
 
         tabLayout?.tabGravity = TabLayout.GRAVITY_FILL
-        var viewPager = findViewById<ViewPager>(R.id.view_pager)
+        var viewPager = findViewById<ViewPager>(R.id.myOrders_viewPager)
         var adapter: LoginAdapter = LoginAdapter(supportFragmentManager, context = applicationContext, totalTabs = tabLayout?.tabCount)
         viewPager?.adapter = adapter
         viewPager?.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))

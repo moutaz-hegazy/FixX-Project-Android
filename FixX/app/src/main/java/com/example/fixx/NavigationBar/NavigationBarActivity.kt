@@ -1,20 +1,12 @@
 package com.example.fixx.NavigationBar
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.GridView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.example.fixx.POJOs.Person
-import com.example.fixx.POJOs.Technician
-import com.example.fixx.POJOs.User
 import com.example.fixx.R
-import com.example.fixx.Support.FirestoreService
 import com.example.project.bottom_navigation_fragments.HomeFragment
-import com.example.project.bottom_navigation_fragments.OrdersFragment
+import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -22,7 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  class NavigationBarActivity : AppCompatActivity() {
 
      companion object{
-         lateinit var USER_OBJECT : Person
+         var USER_OBJECT : Person? = null
      }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
         val ordersFragment = OrdersFragment()
         makeCurrentFragment(homeFragment)
 
-        FirestoreService.fetchUserFromDB {
-            person ->
-            person?.let {
-                USER_OBJECT = it
-            }
-        }
+
         bottomnav.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.toolbar_home_item ->{

@@ -28,7 +28,8 @@
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity"></activity>
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity"></activity>
 
-        <activity android:name=".NavigationBar.NavigationBarActivity"></activity>
+        <activity android:name=".NavigationBar.NavigationBarActivity">
+        </activity>
         <activity android:name=".LoginScreen.Views.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

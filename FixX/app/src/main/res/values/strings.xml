@@ -48,4 +48,12 @@
     <string name="Pest_Control">Pest Control</string>
     <string name="Wood_Painter">Wood Painter</string>
     <string name="Swimming_pool">Pool\n maintain</string>
+    <string name="onGoingOrders">Ongoing</string>
+    <string name="onGuaranteeOrders">Guarantee</string>
+    <string name="completedOrders">Completed</string>
+    <string name="availableOrder">Available</string>
+    <string name="myOrders">My Orders</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

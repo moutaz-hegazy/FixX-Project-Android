@@ -44,6 +44,10 @@ class SplashScreen : AppCompatActivity() {
 
     private fun checkLogin(): Boolean {
         if(FirestoreService.auth.currentUser != null){
+            FirestoreService.fetchUserFromDB {
+                    person ->
+                NavigationBarActivity.USER_OBJECT = person
+            }
             return true
         }
         return false

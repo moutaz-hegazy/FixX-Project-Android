@@ -34,14 +34,6 @@ class ShowTechniciansScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_technicians_screen)
 
-        /*
-        * putExtra(Constants.LOCATION_TO_TECH, selectedLocation)
-                        putExtra(Constants.JOB_TYPE_TO_TECH, selectedJobType)
-                        putExtra(Constants.serviceName, serviceName)
-                        putExtra(Constants.TRANS_JOB, job)
-                        putExtra(Constants.TRANS_IMAGES,images)
-        * */
-
         val serviceName = intent.getIntExtra(Constants.serviceName,-1)
         val job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
         val images = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES)
