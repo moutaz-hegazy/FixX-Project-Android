@@ -30,7 +30,7 @@
                 android:value=".NavigationBar.NavigationBarActivity" />
         </activity>
         <activity
-            android:name=".inAppChatScreens.views.ChatLogActivity" >
+            android:name=".inAppChatScreens.views.ChatLogActivity" android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".inAppChatScreens.views.NewMessageActivity" />

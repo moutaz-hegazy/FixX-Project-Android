@@ -33,21 +33,21 @@ class ChatLogActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
+        channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL) ?: ""
         recyclerview_chat_log.adapter = adapter
         val msg1 = ChatMessage("Hello",FirestoreService.auth?.currentUser?.uid ?: "",System.currentTimeMillis() / 1000)
 
         supportActionBar?.apply {
             title = contact.name
         }
-        FirestoreService.fetchChatHistory(contact.uid ?: "", observerHandler = {
+        FirestoreService.fetchChatHistoryForChannel(channel, observerHandler = {
             msg ->
             Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
             displayMsg(msg)
             adapter.notifyDataSetChanged()
 
         }, onCompletion = {
-            msgs, ch ->
-            channel = ch
+            msgs ->
             setButton()
             Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
             msgs.forEach {
@@ -68,17 +68,20 @@ class ChatLogActivity : AppCompatActivity() {
                 val newMsg = ChatMessage(txt,FirestoreService.auth.currentUser?.uid ?: "",
                     System.currentTimeMillis() / 1000)
                 FirestoreService.sendChatMessage(newMsg, channel)
+                binding.edittextChatLog.text.clear()
             }
         }
     }
     private fun displayMsg(msg : ChatMessage){
-        if(msg.fromId == FirestoreService.auth.currentUser?.uid){
+        if(msg.fromId != FirestoreService.auth.currentUser?.uid){
             NavigationBarActivity.USER_OBJECT?.let {
                 adapter.add(ChatFromItem(msg.text, it))
+                binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
                 Log.i("TAG", "displayMsg: HERE 1 >>> ${msg.text}")
             }
         }else{
             adapter.add(ChatToItem(msg.text,contact))
+            binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
             Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
         }
     }

@@ -30,14 +30,15 @@ class NewMessageActivity : AppCompatActivity() {
 
                 val intent = Intent(view.context, ChatLogActivity::class.java)
                 intent.putExtra(Constants.TRANS_USERDATA,userItem.user)
+                intent.putExtra(Constants.TRANS_CHAT_CHANNEL,userItem.channel)
                 startActivity(intent)
             }
         }
         recyclerview_newmessage.adapter = adapter
 
         NewMessageViewModel{
-            person ->
-            adapter.add(UserItem(person))
+            person , channel ->
+            adapter.add(UserItem(person,channel))
             adapter.notifyDataSetChanged()
         }
     }
