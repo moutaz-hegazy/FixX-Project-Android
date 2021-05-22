@@ -77,12 +77,12 @@ object FirestoreService {
         var contactedUsersIds  =  ArrayList<String>()
         auth.currentUser?.uid?.let {
             uid ->
-            db.collection("Chats").whereArrayContains("users","7uru4sSpz8brZ30aH52JCLaBU733")
+            db.collection("Chats").whereArrayContains("users",uid)
                 .get().addOnSuccessListener {
                 snapShot ->
                 snapShot.forEach {
                     document ->
-                    (document.data["users"] as? List<String>)?.find { it != "7uru4sSpz8brZ30aH52JCLaBU733" }?.let {
+                    (document.data["users"] as? List<String>)?.find { it != uid }?.let {
                         contactedUsersIds.add(it)
                     }
                 }
