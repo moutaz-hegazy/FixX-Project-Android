@@ -4,15 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ChatMessage
 import com.example.fixx.POJOs.Person
-import com.example.fixx.Support.FirestoreService
+import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityChatLogBinding
+import com.example.fixx.inAppChatScreens.model.NotificationData
+import com.example.fixx.inAppChatScreens.model.PushNotification
 import com.example.fixx.inAppChatScreens.viewModels.ChatLogViewModel
+import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ChatLogActivity : AppCompatActivity() {
 
@@ -26,6 +34,7 @@ class ChatLogActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChatLogBinding
     private lateinit var channel : String
     private lateinit var chatLogVm : ChatLogViewModel
+    var topic = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +69,15 @@ class ChatLogActivity : AppCompatActivity() {
         binding.sendButtonChatLog.setOnClickListener {
             val txt = binding.edittextChatLog.text.toString()
             if(!txt.isNullOrEmpty()){
-                val newMsg = ChatMessage(txt,NavigationBarActivity.USER_OBJECT?.uid ?: "",
+                val newMsg = ChatMessage(txt,USER_OBJECT?.uid ?: "",
                     System.currentTimeMillis() / 1000)
                 chatLogVm.sendMessage(newMsg)
                 binding.edittextChatLog.text.clear()
+                topic = "/topics/${USER_OBJECT?.uid}"
+                PushNotification(NotificationData(USER_OBJECT!!.name, txt),
+                    topic).also {
+                    sendNotification(it)
+                }
             }
         }
     }
@@ -78,6 +92,19 @@ class ChatLogActivity : AppCompatActivity() {
             adapter.add(ChatToItem(msg.text,contact))
             binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
             Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
+        }
+    }
+
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d("TAG", "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e("TAG", response.errorBody()!!.string())
+            }
+        } catch(e: Exception) {
+            Log.e("TAG", e.toString())
         }
     }
 }
