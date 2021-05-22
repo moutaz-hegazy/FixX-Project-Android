@@ -141,10 +141,8 @@ object FirestoreService {
                                         snapShot ->
                                     snapShot.forEach {
                                             msgsSnapShot ->
-                                        (msgsSnapShot.data["msg"] as? ChatMessage)?.let{
-                                                msg ->
-                                            msgs.add(msg)
-                                        }
+                                        val msg = msgsSnapShot.toObject<ChatMessage>()
+                                        msgs.add(msg)
                                     }
                                     onCompletion(msgs, "$contact-$uid")
                                 }
