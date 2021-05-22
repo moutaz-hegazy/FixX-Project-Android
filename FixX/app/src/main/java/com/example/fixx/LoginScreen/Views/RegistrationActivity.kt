@@ -1,15 +1,17 @@
 package com.example.fixx.LoginScreen.Views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_registration.*
 
 @Suppress("DEPRECATION")
 class RegistrationActivity : AppCompatActivity(){
@@ -29,8 +31,8 @@ class RegistrationActivity : AppCompatActivity(){
 
         supportActionBar?.hide()
 
-        tabLayout = findViewById(R.id.tab_layout)
-        viewPager = findViewById(R.id.view_pager)
+        tabLayout = findViewById(R.id.myOrders_tablayout)
+        viewPager = findViewById(R.id.myOrders_viewPager)
 
         google = findViewById(R.id.fab_google)
         facebook = findViewById(R.id.fab_facebook)
@@ -52,7 +54,7 @@ class RegistrationActivity : AppCompatActivity(){
         }
 
         tabLayout?.tabGravity = TabLayout.GRAVITY_FILL
-        var viewPager = findViewById<ViewPager>(R.id.view_pager)
+        var viewPager = findViewById<ViewPager>(R.id.myOrders_viewPager)
         var adapter: LoginAdapter = LoginAdapter(supportFragmentManager, context = applicationContext, totalTabs = tabLayout?.tabCount)
         viewPager?.adapter = adapter
         viewPager?.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
@@ -81,16 +83,37 @@ class RegistrationActivity : AppCompatActivity(){
         twitter?.animate()?.translationY(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(800)?.start()
         tabLayout?.animate()?.translationX(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(800)?.start()
 
-        fab_google.setOnClickListener(View.OnClickListener {
+        google?.setOnClickListener(View.OnClickListener {
             Toast.makeText(applicationContext, "Google", Toast.LENGTH_SHORT).show()
+            FirestoreService.signInWithGoogle(this)
         })
 
-        fab_facebook.setOnClickListener(View.OnClickListener {
+        facebook?.setOnClickListener(View.OnClickListener {
             Toast.makeText(applicationContext, "Facebook", Toast.LENGTH_SHORT).show()
         })
 
-        fab_twitter.setOnClickListener(View.OnClickListener {
+        twitter?.setOnClickListener(View.OnClickListener {
             Toast.makeText(applicationContext, "Twitter", Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        FirestoreService.googleSignInRequestResult(requestCode, data, onSuccessHandler = {
+            email ->
+            FirestoreService.checkIfEmailExists(email){
+                exists ->
+                if(exists){
+                    startActivity(Intent(this, NavigationBarActivity::class.java))
+                    finish()
+                }
+                else{
+                    Toast.makeText(this, "I AM HEEEEEEEEEEERE", Toast.LENGTH_SHORT).show()
+                    // sign up activity to enter extra data (phone, type, username)
+                }
+            }
+        }, onFailHandler = {
+            Toast.makeText(this, "Failed to login", Toast.LENGTH_SHORT).show()
         })
     }
 }

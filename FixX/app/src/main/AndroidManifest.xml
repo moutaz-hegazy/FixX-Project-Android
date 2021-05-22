@@ -24,7 +24,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".LoginScreen.Views.TechnicianJobTypeActivity"></activity>
+        <activity android:name=".inAppChatScreens.views.NewMessageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavigationBar.NavigationBarActivity" />
+        </activity>
+        <activity
+            android:name=".inAppChatScreens.views.ChatLogActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".inAppChatScreens.views.NewMessageActivity" />
+        </activity>
+        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity"></activity>
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
         <activity android:name=".NavigationBar.NavigationBarActivity" />
