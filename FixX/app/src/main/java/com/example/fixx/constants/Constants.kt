@@ -13,6 +13,7 @@ sealed class Constants {
         const val START_ADDRESS_MAP_REQUEST_CODE = 6
         const val TRANS_ADDRESS = "address"
         const val TRANS_JOB = "TransJob"
-        const val  TRANS_IMAGES = "TransImages"
+        const val TRANS_IMAGES = "TransImages"
+        const val TRANS_USERDATA = "transUser"
     }
 }

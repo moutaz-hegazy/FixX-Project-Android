@@ -34,9 +34,9 @@ class RecyclerAdapter(val viewModel: RecyclerActivityViewModel, val arrayList: M
     inner class TechViewHolder (private val binding : View) : RecyclerView.ViewHolder(binding){
 
         fun bind(tech: String){
-            var name :TextView = binding.findViewById(R.id.technician_item_name_lbl)
+            var name :TextView = binding.findViewById(R.id.ongoing_orders_jobType_lbl)
             name.text = tech
-            var image : ImageView = binding.findViewById(R.id.technician_item_img)
+            var image : ImageView = binding.findViewById(R.id.ongoing_order_job_image)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 image.setClipToOutline(true)
             }

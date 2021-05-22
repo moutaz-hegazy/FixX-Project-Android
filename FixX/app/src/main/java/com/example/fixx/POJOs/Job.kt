@@ -9,8 +9,8 @@ data class Job (val uid: String?, val type : String, val location : String?, val
     var description : String = ""
     var date : String = ""
     var completionDate : String = ""
-    var fromTime : String = ""
-    var toTime : String = ""
+    var fromTime : String? = null
+    var toTime : String? = null
     var price : Int? = null
     var techID : Int? = null
     var bidders : MutableList<Int>? = null

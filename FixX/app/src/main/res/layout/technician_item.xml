@@ -22,7 +22,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/technician_item_img"
+                android:id="@+id/ongoing_order_job_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="10dp"
@@ -36,7 +36,7 @@
 
 
             <TextView
-                android:id="@+id/technician_item_name_lbl"
+                android:id="@+id/ongoing_orders_jobType_lbl"
                 android:layout_width="115dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="18dp"
@@ -47,7 +47,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.07"
-                app:layout_constraintStart_toEndOf="@id/technician_item_img"
+                app:layout_constraintStart_toEndOf="@id/ongoing_order_job_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -59,8 +59,8 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="2.4"
-                app:layout_constraintStart_toStartOf="@+id/technician_item_name_lbl"
-                app:layout_constraintTop_toBottomOf="@+id/technician_item_name_lbl" />
+                app:layout_constraintStart_toStartOf="@+id/ongoing_orders_jobType_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/ongoing_orders_jobType_lbl" />
 
             <TextView
                 android:id="@+id/technician_item_review_lbl"
@@ -79,7 +79,7 @@
                 android:layout_marginStart="12dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="@+id/technician_item_review_lbl"
-                app:layout_constraintStart_toEndOf="@+id/technician_item_img"
+                app:layout_constraintStart_toEndOf="@+id/ongoing_order_job_image"
                 app:layout_constraintTop_toTopOf="@+id/technician_item_review_lbl" />
 
             <Button

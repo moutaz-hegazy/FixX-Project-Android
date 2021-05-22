@@ -4,10 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.example.fixx.POJOs.Job
-import com.example.fixx.POJOs.Person
-import com.example.fixx.POJOs.Technician
-import com.example.fixx.POJOs.User
+import com.example.fixx.POJOs.*
 import com.example.fixx.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -19,7 +16,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 
 import kotlin.reflect.KProperty1
@@ -43,13 +42,11 @@ object FirestoreService {
                 })
     }
 
-    fun fetchUserFromDB(onCompletion : (user : Person?)->Unit) {
+    fun fetchUserFromDB(uid : String? = auth.currentUser?.uid ,onCompletion : (user : Person?)->Unit) {
         var userData : Person? = null
-        Log.i("wezza", "fetchUserFromDB: here 1")
-        auth.currentUser?.uid?.let {
+        uid?.let {
             db.collection("Users").document(it).get().addOnSuccessListener {
                 snapShot ->
-                Log.i("wezza", "fetchUserFromDB: here 2")
                 val type = snapShot.data?.get("accountType") as? String
                 type?.let {
                     when(it){
@@ -59,6 +56,123 @@ object FirestoreService {
                 }
             }
         }
+    }
+
+    fun fetchChatUsers(onCompletion: (chatUsers : List<String>?) -> Unit){
+        var contactedUsersIds  =  ArrayList<String>()
+        auth.currentUser?.uid?.let {
+            uid ->
+            db.collection("Chats").whereArrayContains("users","7uru4sSpz8brZ30aH52JCLaBU733")
+                .get().addOnSuccessListener {
+                snapShot ->
+                snapShot.forEach {
+                    document ->
+                    (document.data["users"] as? List<String>)?.find { it != "7uru4sSpz8brZ30aH52JCLaBU733" }?.let {
+                        contactedUsersIds.add(it)
+                    }
+                }
+                    onCompletion(contactedUsersIds)
+            }
+        }
+    }
+
+    fun fetchChatHistory(contact : String ,observerHandler: (msg : ChatMessage)-> Unit
+                         , onCompletion: (chatUsers: ArrayList<ChatMessage> , channelName : String) -> Unit){
+        val msgs = ArrayList<ChatMessage>()
+        var display = false
+        auth.currentUser?.uid?.let {
+            uid ->
+            db.collection("Chats").document("$uid-$contact").get().addOnSuccessListener {
+                if(it.exists()){
+                    it.reference
+                        .collection("Messages")
+                        .orderBy("timestamp",Query.Direction.ASCENDING)
+                        .get()
+                        .addOnSuccessListener {
+                            snapShot ->
+                            snapShot.forEach {
+                                msgsSnapShot ->
+                                Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
+                                val msg = msgsSnapShot.toObject<ChatMessage>()
+                                msgs.add(msg)
+                            }
+                            Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
+                            onCompletion(msgs , "$uid-$contact")
+                        }
+
+                    it.reference.collection("Messages")
+                        .orderBy("timestamp",Query.Direction.ASCENDING)
+                        .addSnapshotListener { value, error ->
+                        error?.let{
+                            Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
+                        }
+                        val msgs = value?.toObjects<ChatMessage>()
+                        if(!msgs.isNullOrEmpty() && display){
+                            msgs?.last()?.let {
+                                Log.i("TAG", "fetchChatHistory: "+ it)
+                                observerHandler(it)
+                            }
+                        }
+                            display = true
+                    }
+                }else{
+                    db.collection("Chats").document("$contact-$uid").get().addOnSuccessListener {
+                        it2->
+                        if(it2.exists()){
+                            it2.reference
+                                .collection("Messages")
+                                .get()
+                                .addOnSuccessListener {
+                                        snapShot ->
+                                    snapShot.forEach {
+                                            msgsSnapShot ->
+                                        (msgsSnapShot.data["msg"] as? ChatMessage)?.let{
+                                                msg ->
+                                            msgs.add(msg)
+                                        }
+                                    }
+                                    onCompletion(msgs, "$contact-$uid")
+                                }
+                            it.reference.collection("Messages")
+                                .orderBy("timestamp",Query.Direction.ASCENDING)
+                                .addSnapshotListener { value, error ->
+                                    error?.let{
+                                        Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
+                                    }
+                                    val msgs = value?.toObjects<ChatMessage>()
+                                    if(!msgs.isNullOrEmpty() && display){
+                                        msgs?.last()?.let {
+                                            Log.i("TAG", "fetchChatHistory: "+ it)
+                                            observerHandler(it)
+                                        }
+                                    }
+                                    display = true
+                                }
+                        }else{
+                            // create new document in Chats
+                            db.collection("Chats")
+                                .document("$uid-$contact")
+                                .set(mapOf<String,List<String>>("users" to listOf(uid,contact)))
+                                .addOnSuccessListener {
+                                    Log.i("TAG", "fetchChatHistory: Chat Channel added")
+                                    onCompletion(msgs, "$uid-$contact")
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun sendChatMessage(msg : ChatMessage , toChannel : String){
+        val map = HashMap<String, Any?>()
+        msg::class.memberProperties.forEach {
+            map[it.name] = (it as KProperty1<Any, Any>).get(msg)
+            Log.i("TAG", "save: inside for each  ${it.name} = ${it.get(msg)}")
+        }
+        db.collection("Chats").document(toChannel).collection("Messages").add(map)
+            .addOnSuccessListener { Log.i("TAG", "Message successfully written!") }
+            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
     }
 
     fun loginWithEmailAndPassword(email: String, password: String, onSuccessHandler : ()->Unit, onFailHandler : ()->Unit){
@@ -89,7 +203,9 @@ object FirestoreService {
     }
 
     fun saveUserData(user: Any) {
-
+        (user as? Person)?.let {
+            it.uid = FirebaseAuth.getInstance().uid.toString()
+        }
         val map = HashMap<String, Any?>()
 
         user::class.memberProperties.forEach {
@@ -193,9 +309,6 @@ object FirestoreService {
 
                 var t = document.toObject<Technician>()
                 techniciansList.add(t)
-                t.id = document.id
-
-                Log.i("TAG1", "searchForTechnicianByJobAndLocation: TECH:: ${t.id}")
             }
             callback(techniciansList)
             Log.i("TAG1", "searchForTechnicianByJobAndLocation: ALL TECHNICIANS $techniciansList")
