@@ -15,6 +15,7 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -27,12 +28,23 @@
         <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.HelpActivity" />
-        <activity
-            android:name=".takeOrderScreen.views.ImagePickerDialog"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
+        
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
         <activity android:name=".NavigationBar.NavigationBarActivity">
+        <activity android:name=".inAppChatScreens.views.NewMessageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavigationBar.NavigationBarActivity" />
+        </activity>
+        <activity
+            android:name=".inAppChatScreens.views.ChatLogActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".inAppChatScreens.views.NewMessageActivity" />
+        </activity>
+        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity"></activity>
+        <activity android:name=".LoginScreen.Views.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,8 +58,8 @@
             android:name=".Addresses.AddAddressActivity"
             android:label="Add Address" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".SplashScreen" />
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" /> <!-- added for maps -->
+        <activity android:name=".Addresses.MyAdresses" /> <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -59,7 +71,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
 
-        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LoginScreen.Views.RegistrationActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".HomeActivity" />
     </application>

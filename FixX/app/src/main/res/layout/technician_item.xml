@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="TextView"
+                android:hint="0 done-jobs"
                 app:layout_constraintBottom_toBottomOf="@+id/technician_item_review_lbl"
                 app:layout_constraintStart_toEndOf="@+id/technician_item_img"
                 app:layout_constraintTop_toTopOf="@+id/technician_item_review_lbl" />
@@ -88,7 +88,7 @@
                 android:layout_height="46dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="8dp"
-                android:text="Button"
+                android:text="Book"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

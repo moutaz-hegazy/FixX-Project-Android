@@ -22,13 +22,13 @@
 
             <Spinner
                 android:id="@+id/customizeOrder_pickLocation_spinner"
-                android:layout_width="205dp"
-                android:layout_height="49dp"
-                android:layout_marginTop="24dp"
+                android:layout_width="240dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
                 android:autofillHints="@string/enterLocation"
                 android:prompt="@string/app_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.922"
+                app:layout_constraintHorizontal_bias="0.877"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -16,29 +16,15 @@ import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
 import com.example.fixx.RegistrationActivity
 import kotlinx.android.synthetic.main.fragment_settings.*
+import com.example.fixx.Addresses.MyAdresses
+import com.example.fixx.inAppChatScreens.views.NewMessageActivity
+import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -85,13 +71,7 @@ class SettingsFragment : Fragment() {
 
 
 
-        val profile = rootView.findViewById(R.id.settingsfragment_profile_linear_layout) as LinearLayout
-        profile.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-
-                openProfileActivity();
-            }
-        })
+       
 
         val language = rootView.findViewById(R.id.settingsfragment_language_linear_layout) as LinearLayout
         language.setOnClickListener(object : View.OnClickListener {
@@ -144,10 +124,21 @@ class SettingsFragment : Fragment() {
         })
 
 
+        rootView.settingsfragment_profile_linear_layout.setOnClickListener {
+            openProfileActivity()
+        }
+
+        rootView.settings_addresses_layOut.setOnClickListener {
+            openAddressesScreen()
+        }
+
+        rootView.settings_chat_layout.setOnClickListener {
+            startActivity(Intent(context, NewMessageActivity::class.java))
+        }
         return rootView
     }
 
-    fun openProfileActivity(){
+    private fun openProfileActivity(){
 
         val intent = Intent (getActivity(), ProfileActivity::class.java)
         getActivity()?.startActivity(intent)
@@ -161,24 +152,8 @@ class SettingsFragment : Fragment() {
 
     }
 
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun openAddressesScreen(){
+        startActivity(Intent(context, MyAdresses::class.java))
     }
+
 }

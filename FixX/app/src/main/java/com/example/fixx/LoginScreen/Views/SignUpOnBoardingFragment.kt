@@ -1,15 +1,17 @@
-package com.example.fixx
+package com.example.fixx.LoginScreen.Views
 
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Details
+import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import java.util.regex.Pattern
 
 class SignUpOnBoardingFragment : Fragment() {
@@ -39,15 +41,17 @@ class SignUpOnBoardingFragment : Fragment() {
         userAvatar?.setImageResource(R.drawable.colored_avatar_user)
         techAvatar?.setImageResource(R.drawable.colored_avatar_technician)
 
+
         phoneNumberEditText?.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                phoneNumberEditText?.error = null
             }
         })
+
 
         userAvatar?.setOnClickListener(View.OnClickListener {
             isProfileTypeSelected = true
@@ -56,7 +60,7 @@ class SignUpOnBoardingFragment : Fragment() {
             techAvatar?.setBackgroundResource(0)
             userAvatar?.setBackgroundResource(R.drawable.avatar_frame)
             techChoice?.setTextColor(Color.BLACK)
-            userChoice?.setTextColor(Color.YELLOW)
+            userChoice?.setTextColor(Color.RED)
             accountType = getAppUserAccountType()
         })
 
@@ -67,24 +71,54 @@ class SignUpOnBoardingFragment : Fragment() {
             userAvatar?.setBackgroundResource(0)
             techAvatar?.setBackgroundResource(R.drawable.avatar_frame)
             userChoice?.setTextColor(Color.BLACK)
-            techChoice?.setTextColor(Color.YELLOW)
+            techChoice?.setTextColor(Color.RED)
             accountType = getAppUserAccountType()
         })
 
-        nextButton?.setOnClickListener(View.OnClickListener {
+        nextButton?.setOnClickListener{
             phoneNumber = phoneNumberEditText?.text.toString()
             if(validateSignUpForm1()){
-                passAppUserData(phoneNumber, accountType)
+                FirestoreService.checkIfPhoneExists(phoneNumber){ exists->
+                    if(exists){
+                        phoneNumberEditText?.text?.clear()
+                        Toast.makeText(context , "this phone number already exists.",Toast.LENGTH_SHORT).show()
+                    }else {
+                        passAppUserData(phoneNumber, accountType)
+                        nextButton?.visibility = View.GONE
+                    }
+                }
             }
-        })
+        }
+
         return root
     }
 
-    private fun String.isPhoneNumberValid(): Boolean {
-        if(Pattern.matches("(011|012|010|015)[0-9]{8}", phoneNumber)) {
-            return true
-        }
-        return false
+    private fun String.isValidPhoneNumber(): Boolean {
+        var pattern = Pattern.compile("(011|012|010|015)[0-9]{8}")
+        var matcher = pattern.matcher(phoneNumber)
+        return matcher.matches()
+    }
+
+    private fun validatePhoneNumber(phoneNumber: String): Boolean{
+        var flag = false
+        if(this.phoneNumber.trim().length == 11 && this.phoneNumber.isValidPhoneNumber())
+            flag = true
+        else if(phoneNumber.isEmpty())
+            phoneNumberEditText?.error = "This field is required"
+        else
+            phoneNumberEditText?.error = "Enter number as per Egyptian standards"
+        return flag
+    }
+
+    private fun validateSignUpForm1(): Boolean {
+        var flag: Boolean = false
+        if (validatePhoneNumber(phoneNumber) && isProfileTypeSelected)
+            flag = true
+        else if (phoneNumber.isEmpty())
+            phoneNumberEditText?.error = "This field is required."
+        else if (validatePhoneNumber(phoneNumber) && !isProfileTypeSelected)
+            Toast.makeText(context, "Please, choose profile type.", Toast.LENGTH_LONG).show()
+        return flag
     }
 
     private fun getAppUserAccountType(): String{
@@ -94,32 +128,6 @@ class SignUpOnBoardingFragment : Fragment() {
         else if(isTechieProfile)
             appUserAccountType = "Technician"
         return appUserAccountType
-    }
-
-    private fun validatePhoneNumber(): Boolean{
-        var validPhoneNumber = false
-        if(phoneNumber.trim().length == 11 && phoneNumber.isPhoneNumberValid()){
-            validPhoneNumber = true
-            nextButton?.isEnabled = true
-        }else{
-            phoneNumberEditText?.error = "Phone number format must start with 01x followed by 8 numbers"
-            userAvatar?.isEnabled = false
-            techAvatar?.isEnabled = false
-            nextButton?.isEnabled = false
-        }
-        return validPhoneNumber
-    }
-
-    private fun validateSignUpForm1(): Boolean {
-        var validRequiredFields: Boolean = false
-        if (validatePhoneNumber() && isProfileTypeSelected) {
-            validRequiredFields = true
-        } else if (phoneNumber.isEmpty()) {
-            phoneNumberEditText?.error = "This field is required."
-        } else if (!isProfileTypeSelected) {
-            Toast.makeText(context, "Please, choose profile type.", Toast.LENGTH_LONG).show()
-        }
-        return validRequiredFields
     }
 
     private fun passAppUserData(phoneNumber: String, accountType: String){
