@@ -59,8 +59,8 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="2.4"
-                app:layout_constraintStart_toStartOf="@+id/ongoing_orders_jobType_lbl"
-                app:layout_constraintTop_toBottomOf="@+id/ongoing_orders_jobType_lbl" />
+                app:layout_constraintStart_toStartOf="@+id/technician_item_name_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/technician_item_name_lbl" />
 
             <TextView
                 android:id="@+id/technician_item_review_lbl"
@@ -79,7 +79,7 @@
                 android:layout_marginStart="12dp"
                 android:hint="0 done-jobs"
                 app:layout_constraintBottom_toBottomOf="@+id/technician_item_review_lbl"
-                app:layout_constraintStart_toEndOf="@+id/ongoing_order_job_image"
+                app:layout_constraintStart_toEndOf="@+id/technician_item_img"
                 app:layout_constraintTop_toTopOf="@+id/technician_item_review_lbl" />
 
             <Button
