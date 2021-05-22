@@ -6,11 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.POJOs.ChatMessage
 import com.example.fixx.POJOs.Person
-import com.example.fixx.POJOs.User
-import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityChatLogBinding
+import com.example.fixx.inAppChatScreens.viewModels.ChatLogViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
@@ -26,6 +25,7 @@ class ChatLogActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityChatLogBinding
     private lateinit var channel : String
+    private lateinit var chatLogVm : ChatLogViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,45 +35,40 @@ class ChatLogActivity : AppCompatActivity() {
         contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
         channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL) ?: ""
         recyclerview_chat_log.adapter = adapter
-        val msg1 = ChatMessage("Hello",FirestoreService.auth?.currentUser?.uid ?: "",System.currentTimeMillis() / 1000)
 
         supportActionBar?.apply {
             title = contact.name
         }
-        FirestoreService.fetchChatHistoryForChannel(channel, observerHandler = {
-            msg ->
-            Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
-            displayMsg(msg)
-            adapter.notifyDataSetChanged()
 
-        }, onCompletion = {
-            msgs ->
-            setButton()
-            Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
-            msgs.forEach {
-                msg ->
+        chatLogVm = ChatLogViewModel(channel,contact.uid,
+            observer = { msg ->
+                Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
                 displayMsg(msg)
                 adapter.notifyDataSetChanged()
-            }
-        })
-
-
-
+            },onCompletion = { msgs ->
+                setButton()
+                Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
+                msgs.forEach {
+                        msg ->
+                    displayMsg(msg)
+                    adapter.notifyDataSetChanged()
+                }
+            })
     }
 
     private fun setButton(){
         binding.sendButtonChatLog.setOnClickListener {
             val txt = binding.edittextChatLog.text.toString()
             if(!txt.isNullOrEmpty()){
-                val newMsg = ChatMessage(txt,FirestoreService.auth.currentUser?.uid ?: "",
+                val newMsg = ChatMessage(txt,NavigationBarActivity.USER_OBJECT?.uid ?: "",
                     System.currentTimeMillis() / 1000)
-                FirestoreService.sendChatMessage(newMsg, channel)
+                chatLogVm.sendMessage(newMsg)
                 binding.edittextChatLog.text.clear()
             }
         }
     }
     private fun displayMsg(msg : ChatMessage){
-        if(msg.fromId != FirestoreService.auth.currentUser?.uid){
+        if(msg.fromId != NavigationBarActivity.USER_OBJECT?.uid){
             NavigationBarActivity.USER_OBJECT?.let {
                 adapter.add(ChatFromItem(msg.text, it))
                 binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)

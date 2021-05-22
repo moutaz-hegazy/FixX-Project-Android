@@ -148,29 +148,27 @@ object FirestoreService {
                             if (it2.exists()) {
                                 loadMessagesWithObserver(it2,"$contact-$uid",observerHandler,onCompletion)
                             } else {
-                                var success = false
                                 // create new document in Chats
                                 db.collection("Chats")
                                     .document("$uid-$contact").apply {
                                         set(mapOf<String, List<String>>("users" to listOf(uid, contact)))
-                                            .addOnSuccessListener { success = true }
-                                        if (success) {
-                                            collection("Messages").addSnapshotListener { value, error ->
-                                                error?.let {
-                                                    Log.i(
-                                                        "TAG",
-                                                        "fetchChatHistory: Error " + it.localizedMessage
-                                                    )
-                                                }
-                                                val msgs = value?.toObjects<ChatMessage>()
-                                                if (!msgs.isNullOrEmpty()) {
-                                                    msgs.last().let {
-                                                        Log.i("TAG", "fetchChatHistory: " + it)
-                                                        observerHandler(it)
+                                            .addOnSuccessListener {
+                                                this.collection("Messages").addSnapshotListener { value, error ->
+                                                    error?.let {
+                                                        Log.i(
+                                                            "TAG",
+                                                            "fetchChatHistory: Error " + it.localizedMessage
+                                                        )
+                                                    }
+                                                    val msgs = value?.toObjects<ChatMessage>()
+                                                    if (!msgs.isNullOrEmpty()) {
+                                                        msgs.last().let {
+                                                            Log.i("TAG", "fetchChatHistory: " + it)
+                                                            observerHandler(it)
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
                                     }
                             }
                         }
