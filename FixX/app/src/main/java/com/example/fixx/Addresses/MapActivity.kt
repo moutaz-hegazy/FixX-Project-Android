@@ -6,7 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
@@ -17,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -25,6 +28,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.activity_map.*
 import java.io.IOException
 import java.util.*
@@ -42,6 +51,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
 
+
     var mLocationPermissionGranted = false
 
     var markedLocation: Array<String> = arrayOf("","","","")
@@ -52,6 +62,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_map)
 
         getLocationPermission()
+       // initPlacesSuggestion()
 
     }
 
@@ -71,13 +82,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         try {
             if (mLocationPermissionGranted) {
-                val loaction = mFusedLocationProviderClient.lastLocation
+                var loaction = mFusedLocationProviderClient.lastLocation
                 loaction.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(baseContext, "location found",
-                                Toast.LENGTH_SHORT).show()
                         val currentLocation = task.result
+
                         if (currentLocation != null) {
+
+//                            Toast.makeText(baseContext, "location found newwwwwwwww",
+//                                Toast.LENGTH_SHORT).show()
 
                             val district =  getdistrictName(currentLocation.latitude,currentLocation.longitude)
                             val city = getCityName(currentLocation.latitude,currentLocation.longitude)
@@ -90,6 +103,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                             markedLocation[3] = country
 
                             moveCamera(LatLng(currentLocation.latitude, currentLocation.longitude), DEFAULT_ZOOM,"${district}, ${city}, ${governorate}, ${country}")
+
+
+                        }
+                        else{
+//                            Toast.makeText(baseContext, "tired",
+//                                Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         Toast.makeText(baseContext, "couldn't find location",
@@ -132,6 +151,45 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    fun initPlacesSuggestion(){
+        // Initialize the SDK
+        Places.initialize(applicationContext, getString(R.string.google_maps_api_key))
+
+//        val placesClient = Places.createClient(this)
+//
+//        val autocompleteFragment =
+//            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+//                    as AutocompleteSupportFragment
+//
+//        // Specify the types of place data to return.
+//        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+//
+//        // Set up a PlaceSelectionListener to handle the response.
+//        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+//            override fun onPlaceSelected(place: Place) {
+//
+//                Log.i("auto", "Place: ${place.name}, ${place.id}")
+//            }
+//
+//            override fun onError(p0: Status) {
+//
+//                Log.i("auto", "An error occurred: $p0")
+//            }
+//        })
+
+
+
+//        map_activity_search_input_txt.isFocusable = false
+//
+//        map_activity_search_input_txt.setOnClickListener {
+//            val fieldList =
+//                Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
+//            val autocompleteIntent =
+//                Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(this)
+//            startActivityForResult(autocompleteIntent,100)
+//        }
+    }
+
     fun initMap() {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
@@ -140,13 +198,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @Override
     override fun onMapReady(googleMap: GoogleMap) {
-        Toast.makeText(baseContext, "map is ready",
-                Toast.LENGTH_SHORT).show()
+//        Toast.makeText(baseContext, "map is ready",
+//                Toast.LENGTH_SHORT).show()
 
         mMap = googleMap
 
         if (mLocationPermissionGranted) {
             getDeviceLocation()
+
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return
@@ -226,6 +285,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+//        if(requestCode == 100 && resultCode == Activity.RESULT_OK){
+//            val place = Autocomplete.getPlaceFromIntent(data!!)
+//
+//           // map_activity_search_input_txt.text = place.address.
+//            map_activity_search_input_txt.setText(place.getAddress())
+//        }
+    }
+
     private fun hideSoftKeyboard(){
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
@@ -233,6 +303,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun moveCamera(latLng: LatLng, zoom: Float, title: String) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
 
+       // Toast.makeText(this,"please",Toast.LENGTH_LONG).show()
             val options = MarkerOptions()
                 .position(latLng)
                 .title(title)
@@ -240,6 +311,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.addMarker(options)
 
         hideSoftKeyboard()
+
     }
 
     private fun getdistrictName(lat: Double, lon: Double):String{

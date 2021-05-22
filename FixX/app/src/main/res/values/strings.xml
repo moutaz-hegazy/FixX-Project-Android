@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FixX</string>
-    <string name="google_maps_api_key">AIzaSyAwP8PF38zhUwteoi3kIZVolt0HCndTktk</string>
+    <string name="google_maps_api_key">AIzaSyCye7MCW8Dzvy_U4S5kb-E5j-kIXoWSfCk</string>
     <string name="enterLocation">select location</string>
     <string name="CustomizeOrderTitle">Customize Order</string>
     <string name="Delete">delete</string>

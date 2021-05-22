@@ -66,15 +66,17 @@ class AddAddressActivity : AppCompatActivity() {
         val alexArea = arrayOf(
             "Area",
             "Moharam Bek",
-            "Abou Qeer",
-            "El Hadara",
-            "El Amerya",
-            "El Asafra",
-            "El Azareta",
+            "Abu Qir",
+            "Montaza",
+            "Al Hadarah",
+            "Al Ibrahimeyah",
+            "Asafra",
+            "Al Azaritah",
             "Bahari",
-            "Bokla",
-            "Burg El Arab",
-            "El Qabary",
+            "Dekhela",
+            "Bokli",
+            "Borg Al Arab",
+            "Al Qabari",
             "Fleming",
             "Janklees",
             "Gleem",
@@ -82,18 +84,23 @@ class AddAddressActivity : AppCompatActivity() {
             "Louran",
             "El Mandara",
             "Miami",
-            "San Stefano",
+            "San Stifano",
             "Sidi Beshr",
             "Sidi Gaber",
-            "El Shatbi",
+            "Shatebi",
             "Sporting",
             "Victoria",
             "Smouha",
-            "Stanly",
+            "Stanli",
             "Wabor El Maya",
             "El Hanovil",
             "El Bitash",
-            "Other"
+            "Qism Bab Sharqi",
+            //"Qism El-Raml",
+            "Mansheya",
+            "Al Attarin",
+            "First Al Raml",
+            "Mustafa Kamel"
         )
 
         val emptyArea = arrayOf("Other")
@@ -158,25 +165,31 @@ class AddAddressActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val address = data!!.getStringArrayExtra(Constants.TRANS_ADDRESS)
 
-                var found = false
+                var cityFound = false
+                var areaFound = false
                 for (iterator in cities.indices) {
                     if (address!![2].contains(cities[iterator], ignoreCase = true)) {
                         add_address_activity_city_spinner.setSelection(iterator, true)
-                        found = true
+                        cityFound = true
                     }
                 }
-                if (!found) {
+                if (!cityFound) {
                     add_address_activity_city_spinner.setSelection(0, true)
                 }
 
                 for (iterator in areas.indices) {
-                    if (address!![1].contains(areas[iterator], ignoreCase = true)) {
+                    if (address!![1].contains(areas[iterator], ignoreCase = true) || address!![0].contains(areas[iterator], ignoreCase = true)) {
                         add_address_activity_area_spinner.post(Runnable {
                             add_address_activity_area_spinner.setSelection(
                                 iterator
                             )
                         })
+                        areaFound = true
                     }
+                }
+                if (!areaFound){
+                    add_address_activity_area_spinner.post(Runnable {
+                        add_address_activity_area_spinner.setSelection(0)})
                 }
             }
         } else {
