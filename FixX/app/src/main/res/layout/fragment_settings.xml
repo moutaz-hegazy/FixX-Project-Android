@@ -55,6 +55,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="View or Edit Your Profile"
+                        android:textColor="@android:color/primary_text_light"
 
                         />
 
@@ -70,6 +71,7 @@
                 android:background="#E6E6E6"/>
 
             <LinearLayout
+                android:id="@+id/settingsfragment_chat_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15sp"
@@ -128,6 +130,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/settingsfragment_language_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15sp"
@@ -159,6 +162,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/settingsfragment_help_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15sp"
@@ -190,6 +194,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/settingsfragment_exit_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15sp"

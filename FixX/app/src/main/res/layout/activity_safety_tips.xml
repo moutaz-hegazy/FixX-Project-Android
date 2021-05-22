@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NavigationBar.SettingsScreen.SafetyTipsActivity">
+
+<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gardient_background"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="Make the most of your Fix-X visit"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-Fix-X aims at excellence in services provided to its customers,those are Fix-X tips to help you enjoy our services even better. "
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-Contracting Fix-X fixer outside the app voids your grantee and keeps you without any quality or cost control, so always use Fix-X for your repair needs. "
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-We always make sure our fixers are honest and safe to let in your house, but your peace of mind always keep your personal belongings away from the fixing area. "
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-Try having company when Fix-X fixers are at your home. "
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-Fixing your home might involve dangerous materials and tools, so always keep your children away from Fix-X fixers gadgets and tools to ensure their safety. "
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-Be in close proximity to the fixers, but try not to distract them with questions until the job is finished. "
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="-Please be sure about your order for Fix-X to enable us to serve you best, cancelling and no show isn't welcome at Fix-X. "
+                />
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+    </ScrollView>
+</LinearLayout>

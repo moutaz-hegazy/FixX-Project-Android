@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NavigationBar.SettingsScreen.AboutUsActivity">
+
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gardient_background"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:text="About us"
+            android:padding="15dp"
+            android:paddingLeft="15dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/purple_500"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:textColor="@color/black"
+            android:text="-Fix-X is a repairmen application in Egypt where you can order fixers from different categories in maintenance and finishing.With alot of registered fixers. "
+/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:textColor="@color/black"
+            android:text="-We know how hard it is to find a qualified fixer to get the job done.That's why Fix-X does all the hard work for you;we search,evaluate,and select the best fixers in all maintenance and finishing fields,and connect you with them flawlessly through our application. "
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:textColor="@color/black"
+            android:text="-With Fix-X you can easilychoose your fixer based on previous customers ratings,location,and category.You can also leave your review too. "
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:textColor="@color/black"
+            android:text="-Our fixers are trained,punctual,and highly professional so you can stay safe and get high-quality services. "
+            />
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</ScrollView>
+</LinearLayout>

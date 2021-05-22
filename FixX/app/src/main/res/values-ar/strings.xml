@@ -15,4 +15,26 @@
     <string name="sign_up">إنشاء حساب جديد</string>
     <string name="login">تسجيل الدخول</string>
     <string name="loading">برجاء الانتظار قليلا...</string>
+
+
+
+
+    <string name="Painter">نقاش</string>
+    <string name="Plumber">سباك</string>
+    <string name="Electrician">كهربائى</string>
+    <string name="Carpenter">نجار</string>
+    <string name="Tiles_Handyman">سيراميك</string>
+    <string name="Parquet">باركيه</string>
+    <string name="Smith">حداد</string>
+    <string name="Decoration_Stones">واجهات حجرية</string>
+    <string name="Alumetal">الوميتال</string>
+    <string name="Air_Conditioner">صيانة تكييف</string>
+    <string name="Curtains">ستائر</string>
+    <string name="Glass">زجاج</string>
+    <string name="Satellite">صيانة دش</string>
+    <string name="Gypsum_Works">اعمال جبس</string>
+    <string name="Marble">رخام</string>
+    <string name="Pest_Control">مكافحة حشرات</string>
+    <string name="Wood_Painter">استرجى</string>
+    <string name="Swimming_pool">حمامات سباحة</string>
 </resources>
