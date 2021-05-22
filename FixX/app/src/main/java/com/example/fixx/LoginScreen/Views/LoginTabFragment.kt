@@ -14,9 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fixx.HomeActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
-import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.util.regex.Pattern
 
 class LoginTabFragment: Fragment() {
@@ -85,10 +85,14 @@ class LoginTabFragment: Fragment() {
             if (password.isEmpty())
                 passwordEditText?.error = "This field is required"
             else {
-                Log.i("TAG", "onCreateView: DATA >>>>$email<<<<< , >>>>$password<<<<<")
-                FirestoreService.loginWithEmailAndPassword(email, password) {
-                    Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
-                }
+                FirestoreService.loginWithEmailAndPassword(email, password, onSuccessHandler = {
+                    val home = Intent(context, NavigationBarActivity::class.java)
+                    startActivity(home)
+                    activity?.finish()
+                },
+                    onFailHandler = {
+                        Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
+                })
             }
         })
 

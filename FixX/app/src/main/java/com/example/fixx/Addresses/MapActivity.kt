@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -178,7 +179,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         map_activity_add_address_btn.setOnClickListener {
             val intent = Intent().apply {
-                putExtra("address", markedLocation)
+                putExtra(Constants.TRANS_ADDRESS, markedLocation)
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
@@ -241,42 +242,42 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         hideSoftKeyboard()
     }
 
-    fun getdistrictName(lat: Double, lon: Double):String{
+    private fun getdistrictName(lat: Double, lon: Double):String{
         var district:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var Adress = geoCoder.getFromLocation(lat,lon,3)
+        var address = geoCoder.getFromLocation(lat,lon,3)
 
-        district = Adress.get(0).locality
+        district = address[0].locality
 
         return district
     }
 
-    fun getCityName(lat: Double, lon: Double):String{
+    private fun getCityName(lat: Double, lon: Double):String{
         var cityName:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var Adress = geoCoder.getFromLocation(lat,lon,3)
+        var address = geoCoder.getFromLocation(lat,lon,3)
 
-        cityName = Adress.get(0).subAdminArea
+        cityName = address[0].subAdminArea
 
         return cityName
     }
 
-     fun getGovernorateName(lat: Double, lon: Double):String{
-        var gevornarate:String = ""
+     private fun getGovernorateName(lat: Double, lon: Double):String{
+        var governorate:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var Adress = geoCoder.getFromLocation(lat,lon,3)
+        var address = geoCoder.getFromLocation(lat,lon,3)
 
-        gevornarate = Adress.get(0).adminArea
+        governorate = address[0].adminArea
 
-        return gevornarate
+        return governorate
     }
 
-    fun getCountryName(lat: Double, lon: Double):String{
+    private fun getCountryName(lat: Double, lon: Double):String{
         var countryName = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var Adress = geoCoder.getFromLocation(lat,lon,3)
+        var address = geoCoder.getFromLocation(lat,lon,3)
 
-        countryName = Adress.get(0).countryName
+        countryName = address[0].countryName
 
         return countryName
     }

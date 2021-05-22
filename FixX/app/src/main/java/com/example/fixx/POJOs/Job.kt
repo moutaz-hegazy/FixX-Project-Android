@@ -1,22 +1,25 @@
 package com.example.fixx.POJOs
 
 import android.graphics.Bitmap
+import kotlinx.android.parcel.RawValue
+import java.io.Serializable
 
-data class Job (val uid: Int, val type : String, val location : String, val status : JobStatus = JobStatus.OnRequest){
+data class Job (val uid: String?, val type : String, var location : String?, val status : JobStatus = JobStatus.OnRequest): Serializable{
+    var jobId : String = ""
     var description : String = ""
     var date : String = ""
-    var fromTime : String = ""
-    var toTime : String = ""
+    var completionDate : String = ""
+    var fromTime : String? = null
+    var toTime : String? = null
     var price : Int? = null
-    var images : MutableList<Bitmap>? = null
     var techID : Int? = null
     var bidders : MutableList<Int>? = null
+    var images : MutableList<String>? = null
 
-
-    enum class JobStatus {
-        OnRequest,
-        Accepted,
-        OnGuarantee,
-        Completed
+    enum class JobStatus constructor(var rawValue: String) : Serializable {
+        OnRequest("OnRequest"),
+        Accepted("Accepted"),
+        OnGuarantee("OnGuarantee"),
+        Completed("Completed")
     }
 }

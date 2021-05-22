@@ -12,9 +12,12 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Details
 import com.example.fixx.HomeActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.POJOs.User
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
+import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.util.regex.Pattern
 
 class SignUpTabFragment: Fragment() {
@@ -147,27 +150,39 @@ class SignUpTabFragment: Fragment() {
             password = passwordEditText?.text.toString()
             confirmedPassword = confirmPasswordEditText?.text.toString()
 
-            if(validateSignUpForm2(email, password, confirmedPassword)){
-                startActivity(Intent(context, HomeActivity::class.java))
-            }
-
             if(usernameEditText?.text.isNullOrEmpty())
                 usernameEditText?.error = "This field is required"
-            if(email.isEmpty())
+            else if(email.isEmpty())
                 emailEditText?.error = "This field is required"
-            if(password.isEmpty())
+            else if(password.isEmpty())
                 passwordEditText?.error = "This field is required"
-            if(confirmedPassword.isEmpty())
+            else if(confirmedPassword.isEmpty())
                 confirmPasswordEditText?.error = "This field is required"
-
-            if (passedAccountType == "User"){
-                var user: User = createUserObject()
-                Log.i("TAG", user.phoneNumber)
-
-            }
-            else if (passedAccountType == "Technician"){
-                val technician: Technician = createTechnicianObject()
-                Log.i("TAG", technician.phoneNumber)
+            else if(validateSignUpForm2(email, password, confirmedPassword)){
+                FirestoreService.checkIfEmailExists(email){
+                    exists ->
+                    if(exists){
+                        emailEditText?.text?.clear()
+                        passwordEditText?.text?.clear()
+                        confirmPasswordEditText?.text?.clear()
+                        Toast.makeText(context, "this email already exists.", Toast.LENGTH_SHORT).show()
+                    }else{
+                        FirestoreService.registerUser(email,password, onSuccessHandler = {
+                            if (passedAccountType == "User"){
+                                var user: User = createUserObject()
+                                FirestoreService.saveUserData(user)
+                            }
+                            else if (passedAccountType == "Technician") {
+                                val technician: Technician = createTechnicianObject()
+                                FirestoreService.saveUserData(technician)
+                            }
+                            startActivity(Intent(context, NavigationBarActivity::class.java))
+                            activity?.finish()
+                        }, onFailHandler = {
+                            Toast.makeText(context, "Register fail.",Toast.LENGTH_SHORT).show()
+                        })
+                    }
+                }
             }
         })
 

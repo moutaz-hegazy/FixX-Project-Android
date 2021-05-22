@@ -1,16 +1,16 @@
 package com.example.fixx.takeOrderScreen.views
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.TimePickerDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -23,14 +23,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.Addresses.AddAddressActivity
+import com.example.fixx.POJOs.Job
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
+import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_customize_order.*
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,16 +44,22 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private lateinit var binding: ActivityCustomizeOrderBinding
     private val values = arrayListOf<String>("Select Location", "Add new Location")
-    private val images = mutableListOf<Bitmap>()
+    private val images = arrayListOf<Bitmap>()
 
-    private var uid : Int? = 13
+    private var imagePath : Uri? = null
+
+    private var imagePathsList = arrayListOf<Uri>()
+    private var imagePathsStringArray = arrayListOf<String>()
+
+    private var imagePathsList2 = arrayListOf<Uri>()
+
     private var selectedLocation : String? = null
     private var selectedDate : String = {
         SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
     }()
+
     private var selectedFromTime = ""
     private var selectedToTime = ""
-    private var selectedDescription = ""
     private var selectedJobType : String = ""
 
     private val imagesAdapter : ImagesAdapter by lazy {
@@ -150,21 +161,55 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         // select Tech configuration.
         binding.cusomizeOrderSelectTechBtn.setOnClickListener{
             //select tech.
-            val selectTechIntent = Intent(applicationContext,ShowTechniciansScreen::class.java).apply {
-                putExtra(Constants.LOCATION_TO_TECH, selectedLocation)
-                putExtra(Constants.JOB_TYPE_TO_TECH,selectedJobType)
-                putExtra(Constants.serviceName,serviceName)
+            if (validateJobData()) {
+                val job = createNewJob()
+
+                val selectTechIntent =
+                    Intent(applicationContext, ShowTechniciansScreen::class.java).apply {
+                        putExtra(Constants.serviceName, serviceName)
+                        putExtra(Constants.TRANS_JOB, job)
+                        /*putExtra(Constants.TRANS_IMAGES,images.subList(1,images.size).toTypedArray())
+                          putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsList.toTypedArray())*/
+                        putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsStringArray.toTypedArray())
+
+                    }
+                startActivity(selectTechIntent)
             }
-            startActivity(selectTechIntent)
         }
         //---------------------------------------------------------------
 
         // publish order configuration.
         binding.customizeOrederPublishBtn.setOnClickListener {
-            
+
+            if (validateJobData()) {
+                val job = createNewJob()
+                imagePathsStringArray?.forEach { image ->
+                    imagePathsList2.add(Uri.parse(image))
+                }
+                CustomizeOrderViewModel(job, imagePathsList2){
+                    Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                    Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<< ${job.jobId}")
+                }
+                finish()
+
+            }
         }
         //------------------------------------------------------------------
+    }
 
+    private fun validateJobData(): Boolean {
+        return  !selectedJobType.isNullOrEmpty() && !selectedLocation.isNullOrEmpty()
+    }
+
+    private fun createNewJob() : Job{
+        return Job(FirestoreService.auth.currentUser?.uid, selectedJobType, selectedLocation).apply {
+            date = selectedDate
+            description = binding.customizeOrderDescriptionTxt.text.toString()
+            fromTime = selectedFromTime
+            toTime = selectedToTime
+            var parsedJobLocation = location?.substringBefore(":")
+            location = parsedJobLocation
+        }
     }
 
 
@@ -197,17 +242,35 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         var image : Bitmap? = null
         if(resultCode == Activity.RESULT_OK){
             when (requestCode) {
-                Constants.cameraPickerRequestCode -> if (resultCode === RESULT_OK) {
+                Constants.cameraPickerRequestCode ->{
                     image = data?.extras?.get("data") as? Bitmap
+                    imagePath = image?.let { getImageUriFromBitmap(this, it) }
                 }
 
-                Constants.galleryPickerRequestCode -> if (resultCode === RESULT_OK) {
+                Constants.galleryPickerRequestCode ->{
                     image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+                    imagePath = data?.data
+                }
+
+
+
+                Constants.START_ADDRESS_MAP_REQUEST_CODE -> {
+                    val newAddress = data?.getStringExtra(Constants.TRANS_ADDRESS)
+                    newAddress?.let {
+                        values.add(values.size-1,it)
+                        spinnerAdapter.notifyDataSetChanged()
+                        customizeOrder_pickLocation_spinner.setSelection(values.size -2)
+                    }
                 }
             }
             image?.let{
                 images.add(it)
                 imagesAdapter.notifyDataSetChanged()
+            }
+            //Log.i("TAG", "onActivityResult: will upload  ${imagePath.toString()}")
+            imagePath?.let {
+                imagePathsList.add(it)
+                imagePathsStringArray.add(it.toString())
             }
         }
     }
@@ -229,14 +292,18 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         Log.i("TAG", "onItemSelected:<<<<<<<<<<<< " + values[position])
         if(position == values.size - 1){
             // add new location Logic.
-//            spinnerAdapter.addValue("SHIT")
-//            customizeOrder_pickLocation_spinner.setSelection(spinnerAdapter.getPosition("SHIT"))
+            customizeOrder_pickLocation_spinner.setSelection(0)
+            startAddressActivity()
         }else{
             selectedLocation = values[position]
         }
         Toast.makeText(this, values[position], Toast.LENGTH_SHORT).show()
     }
 
+    private fun startAddressActivity(){
+        startActivityForResult(Intent(applicationContext, AddAddressActivity::class.java),
+                Constants.START_ADDRESS_MAP_REQUEST_CODE)
+    }
 
     private fun showBottomSheetDialog(){
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_pick, null)
@@ -244,15 +311,25 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         dialog.setContentView(btnsheet.rootView)
         btnsheet.bottomSheet_camera_layout.setOnClickListener {
 
-            checkForPermission(android.Manifest.permission.CAMERA,"Camera",Constants.CAMERA_PERMISSION_REQUEST_CODE)
+            checkForPermission(android.Manifest.permission.CAMERA,"Camera",
+                Constants.CAMERA_PERMISSION_REQUEST_CODE){
+                val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(
+                    takePicture,
+                    Constants.cameraPickerRequestCode
+                )
+            }
             dialog.dismiss()
         }
         btnsheet.bottomSheet_gallery_layout.setOnClickListener {
-            val pickPhoto = Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            )
-            startActivityForResult(pickPhoto, Constants.galleryPickerRequestCode)
+            checkForPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,"Gallery",
+                Constants.GALLERY_PERMISSION_REQUEST_CODE){
+                val pickPhoto = Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
+                startActivityForResult(pickPhoto, Constants.galleryPickerRequestCode)
+            }
             dialog.dismiss()
         }
         dialog.show()
@@ -271,15 +348,12 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     // camera permission Code ->
-    private fun checkForPermission(permission : String, name : String,    requestCode : Int){
+    private fun checkForPermission(permission : String, name : String, requestCode : Int ,onGrantedHandler: ()->Unit){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             when {
                 ContextCompat.checkSelfPermission(applicationContext,permission) == PackageManager.PERMISSION_GRANTED -> {
-                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(
-                        takePicture,
-                        Constants.cameraPickerRequestCode
-                    )
+
+                    onGrantedHandler()
                     Toast.makeText(this, "$name Permission Granted", Toast.LENGTH_SHORT).show()
                 }
                 shouldShowRequestPermissionRationale(permission) -> showDialog(permission, name, requestCode)
@@ -302,16 +376,44 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        fun innerCheck(name: String){
-            if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+        fun innerCheck(name: String) : Boolean{
+            return if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this,"$name permission refused",Toast.LENGTH_SHORT)
+                false
             }else{
                 Toast.makeText(this,"$name permission accepted",Toast.LENGTH_SHORT)
-            }
-
-            when(requestCode){
-                Constants.CAMERA_PERMISSION_REQUEST_CODE -> innerCheck("Camera")
+                true
             }
         }
+
+        when(requestCode){
+            Constants.CAMERA_PERMISSION_REQUEST_CODE -> {
+                if (innerCheck("Camera")){
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(
+                        takePicture,
+                        Constants.cameraPickerRequestCode
+                    )
+                }
+            }
+            Constants.GALLERY_PERMISSION_REQUEST_CODE -> {
+                if(innerCheck("Gallery")){
+                    val pickPhoto = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                    startActivityForResult(pickPhoto, Constants.galleryPickerRequestCode)
+                }
+            }
+        }
+    }
+
+
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
     }
 }

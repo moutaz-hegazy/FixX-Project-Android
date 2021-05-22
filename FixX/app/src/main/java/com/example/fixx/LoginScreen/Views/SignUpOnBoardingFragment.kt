@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Details
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import java.util.regex.Pattern
 
 class SignUpOnBoardingFragment : Fragment() {
@@ -77,8 +78,15 @@ class SignUpOnBoardingFragment : Fragment() {
         nextButton?.setOnClickListener{
             phoneNumber = phoneNumberEditText?.text.toString()
             if(validateSignUpForm1()){
-                passAppUserData(phoneNumber, accountType)
-                nextButton?.visibility = View.GONE
+                FirestoreService.checkIfPhoneExists(phoneNumber){ exists->
+                    if(exists){
+                        phoneNumberEditText?.text?.clear()
+                        Toast.makeText(context , "this phone number already exists.",Toast.LENGTH_SHORT).show()
+                    }else {
+                        passAppUserData(phoneNumber, accountType)
+                        nextButton?.visibility = View.GONE
+                    }
+                }
             }
         }
 

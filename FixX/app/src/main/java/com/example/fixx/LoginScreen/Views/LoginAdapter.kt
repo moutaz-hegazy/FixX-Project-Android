@@ -25,7 +25,7 @@ class LoginAdapter: FragmentPagerAdapter {
     }
 
     override fun getItem(position: Int): Fragment {
-        var loginTabFragment = return when(position){
+        return when(position){
             0 -> LoginTabFragment()
             1 -> SignUpOnBoardingFragment()
             else -> Fragment()

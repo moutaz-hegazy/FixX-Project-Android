@@ -1,11 +1,7 @@
 package com.example.fixx.takeOrderScreen.views
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.R
 import com.example.fixx.databinding.CustomizeOrderImageRecyclerItemBinding
 
-class ImagesAdapter(var data: MutableList<Bitmap>) : RecyclerView.Adapter<ImagesAdapter.VH>() {
+class ImagesAdapter(var data: ArrayList<Bitmap>) : RecyclerView.Adapter<ImagesAdapter.VH>() {
     lateinit var scrollToPositionHandler : (position : Int)->Unit
     lateinit var imagePickerHandler : ()->Unit
     lateinit var context: Context
