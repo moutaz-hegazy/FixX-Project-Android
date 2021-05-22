@@ -35,6 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".inAppChatScreens.views.NewMessageActivity" />
         </activity>
+        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity"></activity>
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
         <activity android:name=".NavigationBar.NavigationBarActivity" />

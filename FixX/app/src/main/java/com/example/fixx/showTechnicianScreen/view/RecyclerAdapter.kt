@@ -3,20 +3,19 @@ package com.example.fixx.showTechnicianScreen.view
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.POJOs.Technician
-import com.example.fixx.R
-import com.example.fixx.showTechnicianScreen.viewModel.RecyclerActivityViewModel
+import com.example.fixx.databinding.TechnicianItemBinding
 
 
-class RecyclerAdapter(val viewModel: RecyclerActivityViewModel, val arrayList: MutableList<Technician>, val context: Context) :
-    RecyclerView.Adapter<RecyclerAdapter.TechViewHolder>() {
+class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Context) : RecyclerView.Adapter<RecyclerAdapter.TechViewHolder>() {
+    lateinit var bookTechnician : ()->Unit
+    lateinit var showTechProfileHandler : (Int)->Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TechViewHolder {
-        var root = LayoutInflater.from(parent.context).inflate(R.layout.technician_item, parent, false)
+        var root = TechnicianItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TechViewHolder(root)
     }
 
@@ -28,24 +27,21 @@ class RecyclerAdapter(val viewModel: RecyclerActivityViewModel, val arrayList: M
     }
 
     override fun onBindViewHolder(holder: TechViewHolder, position: Int) {
-        holder.bind(arrayList[position].name)
-    }
+        var name :TextView = holder.binding.technicianItemNameLbl
+        name.text = arrayList[position].name
+        var image : ImageView = holder.binding.technicianItemImg
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            image.clipToOutline = true
+        }
+        holder.itemView.setOnClickListener{
+            Toast.makeText(context,"clicked ${name.text}",Toast.LENGTH_SHORT).show()
+            showTechProfileHandler(position)
+        }
 
-    inner class TechViewHolder (private val binding : View) : RecyclerView.ViewHolder(binding){
-
-        fun bind(tech: String){
-            var name :TextView = binding.findViewById(R.id.ongoing_orders_jobType_lbl)
-            name.text = tech
-            var image : ImageView = binding.findViewById(R.id.ongoing_order_job_image)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                image.setClipToOutline(true)
-            }
-            binding.setOnClickListener{
-
-                Toast.makeText(context,"clicked ${name.text}",Toast.LENGTH_SHORT).show()
-                //context.startActivity(Intent(context, TechnicianProfileActivity::class.java))
-            }
-
+        holder.binding.technicianItemBookBtn.setOnClickListener{
+            bookTechnician()
         }
     }
+
+    inner class TechViewHolder (var binding : TechnicianItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

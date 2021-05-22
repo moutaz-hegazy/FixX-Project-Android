@@ -3,14 +3,18 @@ package com.example.fixx.Support
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.example.fixx.POJOs.*
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -20,6 +24,13 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FileDownloadTask
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
@@ -27,19 +38,23 @@ import kotlin.reflect.full.memberProperties
 object FirestoreService {
     var db = FirebaseFirestore.getInstance()
     var auth = Firebase.auth
+    var storage = Firebase.storage
+    var storageRef = storage.reference
+    var imagesRef: StorageReference? = null
+
     lateinit var googleSignInClient: GoogleSignInClient
-    const val RC_SIGN_IN = 9001
+
 
     fun registerUser(email : String, password : String, onSuccessHandler: () -> Unit, onFailHandler: () -> Unit){
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
-                    if (task.isSuccessful){
-                        onSuccessHandler()
-                    }
-                    else{
-                        onFailHandler()
-                    }
-                })
+            .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
+                if (task.isSuccessful){
+                    onSuccessHandler()
+                }
+                else{
+                    onFailHandler()
+                }
+            })
     }
 
     fun fetchUserFromDB(uid : String? = auth.currentUser?.uid ,onCompletion : (user : Person?)->Unit) {
@@ -178,17 +193,18 @@ object FirestoreService {
     fun loginWithEmailAndPassword(email: String, password: String, onSuccessHandler : ()->Unit, onFailHandler : ()->Unit){
         Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(OnCompleteListener<AuthResult>{ task ->
-                    if(task.isSuccessful){
+            .addOnCompleteListener(OnCompleteListener<AuthResult>{ task ->
+                if(task.isSuccessful){
 //                        Log.i("TAG", "login: successfully"+ auth.uid)
-                        onSuccessHandler()
-                    }
-                    else{
-                        Log.i("TAG", "login: error!!!!")
-                        onFailHandler()
-                    }
-                })
+                    onSuccessHandler()
+                }
+                else{
+                    Log.i("TAG", "login: error!!!!")
+                    onFailHandler()
+                }
+            })
     }
+
 
     fun saveJobDetails(job: Job) {
         val map = HashMap<String, Any?>()
@@ -202,6 +218,7 @@ object FirestoreService {
             .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
     }
 
+
     fun saveUserData(user: Any) {
         (user as? Person)?.let {
             it.uid = FirebaseAuth.getInstance().uid.toString()
@@ -214,17 +231,16 @@ object FirestoreService {
         }
 
         db.collection("Users").document(FirebaseAuth.getInstance().uid.toString())
-                .set(map)
-                .addOnSuccessListener { Log.i("TAG", "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
+            .set(map)
+            .addOnSuccessListener { Log.i("TAG", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
     }
-
 
     private fun configGoogleSignIn(context: Context){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
 
         googleSignInClient = GoogleSignIn.getClient(context, gso)
     }
@@ -232,78 +248,80 @@ object FirestoreService {
     fun signInWithGoogle(context: Context) {
         configGoogleSignIn(context)
         val signInIntent = googleSignInClient.signInIntent
-        (context as Activity).startActivityForResult(signInIntent, RC_SIGN_IN)
+        (context as Activity).startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
     }
 
-    fun googleSignInRequestResult(requestCode : Int, data : Intent?){
+    fun googleSignInRequestResult(requestCode : Int, data : Intent?, onSuccessHandler: (email : String) -> Unit, onFailHandler: () -> Unit){
 
-        if (requestCode == RC_SIGN_IN ) {
+        if (requestCode == Constants.RC_SIGN_IN ) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 Log.i("TAG", "googleSignInRequestResult: before account ")
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d("TAG", "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
+                Log.i("TAG", "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!, onSuccessHandler, onFailHandler)
             } catch (e: ApiException) {
-                Log.w("TAG", "Google sign in failed", e)
+                Log.i("TAG", "Google sign in failed", e)
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
+    private fun firebaseAuthWithGoogle(idToken: String, onSuccessHandler: (email : String) -> Unit, onFailHandler: () -> Unit) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
-                    if (task.isSuccessful) {
-                        val user = auth.currentUser
-                        Log.d("TAG", "signInWithCredential:success")
-                    } else {
-                        Log.w("TAG", "signInWithCredential:failure", task.exception)
-                    }
-                })
+            .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
+                if (task.isSuccessful) {
+                    val userEmail = auth?.currentUser?.email
+                    //Log.d("TAG", "signInWithCredential:success")
+                    onSuccessHandler(userEmail!!)
+                } else {
+                    //Log.w("TAG", "signInWithCredential:failure", task.exception)
+                    onFailHandler()
+                }
+            })
     }
 
     fun checkIfPhoneExists(phone : String, callback : (Boolean) -> Unit) {
         db.collection("Users").whereEqualTo("phoneNumber", phone).get()
-                .addOnCompleteListener(OnCompleteListener {
-                    if (it.isSuccessful) {
-                        val document = it.result
-                        if (document?.size()!! > 0) {
-                            Log.i("TAG", " document data: ${document}")
-                            callback(true)
-                        } else {
-                            Log.i("TAG", "checkIfPhoneExists: nothing")
-                            callback(false)
-                        }
+            .addOnCompleteListener(OnCompleteListener {
+                if (it.isSuccessful) {
+                    val document = it.result
+                    if (document?.size()!! > 0) {
+                        Log.i("TAG", " document data: ${document}")
+                        callback(true)
                     } else {
-                        Log.i("TAG", " get failed: ", it.exception)
+                        Log.i("TAG", "checkIfPhoneExists: nothing")
+                        callback(false)
                     }
-                })
+                } else {
+                    Log.i("TAG", " get failed: ", it.exception)
+                }
+            })
     }
 
     fun checkIfEmailExists(email : String, callback : (Boolean) -> Unit) {
         db.collection("Users").whereEqualTo("email", email).get()
-                .addOnCompleteListener(OnCompleteListener {
-                    if (it.isSuccessful) {
-                        val document = it.result
-                        if (document?.size()!! > 0) {
-                            Log.i("TAG", " document data: ${document}")
-                            callback(true)
-                        } else {
-                            Log.i("TAG", "checkIfPhoneExists: nothing")
-                            callback(false)
-                        }
+            .addOnCompleteListener(OnCompleteListener {
+                if (it.isSuccessful) {
+                    val document = it.result
+                    if (document?.size()!! > 0) {
+                        Log.i("TAG", " document data: ${document}")
+                        callback(true)
                     } else {
-                        Log.i("TAG", " get failed: ", it.exception)
+                        Log.i("TAG", "checkIfPhoneExists: nothing")
+                        callback(false)
                     }
-                })
+                } else {
+                    Log.i("TAG", " get failed: ", it.exception)
+                }
+            })
     }
 
     fun searchForTechnicianByJobAndLocation(job: String, location: String, callback: (MutableList<Technician>) -> Unit) {
 
         var techniciansList = mutableListOf<Technician>()
 
-        val docRef = db.collection("Users").whereEqualTo("accountType", "technician").whereEqualTo("jobTitle", job).whereArrayContains("workLocations",location)
+        val docRef = db.collection("Users").whereEqualTo("accountType", "Technician").whereEqualTo("jobTitle", job).whereArrayContains("workLocations",location)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             for (document in documentSnapshot){
 
@@ -315,4 +333,42 @@ object FirestoreService {
         }
     }
 
+    fun uploadImageToStorage(filePath : MutableList<Uri>, onSuccessHandler: (MutableList<String>) -> Unit) {
+        var imagesPathsList = mutableListOf<String>()
+        if (filePath.isNotEmpty()) {
+            for (image in filePath) {
+                var path = "Images/" + UUID.randomUUID().toString()
+                val imageRef = storageRef!!.child(path)
+                imageRef.putFile(image)
+                    .continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>>{
+                        return@Continuation imageRef.downloadUrl
+                    })
+                    .addOnCompleteListener{
+                        var uri = it.result
+                        Log.i("TAG", "uploadJobImage: ${it.result.toString()}")
+                        if (uri != null){
+                            imagesPathsList.add(uri.toString())
+                            onSuccessHandler(imagesPathsList)
+                        }
+                    }
+            }
+
+        }
+    }
+
+     fun updateDocumentField(collectionName : String, fieldName : String, element: Any, documentId: String) {
+        Log.i("TAG", "updateJob: start updating $element")
+        db.collection(collectionName).document(documentId)
+            .update(fieldName, element)
+            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
+            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+    }
+
+    fun updateDocument(collectionName : String, map : MutableMap<String, Any>, documentId: String) {
+        Log.i("TAG", "updateJob: start updating $map")
+        db.collection(collectionName).document(documentId)
+            .update(map)
+            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
+            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+    }
 }

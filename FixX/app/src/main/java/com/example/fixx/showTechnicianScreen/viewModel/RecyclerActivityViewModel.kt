@@ -14,8 +14,6 @@ class RecyclerActivityViewModel(private val location : String?, private val jobT
     var newList : MutableList<Technician> = mutableListOf()
 
 
-    var userLocations = mutableListOf<String>()
-
     init {
         location?.let{
             jobType?.let {

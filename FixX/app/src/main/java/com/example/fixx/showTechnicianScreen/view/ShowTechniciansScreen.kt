@@ -1,8 +1,9 @@
 package com.example.fixx.showTechnicianScreen.view
 
-import android.graphics.Bitmap
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,8 @@ import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerActivityViewModel
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerViewModelFactory
+import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
+import com.example.fixx.technicianProfileScreen.view.TechnicianProfileActivity
 
 import java.lang.IllegalArgumentException
 
@@ -29,16 +32,36 @@ class ShowTechniciansScreen : AppCompatActivity() {
     private lateinit var techRecycler : RecyclerView
     private lateinit var adapter : RecyclerAdapter
 
+    private var serviceName : Int? = null
+    private var job : Job? = null
+    private var parsedJobLocation : String? = null
+    val imagesUris = mutableListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_technicians_screen)
 
-        val serviceName = intent.getIntExtra(Constants.serviceName,-1)
-        val job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
-        val images = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES)
+        serviceName = intent.getIntExtra(Constants.serviceName,-1)
+        job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
+        //val images = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES)
+        //val imagesPaths = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES_PATHS)
+        val imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS)
+
+        Log.i("TAG2", "onCreate: ${imagesPaths?.size} ")
+        Log.i("TAG2", "onCreate: ${job?.location} ")
+        /*parsedJobLocation = job?.location?.substringBefore(":")
+        job?.location = parsedJobLocation
+        Log.i("TAG2", "onCreate: $parsedJobLocation ")*/
+
+
+        // get list of Uri instead of the received strings to upload
+        imagesPaths?.forEach { image ->
+            imagesUris.add(Uri.parse(image))
+        }
+
+
         supportActionBar?.apply {
-            title = getString(serviceName)
+            title = getString(serviceName!!)
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
 
@@ -66,7 +89,22 @@ class ShowTechniciansScreen : AppCompatActivity() {
         var progressBar : ProgressBar = findViewById(R.id.progressbar)
 
         viewModel.recyclerListData.observe(this, Observer{
-            adapter = RecyclerAdapter(viewModel, it as MutableList<Technician> , this)
+            adapter = RecyclerAdapter(it as MutableList<Technician> , this)
+
+            adapter.bookTechnician = {
+                job?.let {
+                    CustomizeOrderViewModel(it, imagesUris) {
+                        Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            adapter.showTechProfileHandler ={
+                var toProfile = Intent(this, TechnicianProfileActivity::class.java)
+                toProfile.putExtra("name", viewModel.newList.get(it).name)
+                startActivity(toProfile)
+            }
+
             adapter.notifyDataSetChanged()
             progressBar.visibility = View.GONE
             techRecycler.adapter= adapter
