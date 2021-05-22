@@ -92,7 +92,8 @@ object FirestoreService {
             })
     }
 
-    fun saveJobDetails(job: Job, onSuccessHandler: (String) -> Unit) {
+
+    fun saveJobDetails(job: Job) {
         val map = HashMap<String, Any?>()
         job::class.memberProperties.forEach {
             map[it.name] = (it as KProperty1<Any, Any>).get(job)
@@ -100,14 +101,10 @@ object FirestoreService {
 
         }
         db.collection("Jobs").add(map)
-            .addOnSuccessListener {
-                Log.i("TAG", "DocumentSnapshot successfully written!")
-                //job.jobId = it.id
-                onSuccessHandler(it.id)
-            }
+            .addOnSuccessListener { Log.i("TAG", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
-
     }
+
 
     fun saveUserData(user: Any) {
 
@@ -224,37 +221,7 @@ object FirestoreService {
         }
     }
 
-    fun uploadImage(filePath : MutableList<Uri>, jobId : String, onSuccessHandler: (MutableList<Uri>) -> Unit) {
-        var imagesPathsList = mutableListOf<Uri>()
-        if (filePath.isNotEmpty()) {
-            for (image in filePath) {
-                var path = "Images/" + UUID.randomUUID().toString()
-                val imageRef = storageRef!!.child(path)
-                val uploadTask = imageRef.putFile(image)
-                    .addOnSuccessListener {
-                        imageRef.downloadUrl.addOnSuccessListener {
-                            imagesPathsList?.add(it)
-                            Log.i("TAG", "SIZE!!!!!! ${imagesPathsList?.size}")
-                            imagesPathsList?.let { it1 -> onSuccessHandler(it1) }
-                        }
-                        Log.i("TAG", "uploadImage: image uploaded and the url is ${it}")
-                        //updateJob("images", path, jobId)
-
-                    }
-                    .addOnFailureListener {
-                        Log.i("TAG", "uploadImage: failure!!!!!!")
-                    }
-
-                Log.i("TAG", "uploadImage: HELLLOOOOOOOOOOOOOOOOO ${uploadTask.snapshot.storage.downloadUrl} ")
-
-            }
-
-        }
-    }
-
-
-
-    fun uploadJobImage(filePath : MutableList<Uri>, onSuccessHandler: (MutableList<String>) -> Unit) {
+    fun uploadImageToStorage(filePath : MutableList<Uri>, onSuccessHandler: (MutableList<String>) -> Unit) {
         var imagesPathsList = mutableListOf<String>()
         if (filePath.isNotEmpty()) {
             for (image in filePath) {
@@ -277,12 +244,19 @@ object FirestoreService {
         }
     }
 
-     fun updateJob(fieldName : String, element: Any, jobId: String) {
+     fun updateDocumentField(collectionName : String, fieldName : String, element: Any, documentId: String) {
         Log.i("TAG", "updateJob: start updating $element")
-        db.collection("Jobs").document(jobId)
+        db.collection(collectionName).document(documentId)
             .update(fieldName, element)
             .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
             .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
     }
 
+    fun updateDocument(collectionName : String, map : MutableMap<String, Any>, documentId: String) {
+        Log.i("TAG", "updateJob: start updating $map")
+        db.collection(collectionName).document(documentId)
+            .update(map)
+            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
+            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+    }
 }

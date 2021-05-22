@@ -1,5 +1,6 @@
 package com.example.fixx.showTechnicianScreen.view
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -16,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
-import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerActivityViewModel
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerViewModelFactory
 import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
+import com.example.fixx.technicianProfileScreen.view.TechnicianProfileActivity
 
 import java.lang.IllegalArgumentException
 
@@ -92,18 +93,16 @@ class ShowTechniciansScreen : AppCompatActivity() {
 
             adapter.bookTechnician = {
                 job?.let {
-                    CustomizeOrderViewModel(it) {
+                    CustomizeOrderViewModel(it, imagesUris) {
                         Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                        Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<< ${job!!.jobId}")
-
-                        Log.i("TAG", "IMAGE PATH LIST: ${imagesUris.size} ")
-                        FirestoreService.uploadJobImage(imagesUris) {
-                                listOfImages ->
-                            Log.i("TAG", "LISSSSSSSSSSST: ${listOfImages.size} ")
-                            FirestoreService.updateJob("images", listOfImages, job!!.jobId)
-                        }
                     }
                 }
+            }
+
+            adapter.showTechProfileHandler ={
+                var toProfile = Intent(this, TechnicianProfileActivity::class.java)
+                toProfile.putExtra("name", viewModel.newList.get(it).name)
+                startActivity(toProfile)
             }
 
             adapter.notifyDataSetChanged()

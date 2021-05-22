@@ -180,21 +180,17 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
         // publish order configuration.
         binding.customizeOrederPublishBtn.setOnClickListener {
+
             if (validateJobData()) {
                 val job = createNewJob()
-                CustomizeOrderViewModel(job){
+                imagePathsStringArray?.forEach { image ->
+                    imagePathsList2.add(Uri.parse(image))
+                }
+                CustomizeOrderViewModel(job, imagePathsList2){
                     Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
                     Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<< ${job.jobId}")
-                    imagePathsStringArray?.forEach { image ->
-                        imagePathsList2.add(Uri.parse(image))
-                    }
-
-                    FirestoreService.uploadJobImage(imagePathsList2){
-                        listOfImages ->
-                        FirestoreService.updateJob("images", listOfImages, job.jobId)
-                    }
-                    finish()
                 }
+                finish()
 
             }
         }
