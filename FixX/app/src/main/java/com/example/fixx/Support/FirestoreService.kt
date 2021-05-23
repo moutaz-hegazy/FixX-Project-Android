@@ -248,7 +248,10 @@ object FirestoreService {
 
         }
         db.collection("Jobs").add(map)
-            .addOnSuccessListener { Log.i("TAG", "DocumentSnapshot successfully written!") }
+            .addOnSuccessListener {
+                it.update("jobId",it.id)
+                Log.i("TAG", "DocumentSnapshot successfully written!")
+            }
             .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
     }
 
