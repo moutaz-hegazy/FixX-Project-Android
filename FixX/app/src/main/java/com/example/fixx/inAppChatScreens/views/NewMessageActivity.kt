@@ -26,13 +26,7 @@ class NewMessageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Chat"
 
-        FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            FirebaseService.token = it
-        }
 
-        FirebaseMessaging.getInstance()
-            .subscribeToTopic("/topics/${NavigationBarActivity.USER_OBJECT!!.uid}")
         val adapter = GroupAdapter<ViewHolder>().apply {
             setOnItemClickListener { item, view ->
 

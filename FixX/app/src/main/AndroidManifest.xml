@@ -17,6 +17,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
         android:allowBackup="true"
@@ -25,13 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <service
-            android:name=".test.TestService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
         <service android:name=".inAppChatScreens.model.FirebaseService"
             android:permission="com.google.android.c2dm.permission.SEND">

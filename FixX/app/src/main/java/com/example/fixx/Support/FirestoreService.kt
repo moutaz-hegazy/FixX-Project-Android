@@ -113,7 +113,7 @@ object FirestoreService {
                     }
                     val msgs = value?.toObjects<ChatMessage>()
                     if (!msgs.isNullOrEmpty() && display) {
-                        msgs?.last()?.let {
+                        msgs[msgs.size -1].let {
                             Log.i("TAG", "fetchChatHistory: " + it)
                             observerHandler(it)
                         }

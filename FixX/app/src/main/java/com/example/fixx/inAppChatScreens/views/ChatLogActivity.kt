@@ -10,6 +10,7 @@ import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityChatLogBinding
+import com.example.fixx.inAppChatScreens.model.FirebaseService
 import com.example.fixx.inAppChatScreens.model.NotificationData
 import com.example.fixx.inAppChatScreens.model.PushNotification
 import com.example.fixx.inAppChatScreens.viewModels.ChatLogViewModel
@@ -73,11 +74,15 @@ class ChatLogActivity : AppCompatActivity() {
                     System.currentTimeMillis() / 1000)
                 chatLogVm.sendMessage(newMsg)
                 binding.edittextChatLog.text.clear()
-                topic = "/topics/${USER_OBJECT?.uid}"
+                topic = "/topics/${Constants.CHAT_TOPIC}_${contact.uid}"
                 PushNotification(NotificationData(USER_OBJECT!!.name, txt),
                     topic).also {
                     sendNotification(it)
                 }
+//                PushNotification(NotificationData(USER_OBJECT!!.name, txt),
+//                    arrayOf(FirebaseService.token!!)).also {
+//                    sendNotification(it)
+//                }
             }
         }
     }
@@ -85,7 +90,7 @@ class ChatLogActivity : AppCompatActivity() {
         if(msg.fromId != NavigationBarActivity.USER_OBJECT?.uid){
             NavigationBarActivity.USER_OBJECT?.let {
                 adapter.add(ChatFromItem(msg.text, it))
-                binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
+                binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount -1)
                 Log.i("TAG", "displayMsg: HERE 1 >>> ${msg.text}")
             }
         }else{
