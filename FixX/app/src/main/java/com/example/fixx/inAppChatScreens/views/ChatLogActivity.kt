@@ -10,9 +10,9 @@ import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityChatLogBinding
+import com.example.fixx.inAppChatScreens.model.ChatPushNotification
 import com.example.fixx.inAppChatScreens.model.FirebaseService
 import com.example.fixx.inAppChatScreens.model.NotificationData
-import com.example.fixx.inAppChatScreens.model.PushNotification
 import com.example.fixx.inAppChatScreens.viewModels.ChatLogViewModel
 import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
@@ -33,9 +33,8 @@ class ChatLogActivity : AppCompatActivity() {
     private lateinit var contact : Person
 
     private lateinit var binding : ActivityChatLogBinding
-    private lateinit var channel : String
+    private var channel : String? = null
     private lateinit var chatLogVm : ChatLogViewModel
-    var topic = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class ChatLogActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
-        channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL) ?: ""
+        channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
         recyclerview_chat_log.adapter = adapter
 
         supportActionBar?.apply {
@@ -71,24 +70,21 @@ class ChatLogActivity : AppCompatActivity() {
             val txt = binding.edittextChatLog.text.toString()
             if(!txt.isNullOrEmpty()){
                 val newMsg = ChatMessage(txt,USER_OBJECT?.uid ?: "",
-                    System.currentTimeMillis() / 1000)
+                    System.currentTimeMillis())
                 chatLogVm.sendMessage(newMsg)
                 binding.edittextChatLog.text.clear()
-                topic = "/topics/${Constants.CHAT_TOPIC}_${contact.uid}"
-                PushNotification(NotificationData(USER_OBJECT!!.name, txt),
-                    topic).also {
-                    sendNotification(it)
+                contact.token?.let {    token ->
+                    ChatPushNotification(NotificationData(USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: ""),
+                        arrayOf(token)).also {
+                        sendNotification(it)
+                    }
                 }
-//                PushNotification(NotificationData(USER_OBJECT!!.name, txt),
-//                    arrayOf(FirebaseService.token!!)).also {
-//                    sendNotification(it)
-//                }
             }
         }
     }
     private fun displayMsg(msg : ChatMessage){
-        if(msg.fromId != NavigationBarActivity.USER_OBJECT?.uid){
-            NavigationBarActivity.USER_OBJECT?.let {
+        if(msg.fromId != USER_OBJECT?.uid){
+            USER_OBJECT?.let {
                 adapter.add(ChatFromItem(msg.text, it))
                 binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount -1)
                 Log.i("TAG", "displayMsg: HERE 1 >>> ${msg.text}")
@@ -100,7 +96,7 @@ class ChatLogActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+    private fun sendNotification(notification: ChatPushNotification) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val response = RetrofitInstance.api.postNotification(notification)
             if(response.isSuccessful) {

@@ -1,6 +1,7 @@
 package com.example.fixx.NavigationBar.OrdersScreen.views
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.example.fixx.MainActivity
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.databinding.CompletedOrdersRecyclerRowBinding

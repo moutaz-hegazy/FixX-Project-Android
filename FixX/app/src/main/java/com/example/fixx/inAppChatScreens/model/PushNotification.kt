@@ -1,7 +1,7 @@
 package com.example.fixx.inAppChatScreens.model
 
-data class PushNotification(
+data class ChatPushNotification(
     var data:NotificationData,
-    var to:String
-//    var registration_ids : Array<String>
+//    var to:String
+    var registration_ids : Array<String>
 )

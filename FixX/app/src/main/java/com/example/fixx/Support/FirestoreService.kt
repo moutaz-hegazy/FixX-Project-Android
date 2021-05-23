@@ -25,6 +25,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
@@ -223,15 +224,14 @@ object FirestoreService {
     fun loginWithEmailAndPassword(
         email: String,
         password: String,
-        onSuccessHandler: () -> Unit,
+        onSuccessHandler: (person : Person?) -> Unit,
         onFailHandler: () -> Unit
     ) {
         Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
-                if (task.isSuccessful) {
-//                        Log.i("TAG", "login: successfully"+ auth.uid)
-                    onSuccessHandler()
+                if (task.isSuccessful && email != Constants.DEFAULT_EMAIL) {
+                    fetchUserFromDB(auth.currentUser?.uid,onSuccessHandler)
                 } else {
                     Log.i("TAG", "login: error!!!!")
                     onFailHandler()
@@ -253,21 +253,26 @@ object FirestoreService {
     }
 
 
-    fun saveUserData(user: Any) {
-        (user as? Person)?.let {
-            it.uid = FirebaseAuth.getInstance().uid.toString()
-        }
-        val map = HashMap<String, Any?>()
+    fun saveUserData(user: Any, onSuccessHandler: (person: Person?) -> Unit, onFailHandler: () -> Unit) {
+        (user as? Person)?.let {    person ->
+            person.uid = FirebaseAuth.getInstance().uid.toString()
+            FirebaseMessaging.getInstance().token
+                .addOnSuccessListener {  token ->
+                    person.token = token
 
-        user::class.memberProperties.forEach {
-            map[it.name] = (it as KProperty1<Any, Any>).get(user)
-            Log.i("TAG", "save: inside for each  ${it.name} = ${it.get(user)}")
-        }
+                    val map = HashMap<String, Any?>()
 
-        db.collection("Users").document(FirebaseAuth.getInstance().uid.toString())
-            .set(map)
-            .addOnSuccessListener { Log.i("TAG", "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
+                    user::class.memberProperties.forEach {
+                        map[it.name] = (it as KProperty1<Any, Any>).get(user)
+                        Log.i("TAG", "save: inside for each  ${it.name} = ${it.get(user)}")
+                    }
+
+                    db.collection("Users").document(FirebaseAuth.getInstance().uid.toString())
+                        .set(map)
+                        .addOnSuccessListener { onSuccessHandler(person) }
+                        .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e); onFailHandler() }
+                }
+        }
     }
 
     private fun configGoogleSignIn(context: Context) {

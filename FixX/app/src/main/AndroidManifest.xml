@@ -35,6 +35,11 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".services.LogoutService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <activity android:name=".inAppChatScreens.views.NewMessageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

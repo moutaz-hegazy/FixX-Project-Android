@@ -14,10 +14,15 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
+import kotlin.reflect.jvm.internal.impl.load.java.Constant
 
 class FirebaseService : FirebaseMessagingService() {
 

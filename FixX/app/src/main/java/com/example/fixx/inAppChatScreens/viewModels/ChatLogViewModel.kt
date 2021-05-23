@@ -3,7 +3,7 @@ package com.example.fixx.inAppChatScreens.viewModels
 import com.example.fixx.POJOs.ChatMessage
 import com.example.fixx.Support.FirestoreService
 
-class ChatLogViewModel (private var channel : String? = null, private val contact : String? = null,
+class ChatLogViewModel (var channel : String? = null, private val contact : String? = null,
                         private val observer : (msg : ChatMessage)->Unit,
                         private val onCompletion : (msgs : ArrayList<ChatMessage>)->Unit){
 

@@ -22,10 +22,6 @@ class NavigationBarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_bar)
 
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            Log.i("TAG", "onCreate: TOKEN >>>> $it")
-        }
-
         supportActionBar?.hide()
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()

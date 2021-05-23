@@ -19,7 +19,10 @@ sealed class Constants {
         const val TRANS_IMAGES_PATHS = "TransImagesPaths"
         const val TRANS_CHAT_CHANNEL = "ChatChannelName"
         const val CHAT_TOPIC = "chats"
-
+        const val USERS_COLLECTION = "Users"
+        const val JOBS_COLLECTION = "Jobs"
+        const val DEFAULT_EMAIL = "defaultaccount@default.com"
+        const val DEFAULT_PASSWORD = "default123"
         const val BASE_URL = "https://fcm.googleapis.com"
         const val SERVER_KEY = "AAAARyIBb3c:APA91bFyojXc4-L2IjYoZT3MCroUFzqSTGcXT1HGCSePyo0YN0VgD0M4KKNr_Wgd_CdI5Jc0G796NXrnlCIepJwG2qZYz2o9uz1gV4Rb3CblhupUlukmTAC0izMOSGy52UdwU9Rts-jH"
         const val CONTENT_TYPE = "application/json"

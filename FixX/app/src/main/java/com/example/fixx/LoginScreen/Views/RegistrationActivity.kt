@@ -1,17 +1,24 @@
 package com.example.fixx.LoginScreen.Views
 
+import android.app.job.JobScheduler
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
+import com.example.fixx.services.LogoutService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 
 @Suppress("DEPRECATION")
 class RegistrationActivity : AppCompatActivity(){
@@ -104,8 +111,15 @@ class RegistrationActivity : AppCompatActivity(){
             FirestoreService.checkIfEmailExists(email){
                 exists ->
                 if(exists){
-                    startActivity(Intent(this, NavigationBarActivity::class.java))
-                    finish()
+                    FirestoreService.fetchUserFromDB{ person ->
+                        USER_OBJECT = person
+                        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                            FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",token,person!!.uid!!)
+                            USER_OBJECT?.token = token
+                            startActivity(Intent(this, NavigationBarActivity::class.java))
+                            finish()
+                        }
+                    }
                 }
                 else{
                     Toast.makeText(this, "I AM HEEEEEEEEEEERE", Toast.LENGTH_SHORT).show()
@@ -116,4 +130,20 @@ class RegistrationActivity : AppCompatActivity(){
             Toast.makeText(this, "Failed to login", Toast.LENGTH_SHORT).show()
         })
     }
+
+    override fun onStart() {
+        super.onStart()
+        if(FirebaseAuth.getInstance().currentUser == null){
+            FirestoreService.loginWithEmailAndPassword(Constants.DEFAULT_EMAIL,Constants.DEFAULT_PASSWORD,
+                onSuccessHandler = {}, onFailHandler = {})
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(FirebaseAuth.getInstance().currentUser?.email == Constants.DEFAULT_EMAIL){
+            FirebaseAuth.getInstance().signOut()
+        }
+    }
+
 }
