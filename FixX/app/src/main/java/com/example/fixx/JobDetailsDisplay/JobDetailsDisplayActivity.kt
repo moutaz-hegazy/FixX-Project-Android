@@ -72,7 +72,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
 //        }
 
         //dummy job object created...
-        dummyJob = Job(1, "carpentry", "Alexandria", Job.JobStatus.OnRequest)
+        dummyJob = Job(1.toString(), "carpentry", "Alexandria", Job.JobStatus.OnRequest)
         dummyJob!!.description = "Job Description Job DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob DescriptionJob Description"
         dummyJob!!.date = "Job date"
         dummyJob!!.fromTime = "Start"

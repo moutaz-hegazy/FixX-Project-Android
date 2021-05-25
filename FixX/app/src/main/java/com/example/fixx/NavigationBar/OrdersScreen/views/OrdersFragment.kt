@@ -32,9 +32,6 @@ class OrdersFragment : Fragment() {
             newTab().setText(R.string.onGoingOrders).let {
                 binding.myOrdersTablayout.addTab(it)
             }
-            newTab().setText(R.string.onGuaranteeOrders).let {
-                binding.myOrdersTablayout.addTab(it)
-            }
             newTab().setText(R.string.completedOrders).let {
                 binding.myOrdersTablayout.addTab(it)
             }
