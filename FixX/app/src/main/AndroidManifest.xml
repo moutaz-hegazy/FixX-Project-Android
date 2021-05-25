@@ -35,11 +35,6 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".services.LogoutService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <activity android:name=".NavigationBar.SettingsScreen.TermsActivity"></activity>
         <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
