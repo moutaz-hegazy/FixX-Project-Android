@@ -349,6 +349,76 @@ object FirestoreService {
             }
     }
 
+    fun fetchMyCompletedOrderedJobs(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
+        val retrievedJobs = ArrayList<Job>()
+        db.collection("Jobs").whereEqualTo("uid",auth.currentUser?.uid)
+            .whereEqualTo("status",Job.JobStatus.Completed.rawValue)
+            .get().addOnSuccessListener {
+                    queryResult->
+                queryResult.forEach {   document ->
+                    val job = document.toObject<Job>()
+                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    retrievedJobs.add(job)
+                }
+                onSuccessHandler(retrievedJobs)
+            }.addOnFailureListener {
+                onFailureHandler()
+            }
+    }
+
+    fun fetchMyOngoingWork(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
+        val retrievedJobs = ArrayList<Job>()
+        db.collection("Jobs").whereEqualTo("techID",auth.currentUser?.uid)
+            .whereEqualTo("status",Job.JobStatus.Accepted.rawValue)
+            .get().addOnSuccessListener {
+                    queryResult->
+                queryResult.forEach {   document ->
+                    val job = document.toObject<Job>()
+                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    retrievedJobs.add(job)
+                }
+                onSuccessHandler(retrievedJobs)
+            }.addOnFailureListener {
+                onFailureHandler()
+            }
+    }
+
+    fun fetchMyCompletedWork(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
+        val retrievedJobs = ArrayList<Job>()
+        db.collection("Jobs").whereEqualTo("techID",auth.currentUser?.uid)
+            .whereEqualTo("status",Job.JobStatus.Completed.rawValue)
+            .get().addOnSuccessListener {
+                    queryResult->
+                queryResult.forEach {   document ->
+                    val job = document.toObject<Job>()
+                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    retrievedJobs.add(job)
+                }
+                onSuccessHandler(retrievedJobs)
+            }.addOnFailureListener {
+                onFailureHandler()
+            }
+    }
+
+    fun fetchAvailableWork(jobTitle : String, workLocations : ArrayList<String>,
+                           onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
+        val retrievedJobs = ArrayList<Job>()
+        db.collection("Jobs").whereEqualTo("status",Job.JobStatus.OnRequest.rawValue)
+            .whereEqualTo("type",jobTitle)
+            .whereIn("location",workLocations)
+            .get().addOnSuccessListener {
+                    queryResult->
+                queryResult.forEach {   document ->
+                    val job = document.toObject<Job>()
+                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    retrievedJobs.add(job)
+                }
+                onSuccessHandler(retrievedJobs)
+            }.addOnFailureListener {
+                onFailureHandler()
+            }
+    }
+
     fun checkIfPhoneExists(phone: String, callback: (Boolean) -> Unit) {
         db.collection("Users").whereEqualTo("phoneNumber", phone).get()
             .addOnCompleteListener(OnCompleteListener {

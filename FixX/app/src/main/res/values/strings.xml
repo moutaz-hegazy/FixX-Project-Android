@@ -13,7 +13,7 @@
     <string name="ToTime">To : Any time</string>
     <string name="OrderDesc">"Write Order description here "</string>
     <string name="selectTech"><![CDATA[Select Technician >]]></string>
-    <string name="or">>> Or <<</string>
+    <string name="or">-- Or --</string>
     <string name="publishOrder">Publish Order ></string>
     <string name="AddImage">add images of the problem</string>
     <string name="enter_phone_number">Enter Phone Number</string>

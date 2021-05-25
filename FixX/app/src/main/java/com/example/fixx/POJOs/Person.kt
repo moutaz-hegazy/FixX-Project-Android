@@ -8,5 +8,7 @@ abstract class Person(
     var name: String = "",
     var email: String = "",
     var uid : String? = null,
-    var token : String? = null
+    var token : String? = null,
+    var profilePicture: String? = null,
+    var locations: List<String>? = null
 ) : Serializable
