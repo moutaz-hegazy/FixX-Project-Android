@@ -2,6 +2,7 @@ package com.example.fixx.NavigationBar
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Person
 import com.example.fixx.R
@@ -9,9 +10,10 @@ import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 
 
- class NavigationBarActivity : AppCompatActivity() {
+class NavigationBarActivity : AppCompatActivity() {
 
      companion object{
          var USER_OBJECT : Person? = null
@@ -19,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_bar)
+
         supportActionBar?.hide()
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()

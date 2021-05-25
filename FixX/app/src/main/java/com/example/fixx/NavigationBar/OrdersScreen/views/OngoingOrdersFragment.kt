@@ -9,15 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.example.fixx.databinding.FragmentOngoingOrdersBinding
 
 class OngoingOrdersFragment : Fragment() {
 
     var jobs = arrayListOf<Job>()
-
+    val jobsAdapter = OrdersAdapter(jobs,Job.JobStatus.OnRequest)
     lateinit var binding: FragmentOngoingOrdersBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirestoreService.fetchMyOngoingOrderedJobs(onSuccessHandler = { fetchedJobs ->
+            jobs.addAll(fetchedJobs)
+            jobsAdapter.notifyDataSetChanged()
+        },onFailureHandler = {})
     }
 
     override fun onCreateView(
@@ -42,11 +47,11 @@ class OngoingOrdersFragment : Fragment() {
             date = "10-june-2021"
             price = 350
         }
-        jobs.addAll(arrayOf(job1,job2,job3))
+//        jobs.addAll(arrayOf(job1,job2,job3))
 
         binding.ongoingRecycler.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = OrdersAdapter(jobs,Job.JobStatus.OnRequest)
+            adapter = jobsAdapter
         }
     }
 }

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.fixx">
+
     <!-- added for maps -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,6 +17,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +26,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
+
+        <service android:name=".inAppChatScreens.model.FirebaseService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".NavigationBar.SettingsScreen.TermsActivity"></activity>
+        <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
+        <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
+        <activity android:name=".NavigationBar.SettingsScreen.HelpActivity" />
+        
+        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
+        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
+        <activity android:name=".NavigationBar.NavigationBarActivity"/>
         <activity android:name=".JobDetailsDisplay.JobDetailsDisplayActivity"/>
         <activity android:name=".inAppChatScreens.views.NewMessageActivity">
             <meta-data
@@ -31,15 +50,13 @@
                 android:value=".NavigationBar.NavigationBarActivity" />
         </activity>
         <activity
-            android:name=".inAppChatScreens.views.ChatLogActivity" >
+            android:name=".inAppChatScreens.views.ChatLogActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".inAppChatScreens.views.NewMessageActivity" />
         </activity>
         <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity"></activity>
-        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
-        <activity android:name=".NavigationBar.NavigationBarActivity" />
         <activity android:name=".LoginScreen.Views.SplashScreen">
              <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

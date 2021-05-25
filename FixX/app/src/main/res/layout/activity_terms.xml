@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NavigationBar.SettingsScreen.TermsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gardient_background"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/terms_of_use_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/terms_of_use_desc"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/acceptance_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/acceptance_desc1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/acceptance_desc2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/acceptance_desc3"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/service_description_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/service_description_desc"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/behavior_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/behavior_desc"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/intellectual_property_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/intellectual_property_desc"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/compensation_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/compensation_desc1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/compensation_desc2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/compensation_desc3"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/compensation_desc4"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/compensation_desc5"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/service_limits_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/service_limits_desc"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/disclaimer_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/disclaimer_desc"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/general_info_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/general_info_desc"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/waiver_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/waiver_desc"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/privacy_policy_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/privacy_policy_desc"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+
+
+    </ScrollView>
+
+</LinearLayout>

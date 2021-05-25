@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.Addresses.AddAddressActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
@@ -83,11 +84,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
         //-----------------------------------------------------------
         // Spinner configuration.
-        spinnerAdapter = SpinnerAdapter<String>(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            values
-        )
+        spinnerAdapter = SpinnerAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,values)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.customizeOrderPickLocationSpinner.adapter = adapter
