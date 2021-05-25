@@ -49,12 +49,18 @@
     <string name="Wood_Painter">Wood Painter</string>
     <string name="Swimming_pool">Pool\n maintain</string>
     <string name="onGoingOrders">Ongoing</string>
+    <string name="onGoingJobs">Ongoing</string>
     <string name="accepted">Accepted</string>
     <string name="onRequest">On Request</string>
     <string name="onGuaranteeOrders">On Guarantee</string>
     <string name="completedOrders">Completed</string>
+    <string name="completedJobs">Completed</string>
+
     <string name="availableOrder">Available</string>
+    <string name="availableJobs">Available</string>
+
     <string name="myOrders">My Orders</string>
+    <string name="myJobs" >My Jobs</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_chat_log">ChatLogActivity</string>
@@ -70,5 +76,65 @@
     <string name="price">Price : </string>
     <string name="notDetermined">not determined</string>
     <string name="remaining">"remaining : "</string>
+    <string name="completed">Completed</string>
+
+
+    <!-- help screen -->
+    <string name="help_title">Help</string>
+    <string name="about_us_title">About Us</string>
+    <string name="safety_tips_title">Safety Tips</string>
+    <string name="terms_title">Terms And Conditions</string>
+
+
+    <!--about us screen-->
+    <string name="about_us_desc1">- Fix-X is a repairmen application in Egypt where you can order fixers from different categories in maintenance and finishing.With a lot of registered fixers.</string>
+    <string name="about_us_desc2">- We know how hard it is to find a qualified fixer to get the job done.That is why Fix-X does all the hard work for you;we search,evaluate,and select the best fixers in all maintenance and finishing fields,and connect you with them flawlessly through our application.</string>
+    <string name="about_us_desc3">- With Fix-X you can easily choose your fixer based on previous customers ratings,location,and category.You can also leave your review too.</string>
+    <string name="about_us_desc4">- Our fixers are trained,punctual,and highly professional so you can stay safe and get high-quality services.</string>
+
+    <!--safety tips screen-->
+    <string name="safety_tips_screen_title">Make the most of your Fix-X visit</string>
+    <string name="safety_tips_desc1">- Fix-X aims at excellence in services provided to its customers,those are Fix-X tips to help you enjoy our services even better. </string>
+    <string name="safety_tips_desc2">- Contracting Fix-X fixer outside the app voids your grantee and keeps you without any quality or cost control, so always use Fix-X for your repair needs.</string>
+    <string name="safety_tips_desc3">- We always make sure our fixers are honest and safe to let in your house, but your peace of mind always keep your personal belongings away from the fixing area.</string>
+    <string name="safety_tips_desc4">- Try having company when Fix-X fixers are at your home.</string>
+    <string name="safety_tips_desc5">- Fixing your home might involve dangerous materials and tools, so always keep your children away from Fix-X fixers gadgets and tools to ensure their safety.</string>
+    <string name="safety_tips_desc6">- Be in close proximity to the fixers, but try not to distract them with questions until the job is finished.</string>
+    <string name="safety_tips_desc7">- Please be sure about your order for Fix-X to enable us to serve you best, cancelling and no show is not welcome at Fix-X.</string>
+
+    <!--terms and conditions screen -->
+    <string name="terms_of_use_title">Terms of Use:</string>
+    <string name="terms_of_use_desc">Please read these terms of use carefully. By using the application, you are deemed to have understood and accepted these Terms of Use.If you do not agree to these terms of use,please refrain from using this application.</string>
+    <string name="acceptance_title">Acceptance:</string>
+    <string name="acceptance_desc1">Fix-X is an application that connects you with fixers from all fields and this service is provided to you according to the following Terms of Use:</string>
+    <string name="acceptance_desc2">Wherever the context requires, the terms you refers to any person using the application or the service by any form including those who are navigating the app, posting comments,and by using the service you agree to be bound to these terms, in addition when you use the service in whole or in part you have to accept and be bound to all published guidlines applicable which may change or be updated from time to time.</string>
+    <string name="acceptance_desc3">If you disagree to any of these terms, or any guides, or future amends, or you are not satisfied with Fix-X’s service by any means then you should stop using Fix-X immediately. And we reserve the right to amend these Terms at any time.</string>
+    <string name="service_description_title">Service Description and content:</string>
+    <string name="service_description_desc">Fix-X is a tool to facilitate fixers reach; it is an application that connects users with fixers. Therefore,you are fully aware that Fix-X is not involved by any means in the process between you and the fixer and we are not responsible at all for the fixer and his service.And you hereby acknowledge that we are not responsible for the fixers according to the terms described.</string>
+    <string name="behavior_title">Behavior:</string>
+    <string name="behavior_desc">You agree not to post any inappropriate comments, such as verbal abuse and not to post any advertisement through comments on the application.</string>
+    <string name="intellectual_property_title">Intellectual property rights:</string>
+    <string name="intellectual_property_desc">You acknowledge and agree that the materials on the Application are owned by Fix-X and you don’t have the right to use them and that they are subject to copyright and intellectual property rights according to the Arab Republic of Egypt laws.</string>
+    <string name="compensation_title">Compensation:</string>
+    <string name="compensation_desc1">You agree to defend,indemnify,compensate and hold Fix-X and its employees harmless from and against any and all claims and damages,liabilities,losses, and fees(including but not limited to attorney fees) arising from:</string>
+    <string name="compensation_desc2">- Your use of or navigation on the Application and / or the service.</string>
+    <string name="compensation_desc3">- Your violation of any of the provisions of these Terms.</string>
+    <string name="compensation_desc4">- Your violation of any third party’s right including, but not limited to, copyrights,trademarks,business confidential info and other proprietary and privacy rights.</string>
+    <string name="compensation_desc5">- Any claim caused by your content to cause third-party damage and the obligation to defend and indemnify shall remain in force after termination, modification or termination of these Terms, and your use of the Service and/ or Application.</string>
+    <string name="service_limits_title">Service limits and termination:</string>
+    <string name="service_limits_desc">You acknowledge and agree that Fix-X may make some limits to the service use from time to time, including but not limited to the maximum number of days that comments will be retained.</string>
+    <string name="disclaimer_title">Disclaimer of Warranty:</string>
+    <string name="disclaimer_desc">You expressly acknowledge that the use of the application and the service will be at your sole risk and that the service is provided "As is" or "As Available" without any kind of expressed or implied warranties.</string>
+    <string name="general_info_title">General Information:</string>
+    <string name="general_info_desc">These terms and other policies published on this application constitute the sole agreement between you and Fix-X, which governs your use of the Service and the application and supersedes all understandings,agreements,negotiations and discussions between the parties, whether written or oral. The relationship between you and Fix-X must be governed through the laws of the Arab Republic of Egypt. Any claim you may have against Fix-X must be submitted to the exclusive jurisdiction of Egypt. However, if you are a consumer, consumer law may require the application of another law.</string>
+    <string name="waiver_title">Waiver:</string>
+    <string name="waiver_desc">These terms and any rights or licenses granted by you may not be transferred or waived by you, but can be waived by Fix-X without restrictions. Any waiver or transfer of these terms by you is considered null and void.</string>
+    <string name="privacy_policy_title">Privacy Policy:</string>
+    <string name="privacy_policy_desc">We respect you privacy and have developed a privacy policy incorporated into this agreement.Please take your time to read our privacy policy carefully, and by agreeing to this privacy policy.</string>
+
+
+
+
+
 
 </resources>

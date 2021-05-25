@@ -85,6 +85,7 @@
                         android:textSize="18sp"/>
 
                     <ImageButton
+                        android:id="@+id/profile_edit_name_image_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_baseline_edit_24"
@@ -145,6 +146,7 @@
                         android:textSize="18sp"/>
 
                     <ImageButton
+                        android:id="@+id/profile_edit_email_image_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_baseline_edit_24"
@@ -206,6 +208,7 @@
                         android:textSize="18sp"/>
 
                     <ImageButton
+                        android:id="@+id/profile_edit_phone_image_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_baseline_edit_24"
@@ -269,6 +272,7 @@
                         android:textSize="18sp"/>
 
                     <ImageButton
+                        android:id="@+id/profile_edit_password_image_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_baseline_edit_24"

@@ -40,6 +40,14 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <activity android:name=".NavigationBar.SettingsScreen.TermsActivity"></activity>
+        <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
+        <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
+        <activity android:name=".NavigationBar.SettingsScreen.HelpActivity" />
+        
+        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
+        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
+        <activity android:name=".NavigationBar.NavigationBarActivity"/>
         <activity android:name=".inAppChatScreens.views.NewMessageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -52,10 +60,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".inAppChatScreens.views.NewMessageActivity" />
         </activity>
-        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity" />
-        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
-        <activity android:name=".NavigationBar.NavigationBarActivity" />
+        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity"></activity>
         <activity android:name=".LoginScreen.Views.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

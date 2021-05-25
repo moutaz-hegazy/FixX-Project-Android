@@ -87,8 +87,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     def lottieVersion = '3.7.0'
     implementation "com.airbnb.android:lottie:$lottieVersion"
-    implementation 'com.xwray:groupie:2.1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.xwray:groupie:2.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     // Coroutines

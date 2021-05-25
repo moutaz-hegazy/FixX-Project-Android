@@ -1,5 +1,7 @@
 package com.example.fixx.constants
 
+import android.net.Uri
+
 sealed class Constants {
     companion object{
         const val cameraPickerRequestCode = 1
