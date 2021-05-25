@@ -39,7 +39,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/map_activity_magnify_icon_img"
             android:background="@null"
-            android:hint="Enter Your Address"
+            android:hint="@string/enter_your_address"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:textColor="#000"
@@ -68,7 +68,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/btn_border"
-        android:text="Add Address" />
+        android:text="@string/Add_Address" />
 
 
 </RelativeLayout>

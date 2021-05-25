@@ -42,7 +42,7 @@
                 android:layout_width="115dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
-                android:hint="Order Type"
+                android:hint="@string/Order_Type"
                 android:paddingTop="10dp"
                 android:textAlignment="center"
                 android:textSize="18sp"
@@ -92,7 +92,7 @@
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="@+id/ongoing_order_fromTime_lbl"
                 app:layout_constraintStart_toEndOf="@+id/ongoing_order_fromTime_lbl"
-                tools:text="To : Any" />
+                tools:text="To : Any"/>
 
             <TextView
                 android:id="@+id/ongoing_order_price_lbl"

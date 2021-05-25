@@ -54,9 +54,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="View or Edit Your Profile"
-
-                        />
+                        android:text="@string/View_or_Edit_Your_Profile" />
 
                 </LinearLayout>
 
@@ -93,7 +91,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chats"
+                        android:text="@string/Chats"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -124,7 +122,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Addresses"
+                        android:text="@string/Addresses"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -155,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="Language"/>
+                        android:text="@string/Language"/>
 
 
                 </LinearLayout>
@@ -186,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="Help"/>
+                        android:text="@string/Help"/>
 
 
                 </LinearLayout>
@@ -217,7 +215,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="Exit"/>
+                        android:text="@string/Exit"/>
 
 
                 </LinearLayout>

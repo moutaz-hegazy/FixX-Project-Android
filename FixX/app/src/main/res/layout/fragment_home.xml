@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NavigationBar.HomeScreen.HomeFragment"
     android:background="@drawable/pattern1"
     >
 
@@ -31,7 +30,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:title="Select Service"
+                app:title="@string/Select_Service"
                 app:titleTextColor="@color/white">
 
                 <Button

@@ -41,67 +41,70 @@
                 android:id="@+id/completed_orders_jobType_lbl"
                 android:layout_width="115dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
                 android:hint="Order Type"
                 android:paddingTop="10dp"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/ongoing_order_job_image"
-                app:layout_constraintTop_toBottomOf="@+id/ongoing_order_job_image" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/completed_order_job_image" />
 
             <TextView
                 android:id="@+id/completed_order_date_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="15dp"
                 android:text="TextView"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/ongoing_order_job_image"
-                app:layout_constraintTop_toTopOf="@+id/ongoing_order_job_image"
+                app:layout_constraintBottom_toTopOf="@+id/completed_order_price_lbl"
+                app:layout_constraintStart_toEndOf="@+id/completed_order_job_image"
                 tools:text="On : 13-may-22222" />
 
             <TextView
                 android:id="@+id/completed_order_status_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="35dp"
                 android:text="TextView"
                 android:textColor="#4CAF50"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/ongoing_orders_jobType_lbl"
-                app:layout_constraintStart_toEndOf="@+id/ongoing_orders_jobType_lbl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="On Request" />
 
             <TextView
                 android:id="@+id/completed_order_fromTime_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="15dp"
                 android:text="TextView"
-                app:layout_constraintStart_toStartOf="@+id/ongoing_order_date_lbl"
-                app:layout_constraintTop_toBottomOf="@+id/ongoing_order_date_lbl"
+                app:layout_constraintStart_toEndOf="@+id/completed_order_job_image"
+                app:layout_constraintTop_toTopOf="@+id/completed_order_job_image"
                 tools:text="From : Any" />
 
             <TextView
                 android:id="@+id/completed_order_toTime_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
                 android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/ongoing_order_fromTime_lbl"
-                app:layout_constraintStart_toEndOf="@+id/ongoing_order_fromTime_lbl"
+                app:layout_constraintBottom_toBottomOf="@+id/completed_order_status_lbl"
+                app:layout_constraintStart_toStartOf="@+id/completed_order_fromTime_lbl"
                 tools:text="To : Any" />
 
             <TextView
                 android:id="@+id/completed_order_price_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="20dp"
                 android:text="TextView"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/ongoing_order_fromTime_lbl"
-                app:layout_constraintTop_toBottomOf="@+id/ongoing_order_fromTime_lbl"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/completed_orders_jobType_lbl"
                 tools:text="Price : not determined" />
 
             <ImageButton
