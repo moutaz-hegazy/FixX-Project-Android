@@ -332,6 +332,23 @@ object FirestoreService {
             })
     }
 
+    fun fetchMyOngoingOrderedJobs(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
+        val retrievedJobs = ArrayList<Job>()
+        db.collection("Jobs").whereEqualTo("uid","XwOLV99peaTtH3VccAdiNmrsScN2")
+            .whereIn("status", arrayListOf(Job.JobStatus.OnRequest.rawValue, Job.JobStatus.Accepted.rawValue))
+            .get().addOnSuccessListener {
+                queryResult->
+                queryResult.forEach {   document ->
+                    val job = document.toObject<Job>()
+                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    retrievedJobs.add(job)
+                }
+                onSuccessHandler(retrievedJobs)
+            }.addOnFailureListener {
+                onFailureHandler()
+            }
+    }
+
     fun checkIfPhoneExists(phone: String, callback: (Boolean) -> Unit) {
         db.collection("Users").whereEqualTo("phoneNumber", phone).get()
             .addOnCompleteListener(OnCompleteListener {

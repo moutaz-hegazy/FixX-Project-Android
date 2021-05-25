@@ -163,7 +163,7 @@ class ProfileActivity : AppCompatActivity() {
 
        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
            == PackageManager.PERMISSION_DENIED)
-           ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA),Constants.CAMERA_REQUEST)
+           ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA),Constants.CAMERA_PERMISSION_REQUEST_CODE)
 
       btnsheet.bottomSheet_camera_layout.setOnClickListener {
            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

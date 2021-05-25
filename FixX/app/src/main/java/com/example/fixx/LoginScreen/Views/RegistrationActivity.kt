@@ -14,7 +14,6 @@ import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJEC
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
-import com.example.fixx.services.LogoutService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
