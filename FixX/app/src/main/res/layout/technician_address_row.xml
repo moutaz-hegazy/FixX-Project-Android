@@ -13,7 +13,7 @@
         android:background="@drawable/gradient_fadingtowhite">
 
         <TextView
-            android:id="@+id/job_row_job_lbl"
+            android:id="@+id/technician_address_row_address_lbl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

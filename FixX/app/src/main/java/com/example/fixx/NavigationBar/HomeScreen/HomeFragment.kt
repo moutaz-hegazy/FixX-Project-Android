@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.fixx.LoginScreen.Views.PickJob
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
+import com.example.fixx.NavigationBar.notification.NotificationFragment
 import com.example.fixx.R
 import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 
@@ -34,6 +36,7 @@ class HomeFragment : Fragment(){
     private var arrayList = ArrayList<ServiceItem>()
     private var serviceAdapter : ServiceAdapter? =null
     var button: Button? = null
+    var notificationbtn : ImageView? = null
     var notificationCounter: NotificationCounter? = null
 
 
@@ -69,11 +72,19 @@ class HomeFragment : Fragment(){
 
 
         button = rootView.findViewById(R.id.homefragment_notificationcounter_button)
+        notificationbtn = rootView.findViewById(R.id.homefragment_notification_image_view)
+
+        notificationbtn?.setOnClickListener {
+            fragmentManager?.beginTransaction()?.replace(R.id.home_fragment_id, NotificationFragment())?.commit()
+        }
+
        notificationCounter =
               NotificationCounter(rootView.findViewById(R.id.homefragment_notificationcounter_card_view))
         // Inflate the layout for this fragment
 
-        button?.setOnClickListener(View.OnClickListener { notificationCounter!!.increaseNumber() })
+        button?.setOnClickListener(View.OnClickListener {
+            notificationCounter!!.increaseNumber()
+        })
         return rootView
     }
 

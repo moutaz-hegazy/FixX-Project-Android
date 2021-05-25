@@ -15,4 +15,32 @@
     <string name="sign_up">إنشاء حساب جديد</string>
     <string name="login">تسجيل الدخول</string>
     <string name="loading">برجاء الانتظار قليلا...</string>
+
+
+    <string name="addAddressTitle">إضافة عنوان</string>
+    <string name="selectArea">من فضلك اختر المنطقة</string>
+    <string name="selectCity">من فضلك اختر المدينة</string>
+    <string name="myAddressesTitle">عنوانى</string>
+    <string name="longPressToast">انقر مطولا لمسح العنوان</string>
+
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="deleteDialogTitle">تأكيد مسح العنوان</string>
+    <string name="deleteDialogQuestion">هل تريد مسح هذا العنوان؟</string>
+
+    <string name="addressTitleHint">حدد اسماً للعنوان</string>
+    <string name="streetHint">شارع</string>
+    <string name="floorHint">طابق</string>
+    <string name="buildingNumberHint">اسم أو رقم المبنى</string>
+    <string name="notesHint">ملاحظات تخص العنوان</string>
+    <string name="useMapBtn">استخدم الخريطة</string>
+    <string name="addAddressBtn">اضف العنوان</string>
+
+
+    <string name="enterYourAddressHint">ادخل عنوانك</string>
+    <string name="noAddressText">لا يوجد عنوان</string>
+
+
+    <string name="pickJobText">اختر نوع وظيفتك</string>
+    <string name="selectWorkAddressHint">اختر عنوان عملك</string>
 </resources>

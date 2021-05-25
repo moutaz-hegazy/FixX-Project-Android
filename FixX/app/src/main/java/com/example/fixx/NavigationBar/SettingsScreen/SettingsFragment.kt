@@ -6,8 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import com.example.fixx.Addresses.MyAdresses
+import com.example.fixx.Addresses.MyAddresses
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
@@ -49,7 +48,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun openAddressesScreen(){
-        startActivity(Intent(context, MyAdresses::class.java))
+        startActivity(Intent(context, MyAddresses::class.java))
     }
 
 }

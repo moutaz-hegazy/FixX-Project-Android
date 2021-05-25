@@ -5,36 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.fragment_pick_job.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PickJob.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PickJob : Fragment(),TechnicianJobTypeAdapter.OnItemClickListener {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class PickJob : Fragment() {
 
     var jobs = mutableListOf<String>()
+    var technicianJob = ""
 
-    private val adapter = TechnicianJobTypeAdapter(jobs,this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
         jobs.add(getString(R.string.Plumber))
         jobs.add(getString(R.string.Painter))
@@ -56,12 +39,11 @@ class PickJob : Fragment(),TechnicianJobTypeAdapter.OnItemClickListener {
         jobs.add(getString(R.string.Swimming_pool))
 
 
-    }
 
-    override fun onItemClick(position: Int) {
-        fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, SignUpTabFragment())?.commit()
+
 
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,32 +55,46 @@ class PickJob : Fragment(),TechnicianJobTypeAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showJobList()
+        setJobSpinner()
+
+        pick_job_fragment_next_btn.setOnClickListener {
+            fragmentManager?.beginTransaction()?.replace(R.id.pick_job_fragment, TecnicianAddressFragment())?.commit()
+        }
     }
 
-    fun showJobList(){
-        technician_job_type_activity_recycler_view.adapter = adapter
-        technician_job_type_activity_recycler_view.layoutManager = LinearLayoutManager(context)
-        technician_job_type_activity_recycler_view.setHasFixedSize(true)
-    }
+    fun setJobSpinner(){
+        pick_job_fragment_job_spinner.adapter = ArrayAdapter<String>(
+            requireContext(), android.R.layout.simple_spinner_dropdown_item,
+            jobs
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            pick_job_fragment_job_spinner.adapter = adapter
+        }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PickJob.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PickJob().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        pick_job_fragment_job_spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+            AdapterView.OnItemSelectedListener {
+            override fun onItemClick(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                    technicianJob = pick_job_fragment_job_spinner.selectedItem.toString()
+            }
+
+        }
     }
+
 }

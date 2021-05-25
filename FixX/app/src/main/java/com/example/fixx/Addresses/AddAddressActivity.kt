@@ -117,7 +117,7 @@ class AddAddressActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_address)
 
         supportActionBar?.apply {
-            title = "Add Address" 
+            title = getString(R.string.addAddressTitle)
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
 
@@ -138,12 +138,12 @@ class AddAddressActivity : AppCompatActivity() {
             ) {
                 if (add_address_activity_city_spinner.selectedItem == "City") {
                     Toast.makeText(
-                        baseContext, "Please Select City",
+                        baseContext, getString(R.string.selectCity),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else if (add_address_activity_area_spinner.selectedItem == "Area") {
                     Toast.makeText(
-                        baseContext, "Please Select Area",
+                        baseContext, getString(R.string.selectArea),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -155,7 +155,7 @@ class AddAddressActivity : AppCompatActivity() {
         }
     }
 
-    fun initFun() {
+    private fun initFun() {
         val mapIntent = Intent(this, MapActivity::class.java)
         startActivityForResult(mapIntent, Constants.START_ADDRESS_MAP_REQUEST_CODE);
     }
@@ -197,13 +197,13 @@ class AddAddressActivity : AppCompatActivity() {
         }
     }
 
-    fun isServicesOk(): Boolean {
+    private fun isServicesOk(): Boolean {
         val availability = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
         return availability == ConnectionResult.SUCCESS
     }
 
 
-    fun setAreaSpinner() {
+   private fun setAreaSpinner() {
         add_address_activity_area_spinner.adapter = ArrayAdapter<String>(
             this, android.R.layout.simple_spinner_dropdown_item,
             area
@@ -238,7 +238,7 @@ class AddAddressActivity : AppCompatActivity() {
         }
     }
 
-    fun setCitySpinner() {
+    private fun setCitySpinner() {
         add_address_activity_city_spinner.adapter = ArrayAdapter<String>(
             this, android.R.layout.simple_spinner_dropdown_item,
             cities
@@ -268,15 +268,19 @@ class AddAddressActivity : AppCompatActivity() {
                 id: Long
             ) {
 
-                if (add_address_activity_city_spinner.selectedItem == "Cairo") {
+                area = when (add_address_activity_city_spinner.selectedItem) {
+                    "Cairo" -> {
 
-                    area = cairoArea.toMutableList()
+                        cairoArea.toMutableList()
 
-                } else if (add_address_activity_city_spinner.selectedItem == "Alexandria") {
-                    area = alexArea.toMutableList()
+                    }
+                    "Alexandria" -> {
+                        alexArea.toMutableList()
 
-                } else {
-                    area = emptyArea.toMutableList()
+                    }
+                    else -> {
+                        emptyArea.toMutableList()
+                    }
                 }
 
                 setAreaSpinner()

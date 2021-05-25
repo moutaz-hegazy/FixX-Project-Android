@@ -2,25 +2,25 @@ package com.example.fixx.Addresses.view
 
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fixx.Addresses.MyAdresses
+import com.example.fixx.Addresses.MyAddresses
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.address_row.view.*
 
-class RecycleAdapter(private val addressList: MutableList<String>, private val listener: MyAdresses) :
+class RecycleAdapter(private val addressList: MutableList<String>, private val listener: MyAddresses) :
     RecyclerView.Adapter<RecycleAdapter.AddressViewHolder>() {
 
     lateinit var context: Context
 
     inner class AddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener,
         View.OnLongClickListener {
-        val address = itemView.address_row_address_lbl
-        val optionMenu = itemView.address_row_options_menu
+        val address = itemView.address_row_address_lbl!!
+        val optionMenu = itemView.address_row_options_menu!!
 
         init {
             itemView.setOnClickListener(this)
@@ -89,22 +89,22 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
         }
     }
 
-    fun confirmDeleteDialog(position: Int, list: MutableList<String>){
+    private fun confirmDeleteDialog(position: Int, list: MutableList<String>){
         val builder = AlertDialog.Builder(context)
         //set title for alert dialog
-        builder.setTitle("Confirm Deleting Address")
+        builder.setTitle(context.getString(R.string.deleteDialogTitle))
         //set message for alert dialog
-        builder.setMessage("Do you want to delete this address?")
+        builder.setMessage(context.getString(R.string.deleteDialogQuestion))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
 
         //performing positive action
-        builder.setPositiveButton("Yes"){dialogInterface, which ->
+        builder.setPositiveButton(context.getString(R.string.yes)){dialogInterface, which ->
             list.removeAt(position)
             notifyDataSetChanged()
         }
         //performing negative action
-        builder.setNegativeButton("No"){dialogInterface, which ->
+        builder.setNegativeButton(context.getString(R.string.no)){dialogInterface, which ->
 
         }
         // Create the AlertDialog
@@ -112,7 +112,7 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
         // Set other dialog properties
         alertDialog.setCancelable(false)
         alertDialog.show()
-        alertDialog.getWindow()!!.setBackgroundDrawableResource(R.drawable.btn_border);
+        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
 
     }
 

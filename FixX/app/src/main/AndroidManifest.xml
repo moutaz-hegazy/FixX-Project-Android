@@ -54,7 +54,7 @@
             android:label="Add Address"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen"></activity> <!-- added for maps -->
-        <activity android:name=".Addresses.MyAdresses"></activity> <!-- added for maps -->
+        <activity android:name=".Addresses.MyAddresses"></activity> <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
