@@ -322,7 +322,7 @@ object FirestoreService {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
                 if (task.isSuccessful) {
-                    val userEmail = auth?.currentUser?.email
+                    val userEmail = auth.currentUser?.email
                     //Log.d("TAG", "signInWithCredential:success")
                     onSuccessHandler(userEmail!!)
                 } else {
@@ -334,7 +334,7 @@ object FirestoreService {
 
     fun fetchMyOngoingOrderedJobs(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
-        db.collection("Jobs").whereEqualTo("uid","XwOLV99peaTtH3VccAdiNmrsScN2")
+        db.collection("Jobs").whereEqualTo("uid",auth.currentUser?.uid)
             .whereIn("status", arrayListOf(Job.JobStatus.OnRequest.rawValue, Job.JobStatus.Accepted.rawValue))
             .get().addOnSuccessListener {
                 queryResult->
