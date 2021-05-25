@@ -31,7 +31,7 @@
         
         <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
-        <activity android:name=".NavigationBar.NavigationBarActivity">
+        <activity android:name=".NavigationBar.NavigationBarActivity"/>
         <activity android:name=".inAppChatScreens.views.NewMessageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Help"
+        app:title="@string/help_title"
         app:titleTextColor="@color/white"
         android:background="@color/purple_500">
     </androidx.appcompat.widget.Toolbar>
@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="About Us"/>
+                        android:text="@string/about_us_title"/>
 
 
 
@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="Safety Tips"/>
+                        android:text="@string/safety_tips_title"/>
 
 
                 </LinearLayout>
@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textColor="@color/black"
-                        android:text="Terms And Conditions"/>
+                        android:text="@string/terms_title"/>
 
 
                 </LinearLayout>

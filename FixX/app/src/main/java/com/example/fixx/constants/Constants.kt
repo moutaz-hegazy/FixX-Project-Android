@@ -1,5 +1,7 @@
 package com.example.fixx.constants
 
+import android.net.Uri
+
 sealed class Constants {
     companion object{
         const val cameraPickerRequestCode = 1
@@ -17,5 +19,7 @@ sealed class Constants {
         const val TRANS_IMAGES = "TransImages"
         const val TRANS_USERDATA = "transUser"
         const val TRANS_IMAGES_PATHS = "TransImagesPaths"
+        const val REQUEST_CODE = 100
+        const val CAMERA_REQUEST = 1888
     }
 }

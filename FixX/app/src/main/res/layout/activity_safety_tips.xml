@@ -24,7 +24,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="22sp"
-                android:text="Make the most of your Fix-X visit"
+                android:text="@string/safety_tips_screen_title"
                 android:padding="15dp"
                 android:paddingLeft="15dp"/>
 
@@ -42,7 +42,7 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-Fix-X aims at excellence in services provided to its customers,those are Fix-X tips to help you enjoy our services even better. "
+                android:text="@string/safety_tips_desc1"
                 />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-Contracting Fix-X fixer outside the app voids your grantee and keeps you without any quality or cost control, so always use Fix-X for your repair needs. "
+                android:text="@string/safety_tips_desc2"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-We always make sure our fixers are honest and safe to let in your house, but your peace of mind always keep your personal belongings away from the fixing area. "
+                android:text="@string/safety_tips_desc3"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-Try having company when Fix-X fixers are at your home. "
+                android:text="@string/safety_tips_desc4"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-Fixing your home might involve dangerous materials and tools, so always keep your children away from Fix-X fixers gadgets and tools to ensure their safety. "
+                android:text="@string/safety_tips_desc5"
                 />
 
             <TextView
@@ -89,7 +89,7 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-Be in close proximity to the fixers, but try not to distract them with questions until the job is finished. "
+                android:text="@string/safety_tips_desc6"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -98,18 +98,8 @@
                 android:paddingTop="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:text="-Please be sure about your order for Fix-X to enable us to serve you best, cancelling and no show isn't welcome at Fix-X. "
+                android:text="@string/safety_tips_desc7"
                 />
-
-
-
         </LinearLayout>
-
-
-
-
-
-
-
     </ScrollView>
 </LinearLayout>

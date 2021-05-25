@@ -14,9 +14,10 @@ import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
-import com.example.fixx.RegistrationActivity
+
 import kotlinx.android.synthetic.main.fragment_settings.*
 import com.example.fixx.Addresses.MyAdresses
+import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 

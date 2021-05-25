@@ -2,19 +2,19 @@ package com.example.fixx.NavigationBar.SettingsScreen
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,15 +23,13 @@ import kotlinx.android.synthetic.main.bottom_sheet_edit_email.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_name.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_password.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_phone.*
-import kotlinx.android.synthetic.main.bottom_sheet_pick.*
+import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import java.io.ByteArrayOutputStream
 
 class ProfileActivity : AppCompatActivity() {
     var floatingActionButton: FloatingActionButton? = null
     var bottomSheet : BottomSheetDialog?= null
-    val REQUEST_CODE = 100
-
-
-    private val cameraRequest = 1888
+    private var imagePath : Uri? = null
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,34 +84,103 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            imageUri = data?.data
-            profile_profilepicture_image_view.setImageURI(imageUri)
+         var image : Bitmap? = null
+       // if (resultCode == RESULT_OK && requestCode == Constants.REQUEST_CODE) {
+//            imageUri = data?.data
+//            profile_profilepicture_image_view.setImageURI(imageUri)
+
+
+        when (requestCode) {
+            Constants.cameraPickerRequestCode -> {
+                image = data?.extras?.get("data") as? Bitmap
+
+                imagePath = image?.let { getImageUriFromBitmap(this, it) }
+
+            }
+
+            Constants.galleryPickerRequestCode -> {
+                image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+                imagePath = data?.data
+            }
         }
+
+        image?.let {
+            profile_profilepicture_image_view.setImageBitmap(it)
+        }
+
+
+
+
+
+
+
+
+
+//            when (requestCode) {
+//                Constants.cameraPickerRequestCode -> {
+//                    image = data?.extras?.get("data") as? Bitmap
+//                    imagePath = image?.let { getImageUriFromBitmap(this, it)
+//                    }
+//
+//                    profile_profilepicture_image_view.setImageURI(imagePath)
+//                }
+//
+//                Constants.galleryPickerRequestCode -> {
+//                    image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+//                    imagePath = data?.data
+//                    profile_profilepicture_image_view.setImageURI(imagePath)
+//                }
+//
+//            }
+        //}
     }
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
+    }
+
+//    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+//        val bytes = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+//        return Uri.parse(path.toString())
+//    }
 
    private fun showBottomSheetDialog(){
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_pick, null)
 
         val dialog = BottomSheetDialog(this)
-        dialog.setContentView(btnsheet)
-        btnsheet.setOnClickListener {
-            dialog.dismiss()
-        }
-       setContentView(R.layout.bottom_sheet_pick)
+        dialog.setContentView(btnsheet.rootView)
 
-       profile_gallery_linear_layout.setOnClickListener {
+       btnsheet.bottomSheet_gallery_layout.setOnClickListener {
            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
            startActivityForResult(gallery, Constants.galleryPickerRequestCode)
+           dialog.dismiss()
        }
 
        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
            == PackageManager.PERMISSION_DENIED)
-           ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), cameraRequest)
-       profile_camera_linear_layout.setOnClickListener {
+           ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA),Constants.CAMERA_REQUEST)
+
+      btnsheet.bottomSheet_camera_layout.setOnClickListener {
            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+          //cameraIntent.putExtra("data", imagePath)
+
            startActivityForResult(cameraIntent, Constants.cameraPickerRequestCode)
+           dialog.dismiss()
        }
+
+
+        btnsheet.setOnClickListener {
+            dialog.dismiss()
+        }
+      // setContentView(R.layout.bottom_sheet_pick)
+
+
 
 
 

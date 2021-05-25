@@ -26,7 +26,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="22sp"
-            android:text="About us"
+            android:text="@string/about_us_title"
             android:padding="15dp"
             android:paddingLeft="15dp"/>
 
@@ -43,7 +43,8 @@
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             android:textColor="@color/black"
-            android:text="-Fix-X is a repairmen application in Egypt where you can order fixers from different categories in maintenance and finishing.With alot of registered fixers. "
+
+            android:text="@string/about_us_desc1"
 />
 
         <TextView
@@ -53,7 +54,7 @@
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             android:textColor="@color/black"
-            android:text="-We know how hard it is to find a qualified fixer to get the job done.That's why Fix-X does all the hard work for you;we search,evaluate,and select the best fixers in all maintenance and finishing fields,and connect you with them flawlessly through our application. "
+            android:text="@string/about_us_desc2"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -62,7 +63,7 @@
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             android:textColor="@color/black"
-            android:text="-With Fix-X you can easilychoose your fixer based on previous customers ratings,location,and category.You can also leave your review too. "
+            android:text="@string/about_us_desc3"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -71,18 +72,11 @@
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             android:textColor="@color/black"
-            android:text="-Our fixers are trained,punctual,and highly professional so you can stay safe and get high-quality services. "
+            android:text="@string/about_us_desc4"
             />
 
 
 
     </LinearLayout>
-
-
-
-
-
-
-
 </ScrollView>
 </LinearLayout>

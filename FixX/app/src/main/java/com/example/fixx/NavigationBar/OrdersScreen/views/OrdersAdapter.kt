@@ -25,8 +25,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                 .inflate(LayoutInflater.from(parent.context), parent, false))
             Job.JobStatus.Accepted -> VH(OngoingOrderRecyclerRowBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false))
-            Job.JobStatus.OnGuarantee -> VH(OnGuaranteeOrderRecyclerRowBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false))
+
             Job.JobStatus.Completed -> VH(CompletedOrdersRecyclerRowBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false))
         }
@@ -81,17 +80,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                 }
             }
 
-            Job.JobStatus.OnGuarantee -> {
-                val mRoot = holder.binding as? OnGuaranteeOrderRecyclerRowBinding
-                mRoot?.let{
-                    view ->
-                    view.onGuaranteeOrderCompletionDateLbl.text = data[position].completionDate
-                    view.onGuaranteeOrdersJobTypeLbl.text = data[position].type
-                    getImageResourse(data[position].type)?.let {
-                        view.onGuaranteeOrderJobImage.setImageResource(it)
-                    }
-                }
-            }
+
         }
     }
 
