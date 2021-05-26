@@ -155,5 +155,6 @@
     <string name="Book">Book</string>
 
     <string name="SingleJobRequest">requests a job from you</string>
+    <string name="JobRequestTitle">New Job Request</string>
 
 </resources>

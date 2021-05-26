@@ -104,7 +104,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
                             viewModel.sendNotification(
                                 JobRequestData(
                                     USER_OBJECT?.name ?: "",
-                                    R.string.SingleJobRequest, it.jobId
+                                    R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
                                 ), position)
                         }, onFaliureBinding = {
                             Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
