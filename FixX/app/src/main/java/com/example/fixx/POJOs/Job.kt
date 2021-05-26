@@ -19,7 +19,6 @@ data class Job (val uid: String?, val type : String, var location : String?, val
     enum class JobStatus constructor(var rawValue: String) : Serializable {
         OnRequest("OnRequest"),
         Accepted("Accepted"),
-        OnGuarantee("OnGuarantee"),
         Completed("Completed")
     }
 }

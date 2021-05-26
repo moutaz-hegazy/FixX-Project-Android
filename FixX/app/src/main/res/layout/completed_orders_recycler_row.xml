@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="45dp"
                 android:layout_marginEnd="35dp"
-                android:text="TextView"
+                android:text="On Request"
                 android:textColor="#4CAF50"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,19 +81,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="TextView"
+                android:text="From: Any"
                 app:layout_constraintStart_toEndOf="@+id/completed_order_job_image"
-                app:layout_constraintTop_toTopOf="@+id/completed_order_job_image"
-                tools:text="From : Any" />
+                app:layout_constraintTop_toTopOf="@+id/completed_order_job_image" />
 
             <TextView
                 android:id="@+id/completed_order_toTime_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="To: Any"
                 app:layout_constraintBottom_toBottomOf="@+id/completed_order_status_lbl"
-                app:layout_constraintStart_toStartOf="@+id/completed_order_fromTime_lbl"
-                tools:text="To : Any" />
+                app:layout_constraintStart_toStartOf="@+id/completed_order_fromTime_lbl" />
 
             <TextView
                 android:id="@+id/completed_order_price_lbl"
