@@ -41,11 +41,11 @@
         <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
         <activity android:name=".NavigationBar.NavigationBarActivity" />
         <activity android:name=".LoginScreen.Views.SplashScreen">
-            <!-- <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
         </activity>
         <activity
             android:name=".Addresses.MapActivity"
@@ -56,14 +56,6 @@
         <activity android:name=".MainActivity" />
 
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen"></activity> <!-- added for maps -->
-        <activity
-            android:name=".Addresses.MapActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".Addresses.AddAddressActivity"
-            android:label="Add Address" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" /> <!-- added for maps -->
         <activity android:name=".Addresses.MyAdresses" /> <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
