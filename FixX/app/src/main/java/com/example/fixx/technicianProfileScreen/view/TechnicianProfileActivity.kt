@@ -17,11 +17,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.POJOs.Comment
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
+import com.example.fixx.showTechnicianScreen.models.JobRequestData
 import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
 import com.example.fixx.technicianProfileScreen.viewModel.TechnicianProfileViewModel
 import com.example.fixx.technicianProfileScreen.viewModel.TechnicianProfileViewModelFactory
@@ -84,10 +86,19 @@ class TechnicianProfileActivity : AppCompatActivity() {
                 imagesUris.add(Uri.parse(image))
             }
 
-            job?.let { it1 ->
-                CustomizeOrderViewModel(it1, imagesUris,
-                    onSuccessBinding = {},
-                    onFaliureBinding = {})
+            job?.let { job ->
+                job.isPrivate = true
+                CustomizeOrderViewModel(job, imagesUris,
+                    onSuccessBinding = {
+                        Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                        viewModel.sendNotification(
+                            JobRequestData(
+                                NavigationBarActivity.USER_OBJECT?.name ?: "",
+                                R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
+                            ))
+                    }, onFaliureBinding = {
+                        Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                    })
                 jobUploaded = true
             }
             bookBtn?.isClickable = false
@@ -99,12 +110,15 @@ class TechnicianProfileActivity : AppCompatActivity() {
         ratingBar?.rating = technicianData?.rating?.toFloat() ?: 0F
 
         techProfileRecycler = findViewById(R.id.technician_profile_recyclerView)
-        val factory = TechnicianProfileViewModelFactory()
-        try {
-            viewModel = ViewModelProvider(this, factory).get(TechnicianProfileViewModel::class.java)
-        }catch (error : IllegalArgumentException){
-            Toast.makeText(applicationContext,"Couldn't connect to database", Toast.LENGTH_SHORT)
-            finish()
+
+        technicianData?.let {   tech ->
+            val factory = TechnicianProfileViewModelFactory(tech)
+            try {
+                viewModel = ViewModelProvider(this, factory).get(TechnicianProfileViewModel::class.java)
+            }catch (error : IllegalArgumentException){
+                Toast.makeText(applicationContext,"Couldn't connect to database", Toast.LENGTH_SHORT)
+                finish()
+            }
         }
 
         Log.i("TAG", "onCreate ShowTechniciansScreen : ${viewModel.newList}")

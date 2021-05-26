@@ -98,6 +98,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
 
             adapter.bookTechnician = { position ->
                 job?.let { job ->
+                    job.isPrivate = true
                     CustomizeOrderViewModel(job, imagesUris,
                         onSuccessBinding = {
                             Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()

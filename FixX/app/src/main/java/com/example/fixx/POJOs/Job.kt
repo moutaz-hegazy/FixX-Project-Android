@@ -16,6 +16,7 @@ data class Job (val uid: String? = null, val type : String = "", var location : 
     var techID : Int? = null
     var bidders : MutableList<Int>? = null
     var images : MutableList<String>? = null
+    var isPrivate = false
 
     enum class JobStatus constructor(var rawValue: String) : Serializable {
         OnRequest("OnRequest"),
