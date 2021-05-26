@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 
 
 class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Context) : RecyclerView.Adapter<RecyclerAdapter.TechViewHolder>() {
-    lateinit var bookTechnician : ()->Unit
+    lateinit var bookTechnician : (postion : Int)->Unit
     lateinit var showTechProfileHandler : (Int)->Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TechViewHolder {
@@ -56,7 +56,7 @@ class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Conte
         }
 
         holder.binding.technicianItemBookBtn.setOnClickListener{
-            bookTechnician()
+            bookTechnician(position)
         }
     }
 

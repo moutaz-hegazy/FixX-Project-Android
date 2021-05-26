@@ -170,8 +170,9 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                         putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsStringArray.toTypedArray())
 
                     }
-                startActivity(selectTechIntent)
-                finish()
+                startActivityForResult(selectTechIntent,Constants.TECH_LIST_REQUEST_CODE)
+            }else{
+                Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
             }
         }
         //---------------------------------------------------------------
@@ -184,12 +185,16 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 imagePathsStringArray?.forEach { image ->
                     imagePathsList2.add(Uri.parse(image))
                 }
-                CustomizeOrderViewModel(job, imagePathsList2){
-                    Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                    Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<< ${job.jobId}")
-                }
+                CustomizeOrderViewModel(job, imagePathsList2,
+                    onSuccessBinding = {
+                        Toast.makeText(applicationContext, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                    }, onFaliureBinding = {
+                        Toast.makeText(applicationContext, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                    })
                 finish()
 
+            }else{
+                Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
             }
         }
         //------------------------------------------------------------------
@@ -260,6 +265,14 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                         customizeOrder_pickLocation_spinner.setSelection(values.size -2)
                     }
                 }
+
+                Constants.TECH_LIST_REQUEST_CODE -> {
+                    data?.getBooleanExtra(Constants.TECH_LIST_BOOLEAN , false)?.let {
+                        if(it){
+                            finish()
+                        }
+                    }
+                }
             }
             image?.let{
                 images.add(it)
@@ -292,6 +305,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             // add new location Logic.
             customizeOrder_pickLocation_spinner.setSelection(0)
             startAddressActivity()
+        }else if(position == 0 ){
+
         }else{
             selectedLocation = values[position]
         }

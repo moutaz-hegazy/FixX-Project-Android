@@ -240,7 +240,7 @@ object FirestoreService {
     }
 
 
-    fun saveJobDetails(job: Job) {
+    fun saveJobDetails(job: Job, onSuccessHandler: (jobs: Job) -> Unit, onFailHandler: () -> Unit) {
         val map = HashMap<String, Any?>()
         job::class.memberProperties.forEach {
             map[it.name] = (it as KProperty1<Any, Any>).get(job)
@@ -250,9 +250,11 @@ object FirestoreService {
         db.collection("Jobs").add(map)
             .addOnSuccessListener {
                 it.update("jobId",it.id)
+                job.jobId = it.id
+                onSuccessHandler(job)
                 Log.i("TAG", "DocumentSnapshot successfully written!")
             }
-            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
+            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e); onFailHandler() }
     }
 
 

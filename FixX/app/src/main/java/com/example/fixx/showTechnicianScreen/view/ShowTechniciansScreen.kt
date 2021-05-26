@@ -1,5 +1,6 @@
 package com.example.fixx.showTechnicianScreen.view
 
+import android.app.Activity
 import android.content.ContentProvider
 import android.content.Intent
 import android.graphics.Color
@@ -15,10 +16,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
+import com.example.fixx.showTechnicianScreen.models.JobRequestData
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerActivityViewModel
 import com.example.fixx.showTechnicianScreen.viewModel.RecyclerViewModelFactory
 import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
@@ -90,30 +93,56 @@ class ShowTechniciansScreen : AppCompatActivity() {
     fun observeData(){
         var progressBar : ProgressBar = findViewById(R.id.progressbar)
 
-        viewModel.recyclerListData.observe(this, Observer{
-            adapter = RecyclerAdapter(it as MutableList<Technician> , this)
+        viewModel.recyclerListData.observe(this, Observer {
+            adapter = RecyclerAdapter(it as MutableList<Technician>, this)
 
-            adapter.bookTechnician = {
-                job?.let {
-                    CustomizeOrderViewModel(it, imagesUris) {
-                        Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                    }
+            adapter.bookTechnician = { position ->
+                job?.let { job ->
+                    CustomizeOrderViewModel(job, imagesUris,
+                        onSuccessBinding = {
+                            Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                            viewModel.sendNotification(
+                                JobRequestData(
+                                    USER_OBJECT?.name ?: "",
+                                    R.string.SingleJobRequest, it.jobId
+                                ), position)
+                        }, onFaliureBinding = {
+                            Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                        })
+                    val returnIntent = Intent()
+                    returnIntent.putExtra(Constants.TECH_LIST_BOOLEAN, true)
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finish()
                 }
-                onBackPressed()
             }
 
-            adapter.showTechProfileHandler ={
+            adapter.showTechProfileHandler = {
                 var toProfile = Intent(this, TechnicianProfileActivity::class.java)
-                toProfile.putExtra("name", viewModel.newList.get(it).name)
-                toProfile.putExtra(Constants.TRANS_USERDATA, viewModel.newList.get(it))
+                toProfile.putExtra("name", viewModel.newList[it].name)
+                toProfile.putExtra(Constants.TRANS_USERDATA, viewModel.newList[it])
                 toProfile.putExtra(Constants.TRANS_JOB, job)
                 toProfile.putExtra(Constants.TRANS_IMAGES_PATHS, imagesPaths)
-                startActivity(toProfile)
+                startActivityForResult(toProfile, Constants.TECH_DETAILS_REQUESTCODE)
             }
 
             adapter.notifyDataSetChanged()
             progressBar.visibility = View.GONE
-            techRecycler.adapter= adapter
+            techRecycler.adapter = adapter
         })
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == Constants.TECH_DETAILS_REQUESTCODE){
+            data?.getBooleanExtra(Constants.TECH_LIST_BOOLEAN , false)?.let {
+                if(it){
+                    val returnIntent = Intent()
+                    returnIntent.putExtra(Constants.TECH_LIST_BOOLEAN,true)
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finish()
+                }
+            }
+        }
     }
 }

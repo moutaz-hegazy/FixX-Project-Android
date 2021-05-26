@@ -1,5 +1,7 @@
 package com.example.fixx.technicianProfileScreen.view
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.Image
@@ -44,6 +46,8 @@ class TechnicianProfileActivity : AppCompatActivity() {
     var job : Job? = null
     val imagesUris = mutableListOf<Uri>()
 
+    private var jobUploaded = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +85,10 @@ class TechnicianProfileActivity : AppCompatActivity() {
             }
 
             job?.let { it1 ->
-                CustomizeOrderViewModel(it1, imagesUris) {
-
-                }
+                CustomizeOrderViewModel(it1, imagesUris,
+                    onSuccessBinding = {},
+                    onFaliureBinding = {})
+                jobUploaded = true
             }
             bookBtn?.isClickable = false
             bookBtn?.text = "Booked"
@@ -109,6 +114,17 @@ class TechnicianProfileActivity : AppCompatActivity() {
     private fun initialiseAdapter(){
         techProfileRecycler.layoutManager = viewManager
         observeData()
+    }
+
+    override fun onBackPressed() {
+        if(jobUploaded){
+            Intent().apply {
+                putExtra(Constants.TECH_LIST_BOOLEAN, true)
+            }.also {
+                setResult(Activity.RESULT_OK, it)
+                finish()
+            }
+        }
     }
 
     fun observeData(){
