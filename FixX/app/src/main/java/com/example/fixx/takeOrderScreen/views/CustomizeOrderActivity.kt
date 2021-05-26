@@ -171,6 +171,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                     }
                 startActivity(selectTechIntent)
+                finish()
             }
         }
         //---------------------------------------------------------------

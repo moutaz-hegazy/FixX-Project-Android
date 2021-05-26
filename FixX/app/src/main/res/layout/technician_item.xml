@@ -21,6 +21,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/technician_item_img_lbl"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_blue"
+                android:gravity="center"
+                android:hint="T"
+                android:textColor="#fff"
+                android:textSize="26sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="invisible"
+                />
+
             <ImageView
                 android:id="@+id/technician_item_img"
                 android:layout_width="80dp"
@@ -32,7 +50,8 @@
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="invisible"/>
 
 
             <TextView

@@ -1,5 +1,6 @@
 package com.example.fixx.showTechnicianScreen.view
 
+import android.content.ContentProvider
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -36,6 +37,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
     private var job : Job? = null
     private var parsedJobLocation : String? = null
     val imagesUris = mutableListOf<Uri>()
+    var imagesPaths = arrayOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +47,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
         job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
         //val images = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES)
         //val imagesPaths = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES_PATHS)
-        val imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS)
+        imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS) as Array<String>
 
         Log.i("TAG2", "onCreate: ${imagesPaths?.size} ")
         Log.i("TAG2", "onCreate: ${job?.location} ")
@@ -97,11 +99,15 @@ class ShowTechniciansScreen : AppCompatActivity() {
                         Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
                     }
                 }
+                onBackPressed()
             }
 
             adapter.showTechProfileHandler ={
                 var toProfile = Intent(this, TechnicianProfileActivity::class.java)
                 toProfile.putExtra("name", viewModel.newList.get(it).name)
+                toProfile.putExtra(Constants.TRANS_USERDATA, viewModel.newList.get(it))
+                toProfile.putExtra(Constants.TRANS_JOB, job)
+                toProfile.putExtra(Constants.TRANS_IMAGES_PATHS, imagesPaths)
                 startActivity(toProfile)
             }
 
