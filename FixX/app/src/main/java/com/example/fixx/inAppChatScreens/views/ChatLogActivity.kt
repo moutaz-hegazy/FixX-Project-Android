@@ -3,7 +3,6 @@ package com.example.fixx.inAppChatScreens.views
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ChatMessage
 import com.example.fixx.POJOs.Person
@@ -11,7 +10,6 @@ import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityChatLogBinding
 import com.example.fixx.inAppChatScreens.model.ChatPushNotification
-import com.example.fixx.inAppChatScreens.model.FirebaseService
 import com.example.fixx.inAppChatScreens.model.NotificationData
 import com.example.fixx.inAppChatScreens.viewModels.ChatLogViewModel
 import com.google.gson.Gson

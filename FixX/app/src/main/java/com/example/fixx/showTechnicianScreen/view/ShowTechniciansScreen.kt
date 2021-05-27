@@ -103,7 +103,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
                         onSuccessBinding = {
                             Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
                             viewModel.sendNotification(
-                                JobRequestData(
+                                JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
                                     USER_OBJECT?.name ?: "",
                                     R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
                                 ), position)

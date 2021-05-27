@@ -5,20 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.fixx.HomeActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
-import com.example.fixx.constants.Constants
-import com.example.fixx.inAppChatScreens.model.FirebaseService
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
+import com.example.fixx.Support.FirebaseService
 
 @Suppress("DEPRECATION")
 class SplashScreen : AppCompatActivity() {

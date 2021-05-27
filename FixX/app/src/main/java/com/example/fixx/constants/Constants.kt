@@ -31,5 +31,8 @@ sealed class Constants {
         const val TECH_LIST_REQUEST_CODE = 300
         const val TECH_LIST_BOOLEAN = "BooleanResult"
         const val TECH_DETAILS_REQUESTCODE = 301
+        const val NOTIFICATION_TYPE_TECH_REPLY_CONFIRM = "techReplyConfirm"
+        const val NOTIFICATION_TYPE_TECH_REPLY_DENY = "techReplyDeny"
+        const val NOTIFICATION_TYPE_USER_JOB_REQUEST = "jobRequest"
     }
 }

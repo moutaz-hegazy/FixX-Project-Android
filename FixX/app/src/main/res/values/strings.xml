@@ -156,5 +156,16 @@
 
     <string name="SingleJobRequest">requests a job from you</string>
     <string name="JobRequestTitle">New Job Request</string>
+    <string name="Deny">Deny Request</string>
+    <string name="Determine_Price">Determine Price : </string>
+    <string name="Confirm">Confirm Request</string>
+    <string name="LE">LE</string>
+    <string name="On">On : </string>
+    <string name="AnyTime">-- : --</string>
+    <string name="Address">Address : </string>
+    <string name="RequestDenied">Request Denied</string>
+    <string name="DenyMessage">Denied your request</string>
+    <string name="RequestConfirmed">Request Confirmed</string>
+    <string name="ConfirmMessage">Confirmed you application</string>
 
 </resources>

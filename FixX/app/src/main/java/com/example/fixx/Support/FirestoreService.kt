@@ -221,6 +221,18 @@ object FirestoreService {
             .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
     }
 
+    fun fetchJobById(jobId : String, onSuccessHandler: (job : Job) -> Unit, onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).get()
+            .addOnSuccessListener { snapShot ->
+            val job = snapShot.toObject<Job>()
+                job?.let {
+                    onSuccessHandler(it)
+                }
+        }.addOnFailureListener {
+            onFailHandler()
+        }
+    }
+
     fun loginWithEmailAndPassword(
         email: String,
         password: String,
