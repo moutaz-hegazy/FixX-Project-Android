@@ -19,7 +19,7 @@ class TechViewOrderViewModel() {
         FirestoreService.fetchUserFromDB(uid, onSuccessBinding)
     }
 
-    fun sendDenyNotification(notification : TechReplyPushNotification) = CoroutineScope(Dispatchers.IO).launch {
+    fun sendReplyNotification(notification : TechReplyPushNotification) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val response = RetrofitInstance.api.postTechReplyNotification(notification)
             if (response.isSuccessful) {

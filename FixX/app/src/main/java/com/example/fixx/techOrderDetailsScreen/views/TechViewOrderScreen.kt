@@ -71,7 +71,9 @@ class TechViewOrderScreen : AppCompatActivity() {
                                         R.string.RequestConfirmed,
                                         R.string.ConfirmMessage,job.jobId,
                                         binding.techViewOrderPriceTxt.text.toString()),
-                                        arrayOf(token))
+                                        arrayOf(token)).also {
+                                            viewModel.sendReplyNotification(it)
+                                    }
                                 }
                             }
                         }
