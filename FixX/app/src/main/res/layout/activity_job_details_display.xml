@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".JobDetailsDisplay.JobDetailsDisplayActivity">
+    tools:context=".JobDetailsDisplay.views.JobDetailsDisplayActivity">
 
     <ImageView
-        android:id="@+id/jobType"
+        android:id="@+id/jobDetails_job_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
@@ -18,179 +18,93 @@
         tools:srcCompat="@tools:sample/avatars"/>
 
     <TextView
-        android:id="@+id/jobLocation"
+        android:id="@+id/jobDetails_location_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Job Location"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/jobStatus"
-        app:layout_constraintStart_toEndOf="@+id/jobType" />
+        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
+        app:layout_constraintTop_toTopOf="@+id/jobDetails_job_image" />
 
-    <HorizontalScrollView
-        android:id="@+id/imagesScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="15dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionLinearLayout"
-        android:background="@drawable/textview_border">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/google" />
-
-        </LinearLayout>
-    </HorizontalScrollView>
 
     <TextView
-        android:id="@+id/descriptionHeading"
+        android:id="@+id/jobDetails_description_lbl"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/textview_border"
+        android:maxLines="3"
+        android:scrollbars="vertical"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/jobDetails_descTitle_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_descTitle_lbl" />
+
+    <TextView
+        android:id="@+id/jobDetails_descTitle_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
         android:text="@string/description"
         android:textColor="@color/red"
+        android:visibility="gone"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionLinearLayout"
-        app:layout_constraintStart_toStartOf="parent" />
-
-        <RelativeLayout
-            android:id="@+id/descriptionLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="15dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/jobType">
-
-            <TextView
-                android:id="@+id/jobDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/textview_border"
-                android:scrollbars="vertical"
-                android:maxLines="3"
-                android:textSize="20sp" />
-
-        </RelativeLayout>
+        app:layout_constraintStart_toStartOf="@+id/jobDetails_job_image"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_job_image" />
 
     <TextView
-        android:id="@+id/imagesHeading"
+        android:id="@+id/jobDetails_imagesTitle_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="12dp"
         android:text="@string/images"
         android:textColor="@color/red"
         android:textSize="20sp"
+        android:visibility="gone"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imagesScrollView"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/jobDetails_description_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_description_lbl" />
 
     <TextView
-        android:id="@+id/biddersHeading"
+        android:id="@+id/jobDetails_biddersTitle_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
         android:text="@string/bidders"
         android:textColor="@color/red"
         android:textSize="20sp"
+        android:visibility="gone"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/biddersRecyclerView"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/jobDetails_images_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_images_recycler" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/biddersRecyclerView"
+        android:id="@+id/jobDetails_bidders_recycler"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="214dp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        android:background="@drawable/textview_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagesScrollView"
-        android:background="@drawable/textview_border">
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_biddersTitle_lbl">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/jobPrice"
+        android:id="@+id/jobDetails_finalPrice_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
+        android:visibility="invisible"
         android:text="Job Price"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/jobType"
+        app:layout_constraintBottom_toBottomOf="@+id/jobDetails_job_image"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -202,8 +116,8 @@
         android:text="@string/from"
         android:textColor="@color/red"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/jobType"
-        app:layout_constraintTop_toBottomOf="@+id/jobLocation" />
+        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_location_lbl" />
 
     <TextView
         android:id="@+id/textView11"
@@ -214,21 +128,22 @@
         android:text="@string/to"
         android:textColor="@color/red"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/jobType"
+        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
-        android:id="@+id/jobStatus"
+        android:id="@+id/jobDetails_status_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
         android:text="Job Status"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/jobType" />
+        app:layout_constraintTop_toTopOf="@+id/jobDetails_fromTime_lbl" />
 
     <TextView
-        android:id="@+id/fromTime"
+        android:id="@+id/jobDetails_fromTime_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -237,7 +152,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView8" />
 
     <TextView
-        android:id="@+id/toTime"
+        android:id="@+id/jobDetails_toTime_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
@@ -246,14 +161,149 @@
         app:layout_constraintTop_toTopOf="@+id/textView11" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/jobDetails_date_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Date"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/jobType"
-        app:layout_constraintStart_toEndOf="@+id/jobType" />
+        app:layout_constraintBottom_toBottomOf="@+id/jobDetails_job_image"
+        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/jobDetails_images_recycler"
+        android:layout_width="373dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintStart_toStartOf="@+id/jobDetails_imagesTitle_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_imagesTitle_lbl" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/jobDetails_tech_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_bidders_recycler">
+
+        <ImageView
+            android:id="@+id/bidderItem_tech_imageView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            android:background="@drawable/rounded_outline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/bidderItem_tech_imageLbl"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_blue"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="35sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/bidderItem_techName_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/bidderItem_tech_imageView"
+            app:layout_constraintTop_toTopOf="@+id/bidderItem_tech_imageView" />
+
+        <RatingBar
+            android:id="@+id/bidderItem_tech_rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="2.4"
+            app:layout_constraintBottom_toBottomOf="@+id/bidderItem_techName_lbl"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/bidderItem_techChat_btn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/bidderItem_techName_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/bidderItem_techName_lbl"
+            app:srcCompat="@drawable/chat_icon" />
+
+        <ImageButton
+            android:id="@+id/bidderItem_techCall_btn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@+id/bidderItem_techChat_btn"
+            app:layout_constraintTop_toTopOf="@+id/bidderItem_techChat_btn"
+            app:srcCompat="@drawable/call_icon" />
+
+        <TextView
+            android:id="@+id/bidderItem_confirmPriceTitle_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            android:text="@string/OfferedPrice"
+            app:layout_constraintStart_toStartOf="@+id/bidderItem_tech_rating"
+            app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating" />
+
+        <TextView
+            android:id="@+id/bidderItem_confirmPrice_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/bidderItem_confirmPriceTitle_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/bidderItem_confirmPriceTitle_lbl"
+            tools:text="999" />
+
+        <Button
+            android:id="@+id/jobDetails_techAccept_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/Accept"
+            android:visibility="invisible"
+            app:backgroundTint="#009688"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bidderItem_techChat_btn" />
+
+        <Button
+            android:id="@+id/jobDetails_techCancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:text="@string/Cancel"
+            android:visibility="invisible"
+            app:backgroundTint="#ED1808"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
@@ -56,10 +57,14 @@ class FirebaseService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         when(p0.data["type"]){
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM ->{
-                val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
-//                TaskStackBuilder.create(applicationContext).apply {
-//                    addNextIntentWithParentStack(Intent(applicationContext,))
-//                }
+                var pendingIntent : PendingIntent
+                TaskStackBuilder.create(applicationContext).apply {
+                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
+                    editIntentAt(0).apply {
+                        putExtra(Constants.TRANS_JOB,p0.data["jobID"])
+                    }
+                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                }
                 notification = NotificationCompat.Builder(this,CHANNEL_ID)
                     .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
                     .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")

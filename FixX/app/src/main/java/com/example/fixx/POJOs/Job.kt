@@ -13,8 +13,8 @@ data class Job (val uid: String? = null, val type : String = "", var location : 
     var fromTime : String? = null
     var toTime : String? = null
     var price : Int? = null
-    var techID : Int? = null
-    var bidders : MutableList<Int>? = null
+    var techID : String? = null
+    var bidders : MutableMap<String,String>? = null
     var images : MutableList<String>? = null
     var isPrivate = false
 

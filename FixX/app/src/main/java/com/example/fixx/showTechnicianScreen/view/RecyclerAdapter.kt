@@ -33,7 +33,7 @@ class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Conte
         var name :TextView = holder.binding.technicianItemNameLbl
         var image : ImageView = holder.binding.technicianItemImg
         var imageLbl : TextView = holder.binding.technicianItemImgLbl
-        var ratingBar : RatingBar = holder.binding.technicianItemRatingBar
+        var ratingBar : RatingBar = holder.binding.bidderItemTechRating
 
         name.text = arrayList[position].name
 

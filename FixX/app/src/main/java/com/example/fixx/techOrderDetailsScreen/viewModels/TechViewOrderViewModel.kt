@@ -35,4 +35,12 @@ class TechViewOrderViewModel() {
     fun fetchJobFromDB(jobId : String, onSuccessBinding: (job: Job) -> Unit, onFailBinding : () -> Unit){
         FirestoreService.fetchJobById(jobId,onSuccessBinding,onFailBinding)
     }
+
+    fun addToBidders(uid : String?, jobId : String, price : String , onSuccessBinding: () -> Unit){
+        uid?.let { it ->
+            FirestoreService.addBidder(uid,jobId,price){
+                onSuccessBinding()
+            }
+        }
+    }
 }

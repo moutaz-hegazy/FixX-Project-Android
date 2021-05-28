@@ -167,5 +167,9 @@
     <string name="DenyMessage">Denied your request</string>
     <string name="RequestConfirmed">Request Confirmed</string>
     <string name="ConfirmMessage">Confirmed you application</string>
+    <string name="JobDetails">Job Details</string>
+    <string name="OfferedPrice">Offered Price</string>
+    <string name="Accept">Accept</string>
+    <string name="Cancel">Cancel</string>
 
 </resources>

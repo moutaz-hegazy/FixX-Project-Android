@@ -2,66 +2,96 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bidderItem_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="10dp">
 
     <ImageView
-        android:id="@+id/bidderAvatar"
-        android:layout_width="100dp"
-        android:layout_height="105dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
+        android:id="@+id/bidderItem_tech_imageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_outline"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="25dp"
-        android:text="@string/Bid"
-        app:layout_constraintBottom_toBottomOf="@+id/bidderAvatar"
-        app:layout_constraintStart_toEndOf="@+id/bidderAvatar" />
+        android:id="@+id/bidderItem_tech_imageLbl"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_blue"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="35sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/bidderName"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:text="Bidder Name"
-        app:layout_constraintStart_toEndOf="@+id/bidderAvatar"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/bidderItem_techName_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/bidderItem_tech_imageView"
+        app:layout_constraintTop_toTopOf="@+id/bidderItem_tech_imageView" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="25dp"
-        android:text="@string/Rating"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintStart_toEndOf="@+id/bidderAvatar"
-        app:layout_constraintTop_toBottomOf="@+id/bidderName" />
-
-    <TextView
-        android:id="@+id/bidderRating"
-        android:layout_width="115dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="15dp"
+    <RatingBar
+        android:id="@+id/bidderItem_tech_rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:isIndicator="true"
         android:numStars="5"
-        android:stepSize="0"
-        app:layout_constraintBottom_toTopOf="@+id/bidderBid"
-        app:layout_constraintStart_toEndOf="@+id/textView5" />
+        android:rating="2.4"
+        app:layout_constraintBottom_toBottomOf="@+id/bidderItem_techName_lbl"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/bidderItem_techChat_btn"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/bidderItem_techName_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/bidderItem_techName_lbl"
+        app:srcCompat="@drawable/chat_icon" />
+
+    <ImageButton
+        android:id="@+id/bidderItem_techCall_btn"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toEndOf="@+id/bidderItem_techChat_btn"
+        app:layout_constraintTop_toTopOf="@+id/bidderItem_techChat_btn"
+        app:srcCompat="@drawable/call_icon" />
 
     <TextView
-        android:id="@+id/bidderBid"
-        android:layout_width="115dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="15dp"
-        android:text="....."
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintStart_toEndOf="@+id/textView3" />
+        android:id="@+id/bidderItem_confirmPriceTitle_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/OfferedPrice"
+        app:layout_constraintStart_toStartOf="@+id/bidderItem_tech_rating"
+        app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating" />
+
+    <TextView
+        android:id="@+id/bidderItem_confirmPrice_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/bidderItem_confirmPriceTitle_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/bidderItem_confirmPriceTitle_lbl"
+        tools:text="999" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

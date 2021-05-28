@@ -134,6 +134,13 @@ object FirestoreService {
             }
     }
 
+    fun addBidder(uid : String, jobId : String, price: String, onCompletion:()->Unit){
+        db.collection("Jobs").document(jobId)
+            .update("bidders", mapOf(uid to price)).addOnSuccessListener {
+                onCompletion()
+            }
+    }
+
     fun fetchChatHistoryForInstance(
         contact: String,
         observerHandler: (msg: ChatMessage) -> Unit,

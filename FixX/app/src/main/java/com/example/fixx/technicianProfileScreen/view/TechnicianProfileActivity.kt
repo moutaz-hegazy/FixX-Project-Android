@@ -60,13 +60,17 @@ class TechnicianProfileActivity : AppCompatActivity() {
         technicianData = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Technician
         job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
         imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS) as Array<String>
-
+        val showOnly = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
 
         techName = findViewById(R.id.technician_profile_name_lbl)
         image = findViewById(R.id.technician_profile_img)
         imageLbl = findViewById(R.id.technician_profile_img_lbl)
         bookBtn = findViewById(R.id.technician_profile_book_btn)
         ratingBar = findViewById(R.id.technician_profile_ratingBar)
+
+        if(!showOnly){
+            bookBtn?.visibility = View.VISIBLE
+        }
 
         if (technicianData?.profilePicture != null){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

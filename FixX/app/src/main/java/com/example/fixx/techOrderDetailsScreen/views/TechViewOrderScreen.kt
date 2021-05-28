@@ -39,15 +39,15 @@ class TechViewOrderScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar.apply {
-            title = "Job Details"
+            title = getString(R.string.JobDetails)
         }
 
         intent.apply {
             jobId = getStringExtra(Constants.TRANS_JOB)
         }
 
-        jobId?.let {
-            viewModel.fetchJobFromDB(it, onSuccessBinding = {
+        jobId?.let {    jobID ->
+            viewModel.fetchJobFromDB(jobID, onSuccessBinding = {
                 job = it
                 viewModel.fetchUserFromDB(job.uid){  person ->
                     contact = person
@@ -64,13 +64,15 @@ class TechViewOrderScreen : AppCompatActivity() {
                         if(binding.techViewOrderPriceTxt.text.isNullOrEmpty()){
                             binding.techViewOrderPriceTxt.error = "enter a price"
                         }else{
-                            contact?.token?.let {   token ->
-                                TechReplyPushNotification(ReplyNotificationData(Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
-                                    USER_OBJECT?.name ?: "",
-                                    R.string.RequestConfirmed,
-                                    R.string.ConfirmMessage,job.jobId, USER_OBJECT?.uid,
-                                    binding.techViewOrderPriceTxt.text.toString()),
-                                    arrayOf(token))
+                            viewModel.addToBidders(USER_OBJECT?.uid, jobID, binding.techViewOrderPriceTxt.text.toString()){
+                                contact?.token?.let {   token ->
+                                    TechReplyPushNotification(ReplyNotificationData(Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
+                                        USER_OBJECT?.name ?: "",
+                                        R.string.RequestConfirmed,
+                                        R.string.ConfirmMessage,job.jobId,
+                                        binding.techViewOrderPriceTxt.text.toString()),
+                                        arrayOf(token))
+                                }
                             }
                         }
                     }
