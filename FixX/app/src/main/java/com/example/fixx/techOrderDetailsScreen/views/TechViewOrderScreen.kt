@@ -37,6 +37,11 @@ class TechViewOrderScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        supportActionBar.apply {
+            title = "Job Details"
+        }
+
         intent.apply {
             jobId = getStringExtra(Constants.TRANS_JOB)
         }
