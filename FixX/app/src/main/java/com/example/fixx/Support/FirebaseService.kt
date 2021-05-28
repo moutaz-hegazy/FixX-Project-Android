@@ -15,6 +15,7 @@ import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
+import com.example.fixx.inAppChatScreens.views.ChatLogActivity
 import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -61,7 +62,7 @@ class FirebaseService : FirebaseMessagingService() {
                 TaskStackBuilder.create(applicationContext).apply {
                     addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
                     editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobID"])
+                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
                     }
                     pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
                 }
@@ -91,6 +92,25 @@ class FirebaseService : FirebaseMessagingService() {
                     .setContentIntent(pendingIntent)
                     .build()
             }
+
+            Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->{
+                var pendingIntent : PendingIntent
+                TaskStackBuilder.create(applicationContext).apply {
+                    addNextIntentWithParentStack(Intent(applicationContext,ChatLogActivity::class.java))
+                    editIntentAt(0).apply {
+                        putExtra(Constants.TRANS_JOB,p0.data["jobID"])
+                    }
+                    pendingIntent = getPendingIntent(2,PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                notification = NotificationCompat.Builder(this,CHANNEL_ID)
+                    .setContentTitle("${p0.data["user"]}")
+                    .setContentText("${p0.data["message"]}")
+                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .build()
+            }
+
             else ->{
                 val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
                 notification = NotificationCompat.Builder(this,CHANNEL_ID)

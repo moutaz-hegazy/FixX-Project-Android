@@ -86,12 +86,12 @@ class TechnicianProfileActivity : AppCompatActivity() {
         techName?.text = technicianData?.name
 
         bookBtn?.setOnClickListener {
-            imagesPaths?.forEach { image ->
+            imagesPaths.forEach { image ->
                 imagesUris.add(Uri.parse(image))
             }
 
             job?.let { job ->
-                job.isPrivate = true
+                job.privateRequest = true
                 CustomizeOrderViewModel(job, imagesUris,
                     onSuccessBinding = {
                         Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()

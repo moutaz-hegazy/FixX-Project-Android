@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,11 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         jobId = intent.getStringExtra(Constants.TRANS_JOB)
+        if(jobId == null){
+            Log.i("TAG", "onCreate: BIG NULL <<<<<<<<<<<< ")
+        }else{
+            Log.i("TAG", "onCreate: ID >>>>>>>>>> "+jobId)
+        }
         jobId?.let {
             viewmodel= JobDetailsViewModel(it, onSuccessBinding = { job ->
                 binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
@@ -53,18 +59,26 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                         adapter = JobDetailsImagesAdapter(images)
                     }
                 }
+                if(!job.description.isNullOrEmpty()){
+                    binding.jobDetailsDescTitleLbl.visibility = View.VISIBLE
+                    binding.jobDetailsDescriptionLbl.text = job.description
+                    binding.jobDetailsDescriptionLbl.visibility = View.VISIBLE
+                }
 
                 if (job.techID != null) {
+                    Log.i("TAG", "onCreate: Here 11 <<<<<<<<")
                     loadSingleTechnician(job.techID!!)
-                }else{
+                } else {
                     job.bidders?.let { map ->
-                        if(job.isPrivate){
+                        Log.i("TAG", "onCreate: Here 44 <<<<<<<<"+ job.privateRequest + job)
+                        if (job.privateRequest) {
+                            Log.i("TAG", "onCreate: Here 22 <<<<<<<<")
                             map.keys.first().let { techUid ->
-                                loadSingleTechnician(techUid){
+                                loadSingleTechnician(techUid) {
                                     binding.bidderItemConfirmPriceTitleLbl.visibility = View.VISIBLE
-                                    binding.bidderItemConfirmPriceLbl.text = map[techUid]
+                                    binding.bidderItemConfirmPriceLbl.text = "${map[techUid]} ${getString(R.string.LE)}"
                                     binding.bidderItemConfirmPriceLbl.visibility = View.VISIBLE
-                                    binding.jobDetailsTechAcceptBtn.apply{
+                                    binding.jobDetailsTechAcceptBtn.apply {
                                         visibility = View.VISIBLE
                                         setOnClickListener {
                                             // Accept price.
@@ -79,13 +93,16 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                        }else{
+                        } else {
+                            Log.i("TAG", "onCreate: Here 33 <<<<<<<<")
                             job.bidders?.let { bidders ->
                                 binding.jobDetailsBiddersRecycler.apply {
                                     visibility = View.VISIBLE
-                                    adapter = JobDetailsBiddersAdapter(bidders.keys.toList(),bidders){
-                                        uid, onSuccess, onFail ->
-                                        viewmodel.getTechnician(uid,onSuccess,onFail)
+                                    adapter = JobDetailsBiddersAdapter(
+                                        bidders.keys.toList(),
+                                        bidders
+                                    ) { uid, onSuccess, onFail ->
+                                        viewmodel.getTechnician(uid, onSuccess, onFail)
                                     }
                                 }
                             }
