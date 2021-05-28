@@ -72,7 +72,8 @@ class ChatLogActivity : AppCompatActivity() {
                 chatLogVm.sendMessage(newMsg)
                 binding.edittextChatLog.text.clear()
                 contact.token?.let {    token ->
-                    ChatPushNotification(NotificationData(USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: ""),
+                    ChatPushNotification(NotificationData(Constants.NOTIFICATION_TYPE_CHAT_MESSAGE,
+                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: ""),
                         arrayOf(token)).also {
                         sendNotification(it)
                     }
