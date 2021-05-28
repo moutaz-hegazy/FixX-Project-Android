@@ -1,6 +1,7 @@
 package com.example.fixx.inAppChatScreens.viewModels
 
 import com.example.fixx.POJOs.ChatMessage
+import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.FirestoreService
 
 class ChatLogViewModel (var channel : String? = null, private val contact : String? = null,
@@ -20,6 +21,10 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
                     })
             }
         }
+    }
+
+    fun fetchContact(onCompletion : (person : Person?) -> Unit){
+        FirestoreService.fetchUserFromDB(contact,onCompletion)
     }
 
     fun sendMessage(message: ChatMessage){

@@ -176,6 +176,7 @@ object FirestoreService {
                                                         }
                                                     }
                                                 }
+                                                onCompletion(arrayListOf(),"$uid-$contact")
                                             }
                                     }
                             }

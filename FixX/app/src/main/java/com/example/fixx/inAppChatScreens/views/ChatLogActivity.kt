@@ -39,28 +39,50 @@ class ChatLogActivity : AppCompatActivity() {
         binding = ActivityChatLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
-        channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
         recyclerview_chat_log.adapter = adapter
 
         supportActionBar?.apply {
             title = contact.name
         }
 
-        chatLogVm = ChatLogViewModel(channel,contact.uid,
-            observer = { msg ->
-                Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
-                displayMsg(msg)
-                adapter.notifyDataSetChanged()
-            },onCompletion = { msgs ->
-                setButton()
-                Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
-                msgs.forEach {
-                        msg ->
+        contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
+        channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
+        val fromNotification = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
+        if(fromNotification){
+            val contactUid = intent.getStringExtra(Constants.TRANS_CONTACT_UID)
+            chatLogVm = ChatLogViewModel(channel,contactUid,
+                observer = { msg ->
+                    Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
                     displayMsg(msg)
                     adapter.notifyDataSetChanged()
-                }
-            })
+                },onCompletion = { msgs ->
+                    chatLogVm.fetchContact(){
+                        contact = it!!
+                        setButton()
+                        Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
+                        msgs.forEach {
+                                msg ->
+                            displayMsg(msg)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                })
+        }else{
+            chatLogVm = ChatLogViewModel(channel,contact.uid,
+                observer = { msg ->
+                    Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
+                    displayMsg(msg)
+                    adapter.notifyDataSetChanged()
+                },onCompletion = { msgs ->
+                    setButton()
+                    Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
+                    msgs.forEach {
+                            msg ->
+                        displayMsg(msg)
+                        adapter.notifyDataSetChanged()
+                    }
+                })
+        }
     }
 
     private fun setButton(){
@@ -73,7 +95,7 @@ class ChatLogActivity : AppCompatActivity() {
                 binding.edittextChatLog.text.clear()
                 contact.token?.let {    token ->
                     ChatPushNotification(NotificationData(Constants.NOTIFICATION_TYPE_CHAT_MESSAGE,
-                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: ""),
+                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: "", USER_OBJECT?.uid ?: ""),
                         arrayOf(token)).also {
                         sendNotification(it)
                     }

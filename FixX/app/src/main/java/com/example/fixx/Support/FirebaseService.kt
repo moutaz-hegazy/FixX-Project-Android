@@ -98,7 +98,9 @@ class FirebaseService : FirebaseMessagingService() {
                 TaskStackBuilder.create(applicationContext).apply {
                     addNextIntentWithParentStack(Intent(applicationContext,ChatLogActivity::class.java))
                     editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobID"])
+                        putExtra(Constants.TRANS_CONTACT_UID,p0.data["uid"])
+                        putExtra(Constants.TRANS_CHAT_CHANNEL,p0.data["channel"])
+                        putExtra(Constants.TRANS_RESPONSE_BOOL,true)
                     }
                     pendingIntent = getPendingIntent(2,PendingIntent.FLAG_UPDATE_CURRENT)
                 }
