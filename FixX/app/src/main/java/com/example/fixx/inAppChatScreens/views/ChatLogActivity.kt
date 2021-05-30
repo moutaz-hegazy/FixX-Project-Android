@@ -40,12 +40,6 @@ class ChatLogActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         recyclerview_chat_log.adapter = adapter
-
-        supportActionBar?.apply {
-            title = contact.name
-        }
-
-        contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
         channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
         val fromNotification = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
         if(fromNotification){
@@ -65,9 +59,16 @@ class ChatLogActivity : AppCompatActivity() {
                             displayMsg(msg)
                             adapter.notifyDataSetChanged()
                         }
+                        supportActionBar?.apply {
+                            title = contact.name
+                        }
                     }
                 })
         }else{
+            contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
+            supportActionBar?.apply {
+                title = contact.name
+            }
             chatLogVm = ChatLogViewModel(channel,contact.uid,
                 observer = { msg ->
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")

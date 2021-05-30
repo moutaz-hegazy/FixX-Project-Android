@@ -56,7 +56,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                         layoutManager = LinearLayoutManager(applicationContext).apply {
                             orientation = RecyclerView.HORIZONTAL
                         }
-                        adapter = JobDetailsImagesAdapter(images)
+                        adapter = OrderImagesAdapter(images)
                     }
                 }
                 if(!job.description.isNullOrEmpty()){

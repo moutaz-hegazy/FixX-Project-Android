@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.databinding.CustomizeOrderImageRecyclerItemBinding
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
@@ -42,20 +45,18 @@ class OrderImagesAdapter(var data : List<String>) : RecyclerView.Adapter<OrderIm
         holder.binding.orderImageOptionsBtn.apply {
             visibility = View.GONE
         }
-        Picasso.get().load(data[position]).into(object : Target {
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                images.add(bitmap)
-                holder.binding.cutomizeOrderRecyclerImageView.setImageBitmap(bitmap)
-            }
 
-            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                Log.i("TAG", "onBitmapFailed: ")
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val bitMap = Picasso.get().load(data[position]).get()
+                CoroutineScope(Dispatchers.Main).launch {
+                    images.add(bitMap)
+                    holder.binding.cutomizeOrderRecyclerImageView.setImageBitmap(bitMap)
+                }
+            }catch (error : IllegalArgumentException){
+                Log.i("TAG", "onBindViewHolder: "+ error.localizedMessage)
             }
-
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                Log.i("TAG", "onPrepareLoad: ")
-            }
-        })
+        }
     }
 
     private fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {

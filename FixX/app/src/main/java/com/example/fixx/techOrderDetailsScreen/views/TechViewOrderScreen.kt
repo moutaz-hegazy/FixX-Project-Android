@@ -49,59 +49,74 @@ class TechViewOrderScreen : AppCompatActivity() {
         jobId?.let {    jobID ->
             viewModel.fetchJobFromDB(jobID, onSuccessBinding = {
                 job = it
-                viewModel.fetchUserFromDB(job.uid){  person ->
+                viewModel.fetchUserFromDB(job.uid) { person ->
                     contact = person
 
                     binding.techViewOrderChatBtn.setOnClickListener {
-                        Intent(this,ChatLogActivity::class.java).apply {
-                            putExtra(Constants.TRANS_USERDATA,contact)
+                        Intent(this, ChatLogActivity::class.java).apply {
+                            putExtra(Constants.TRANS_USERDATA, contact)
                         }.also {
                             startActivity(it)
                         }
                     }
 
                     binding.techViewOrderConfirmBtn.setOnClickListener {
-                        if(binding.techViewOrderPriceTxt.text.isNullOrEmpty()){
+                        if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
                             binding.techViewOrderPriceTxt.error = "enter a price"
-                        }else{
-                            viewModel.addToBidders(USER_OBJECT?.uid, jobID, binding.techViewOrderPriceTxt.text.toString()){
-                                contact?.token?.let {   token ->
-                                    TechReplyPushNotification(ReplyNotificationData(Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
-                                        USER_OBJECT?.name ?: "",
-                                        R.string.RequestConfirmed,
-                                        R.string.ConfirmMessage,job.jobId,
-                                        binding.techViewOrderPriceTxt.text.toString()),
-                                        arrayOf(token)).also {
-                                            viewModel.sendReplyNotification(it)
+                        } else {
+                            viewModel.addToBidders(
+                                USER_OBJECT?.uid,
+                                jobID,
+                                binding.techViewOrderPriceTxt.text.toString()
+                            ) {
+                                contact?.token?.let { token ->
+                                    TechReplyPushNotification(
+                                        ReplyNotificationData(
+                                            Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
+                                            USER_OBJECT?.name ?: "",
+                                            R.string.RequestConfirmed,
+                                            R.string.ConfirmMessage, job.jobId,
+                                            binding.techViewOrderPriceTxt.text.toString()
+                                        ),
+                                        arrayOf(token)
+                                    ).also {
+                                        viewModel.sendReplyNotification(it)
                                     }
                                 }
                             }
                         }
                     }
 
-                    if (person?.profilePicture != null){
+                    if (person?.profilePicture != null) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             binding.techViewOrderUserImageView.clipToOutline = true
                         }
                         binding.techViewOrderUserImageView.visibility = View.VISIBLE
-                        Picasso.get().load(person.profilePicture).into( binding.techViewOrderUserImageView)
-                    } else{
+                        Picasso.get().load(person.profilePicture)
+                            .into(binding.techViewOrderUserImageView)
+                    } else {
                         binding.techViewOrderUserImageLbl.visibility = View.VISIBLE
-                        binding.techViewOrderUserImageLbl.text = person?.name?.first()?.toUpperCase().toString()
+                        binding.techViewOrderUserImageLbl.text =
+                            person?.name?.first()?.toUpperCase().toString()
                     }
                     binding.techViewOrderUserNameLbl.text = person?.name
                 }
 
                 binding.techViewOrderDenyBtn.setOnClickListener {
-                    contact?.token?.let {   token ->
-                        TechReplyPushNotification(ReplyNotificationData(Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
-                            USER_OBJECT?.name ?: "",
-                            R.string.RequestDenied,
-                            R.string.DenyMessage,job.jobId),
-                            arrayOf(token))
+                    contact?.token?.let { token ->
+                        TechReplyPushNotification(
+                            ReplyNotificationData(
+                                Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
+                                USER_OBJECT?.name ?: "",
+                                R.string.RequestDenied,
+                                R.string.DenyMessage, job.jobId
+                            ),
+                            arrayOf(token)
+                        )
                     }
                 }
 
+                binding.techViewOrderAddressLbl.text = job.location
                 binding.techViewOrderDateLbl.text = job.date
                 binding.techViewOrderFromTimeLbl.text = job.fromTime
                 binding.techViewOrderToTimeLbl.text = job.toTime
