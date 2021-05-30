@@ -153,6 +153,7 @@
     <string name="View_or_Edit_Your_Profile">View or Edit Your Profile</string>
     <string name="Order_Type">Order Type</string>
     <string name="Book">Book</string>
+    <string name="completion_date">Completion Date</string>
 
     <string name="SingleJobRequest">requests a job from you</string>
     <string name="JobRequestTitle">New Job Request</string>

@@ -75,8 +75,9 @@
             android:name=".Addresses.AddAddressActivity"
             android:label="Add Address" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" /> <!-- added for maps -->
-        <activity android:name=".Addresses.MyAdresses" /> <!-- added for maps -->
+        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" />
+        <activity android:name=".Addresses.MyAdresses" /> 
+        <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

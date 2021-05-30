@@ -15,9 +15,7 @@ class FragmentsAdapter (private val fm : FragmentManager, private val context : 
     override fun getItem(position: Int): Fragment {
         return when(position){
             0 -> OngoingOrdersFragment()
-            1 -> OnGuaranteeOrdersFragment()
-            2 -> CompletedOrdersFragment()
-            3 -> AvailableOrdersFragment()
+            1 -> CompletedOrdersFragment()
             else -> Fragment()
         }
     }

@@ -277,6 +277,7 @@ object FirestoreService {
             .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e); onFailHandler() }
     }
 
+    
 
     fun saveUserData(user: Any, onSuccessHandler: (person: Person?) -> Unit, onFailHandler: () -> Unit) {
         (user as? Person)?.let {    person ->
