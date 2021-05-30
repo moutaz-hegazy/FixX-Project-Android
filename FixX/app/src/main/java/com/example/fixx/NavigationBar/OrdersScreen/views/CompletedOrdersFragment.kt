@@ -50,10 +50,5 @@ class CompletedOrdersFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = jobFDetailsAdapter
         }
-
-        jobFDetailsAdapter.showJobDetailsHandler = {
-            var intent = Intent(context, JobDetailsDisplayActivity::class.java)
-            intent.putExtra(Constants.TRANS_JOB,)
-        }
     }
 }

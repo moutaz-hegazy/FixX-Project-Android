@@ -15,6 +15,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.fixx.JobDetailsDisplay.JobDetailsDisplayActivity
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.CompletedOrdersRecyclerRowBinding
 import com.example.fixx.databinding.OngoingOrderRecyclerRowBinding
 
@@ -56,17 +57,6 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     }
                     view.ongoingOrderAddressLbl.text = data[position].location
                 }
-                holder.binding.also {
-
-                    val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                    //intent.putExtra()
-                    //startActivity(intent)
-                }
-                holder.itemView.setOnClickListener{
-                    Toast.makeText(context, "${position}" ,Toast.LENGTH_SHORT).show()
-                    Log.i("TAG", "onBindViewHolder: ${position}")
-                    showJobDetailsHandler(position)
-                }
             }
 
             Job.JobStatus.Accepted -> {
@@ -90,50 +80,29 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                         view.ongoingOrderJobImage.setImageResource(it)
                     }
                     view.ongoingOrderAddressLbl.text = data[position].location
-                }
-                holder.binding.also {
-
-                    val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                    //intent.putExtra()
-                    //startActivity(intent)
-                }
-                holder.itemView.setOnClickListener{
-                    Toast.makeText(context, "${position}" ,Toast.LENGTH_SHORT).show()
-                    Log.i("TAG", "onBindViewHolder: ${position}")
+                    view.ongoingOrderLayout.setOnClickListener{
+                        val intent = Intent(context, JobDetailsDisplayActivity::class.java)
+                        intent.putExtra(Constants.TRANS_JOB, data[position])
+                        context.startActivity(intent)
+                    }
                 }
             }
 
             Job.JobStatus.Completed -> {
                 val mRoot = holder.binding as? CompletedOrdersRecyclerRowBinding
                 mRoot?.let { view ->
-                    view.completedOrderDateLbl.text = data[position].date
-                    view.completedOrderFromTimeLbl.text = context.getString(R.string.from) +
-                            (data[position].fromTime ?: "--:--")
-                    view.completedOrderToTimeLbl.text = context.getString(R.string.to) +
-                            (data[position].toTime ?: "--:--")
-                    view.completedOrderPriceLbl.text = """${context.getString(R.string.price)} ${
-                    (data[position].price?.toString()
-                        ?: context.getString(R.string.notDetermined))
-                    } LE"""
-                    view.completedOrderStatusLbl.apply {
-                        text = context.getString(R.string.accepted)
-                        setTextColor(Color.BLUE)
-                    }
+                    view.completedOrderDateLbl.text = data[position].completionDate
+                    view.completedOrderPriceLbl.text = data[position].price.toString()
                     view.completedOrdersJobTypeLbl.text = data[position].type
                     getImageResourse(data[position].type)?.let {
                         view.completedOrderJobImage.setImageResource(it)
                     }
-                    //view.completedOrderAddressLbl.text = data[position].location
-                }
-                holder.binding.also {
-
-                    val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                    //intent.putExtra()
-                    //startActivity(intent)
-                }
-                holder.itemView.setOnClickListener{
-                    Toast.makeText(context, "${position}" ,Toast.LENGTH_SHORT).show()
-                    Log.i("TAG", "onBindViewHolder: ${position}")
+                    view.completedOrderAddressLbl.text = data[position].location
+                    view.completedOrderLayout.setOnClickListener{
+                        val intent = Intent(context, JobDetailsDisplayActivity::class.java)
+                        intent.putExtra(Constants.TRANS_JOB, data[position])
+                        context.startActivity(intent)
+                    }
                 }
             }
         }
