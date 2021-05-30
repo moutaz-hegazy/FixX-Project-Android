@@ -107,12 +107,12 @@ class ChatLogActivity : AppCompatActivity() {
     private fun displayMsg(msg : ChatMessage){
         if(msg.fromId != USER_OBJECT?.uid){
             USER_OBJECT?.let {
-                adapter.add(ChatFromItem(msg.text, it))
+                adapter.add(ChatToItem(msg.text, it))
                 binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount -1)
                 Log.i("TAG", "displayMsg: HERE 1 >>> ${msg.text}")
             }
         }else{
-            adapter.add(ChatToItem(msg.text,contact))
+            adapter.add(ChatFromItem(msg.text,contact))
             binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
             Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
         }

@@ -55,7 +55,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/jobDetails_job_image"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_job_image" />
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_date_lbl" />
 
     <TextView
         android:id="@+id/jobDetails_imagesTitle_lbl"
@@ -104,7 +104,7 @@
         android:visibility="invisible"
         android:text="Job Price"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/jobDetails_job_image"
+        app:layout_constraintTop_toTopOf="@id/jobDetails_date_lbl"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -164,11 +164,11 @@
         android:id="@+id/jobDetails_date_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
         android:text="Date"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/jobDetails_job_image"
-        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image" />
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobDetails_images_recycler"
@@ -187,6 +187,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:visibility="visible"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
