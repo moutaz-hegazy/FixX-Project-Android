@@ -15,9 +15,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fixx.HomeActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.regex.Pattern
+import kotlin.reflect.jvm.internal.impl.load.java.Constant
 
 class LoginTabFragment: Fragment() {
 
@@ -86,6 +90,12 @@ class LoginTabFragment: Fragment() {
                 passwordEditText?.error = "This field is required"
             else {
                 FirestoreService.loginWithEmailAndPassword(email, password, onSuccessHandler = {
+                    person ->
+                    USER_OBJECT = person
+                    FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                        FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",token,person!!.uid!!)
+                        USER_OBJECT?.token = token
+                    }
                     val home = Intent(context, NavigationBarActivity::class.java)
                     startActivity(home)
                     activity?.finish()

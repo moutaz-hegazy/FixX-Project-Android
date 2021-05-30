@@ -14,39 +14,30 @@ import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 import com.example.project.ServiceAdapter
 import com.example.fixx.POJOs.ServiceItem
 import com.example.fixx.constants.Constants
+import com.example.fixx.jobs.jobsFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.fragment.app.FragmentTransaction
+import com.example.fixx.inAppChatScreens.views.ChatLogActivity
+import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment(){
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
 
     private var gridView: GridView? = null
     private var arrayList = ArrayList<ServiceItem>()
     private var serviceAdapter : ServiceAdapter? =null
     var button: Button? = null
     var notificationCounter: NotificationCounter? = null
+    var floatingActionButton: FloatingActionButton? = null
+    var chatBtn : ImageView? = null
 
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
 
-
-        }
     }
 
     override fun onCreateView(
@@ -74,6 +65,24 @@ class HomeFragment : Fragment(){
         // Inflate the layout for this fragment
 
         button?.setOnClickListener(View.OnClickListener { notificationCounter!!.increaseNumber() })
+
+
+        chatBtn = rootView.findViewById(R.id.homefragment_chat_image_view)
+        chatBtn?.setOnClickListener{
+            val intent = Intent (getActivity(), NewMessageActivity::class.java)
+            getActivity()?.startActivity(intent)
+        }
+        floatingActionButton = rootView.findViewById(R.id.home_jobs_floatingactionbutton)
+        floatingActionButton?.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+
+                fragmentManager?.beginTransaction()?.replace(R.id.home_fragment, jobsFragment())?.commit()
+            }
+        }
+
+        )
+
+
         return rootView
     }
 
@@ -108,24 +117,5 @@ class HomeFragment : Fragment(){
         return arrayList
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
-}

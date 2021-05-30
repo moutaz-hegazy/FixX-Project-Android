@@ -42,7 +42,7 @@ class ChatToItem(val text: String, val user: Person): Item<ViewHolder>() {
 }
 
 
-class UserItem(val user: Person): Item<ViewHolder>() {
+class UserItem(val user: Person, val channel : String): Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.username_textview_new_message.text = user.name
         viewHolder.itemView.imageview_new_message.setImageResource(R.drawable.colored_avatar_user)

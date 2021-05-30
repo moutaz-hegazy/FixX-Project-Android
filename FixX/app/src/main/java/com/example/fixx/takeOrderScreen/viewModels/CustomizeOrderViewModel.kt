@@ -15,11 +15,17 @@ class CustomizeOrderViewModel(val job : Job , val imagesUris : MutableList<Uri>,
 
     init {
         Thread{
-            FirestoreService.uploadImageToStorage(imagesUris) { listOfImages ->
-                Log.i("TAG", "LISSSSSSSSSSST: ${listOfImages.size} ")
-                job.images = listOfImages
+            if(!imagesUris.isNullOrEmpty()) {
+                FirestoreService.uploadImageToStorage(imagesUris) { listOfImages ->
+                    Log.i("TAG", "LISSSSSSSSSSST: ${listOfImages.size} ")
+                    if(listOfImages.size == imagesUris.size){
+                        job.images = listOfImages
+                        FirestoreService.saveJobDetails(job)
+                        handler.sendEmptyMessage(20)
+                    }
+                }
+            }else{
                 FirestoreService.saveJobDetails(job)
-                handler.sendEmptyMessage(20)
             }
 
         }.start()

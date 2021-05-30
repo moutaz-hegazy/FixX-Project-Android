@@ -4,7 +4,8 @@ import android.graphics.Bitmap
 import kotlinx.android.parcel.RawValue
 import java.io.Serializable
 
-data class Job (val uid: String?, val type : String, var location : String?, val status : JobStatus = JobStatus.OnRequest): Serializable{
+data class Job (val uid: String? = null, val type : String = "", var location : String? = null,
+                val status : JobStatus = JobStatus.OnRequest): Serializable{
     var jobId : String = ""
     var description : String = ""
     var date : String = ""

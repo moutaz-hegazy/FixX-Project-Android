@@ -4,27 +4,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fixx.POJOs.Bidder
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
-import kotlinx.android.synthetic.main.activity_job_details_display.view.*
 
-class BiddersAdapter(val bidderList: ArrayList<Bidder>) : RecyclerView.Adapter<BiddersAdapter.ViewHolder>() {
+
+class BiddersAdapter(val bidderList: ArrayList<Technician>) : RecyclerView.Adapter<BiddersAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        fun bindItems(Bidder: Bidder) {
+        fun bindItems(Bidder: Technician) {
             var bidderAvatar = itemView.findViewById(R.id.bidderAvatar) as ImageView
             var bidderName = itemView.findViewById(R.id.bidderName) as TextView
             var bidderRating = itemView.findViewById(R.id.bidderRating) as TextView
             var bidderPrice = itemView.findViewById(R.id.bidderBid) as TextView
 
-            bidderAvatar.setImageResource(Bidder.image)
-            bidderName.text = Bidder.name
-            bidderRating.text = Bidder.rating
-            bidderPrice.text = Bidder.bid.toString()
+//            bidderAvatar.setImageResource(Bidder.profilePicture)
+//            bidderName.text = Bidder.name
+//            bidderRating.text = Bidder.rating
+//            bidderPrice.text = Bidder.bid.toString()
         }
     }
 
