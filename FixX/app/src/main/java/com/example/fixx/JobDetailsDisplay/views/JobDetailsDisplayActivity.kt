@@ -51,6 +51,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                     binding.jobDetailsFinalPriceLbl.text = it.toString()
                 }
                 job.images?.let { images ->
+                    binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
                     binding.jobDetailsImagesRecycler.apply {
                         visibility = View.VISIBLE
                         layoutManager = LinearLayoutManager(applicationContext).apply {

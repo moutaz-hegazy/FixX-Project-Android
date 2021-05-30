@@ -1,6 +1,7 @@
 package com.example.fixx.techOrderDetailsScreen.views
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -120,9 +121,18 @@ class TechViewOrderScreen : AppCompatActivity() {
                 binding.techViewOrderDateLbl.text = job.date
                 binding.techViewOrderFromTimeLbl.text = job.fromTime
                 binding.techViewOrderToTimeLbl.text = job.toTime
-                binding.techViewOrderDescriptionLbl.text = job.description
+                if(job.description.isNullOrEmpty()){
+                    binding.techViewOrderDescTitleLbl.text = getString(R.string.No_Description)
+                    binding.techViewOrderDescTitleLbl.setTextColor(Color.GRAY)
+                }else{
+                    binding.techViewOrderDescriptionLbl.apply {
+                        visibility = View.VISIBLE
+                        text = job.description
+                    }
+                }
 
                 job.images?.let { images ->
+                    binding.techViewOrderImagesLbl.visibility = View.VISIBLE
                     binding.techViewOrderImagesRecycler.apply {
                         visibility = View.VISIBLE
                         layoutManager = LinearLayoutManager(applicationContext).apply {
@@ -132,7 +142,7 @@ class TechViewOrderScreen : AppCompatActivity() {
                     }
                 }
             }, onFailBinding = {
-                Log.i("TAG", "onCreate: Failed<<<<")
+
                 finish()
             })
         }
