@@ -1,8 +1,16 @@
 package com.example.fixx.inAppChatScreens.viewModels
 
+import android.util.Log
 import com.example.fixx.POJOs.ChatMessage
 import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.Support.RetrofitInstance
+import com.example.fixx.inAppChatScreens.model.ChatPushNotification
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ChatLogViewModel (var channel : String? = null, private val contact : String? = null,
                         private val observer : (msg : ChatMessage)->Unit,
@@ -31,6 +39,19 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
         channel?.let {
             ch->
             FirestoreService.sendChatMessage(message, ch)
+        }
+    }
+
+    fun sendNotification(notification: ChatPushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d("TAG", "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e("TAG", response.errorBody()!!.string())
+            }
+        } catch(e: Exception) {
+            Log.e("TAG", e.toString())
         }
     }
 }

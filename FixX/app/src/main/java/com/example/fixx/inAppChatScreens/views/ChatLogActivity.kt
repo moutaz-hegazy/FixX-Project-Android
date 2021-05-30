@@ -98,14 +98,14 @@ class ChatLogActivity : AppCompatActivity() {
                     ChatPushNotification(NotificationData(Constants.NOTIFICATION_TYPE_CHAT_MESSAGE,
                         USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: "", USER_OBJECT?.uid ?: ""),
                         arrayOf(token)).also {
-                        sendNotification(it)
-                    }
+                            chatLogVm.sendNotification(it)
+                        }
                 }
             }
         }
     }
     private fun displayMsg(msg : ChatMessage){
-        if(msg.fromId != USER_OBJECT?.uid){
+        if(msg.fromId == USER_OBJECT?.uid){
             USER_OBJECT?.let {
                 adapter.add(ChatToItem(msg.text, it))
                 binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount -1)
@@ -115,19 +115,6 @@ class ChatLogActivity : AppCompatActivity() {
             adapter.add(ChatFromItem(msg.text,contact))
             binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
             Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
-        }
-    }
-
-    private fun sendNotification(notification: ChatPushNotification) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val response = RetrofitInstance.api.postNotification(notification)
-            if(response.isSuccessful) {
-                Log.d("TAG", "Response: ${Gson().toJson(response)}")
-            } else {
-                Log.e("TAG", response.errorBody()!!.string())
-            }
-        } catch(e: Exception) {
-            Log.e("TAG", e.toString())
         }
     }
 }
