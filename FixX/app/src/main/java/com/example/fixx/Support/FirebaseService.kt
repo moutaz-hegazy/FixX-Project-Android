@@ -20,6 +20,7 @@ import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
+import kotlin.reflect.jvm.internal.impl.load.java.Constant
 
 class FirebaseService : FirebaseMessagingService() {
 
@@ -107,6 +108,24 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = NotificationCompat.Builder(this,CHANNEL_ID)
                     .setContentTitle("${p0.data["user"]}")
                     .setContentText("${p0.data["message"]}")
+                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .build()
+            }
+
+            Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
+                var pendingIntent : PendingIntent
+                TaskStackBuilder.create(applicationContext).apply {
+                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
+                    editIntentAt(0).apply {
+                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    }
+                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                notification = NotificationCompat.Builder(this,CHANNEL_ID)
+                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
+                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
                     .setSmallIcon(R.drawable.ic_baseline_notifications_24)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)

@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.fixx.JobDetailsDisplay.JobDetailsDisplayActivity
+import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.constants.Constants

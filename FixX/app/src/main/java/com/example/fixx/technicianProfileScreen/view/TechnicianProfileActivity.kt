@@ -44,7 +44,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
     var ratingBar : RatingBar? = null
 
     var technicianData : Technician? = null
-    var imagesPaths = arrayOf<String>()
+    var imagesPaths : Array<String>? = null
     var job : Job? = null
     val imagesUris = mutableListOf<Uri>()
 
@@ -59,7 +59,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
 
         technicianData = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Technician
         job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
-        imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS) as Array<String>
+        imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS) as? Array<String>
         val showOnly = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
 
         techName = findViewById(R.id.technician_profile_name_lbl)
@@ -86,7 +86,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
         techName?.text = technicianData?.name
 
         bookBtn?.setOnClickListener {
-            imagesPaths.forEach { image ->
+            imagesPaths?.forEach { image ->
                 imagesUris.add(Uri.parse(image))
             }
 
@@ -142,6 +142,8 @@ class TechnicianProfileActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_OK, it)
                 finish()
             }
+        }else{
+          super.onBackPressed()
         }
     }
 

@@ -97,7 +97,6 @@ object FirestoreService {
                 }
         }
     }
-
     fun fetchChatHistoryForChannel(
         channelName: String,
         observerHandler: (msg: ChatMessage) -> Unit,
@@ -139,6 +138,15 @@ object FirestoreService {
             .update("bidders", mapOf(uid to price)).addOnSuccessListener {
                 onCompletion()
             }
+    }
+
+    fun removeBidders(jobId : String){
+        db.collection("Jobs").document(jobId).update("bidders",null)
+    }
+
+    fun selectTechForJob(techId : String, jobId : String, price : String){
+        db.collection("Jobs").document(jobId)
+            .update(mapOf("techID" to techId, "price" to price , "bidders" to null , "status" to Job.JobStatus.Accepted.rawValue))
     }
 
     fun fetchChatHistoryForInstance(
@@ -538,7 +546,7 @@ object FirestoreService {
             .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
     }
 
-    fun updateDocument(collectionName: String, map: MutableMap<String, Any>, documentId: String) {
+    fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String) {
         Log.i("TAG", "updateJob: start updating $map")
         db.collection(collectionName).document(documentId)
             .update(map)

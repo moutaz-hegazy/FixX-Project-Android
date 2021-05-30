@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityJobDetailsDisplayBinding
@@ -75,7 +77,8 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                         if (job.privateRequest) {
                             Log.i("TAG", "onCreate: Here 22 <<<<<<<<")
                             map.keys.first().let { techUid ->
-                                loadSingleTechnician(techUid) {
+                                binding.jobDetailsTechLayout.visibility = View.VISIBLE
+                                loadSingleTechnician(techUid) { tech->
                                     binding.bidderItemConfirmPriceTitleLbl.visibility = View.VISIBLE
                                     binding.bidderItemConfirmPriceLbl.text = "${map[techUid]} ${getString(R.string.LE)}"
                                     binding.bidderItemConfirmPriceLbl.visibility = View.VISIBLE
@@ -83,12 +86,18 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                                         visibility = View.VISIBLE
                                         setOnClickListener {
                                             // Accept price.
+                                            viewmodel.setTechnicianUidWithPrice(techUid,
+                                                map[techUid] ?: "")
+                                            viewmodel.sendAcceptNotification(techUid,tech.token!!, USER_OBJECT!!.name)
+                                            finish()
                                         }
                                     }
                                     binding.jobDetailsTechCancelBtn.apply {
                                         visibility = View.VISIBLE
                                         setOnClickListener {
-                                            // delete bidder
+                                            viewmodel.removeSingleBidder()
+                                            binding.jobDetailsTechLayout.visibility = View.INVISIBLE
+                                            // show dialog Edit or delete job.
                                             finish()
                                         }
                                     }
@@ -117,7 +126,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadSingleTechnician(uid : String, onLoadCompleted : (() -> Unit)? = null){
+    private fun loadSingleTechnician(uid : String, onLoadCompleted : ((Technician) -> Unit)? = null){
         viewmodel.getTechnician(uid, onSuccessBinding = { tech ->
             if (tech.profilePicture != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -136,6 +145,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             binding.jobDetailsTechLayout.setOnClickListener {
                 Intent(this, TechnicianProfileActivity::class.java).apply {
                     putExtra(Constants.TRANS_RESPONSE_BOOL, true)
+                    putExtra(Constants.TRANS_USERDATA,tech)
                 }.also {
                     startActivity(it)
                 }
@@ -154,7 +164,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             }
 
             onLoadCompleted?.let {
-                it()
+                it(tech)
             }
         }, onFailBinding = {
 
