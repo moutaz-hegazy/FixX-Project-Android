@@ -82,7 +82,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     view.ongoingOrderAddressLbl.text = data[position].location
                     view.ongoingOrderLayout.setOnClickListener{
                         val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                        intent.putExtra(Constants.TRANS_JOB, data[position])
+                        intent.putExtra(Constants.TRANS_JOB_OBJECT, data[position])
                         context.startActivity(intent)
                     }
                 }

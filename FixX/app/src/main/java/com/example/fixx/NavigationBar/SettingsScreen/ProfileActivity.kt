@@ -67,72 +67,28 @@ class ProfileActivity : AppCompatActivity() {
         profile_edit_password_image_button.setOnClickListener {
             showBottomSheetEditPassword()
         }
-
-
-
-
-
-//        val galleryLinearLayout = findViewById(R.id.profile_gallery_linear_layout) as LinearLayout
-//        galleryLinearLayout.setOnClickListener(object : View.OnClickListener {
-//            override fun onClick(v: View) {
-//
-//                val intent = Intent("MediaStore.ACTION_IMAGE_CAPTURE")
-//            startActivityForResult(intent, 1)
-//            }
-//        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
          var image : Bitmap? = null
-       // if (resultCode == RESULT_OK && requestCode == Constants.REQUEST_CODE) {
-//            imageUri = data?.data
-//            profile_profilepicture_image_view.setImageURI(imageUri)
+        if(resultCode == Activity.RESULT_OK){
+            when (requestCode) {
+                Constants.cameraPickerRequestCode -> {
+                    image = data?.extras?.get("data") as? Bitmap
+                    imagePath = image?.let { getImageUriFromBitmap(this, it) }
+                }
 
-
-        when (requestCode) {
-            Constants.cameraPickerRequestCode -> {
-                image = data?.extras?.get("data") as? Bitmap
-
-                imagePath = image?.let { getImageUriFromBitmap(this, it) }
-
+                Constants.galleryPickerRequestCode -> {
+                    image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+                    imagePath = data?.data
+                }
             }
 
-            Constants.galleryPickerRequestCode -> {
-                image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
-                imagePath = data?.data
+            image?.let {
+                profile_profilepicture_image_view.setImageBitmap(it)
             }
         }
-
-        image?.let {
-            profile_profilepicture_image_view.setImageBitmap(it)
-        }
-
-
-
-
-
-
-
-
-
-//            when (requestCode) {
-//                Constants.cameraPickerRequestCode -> {
-//                    image = data?.extras?.get("data") as? Bitmap
-//                    imagePath = image?.let { getImageUriFromBitmap(this, it)
-//                    }
-//
-//                    profile_profilepicture_image_view.setImageURI(imagePath)
-//                }
-//
-//                Constants.galleryPickerRequestCode -> {
-//                    image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
-//                    imagePath = data?.data
-//                    profile_profilepicture_image_view.setImageURI(imagePath)
-//                }
-//
-//            }
-        //}
     }
 
     fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{

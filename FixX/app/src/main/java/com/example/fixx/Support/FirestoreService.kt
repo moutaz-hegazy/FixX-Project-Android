@@ -146,7 +146,7 @@ object FirestoreService {
 
     fun selectTechForJob(techId : String, jobId : String, price : String){
         db.collection("Jobs").document(jobId)
-            .update(mapOf("techID" to techId, "price" to price , "bidders" to null , "status" to Job.JobStatus.Accepted.rawValue))
+            .update(mapOf("techID" to techId, "price" to price.toInt() , "bidders" to null , "status" to Job.JobStatus.Accepted.rawValue))
     }
 
     fun fetchChatHistoryForInstance(

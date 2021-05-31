@@ -35,11 +35,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         jobId = intent.getStringExtra(Constants.TRANS_JOB)
-        if(jobId == null){
-            Log.i("TAG", "onCreate: BIG NULL <<<<<<<<<<<< ")
-        }else{
-            Log.i("TAG", "onCreate: ID >>>>>>>>>> "+jobId)
-        }
+
         jobId?.let {
             viewmodel= JobDetailsViewModel(it, onSuccessBinding = { job ->
                 binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
@@ -49,8 +45,9 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 binding.jobDetailsToTimeLbl.text = job.toTime
                 binding.jobDetailsStatusLbl.text = job.status.rawValue
                 job.price?.let {
+                    binding.jobDetailsFinalPriceTitleLbl.visibility = View.VISIBLE
                     binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
-                    binding.jobDetailsFinalPriceLbl.text = it.toString()
+                    binding.jobDetailsFinalPriceLbl.text = "$it ${getString(R.string.LE)}"
                 }
                 job.images?.let { images ->
                     binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
@@ -89,7 +86,8 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                                             viewmodel.setTechnicianUidWithPrice(techUid,
                                                 map[techUid] ?: "")
                                             viewmodel.sendAcceptNotification(techUid,tech.token!!, USER_OBJECT!!.name)
-                                            finish()
+                                            this.visibility = View.INVISIBLE
+                                            binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
                                         }
                                     }
                                     binding.jobDetailsTechCancelBtn.apply {
@@ -98,7 +96,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                                             viewmodel.removeSingleBidder()
                                             binding.jobDetailsTechLayout.visibility = View.INVISIBLE
                                             // show dialog Edit or delete job.
-                                            finish()
+
                                         }
                                     }
                                 }

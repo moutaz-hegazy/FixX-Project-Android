@@ -21,6 +21,7 @@ sealed class Constants {
         const val TRANS_IMAGES_PATHS = "TransImagesPaths"
         const val TRANS_CHAT_CHANNEL = "ChatChannelName"
         const val TRANS_CONTACT_UID = "contactUid"
+        const val TRANS_JOB_OBJECT = "transJobObject"
         const val CHAT_TOPIC = "chats"
         const val USERS_COLLECTION = "Users"
         const val JOBS_COLLECTION = "Jobs"
