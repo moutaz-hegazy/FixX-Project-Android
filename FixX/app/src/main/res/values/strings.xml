@@ -60,7 +60,7 @@
     <string name="availableJobs">Available</string>
 
     <string name="myOrders">My Orders</string>
-    <string name="myJobs" >My Jobs</string>
+    <string name="myJobs">My Jobs</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_chat_log">ChatLogActivity</string>
@@ -131,10 +131,6 @@
     <string name="waiver_desc">These terms and any rights or licenses granted by you may not be transferred or waived by you, but can be waived by Fix-X without restrictions. Any waiver or transfer of these terms by you is considered null and void.</string>
     <string name="privacy_policy_title">Privacy Policy:</string>
     <string name="privacy_policy_desc">We respect you privacy and have developed a privacy policy incorporated into this agreement.Please take your time to read our privacy policy carefully, and by agreeing to this privacy policy.</string>
-
-
-
-
 
 
 </resources>

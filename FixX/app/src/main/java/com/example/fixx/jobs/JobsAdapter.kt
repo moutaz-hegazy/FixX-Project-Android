@@ -158,6 +158,6 @@ class JobsAdapter (val data: ArrayList<Job>, val type : Job.JobStatus) : Recycle
 
         }
     }
-    
+
 
 }
