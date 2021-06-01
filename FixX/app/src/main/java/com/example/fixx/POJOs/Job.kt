@@ -4,22 +4,23 @@ import android.graphics.Bitmap
 import kotlinx.android.parcel.RawValue
 import java.io.Serializable
 
-data class Job (val uid: String?, val type : String, var location : String?, val status : JobStatus = JobStatus.OnRequest): Serializable{
-    var jobId : String = ""
-    var description : String = ""
-    var date : String = ""
-    var completionDate : String = ""
-    var fromTime : String? = null
-    var toTime : String? = null
-    var price : Int? = null
-    var techID : Int? = null
-    var bidders : MutableList<Int>? = null
-    var images : MutableList<String>? = null
+data class Job (val uid: String? = null, val type : String = "", var location : String? = null,
+                val status : JobStatus = JobStatus.OnRequest,
+                var jobId : String = "",
+                var description : String = "",
+                var date : String = "",
+                var completionDate : String = "",
+                var fromTime : String? = null,
+                var toTime : String? = null,
+                var price : Int? = null,
+                var techID : String? = null,
+                var bidders : MutableMap<String,String>? = null,
+                var images : MutableList<String>? = null,
+                var privateRequest : Boolean = false): Serializable{
 
     enum class JobStatus constructor(var rawValue: String) : Serializable {
         OnRequest("OnRequest"),
         Accepted("Accepted"),
-        OnGuarantee("OnGuarantee"),
         Completed("Completed")
     }
 }

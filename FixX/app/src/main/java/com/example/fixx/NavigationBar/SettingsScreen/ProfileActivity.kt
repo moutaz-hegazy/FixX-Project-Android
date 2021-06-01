@@ -1,23 +1,48 @@
 package com.example.fixx.NavigationBar.SettingsScreen
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_email.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_email.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_name.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_name.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_password.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_password.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_phone.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_phone.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import java.io.ByteArrayOutputStream
 
 class ProfileActivity : AppCompatActivity() {
     var floatingActionButton: FloatingActionButton? = null
-    var bottomSheet : BottomSheetDialog?= null
-    private val pickImage = 100
+    var bottomSheet: BottomSheetDialog? = null
+    private var imagePath: Uri? = null
+    private var imageUri: Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         supportActionBar?.hide()
+
+
+
         floatingActionButton = findViewById(R.id.profile_camera_floatingactionbutton)
         floatingActionButton?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
@@ -27,29 +52,181 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         )
-//        val galleryLinearLayout = findViewById(R.id.profile_gallery_linear_layout) as LinearLayout
-//        galleryLinearLayout.setOnClickListener(object : View.OnClickListener {
-//            override fun onClick(v: View) {
-//
-//                openGallery();
-//            }
-//        })
+
+
+
+
+        profile_edit_name_image_button.setOnClickListener {
+            showBottomSheetEditName()
+        }
+
+        profile_edit_email_image_button.setOnClickListener {
+            showBottomSheetEditEmail()
+        }
+
+        profile_edit_phone_image_button.setOnClickListener {
+            showBottomSheetEditPhone()
+        }
+
+        profile_edit_password_image_button.setOnClickListener {
+            showBottomSheetEditPassword()
+        }
     }
 
-    fun showBottomSheetDialog(){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        var image : Bitmap? = null
+        if(resultCode == Activity.RESULT_OK){
+            when (requestCode) {
+                Constants.cameraPickerRequestCode -> {
+                    image = data?.extras?.get("data") as? Bitmap
+                    imagePath = image?.let { getImageUriFromBitmap(this, it) }
+                }
+
+                Constants.galleryPickerRequestCode -> {
+                    image = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+                    imagePath = data?.data
+                }
+            }
+
+            image?.let {
+                profile_profilepicture_image_view.setImageBitmap(it)
+            }
+        }
+    }
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
+    }
+
+
+    private fun showBottomSheetDialog() {
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_pick, null)
+
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(btnsheet.rootView)
+
+        btnsheet.bottomSheet_gallery_layout.setOnClickListener {
+            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, Constants.galleryPickerRequestCode)
+            dialog.dismiss()
+        }
+
+        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_DENIED
+        )
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                Constants.CAMERA_PERMISSION_REQUEST_CODE
+            )
+
+        btnsheet.bottomSheet_camera_layout.setOnClickListener {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(cameraIntent, Constants.cameraPickerRequestCode)
+            dialog.dismiss()
+        }
+
+        btnsheet.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showBottomSheetEditName() {
+
+        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_name, null)
+
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet)
         btnsheet.setOnClickListener {
             dialog.dismiss()
+
+            btnsheet.bottom_sheet_edit_name_cancel_button.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnsheet.bottom_sheet_edit_name_save_button.setOnClickListener {
+                dialog.dismiss()
+            }
         }
         dialog.show()
+
     }
 
-//    fun openGallery(){
-//
-//        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//        startActivityForResult(gallery, pickImage)
-//
-//    }
+
+    private fun showBottomSheetEditEmail() {
+
+        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_email, null)
+
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(btnsheet)
+        btnsheet.setOnClickListener {
+            dialog.dismiss()
+
+            btnsheet.bottom_sheet_edit_email_cancel_button.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnsheet.bottom_sheet_edit_email_save_button.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+
+    }
+
+    private fun showBottomSheetEditPhone() {
+
+        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_phone, null)
+
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(btnsheet)
+        btnsheet.setOnClickListener {
+            dialog.dismiss()
+
+            btnsheet.bottom_sheet_edit_phone_cancel_button.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnsheet.bottom_sheet_edit_phone_save_button.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+
+    }
+
+    private fun showBottomSheetEditPassword() {
+
+        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_password, null)
+
+        val dialog = BottomSheetDialog(this)
+
+        dialog.setContentView(btnsheet)
+
+        btnsheet.bottom_sheet_edit_password_next_button.setOnClickListener {
+            dialog.dismiss()
+            val nextbtnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_new_password, null)
+            val newDialog = BottomSheetDialog(this)
+            newDialog.setContentView(nextbtnsheet)
+            nextbtnsheet.setOnClickListener {
+                newDialog.dismiss()
+            }
+
+            newDialog.show()
+        }
+
+
+        btnsheet.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
 }

@@ -13,10 +13,12 @@ import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Details
 import com.example.fixx.HomeActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.POJOs.User
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.util.regex.Pattern
 
@@ -167,17 +169,32 @@ class SignUpTabFragment: Fragment() {
                         confirmPasswordEditText?.text?.clear()
                         Toast.makeText(context, "this email already exists.", Toast.LENGTH_SHORT).show()
                     }else{
+                        FirebaseAuth.getInstance().signOut()
                         FirestoreService.registerUser(email,password, onSuccessHandler = {
                             if (passedAccountType == "User"){
                                 var user: User = createUserObject()
-                                FirestoreService.saveUserData(user)
+                                FirestoreService.saveUserData(user,
+                                    onSuccessHandler = {
+                                        person ->
+                                        USER_OBJECT = person
+                                        startActivity(Intent(context, NavigationBarActivity::class.java))
+                                        activity?.finish()
+                                    },onFailHandler = {
+                                        Toast.makeText(context,"Register failed",Toast.LENGTH_SHORT)
+                                    })
                             }
                             else if (passedAccountType == "Technician") {
                                 val technician: Technician = createTechnicianObject()
-                                FirestoreService.saveUserData(technician)
+                                FirestoreService.saveUserData(technician,
+                                    onSuccessHandler = {
+                                            person ->
+                                        USER_OBJECT = person
+                                        startActivity(Intent(context, NavigationBarActivity::class.java))
+                                        activity?.finish()
+                                    },onFailHandler = {
+                                        Toast.makeText(context,"Register failed",Toast.LENGTH_SHORT)
+                                    })
                             }
-                            startActivity(Intent(context, NavigationBarActivity::class.java))
-                            activity?.finish()
                         }, onFailHandler = {
                             Toast.makeText(context, "Register fail.",Toast.LENGTH_SHORT).show()
                         })

@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.Addresses.AddAddressActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
@@ -83,11 +84,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
         //-----------------------------------------------------------
         // Spinner configuration.
-        spinnerAdapter = SpinnerAdapter<String>(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            values
-        )
+        spinnerAdapter = SpinnerAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,values)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.customizeOrderPickLocationSpinner.adapter = adapter
@@ -173,7 +170,9 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                         putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsStringArray.toTypedArray())
 
                     }
-                startActivity(selectTechIntent)
+                startActivityForResult(selectTechIntent,Constants.TECH_LIST_REQUEST_CODE)
+            }else{
+                Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
             }
         }
         //---------------------------------------------------------------
@@ -186,12 +185,16 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 imagePathsStringArray?.forEach { image ->
                     imagePathsList2.add(Uri.parse(image))
                 }
-                CustomizeOrderViewModel(job, imagePathsList2){
-                    Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                    Log.i("TAG", "onCreate: JOB UPLOADED !!<<<<<<<<<<<<< ${job.jobId}")
-                }
+                CustomizeOrderViewModel(job, imagePathsList2,
+                    onSuccessBinding = {
+                        Toast.makeText(applicationContext, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                    }, onFaliureBinding = {
+                        Toast.makeText(applicationContext, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                    })
                 finish()
 
+            }else{
+                Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
             }
         }
         //------------------------------------------------------------------
@@ -262,6 +265,14 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                         customizeOrder_pickLocation_spinner.setSelection(values.size -2)
                     }
                 }
+
+                Constants.TECH_LIST_REQUEST_CODE -> {
+                    data?.getBooleanExtra(Constants.TECH_LIST_BOOLEAN , false)?.let {
+                        if(it){
+                            finish()
+                        }
+                    }
+                }
             }
             image?.let{
                 images.add(it)
@@ -294,6 +305,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             // add new location Logic.
             customizeOrder_pickLocation_spinner.setSelection(0)
             startAddressActivity()
+        }else if(position == 0 ){
+
         }else{
             selectedLocation = values[position]
         }
@@ -410,7 +423,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
 
 
-    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+    private fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)

@@ -2,10 +2,7 @@ package com.example.fixx.inAppChatScreens.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.SyncStateContract
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.fixx.POJOs.User
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.viewModels.NewMessageViewModel
@@ -29,15 +26,15 @@ class NewMessageActivity : AppCompatActivity() {
                 val userItem = item as UserItem
 
                 val intent = Intent(view.context, ChatLogActivity::class.java)
-                intent.putExtra(Constants.TRANS_USERDATA,userItem.user)
+                intent.putExtra(Constants.TRANS_USERDATA, userItem.user)
+                intent.putExtra(Constants.TRANS_CHAT_CHANNEL, userItem.channel)
                 startActivity(intent)
             }
         }
         recyclerview_newmessage.adapter = adapter
 
-        NewMessageViewModel{
-            person ->
-            adapter.add(UserItem(person))
+        NewMessageViewModel { person, channel ->
+            adapter.add(UserItem(person, channel))
             adapter.notifyDataSetChanged()
         }
     }

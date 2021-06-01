@@ -1,7 +1,6 @@
 package com.example.fixx.constants
 
-import android.content.res.Resources
-import com.example.fixx.R
+import android.net.Uri
 
 sealed class Constants {
 
@@ -21,78 +20,25 @@ sealed class Constants {
         const val TRANS_IMAGES = "TransImages"
         const val TRANS_USERDATA = "transUser"
         const val TRANS_IMAGES_PATHS = "TransImagesPaths"
-
-//        val cities = arrayOf(getString(R.string.City),
-//                getString(R.string.Cairo),
-//                getString(R.string.Alexandria))
-//        val cairoArea = arrayOf(
-//            "Area",
-//            "Al-Shrouk",
-//            "1st Settlement",
-//            "Fifth Settlement",
-//            "Madenti",
-//            "Al-Rehab",
-//            "10th Of Ramadan",
-//            "Badr City",
-//            "Zamalek",
-//            "Heliopolis",
-//            "Nasser City",
-//            "Qobbah",
-//            "Maadi",
-//            "Mokkatm",
-//            "Mohandsen",
-//            "Shekh Zayed",
-//            "Dokki",
-//            "Giza Square",
-//            "Haram",
-//            "Fissal",
-//            "Shobra",
-//            "Obour",
-//            "Matareya",
-//            "6th October",
-//            "Helwan",
-//            "Ain Shams",
-//            "Manyal",
-//            "Agouza"
-//        )
-//        val alexArea = arrayOf(
-//            "Area",
-//            "Moharam Bek",
-//            "Abu Qir",
-//            "Montaza",
-//            "Al Hadarah",
-//            "Al Ibrahimeyah",
-//            "Asafra",
-//            "Al Azaritah",
-//            "Bahari",
-//            "Dekhela",
-//            "Bokli",
-//            "Borg Al Arab",
-//            "Al Qabari",
-//            "Fleming",
-//            "Janklees",
-//            "Gleem",
-//            "Kafr Abdou",
-//            "Louran",
-//            "El Mandara",
-//            "Miami",
-//            "San Stifano",
-//            "Sidi Beshr",
-//            "Sidi Gaber",
-//            "Shatebi",
-//            "Sporting",
-//            "Victoria",
-//            "Smouha",
-//            "Stanli",
-//            "Wabor El Maya",
-//            "El Hanovil",
-//            "El Bitash",
-//            "Qism Bab Sharqi",
-//            //"Qism El-Raml",
-//            "Mansheya",
-//            "Al Attarin",
-//            "First Al Raml",
-//            "Mustafa Kamel"
-//        )
+        const val TRANS_CHAT_CHANNEL = "ChatChannelName"
+        const val TRANS_CONTACT_UID = "contactUid"
+        const val TRANS_JOB_OBJECT = "transJobObject"
+        const val CHAT_TOPIC = "chats"
+        const val USERS_COLLECTION = "Users"
+        const val JOBS_COLLECTION = "Jobs"
+        const val DEFAULT_EMAIL = "defaultaccount@default.com"
+        const val DEFAULT_PASSWORD = "default123"
+        const val BASE_URL = "https://fcm.googleapis.com"
+        const val SERVER_KEY = "AAAARyIBb3c:APA91bFyojXc4-L2IjYoZT3MCroUFzqSTGcXT1HGCSePyo0YN0VgD0M4KKNr_Wgd_CdI5Jc0G796NXrnlCIepJwG2qZYz2o9uz1gV4Rb3CblhupUlukmTAC0izMOSGy52UdwU9Rts-jH"
+        const val CONTENT_TYPE = "application/json"
+        const val TECH_LIST_REQUEST_CODE = 300
+        const val TECH_LIST_BOOLEAN = "BooleanResult"
+        const val TECH_DETAILS_REQUESTCODE = 301
+        const val NOTIFICATION_TYPE_TECH_REPLY_CONFIRM = "techReplyConfirm"
+        const val NOTIFICATION_TYPE_TECH_REPLY_DENY = "techReplyDeny"
+        const val NOTIFICATION_TYPE_USER_JOB_REQUEST = "jobRequest"
+        const val NOTIFICATION_TYPE_CHAT_MESSAGE = "chatMsg"
+        const val NOTIFICATION_TYPE_USER_ACCEPT = "userAccept"
+        const val TRANS_RESPONSE_BOOL = "responseBool"
     }
 }

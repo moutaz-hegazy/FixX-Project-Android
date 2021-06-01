@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NavigationBar.SettingsScreen.SafetyTipsActivity">
+
+<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gardient_background"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="@string/safety_tips_screen_title"
+                android:padding="15dp"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_500"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc3"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc4"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc5"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc6"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:text="@string/safety_tips_desc7"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

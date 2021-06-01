@@ -3,15 +3,18 @@ package com.example.fixx.showTechnicianScreen.view
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.POJOs.Technician
+import com.example.fixx.R
 import com.example.fixx.databinding.TechnicianItemBinding
+import com.squareup.picasso.Picasso
 
 
 class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Context) : RecyclerView.Adapter<RecyclerAdapter.TechViewHolder>() {
-    lateinit var bookTechnician : ()->Unit
+    lateinit var bookTechnician : (postion : Int)->Unit
     lateinit var showTechProfileHandler : (Int)->Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TechViewHolder {
@@ -28,18 +31,32 @@ class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Conte
 
     override fun onBindViewHolder(holder: TechViewHolder, position: Int) {
         var name :TextView = holder.binding.technicianItemNameLbl
-        name.text = arrayList[position].name
         var image : ImageView = holder.binding.technicianItemImg
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            image.clipToOutline = true
+        var imageLbl : TextView = holder.binding.technicianItemImgLbl
+        var ratingBar : RatingBar = holder.binding.bidderItemTechRating
+
+        name.text = arrayList[position].name
+
+        if (arrayList[position].profilePicture != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                image.clipToOutline = true
+            }
+            image.visibility = View.VISIBLE
+            Picasso.get().load(arrayList[position].profilePicture).into(image)
+        } else{
+            imageLbl.visibility = View.VISIBLE
+            imageLbl.text = arrayList[position].name.first().toUpperCase().toString()
         }
+
+        ratingBar.rating = arrayList[position].rating?.toFloat() ?: 0F
+
         holder.itemView.setOnClickListener{
             Toast.makeText(context,"clicked ${name.text}",Toast.LENGTH_SHORT).show()
             showTechProfileHandler(position)
         }
 
         holder.binding.technicianItemBookBtn.setOnClickListener{
-            bookTechnician()
+            bookTechnician(position)
         }
     }
 
