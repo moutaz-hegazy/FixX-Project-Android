@@ -12,9 +12,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.POJOs.ServiceItem
-import android.widget.*
-import com.example.fixx.LoginScreen.Views.PickJob
-import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.NavigationBar.notification.NotificationFragment
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
