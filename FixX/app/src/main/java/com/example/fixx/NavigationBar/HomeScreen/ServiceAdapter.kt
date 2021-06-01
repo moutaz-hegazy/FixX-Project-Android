@@ -30,7 +30,7 @@ class ServiceAdapter(var context : Context , var arrayList: ArrayList<ServiceIte
         var names : TextView = view.findViewById(R.id.homefragment_servicename_text_view)
         var serviceItem : ServiceItem = arrayList.get(position)
         icons.setImageResource(serviceItem.icons!!)
-        names.setText(arrayList[position].name ?: R.string.Camera)
+        names.text = context.getString(serviceItem.name?:0)
         return view
     }
 
