@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.fragment_tecnician_address.*
@@ -16,97 +17,99 @@ class TecnicianAddressFragment : Fragment() {
 
     var addresses = mutableListOf<String>()
 
-    var cities = arrayOf<String>()
+    var cities = mutableListOf<String>()
     var area = mutableListOf<String>()
-    var cairoArea = arrayOf<String>()
-    var alexArea = arrayOf<String>()
-    var emptyArea = arrayOf<String>()
-    var areas = arrayOf<String>()
+    var cairoArea = mutableListOf<String>()
+    var alexArea = mutableListOf<String>()
+    val emptyArea = arrayOf("")
+
 
     private val adapter = TechnicianAddressAdapter(addresses)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        cities = arrayOf("City", "Cairo", "Alexandria")
-
-        cairoArea = arrayOf(
-            "Area",
-            "El Shrouk",
-            "1st Settlement",
-            "Fifth Settlement",
-            "Madenti",
-            "El Rehab",
-            "10th Of Ramadan",
-            "Badr City",
-            "New Heliopolis City",
-            "Zamalek",
-            "Heliopolis",
-            "Nasser City",
-            "El Qobbah",
-            "El Maadi",
-            "El Mokkatm",
-            "El Mohandsen",
-            "El Shekh Zayed",
-            " El Dokki",
-            "Giza Square",
-            "El Haram",
-            "Fissal",
-            "Shobra",
-            "Obour",
-            " El Matareya",
-            "6th October",
-            "Helwan",
-            "Ain Shams",
-            "DownTown",
-            "Al-Manyal",
-            "Al-Agouza",
-            "other"
+        cities.addAll(
+            arrayOf(
+                getString(R.string.City),
+                getString(R.string.Cairo),
+                getString(R.string.Alexandria)
+            )
         )
 
-        alexArea = arrayOf(
-            "Area",
-            "Moharam Bek",
-            "Abu Qir",
-            "Montaza",
-            "Al Hadarah",
-            "Al Ibrahimeyah",
-            "Asafra",
-            "Al Azaritah",
-            "Bahari",
-            "Dekhela",
-            "Bokli",
-            "Borg Al Arab",
-            "Al Qabari",
-            "Fleming",
-            "Janklees",
-            "Gleem",
-            "Kafr Abdou",
-            "Louran",
-            "El Mandara",
-            "Miami",
-            "San Stifano",
-            "Sidi Beshr",
-            "Sidi Gaber",
-            "Shatebi",
-            "Sporting",
-            "Victoria",
-            "Smouha",
-            "Stanli",
-            "Wabor El Maya",
-            "El Hanovil",
-            "El Bitash",
-            "Qism Bab Sharqi",
-            //"Qism El-Raml",
-            "Mansheya",
-            "Al Attarin",
-            "First Al Raml",
-            "Mustafa Kamel"
+        cairoArea.addAll(
+            arrayOf(
+                getString(R.string.Area),
+                getString(R.string.AlShrouk),
+                getString(R.string.firstSettlement),
+                getString(R.string.FifthSettlement),
+                getString(R.string.Madenti),
+                getString(R.string.AlRehab),
+                getString(R.string.tenthOfRamadan),
+                getString(R.string.BadrCity),
+                getString(R.string.Zamalek),
+                getString(R.string.Heliopolis),
+                getString(R.string.NasserCity),
+                getString(R.string.Qobbah),
+                getString(R.string.Maadi),
+                getString(R.string.Mokkatm),
+                getString(R.string.Mohandsen),
+                getString(R.string.ShekhZayed),
+                getString(R.string.Dokki),
+                getString(R.string.GizaSquare),
+                getString(R.string.Haram),
+                getString(R.string.Fissal),
+                getString(R.string.Shobra),
+                getString(R.string.Obour),
+                getString(R.string.Matareya),
+                getString(R.string.sixthOctober),
+                getString(R.string.Helwan),
+                getString(R.string.AinShams),
+                getString(R.string.Manyal),
+                getString(R.string.Agouza)
+            )
         )
 
-        emptyArea = arrayOf("Other")
-
-        areas = alexArea + cairoArea
+        alexArea.addAll(
+            arrayOf(
+                getString(R.string.Area),
+                getString(R.string.MoharamBek),
+                getString(R.string.AbuQir),
+                getString(R.string.Montaza),
+                getString(R.string.AlHadarah),
+                getString(R.string.AlIbrahimeyah),
+                getString(R.string.Asafra),
+                getString(R.string.AlAzaritah),
+                getString(R.string.Bahari),
+                getString(R.string.Dekhela),
+                getString(R.string.Bokli),
+                getString(R.string.BorgAlArab),
+                getString(R.string.AlQabari),
+                getString(R.string.Fleming),
+                getString(R.string.Janklees),
+                getString(R.string.Gleem),
+                getString(R.string.KafrAbdou),
+                getString(R.string.Louran),
+                getString(R.string.ElMandara),
+                getString(R.string.Miami),
+                getString(R.string.SanStifano),
+                getString(R.string.SidiBeshr),
+                getString(R.string.SidiGaber),
+                getString(R.string.Shatebi),
+                getString(R.string.Sporting),
+                getString(R.string.Victoria),
+                getString(R.string.Smouha),
+                getString(R.string.Stanli),
+                getString(R.string.WaborElMaya),
+                getString(R.string.ElHanovil),
+                getString(R.string.ElBitash),
+                getString(R.string.QismBabSharqi),
+                getString(R.string.Mansheya),
+                getString(R.string.AlAttarin),
+                getString(R.string.FirstAlRaml),
+                getString(R.string.MustafaKamel)
+            )
+        )
 
     }
 
@@ -125,10 +128,23 @@ class TecnicianAddressFragment : Fragment() {
         showAddressList()
 
         pick_address_fragment_add_address_btn.setOnClickListener {
-            addresses.add(pick_address_fragment_city_spinner.selectedItem.toString() + pick_address_fragment_area_spinner.selectedItem.toString())
-            showAddressList()
-            pick_address_fragment_city_spinner.setSelection(0)
-            pick_address_fragment_area_spinner.setSelection(0)
+            if(pick_address_fragment_city_spinner.selectedItem == getString(R.string.City)){
+                Toast.makeText(
+                    context, getString(R.string.selectCity),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }else if (pick_address_fragment_area_spinner.selectedItem == getString(R.string.Area)){
+                Toast.makeText(
+                    context, getString(R.string.selectArea),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }else{
+                addresses.add(pick_address_fragment_city_spinner.selectedItem.toString() + pick_address_fragment_area_spinner.selectedItem.toString())
+                showAddressList()
+                pick_address_fragment_city_spinner.setSelection(0)
+                pick_address_fragment_area_spinner.setSelection(0)
+            }
+
         }
 
         pick_address_fragment_next_btn.setOnClickListener {
@@ -209,11 +225,11 @@ class TecnicianAddressFragment : Fragment() {
             ) {
 
                 area = when (pick_address_fragment_city_spinner.selectedItem) {
-                    "Cairo" -> {
+                    getString(R.string.Cairo) -> {
                         cairoArea.toMutableList()
 
                     }
-                    "Alexandria" -> {
+                    getString(R.string.Alexandria) -> {
                         alexArea.toMutableList()
 
                     }

@@ -23,12 +23,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.activity_map.*
 import java.io.IOException
 import java.util.*
@@ -50,12 +44,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     var mLocationPermissionGranted = false
 
     var markedLocation: Array<String> = arrayOf("","","","")
-
-
-    var gevornorate =""
-    var city = ""
-    var country = ""
-    var district = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +78,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         if (currentLocation != null) {
 
-                           setAddressArray(LatLng(currentLocation.latitude,currentLocation.longitude))
+                            val district =  getdistrictName(currentLocation.latitude,currentLocation.longitude)
+                            val city = getCityName(currentLocation.latitude,currentLocation.longitude)
+                            val gevornorate = getGovernorateName(currentLocation.latitude,currentLocation.longitude)
+                            val country = getCountryName(currentLocation.latitude,currentLocation.longitude)
+
+                            markedLocation[0] = district
+                            markedLocation[1] = city
+                            markedLocation[2] = gevornorate
+                            markedLocation[3] = country
+
                             moveCamera(LatLng(currentLocation.latitude, currentLocation.longitude), DEFAULT_ZOOM,"${district}, ${city}, ${gevornorate}, $country")
                         }
                         else{
@@ -201,7 +198,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.setOnMapClickListener {
 
-            setAddressArray(LatLng(it.latitude,it.longitude))
+            val district =  getdistrictName(it.latitude,it.longitude)
+            val city = getCityName(it.latitude,it.longitude)
+            val gevornorate = getGovernorateName(it.latitude,it.longitude)
+            val country = getCountryName(it.latitude,it.longitude)
+
+            markedLocation[0] = district
+            markedLocation[1] = city
+            markedLocation[2] = gevornorate
+            markedLocation[3] = country
 
             val markerOptions = MarkerOptions()
             markerOptions.position(it)
@@ -289,9 +294,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getdistrictName(lat: Double, lon: Double):String{
         var district:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
+
+
         var address = geoCoder.getFromLocation(lat,lon,3)
 
-        district = address[0].locality
+        if (address != null){
+            if (address[0].locality != null){
+                district = address[0].locality
+            }
+
+        }
 
         return district
     }
@@ -299,9 +311,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getCityName(lat: Double, lon: Double):String{
         var cityName:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var address = geoCoder.getFromLocation(lat,lon,3)
+       var address = geoCoder.getFromLocation(lat,lon,3)
 
-        cityName = address[0].subAdminArea
+        if (address != null){
+            if(address[0].subAdminArea != null){
+                cityName = address[0].subAdminArea
+            }
+        }
 
         return cityName
     }
@@ -309,9 +325,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
      private fun getGovernorateName(lat: Double, lon: Double):String{
         var governorate:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var address = geoCoder.getFromLocation(lat,lon,3)
+       var address = geoCoder.getFromLocation(lat,lon,3)
 
-        governorate = address[0].adminArea
+         if (address != null){
+             if (address[0].adminArea != null){
+                 governorate = address[0].adminArea
+             }
+         }
 
         return governorate
     }
@@ -319,25 +339,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getCountryName(lat: Double, lon: Double):String{
         var countryName = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var address = geoCoder.getFromLocation(lat,lon,3)
+       var address = geoCoder.getFromLocation(lat,lon,3)
 
-        countryName = address[0].countryName
+        if(address != null){
+            if(address[0].countryName != null){
+                countryName = address[0].countryName
+            }
+        }
 
         return countryName
     }
 
-    private fun setAddressArray(latlng: LatLng){
-
-        district =  getdistrictName(latlng.latitude,latlng.longitude)
-        city = getCityName(latlng.latitude,latlng.longitude)
-        gevornorate = getGovernorateName(latlng.latitude,latlng.longitude)
-        country = getCountryName(latlng.latitude,latlng.longitude)
-
-        markedLocation[0] = district
-        markedLocation[1] = city
-        markedLocation[2] = gevornorate
-        markedLocation[3] = country
-
-    }
 
 }

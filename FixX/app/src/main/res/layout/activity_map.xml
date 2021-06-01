@@ -23,13 +23,13 @@
         android:background="@drawable/white_border"
         android:elevation="10dp">
 
-        <ImageView
-            android:id="@+id/map_activity_magnify_icon_img"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_magnify" />
+<!--        <ImageView-->
+<!--            android:id="@+id/map_activity_magnify_icon_img"-->
+<!--            android:layout_width="15dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:src="@drawable/ic_magnify" />-->
 
         <EditText
             android:id="@+id/map_activity_search_input_txt"
@@ -39,11 +39,10 @@
             android:padding="16dp"
             android:drawablePadding="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/map_activity_magnify_icon_img"
             android:background="@null"
             android:hint="@string/enterYourAddressHint"
             android:imeOptions="actionSearch"
-            android:inputType="text"
+            android:inputType="textAutoComplete"
             android:textColor="#000"
             android:textSize="15sp" />
 

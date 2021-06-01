@@ -101,5 +101,74 @@
     <string name="pickJobText">Pick Job Profile</string>
     <string name="selectWorkAddressHint">Select Your Work Addresses</string>
 
+    <string name="City">City</string>
+    <string name="Cairo">Cairo</string>
+    <string name="Alexandria">Alexandria</string>
+
+    <string name="Area">Area</string>
+    <string name="AlShrouk">Al-Shrouk</string>
+    <string name="firstSettlement">1st Settlement</string>
+    <string name="FifthSettlement">Fifth Settlement</string>
+    <string name="Madenti">Madenti</string>
+    <string name="AlRehab">Al-Rehab</string>
+    <string name="tenthOfRamadan">10th Of Ramadan</string>
+    <string name="BadrCity">Badr City</string>
+    <string name="Heliopolis">Heliopolis</string>
+    <string name="Zamalek">Zamalek</string>
+    <string name="NasserCity">Nasser City</string>
+    <string name="Qobbah">Qobbah</string>
+    <string name="Maadi">Maadi</string>
+    <string name="Mokkatm">Mokkatm</string>
+    <string name="Mohandsen">Mohandsen</string>
+    <string name="ShekhZayed">Shekh Zayed</string>
+    <string name="Dokki">Dokki</string>
+    <string name="GizaSquare">Giza Square</string>
+    <string name="Haram">Haram</string>
+    <string name="Fissal">Fissal</string>
+    <string name="Shobra">Shobra</string>
+    <string name="Obour">Obour</string>
+    <string name="Matareya">Matareya</string>
+    <string name="sixthOctober">6th October</string>
+    <string name="Helwan">Helwan</string>
+    <string name="AinShams">Ain Shams</string>
+    <string name="Manyal">Manyal</string>
+    <string name="Agouza">Agouza</string>
+
+    <string name="MoharamBek">Moharam Bek</string>
+    <string name="AbuQir">Abu Qir</string>
+    <string name="Montaza">Montaza</string>
+    <string name="AlHadarah">Al Hadarah</string>
+    <string name="AlIbrahimeyah">Al Ibrahimeyah</string>
+    <string name="Asafra">Asafra</string>
+    <string name="AlAzaritah">Al Azaritah</string>
+    <string name="Bahari">Bahari</string>
+    <string name="Dekhela">Dekhela</string>
+    <string name="Bokli">Bokli</string>
+    <string name="BorgAlArab">Borg Al Arab</string>
+    <string name="AlQabari">Al Qabari</string>
+    <string name="Fleming">Fleming</string>
+    <string name="Janklees">Janklees</string>
+    <string name="Gleem">Gleem</string>
+    <string name="KafrAbdou">Kafr Abdou</string>
+    <string name="Louran">Louran</string>
+    <string name="ElMandara">El Mandara</string>
+    <string name="Miami">Miami</string>
+    <string name="SanStifano">San Stifano</string>
+    <string name="SidiBeshr">Sidi Beshr</string>
+    <string name="SidiGaber">Sidi Gaber</string>
+    <string name="Shatebi">Shatebi</string>
+    <string name="Sporting">Sporting</string>
+    <string name="Victoria">Victoria</string>
+    <string name="Smouha">Smouha</string>
+    <string name="Stanli">Stanli</string>
+    <string name="WaborElMaya">Wabor El Maya</string>
+    <string name="ElHanovil">El Hanovil</string>
+    <string name="ElBitash">El Bitash</string>
+    <string name="QismBabSharqi">Qism Bab Sharqi</string>
+    <string name="Mansheya">Mansheya</string>
+    <string name="AlAttarin">Al Attarin</string>
+    <string name="FirstAlRaml">First Al Raml</string>
+    <string name="MustafaKamel">Mustafa Kamel</string>
+
 
 </resources>
