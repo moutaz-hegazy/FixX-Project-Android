@@ -1,9 +1,6 @@
 package com.example.fixx.NavigationBar
 
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
@@ -12,8 +9,6 @@ import com.example.fixx.R
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.android.material.internal.ContextUtils.getActivity
 
 
 class NavigationBarActivity : AppCompatActivity() {
@@ -54,34 +49,17 @@ class NavigationBarActivity : AppCompatActivity() {
 
     }
     override fun onBackPressed() {
-        val homeFragment = HomeFragment()
-        val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-      //  if(bottomnav.selectedItemId eq)
-
-      //  val currentFragment = defaultNavigator.currentDestination
-
-
-
-
-//        val f: Fragment =
-//            getActivity(this).getFragmentManager().findFragmentById(R.id.home_fragment)
-//
-
-        if(bottomnav.selectedItemId == R.id.toolbar_home_item)
-        {
+        val currentFragment = supportFragmentManager.fragments[0] as? HomeFragment
+        if(currentFragment != null){
             super.onBackPressed()
+        }else{
+            makeCurrentFragment(HomeFragment())
         }
-        makeCurrentFragment(homeFragment)
-       // bottomnav.menu.getItem(1).setChecked(true)
     }
 
-    private fun makeCurrentFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().apply {
+    private fun makeCurrentFragment(fragment: Fragment) = supportFragmentManager.beginTransaction().apply {
            replace(R.id.toolbar_framelayout,fragment)
             commit()
-        }
-
-
+    }
 }
 

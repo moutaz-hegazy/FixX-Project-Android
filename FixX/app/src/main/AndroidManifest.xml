@@ -40,7 +40,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".jobs.JobsActivity"></activity>
+        <activity android:name=".jobs.JobsActivity"/>
         <activity android:name=".NavigationBar.SettingsScreen.TermsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
@@ -71,7 +71,9 @@
         </activity>
         <activity
             android:name=".Addresses.MapActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        </activity>
         <activity
             android:name=".Addresses.AddAddressActivity"
             android:label="Add Address" />

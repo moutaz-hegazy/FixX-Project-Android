@@ -40,7 +40,7 @@
             android:drawablePadding="10dp"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:hint="@string/enter_your_address"
+            android:hint="@string/enterYourAddressHint"
             android:imeOptions="actionSearch"
             android:inputType="textAutoComplete"
             android:textColor="#000"
@@ -74,8 +74,12 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_border"
-        android:text="@string/Add_Address" />
+        android:background="@drawable/button_bg"
+        android:textColor="@color/white"
+        android:text="@string/addAddressBtn"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="175dp"/>
 
 
 </RelativeLayout>
