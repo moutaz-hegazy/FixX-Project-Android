@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.fixx.Addresses.MyAdresses
+import com.example.fixx.Addresses.MyAddresses
 import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
