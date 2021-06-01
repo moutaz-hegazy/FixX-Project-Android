@@ -95,4 +95,99 @@
     <string name="privacy_policy_title">سياسة الخصوصية:</string>
     <string name="privacy_policy_desc">نحن نحترم خصوصيتك ولقد قمنا بتطوير سياسة خاصة بالخصوصية مدمجة بهذه الاتفاقية.نرجو إتاحة بعض الوقت لقراءة سياسة الخصوصية الخاصة بنا،وبالموافقة على هذه الشروط،فأنت أيضا تقبل شروط سياسة الخصوصية هذه.</string>
 
+    <string name="addAddressTitle">إضافة عنوان</string>
+    <string name="selectArea">من فضلك اختر المنطقة</string>
+    <string name="selectCity">من فضلك اختر المدينة</string>
+    <string name="myAddressesTitle">عنوانى</string>
+    <string name="longPressToast">انقر مطولا لمسح العنوان</string>
+
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="deleteDialogTitle">تأكيد مسح العنوان</string>
+    <string name="deleteDialogQuestion">هل تريد مسح هذا العنوان؟</string>
+
+    <string name="addressTitleHint">حدد اسماً للعنوان</string>
+    <string name="streetHint">شارع</string>
+    <string name="floorHint">طابق</string>
+    <string name="buildingNumberHint">اسم أو رقم المبنى</string>
+    <string name="notesHint">ملاحظات تخص العنوان</string>
+    <string name="useMapBtn">استخدم الخريطة</string>
+    <string name="addAddressBtn">اضف العنوان</string>
+
+
+    <string name="enterYourAddressHint">ادخل عنوانك</string>
+    <string name="noAddressText">لا يوجد عنوان</string>
+
+
+    <string name="pickJobText">اختر نوع وظيفتك</string>
+    <string name="selectWorkAddressHint">اختر عنوان عملك</string>
+
+    <string name="City">مدينة</string>
+    <string name="Cairo">القاهرة</string>
+    <string name="Alexandria">الإسكندرية</string>
+
+    <string name="Area">منطقة</string>
+    <string name="AlShrouk">الشروق</string>
+    <string name="firstSettlement">التجمع الأول</string>
+    <string name="FifthSettlement">التجمع الخامس</string>
+    <string name="Madenti">مدينتى</string>
+    <string name="AlRehab">الرحاب</string>
+    <string name="tenthOfRamadan">العاشر من رمضان</string>
+    <string name="BadrCity">مدينة بدر</string>
+    <string name="Heliopolis">هليوبليس</string>
+    <string name="Zamalek">الزمالك</string>
+    <string name="NasserCity">مدينة ناصر</string>
+    <string name="Qobbah">القبة</string>
+    <string name="Maadi">المعادى</string>
+    <string name="Mokkatm">المقطم</string>
+    <string name="Mohandsen">المهندسين</string>
+    <string name="ShekhZayed">الشيخ زايد</string>
+    <string name="Dokki">الدقى</string>
+    <string name="GizaSquare">ميدان الجيزة</string>
+    <string name="Haram">الهرم</string>
+    <string name="Fissal">فيصل</string>
+    <string name="Shobra">شبرا</string>
+    <string name="Obour">العبور</string>
+    <string name="Matareya">المطرية</string>
+    <string name="sixthOctober">السادس من أكتوبر</string>
+    <string name="Helwan">حلوان</string>
+    <string name="AinShams">عين شمس</string>
+    <string name="Manyal">المنيل</string>
+    <string name="Agouza">العجوزة</string>
+
+    <string name="MoharamBek">محرم بك</string>
+    <string name="AbuQir">أبو قير</string>
+    <string name="Montaza">المنتزة</string>
+    <string name="AlHadarah">الحضرة</string>
+    <string name="AlIbrahimeyah">الإبراهيمية</string>
+    <string name="Asafra">العصافرة</string>
+    <string name="AlAzaritah">الأزاريطة</string>
+    <string name="Bahari">بحرى</string>
+    <string name="Dekhela">الدخيلة</string>
+    <string name="Bokli">بوكلى</string>
+    <string name="BorgAlArab">برج العرب</string>
+    <string name="AlQabari">القبارى</string>
+    <string name="Fleming">فليمينج</string>
+    <string name="Janklees">جناكليس</string>
+    <string name="Gleem">جليم</string>
+    <string name="KafrAbdou">كفر عبده</string>
+    <string name="Louran">لوران</string>
+    <string name="ElMandara">المندرة</string>
+    <string name="Miami">ميامي</string>
+    <string name="SanStifano">سان استيفانو</string>
+    <string name="SidiBeshr">سيدى بشر</string>
+    <string name="SidiGaber">سيدى جابر</string>
+    <string name="Shatebi">الشاطبى</string>
+    <string name="Sporting">سبورتنج</string>
+    <string name="Victoria">فيكتوريا</string>
+    <string name="Smouha">سموحة</string>
+    <string name="Stanli">ستانلى</string>
+    <string name="WaborElMaya">وابور المية</string>
+    <string name="ElHanovil">الهانوفيل</string>
+    <string name="ElBitash">البطاش</string>
+    <string name="QismBabSharqi">قسم باب شرقي</string>
+    <string name="Mansheya">المنشية</string>
+    <string name="AlAttarin">العطارين</string>
+    <string name="FirstAlRaml">أول الرمل</string>
+    <string name="MustafaKamel">مصطفى كامل</string>
 </resources>

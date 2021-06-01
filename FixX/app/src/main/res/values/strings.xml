@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FixX</string>
-    <string name="google_maps_api_key">AIzaSyAwP8PF38zhUwteoi3kIZVolt0HCndTktk</string>
+    <string name="google_maps_api_key">AIzaSyCye7MCW8Dzvy_U4S5kb-E5j-kIXoWSfCk</string>
     <string name="enterLocation">select location</string>
     <string name="CustomizeOrderTitle">Customize Order</string>
     <string name="Delete">delete</string>
@@ -48,6 +48,8 @@
     <string name="Pest_Control">Pest Control</string>
     <string name="Wood_Painter">Wood Painter</string>
     <string name="Swimming_pool">Pool\n maintain</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="onGoingOrders">Ongoing</string>
     <string name="onGoingJobs">Ongoing</string>
     <string name="accepted">Accepted</string>
@@ -62,7 +64,7 @@
     <string name="myOrders">My Orders</string>
     <string name="myJobs">My Jobs</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="title_activity_chat_log">ChatLogActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -178,5 +180,103 @@
     <string name="TotalAccount">Total Account : </string>
     <string name="JobCompleted">Complete Job ✓</string>
     <string name="CancelJob">Cancel Job</string>
+
+
+    <string name="addAddressTitle">Add Address</string>
+    <string name="selectArea">Please Select Area</string>
+    <string name="selectCity">Please Select City</string>
+    <string name="myAddressesTitle">My Addresses</string>
+    <string name="longPressToast">Long Press to delete</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="deleteDialogTitle">Confirm Deleting Address</string>
+    <string name="deleteDialogQuestion">Do you want to delete this address?</string>
+
+    <string name="addressTitleHint">Title for you address</string>
+    <string name="streetHint">Street</string>
+    <string name="floorHint">Floor</string>
+    <string name="buildingNumberHint">Building Number or Name</string>
+    <string name="notesHint">Notes about location</string>
+    <string name="useMapBtn">Use Map</string>
+    <string name="addAddressBtn">Add Address</string>
+
+
+    <string name="enterYourAddressHint">Enter Your Address</string>
+    <string name="noAddressText">No Address Found</string>
+
+
+    <string name="pickJobText">Pick Job Profile</string>
+    <string name="selectWorkAddressHint">Select Your Work Addresses</string>
+
+    <string name="City">City</string>
+    <string name="Cairo">Cairo</string>
+    <string name="Alexandria">Alexandria</string>
+
+    <string name="Area">Area</string>
+    <string name="AlShrouk">Al-Shrouk</string>
+    <string name="firstSettlement">1st Settlement</string>
+    <string name="FifthSettlement">Fifth Settlement</string>
+    <string name="Madenti">Madenti</string>
+    <string name="AlRehab">Al-Rehab</string>
+    <string name="tenthOfRamadan">10th Of Ramadan</string>
+    <string name="BadrCity">Badr City</string>
+    <string name="Heliopolis">Heliopolis</string>
+    <string name="Zamalek">Zamalek</string>
+    <string name="NasserCity">Nasser City</string>
+    <string name="Qobbah">Qobbah</string>
+    <string name="Maadi">Maadi</string>
+    <string name="Mokkatm">Mokkatm</string>
+    <string name="Mohandsen">Mohandsen</string>
+    <string name="ShekhZayed">Shekh Zayed</string>
+    <string name="Dokki">Dokki</string>
+    <string name="GizaSquare">Giza Square</string>
+    <string name="Haram">Haram</string>
+    <string name="Fissal">Fissal</string>
+    <string name="Shobra">Shobra</string>
+    <string name="Obour">Obour</string>
+    <string name="Matareya">Matareya</string>
+    <string name="sixthOctober">6th October</string>
+    <string name="Helwan">Helwan</string>
+    <string name="AinShams">Ain Shams</string>
+    <string name="Manyal">Manyal</string>
+    <string name="Agouza">Agouza</string>
+
+    <string name="MoharamBek">Moharam Bek</string>
+    <string name="AbuQir">Abu Qir</string>
+    <string name="Montaza">Montaza</string>
+    <string name="AlHadarah">Al Hadarah</string>
+    <string name="AlIbrahimeyah">Al Ibrahimeyah</string>
+    <string name="Asafra">Asafra</string>
+    <string name="AlAzaritah">Al Azaritah</string>
+    <string name="Bahari">Bahari</string>
+    <string name="Dekhela">Dekhela</string>
+    <string name="Bokli">Bokli</string>
+    <string name="BorgAlArab">Borg Al Arab</string>
+    <string name="AlQabari">Al Qabari</string>
+    <string name="Fleming">Fleming</string>
+    <string name="Janklees">Janklees</string>
+    <string name="Gleem">Gleem</string>
+    <string name="KafrAbdou">Kafr Abdou</string>
+    <string name="Louran">Louran</string>
+    <string name="ElMandara">El Mandara</string>
+    <string name="Miami">Miami</string>
+    <string name="SanStifano">San Stifano</string>
+    <string name="SidiBeshr">Sidi Beshr</string>
+    <string name="SidiGaber">Sidi Gaber</string>
+    <string name="Shatebi">Shatebi</string>
+    <string name="Sporting">Sporting</string>
+    <string name="Victoria">Victoria</string>
+    <string name="Smouha">Smouha</string>
+    <string name="Stanli">Stanli</string>
+    <string name="WaborElMaya">Wabor El Maya</string>
+    <string name="ElHanovil">El Hanovil</string>
+    <string name="ElBitash">El Bitash</string>
+    <string name="QismBabSharqi">Qism Bab Sharqi</string>
+    <string name="Mansheya">Mansheya</string>
+    <string name="AlAttarin">Al Attarin</string>
+    <string name="FirstAlRaml">First Al Raml</string>
+    <string name="MustafaKamel">Mustafa Kamel</string>
+
 
 </resources>

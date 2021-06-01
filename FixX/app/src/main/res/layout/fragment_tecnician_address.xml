@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_fadingtowhite"
+    android:id="@+id/pick_tecnician_address_fragment"
+   >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+        <TextView
+            android:id="@+id/pick_address_fragment_address_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_border"
+            android:text="@string/selectWorkAddressHint" />
+
+        <Spinner
+            android:id="@+id/pick_address_fragment_city_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pick_address_fragment_address_lbl"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="ChooseCity"
+            android:padding="5dp"
+            android:prompt="@string/app_name" />
+
+        <Spinner
+            android:id="@+id/pick_address_fragment_area_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pick_address_fragment_city_spinner"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="ChooseArea"
+            android:padding="5dp"
+            android:prompt="@string/app_name" />
+
+        <Button
+            android:id="@+id/pick_address_fragment_add_address_btn"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/pick_address_fragment_area_spinner"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_border"
+            android:text="@string/addAddressBtn"
+            android:textSize="10sp" />
+
+
+        <Button
+            android:id="@+id/pick_address_fragment_next_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pick_address_fragment_add_address_btn"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_bg"
+            android:text="@string/next"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/turquoise" />
+
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@+id/pick_address_fragment_next_btn"
+                android:id="@+id/technician_address_fragment_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/technician_address_row" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

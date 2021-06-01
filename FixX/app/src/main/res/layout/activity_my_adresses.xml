@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_fadingtowhite">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,7 @@
         android:layout_centerVertical="true"
         android:background="@drawable/edit_txt_border"
         android:padding="20dp"
-        android:text="No Addresses" />
+        android:text="@string/noAddressText" />
 
     <Button
         android:id="@+id/my_addresses_activity_add_address_btn"
@@ -43,7 +44,11 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_border"
-        android:text="Add Address" />
+        android:background="@drawable/button_bg"
+        android:text="@string/addAddressBtn"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="175dp"/>
 
 </RelativeLayout>

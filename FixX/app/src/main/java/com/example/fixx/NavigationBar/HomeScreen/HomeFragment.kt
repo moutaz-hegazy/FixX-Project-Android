@@ -12,6 +12,10 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.POJOs.ServiceItem
+import android.widget.*
+import com.example.fixx.LoginScreen.Views.PickJob
+import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
+import com.example.fixx.NavigationBar.notification.NotificationFragment
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
@@ -28,6 +32,7 @@ class HomeFragment : Fragment(){
     private var arrayList = ArrayList<ServiceItem>()
     private var serviceAdapter : ServiceAdapter? =null
     var button: Button? = null
+    var notificationbtn : ImageView? = null
     var notificationCounter: NotificationCounter? = null
     var floatingActionButton: FloatingActionButton? = null
     var chatBtn : ImageView? = null
@@ -62,6 +67,12 @@ class HomeFragment : Fragment(){
 
 
         button = rootView.findViewById(R.id.homefragment_notificationcounter_button)
+        notificationbtn = rootView.findViewById(R.id.homefragment_notification_image_view)
+
+        notificationbtn?.setOnClickListener {
+            fragmentManager?.beginTransaction()?.replace(R.id.home_fragment_id, NotificationFragment())?.commit()
+        }
+
        notificationCounter =
               NotificationCounter(rootView.findViewById(R.id.homefragment_notificationcounter_card_view))
         // Inflate the layout for this fragment

@@ -195,7 +195,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun openAddressesScreen(){
-        startActivity(Intent(context, MyAdresses::class.java))
+        startActivity(Intent(context, MyAddresses::class.java))
     }
 
 
