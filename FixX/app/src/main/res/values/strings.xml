@@ -175,5 +175,8 @@
     <string name="No_Description">No Available Description</string>
     <string name="Job_Accepted">Job\'s yours</string>
     <string name="Job_Accept_Msg">Accepted The Price You Offered</string>
+    <string name="TotalAccount">Total Account : </string>
+    <string name="JobCompleted">Complete Job ✓</string>
+    <string name="CancelJob">Cancel Job</string>
 
 </resources>

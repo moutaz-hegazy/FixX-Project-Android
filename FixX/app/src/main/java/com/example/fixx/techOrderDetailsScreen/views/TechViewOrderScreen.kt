@@ -32,7 +32,7 @@ class TechViewOrderScreen : AppCompatActivity() {
     }
     var jobId : String? = null
 
-    lateinit var job : Job
+    var job : Job? = null
 
     var contact : Person? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +45,13 @@ class TechViewOrderScreen : AppCompatActivity() {
 
         intent.apply {
             jobId = getStringExtra(Constants.TRANS_JOB)
+
         }
 
         jobId?.let {    jobID ->
             viewModel.fetchJobFromDB(jobID, onSuccessBinding = {
                 job = it
-                viewModel.fetchUserFromDB(job.uid) { person ->
+                viewModel.fetchUserFromDB(job?.uid) { person ->
                     contact = person
 
                     binding.techViewOrderChatBtn.setOnClickListener {
@@ -76,7 +77,7 @@ class TechViewOrderScreen : AppCompatActivity() {
                                             Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
                                             USER_OBJECT?.name ?: "",
                                             R.string.RequestConfirmed,
-                                            R.string.ConfirmMessage, job.jobId,
+                                            R.string.ConfirmMessage, job?.jobId!!,
                                             binding.techViewOrderPriceTxt.text.toString()
                                         ),
                                         arrayOf(token)
@@ -110,28 +111,28 @@ class TechViewOrderScreen : AppCompatActivity() {
                                 Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
                                 USER_OBJECT?.name ?: "",
                                 R.string.RequestDenied,
-                                R.string.DenyMessage, job.jobId
+                                R.string.DenyMessage, job!!.jobId
                             ),
                             arrayOf(token)
                         )
                     }
                 }
 
-                binding.techViewOrderAddressLbl.text = job.location
-                binding.techViewOrderDateLbl.text = job.date
-                binding.techViewOrderFromTimeLbl.text = job.fromTime
-                binding.techViewOrderToTimeLbl.text = job.toTime
-                if(job.description.isNullOrEmpty()){
+                binding.techViewOrderAddressLbl.text = job?.location
+                binding.techViewOrderDateLbl.text = job?.date
+                binding.techViewOrderFromTimeLbl.text = job?.fromTime
+                binding.techViewOrderToTimeLbl.text = job?.toTime
+                if(job?.description.isNullOrEmpty()){
                     binding.techViewOrderDescTitleLbl.text = getString(R.string.No_Description)
                     binding.techViewOrderDescTitleLbl.setTextColor(Color.GRAY)
                 }else{
                     binding.techViewOrderDescriptionLbl.apply {
                         visibility = View.VISIBLE
-                        text = job.description
+                        text = job?.description
                     }
                 }
 
-                job.images?.let { images ->
+                job?.images?.let { images ->
                     binding.techViewOrderImagesLbl.visibility = View.VISIBLE
                     binding.techViewOrderImagesRecycler.apply {
                         visibility = View.VISIBLE

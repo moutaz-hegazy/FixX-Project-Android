@@ -33,94 +33,106 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityJobDetailsDisplayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         jobId = intent.getStringExtra(Constants.TRANS_JOB)
 
-        jobId?.let {
-            viewmodel= JobDetailsViewModel(it, onSuccessBinding = { job ->
-                binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
-                binding.jobDetailsDateLbl.text = getDateFor(job.status, job)
-                binding.jobDetailsLocationLbl.text = job.location
-                binding.jobDetailsFromTimeLbl.text = job.fromTime
-                binding.jobDetailsToTimeLbl.text = job.toTime
-                binding.jobDetailsStatusLbl.text = job.status.rawValue
-                job.price?.let {
-                    binding.jobDetailsFinalPriceTitleLbl.visibility = View.VISIBLE
-                    binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
-                    binding.jobDetailsFinalPriceLbl.text = "$it ${getString(R.string.LE)}"
-                }
-                job.images?.let { images ->
-                    binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
-                    binding.jobDetailsImagesRecycler.apply {
-                        visibility = View.VISIBLE
-                        layoutManager = LinearLayoutManager(applicationContext).apply {
-                            orientation = RecyclerView.HORIZONTAL
-                        }
-                        adapter = OrderImagesAdapter(images)
-                    }
-                }
-                if(!job.description.isNullOrEmpty()){
-                    binding.jobDetailsDescTitleLbl.visibility = View.VISIBLE
-                    binding.jobDetailsDescriptionLbl.text = job.description
-                    binding.jobDetailsDescriptionLbl.visibility = View.VISIBLE
-                }
+        val jobObject = intent.getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
 
-                if (job.techID != null) {
-                    Log.i("TAG", "onCreate: Here 11 <<<<<<<<")
-                    loadSingleTechnician(job.techID!!)
+        if(jobObject != null){
+            viewmodel = JobDetailsViewModel(jobObject.jobId)
+            displayJobOnScreen(jobObject)
+        }else{
+            jobId?.let {
+                viewmodel = JobDetailsViewModel(it)
+                viewmodel.fetchJobfromDB(onSuccessBinding = { job ->
+                    displayJobOnScreen(job)
+
+                }, onFailBinding = {
+
+                })
+            }
+        }
+    }
+
+
+    private fun displayJobOnScreen(job : Job){
+        binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
+        binding.jobDetailsDateLbl.text = getDateFor(job.status, job)
+        binding.jobDetailsLocationLbl.text = job.location
+        binding.jobDetailsFromTimeLbl.text = job.fromTime
+        binding.jobDetailsToTimeLbl.text = job.toTime
+        binding.jobDetailsStatusLbl.text = job.status.rawValue
+        job.price?.let {
+            binding.jobDetailsFinalPriceTitleLbl.visibility = View.VISIBLE
+            binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
+            binding.jobDetailsFinalPriceLbl.text = "$it ${getString(R.string.LE)}"
+        }
+        job.images?.let { images ->
+            binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
+            binding.jobDetailsImagesRecycler.apply {
+                visibility = View.VISIBLE
+                layoutManager = LinearLayoutManager(applicationContext).apply {
+                    orientation = RecyclerView.HORIZONTAL
+                }
+                adapter = OrderImagesAdapter(images)
+            }
+        }
+        if(!job.description.isNullOrEmpty()){
+            binding.jobDetailsDescTitleLbl.visibility = View.VISIBLE
+            binding.jobDetailsDescriptionLbl.text = job.description
+            binding.jobDetailsDescriptionLbl.visibility = View.VISIBLE
+        }
+
+        if (job.techID != null) {
+            Log.i("TAG", "onCreate: Here 11 <<<<<<<<")
+            loadSingleTechnician(job.techID!!)
+        } else {
+            job.bidders?.let { map ->
+                Log.i("TAG", "onCreate: Here 44 <<<<<<<<"+ job.privateRequest + job)
+                if (job.privateRequest) {
+                    Log.i("TAG", "onCreate: Here 22 <<<<<<<<")
+                    map.keys.first().let { techUid ->
+                        binding.jobDetailsTechLayout.visibility = View.VISIBLE
+                        loadSingleTechnician(techUid) { tech->
+                            binding.bidderItemConfirmPriceTitleLbl.visibility = View.VISIBLE
+                            binding.bidderItemConfirmPriceLbl.text = "${map[techUid]} ${getString(R.string.LE)}"
+                            binding.bidderItemConfirmPriceLbl.visibility = View.VISIBLE
+                            binding.jobDetailsTechAcceptBtn.apply {
+                                visibility = View.VISIBLE
+                                setOnClickListener {
+                                    // Accept price.
+                                    viewmodel.setTechnicianUidWithPrice(techUid,
+                                        map[techUid] ?: "")
+                                    viewmodel.sendAcceptNotification(techUid,tech.token!!, USER_OBJECT!!.name)
+                                    this.visibility = View.INVISIBLE
+                                    binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
+                                }
+                            }
+                            binding.jobDetailsTechCancelBtn.apply {
+                                visibility = View.VISIBLE
+                                setOnClickListener {
+                                    viewmodel.removeSingleBidder()
+                                    binding.jobDetailsTechLayout.visibility = View.INVISIBLE
+                                    // show dialog Edit or delete job.
+
+                                }
+                            }
+                        }
+                    }
                 } else {
-                    job.bidders?.let { map ->
-                        Log.i("TAG", "onCreate: Here 44 <<<<<<<<"+ job.privateRequest + job)
-                        if (job.privateRequest) {
-                            Log.i("TAG", "onCreate: Here 22 <<<<<<<<")
-                            map.keys.first().let { techUid ->
-                                binding.jobDetailsTechLayout.visibility = View.VISIBLE
-                                loadSingleTechnician(techUid) { tech->
-                                    binding.bidderItemConfirmPriceTitleLbl.visibility = View.VISIBLE
-                                    binding.bidderItemConfirmPriceLbl.text = "${map[techUid]} ${getString(R.string.LE)}"
-                                    binding.bidderItemConfirmPriceLbl.visibility = View.VISIBLE
-                                    binding.jobDetailsTechAcceptBtn.apply {
-                                        visibility = View.VISIBLE
-                                        setOnClickListener {
-                                            // Accept price.
-                                            viewmodel.setTechnicianUidWithPrice(techUid,
-                                                map[techUid] ?: "")
-                                            viewmodel.sendAcceptNotification(techUid,tech.token!!, USER_OBJECT!!.name)
-                                            this.visibility = View.INVISIBLE
-                                            binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
-                                        }
-                                    }
-                                    binding.jobDetailsTechCancelBtn.apply {
-                                        visibility = View.VISIBLE
-                                        setOnClickListener {
-                                            viewmodel.removeSingleBidder()
-                                            binding.jobDetailsTechLayout.visibility = View.INVISIBLE
-                                            // show dialog Edit or delete job.
-
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            Log.i("TAG", "onCreate: Here 33 <<<<<<<<")
-                            job.bidders?.let { bidders ->
-                                binding.jobDetailsBiddersRecycler.apply {
-                                    visibility = View.VISIBLE
-                                    adapter = JobDetailsBiddersAdapter(
-                                        bidders.keys.toList(),
-                                        bidders
-                                    ) { uid, onSuccess, onFail ->
-                                        viewmodel.getTechnician(uid, onSuccess, onFail)
-                                    }
-                                }
+                    Log.i("TAG", "onCreate: Here 33 <<<<<<<<")
+                    job.bidders?.let { bidders ->
+                        binding.jobDetailsBiddersRecycler.apply {
+                            visibility = View.VISIBLE
+                            adapter = JobDetailsBiddersAdapter(
+                                bidders.keys.toList(),
+                                bidders
+                            ) { uid, onSuccess, onFail ->
+                                viewmodel.getTechnician(uid, onSuccess, onFail)
                             }
                         }
                     }
                 }
-
-            }, onFailBinding = {
-
-            })
+            }
         }
     }
 

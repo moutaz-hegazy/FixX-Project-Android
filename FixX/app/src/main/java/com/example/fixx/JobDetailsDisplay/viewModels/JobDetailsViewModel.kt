@@ -19,9 +19,9 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
-class JobDetailsViewModel(private val jobId : String, private val onSuccessBinding : (job : Job)->Unit,
-                          private val onFailBinding : () -> Unit) {
-    init {
+class JobDetailsViewModel(private val jobId : String) {
+
+    fun fetchJobfromDB(onSuccessBinding : (job : Job)->Unit, onFailBinding : () -> Unit){
         FirestoreService.fetchJobById(jobId, onSuccessBinding, onFailBinding)
     }
 
