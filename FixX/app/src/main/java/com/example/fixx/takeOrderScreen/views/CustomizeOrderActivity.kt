@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.Addresses.view.AddAddressActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
@@ -72,6 +73,16 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         super.onCreate(savedInstanceState)
         binding = ActivityCustomizeOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        USER_OBJECT?.locations?.forEach {   locationString ->
+            locationString.substringBefore("%").let {  locName->
+                if(!locName.isNullOrEmpty()){
+                    values.add(values.size-1,locName)
+                }else{
+                    values.add(values.size-1 , locationString.substringAfter("%"))
+                }
+            }
+        }
 
         Log.i("TAG", "onCreate: >>>>$selectedDate")
         val serviceName = intent.getIntExtra(Constants.serviceName, -1)
@@ -258,10 +269,16 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                 Constants.START_ADDRESS_MAP_REQUEST_CODE -> {
                     val newAddress = data?.getStringExtra(Constants.TRANS_ADDRESS)
-                    newAddress?.let {
-                        values.add(values.size-1,it)
-                        spinnerAdapter.notifyDataSetChanged()
-                        customizeOrder_pickLocation_spinner.setSelection(values.size -2)
+                    newAddress?.let {   address->
+                        address.substringBefore("%").let { addName->
+                            if(!addName.isNullOrEmpty()){
+                                values.add(values.size-1, addName)
+                            }else{
+                                values.add(values.size-1, address.substringAfter("%"))
+                            }
+                            spinnerAdapter.notifyDataSetChanged()
+                            customizeOrder_pickLocation_spinner.setSelection(values.size -2)
+                        }
                     }
                 }
 
