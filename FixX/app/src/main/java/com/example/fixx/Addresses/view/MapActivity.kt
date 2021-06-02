@@ -1,4 +1,4 @@
-package com.example.fixx.Addresses
+package com.example.fixx.Addresses.view
 
 import android.Manifest
 import android.app.Activity
@@ -10,8 +10,6 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,14 +31,15 @@ import java.util.*
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
-    val locarionPermissionRequestCode = 1234
-    val DEFAULT_ZOOM = 15f
+    private val locationPermissionRequestCode = 1234
+    private val DEFAULT_ZOOM = 15f
 
-    val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
-    val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
+    private val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
+    private val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
 
     private lateinit var mMap: GoogleMap
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+
 
     var mLocationPermissionGranted = false
 
@@ -52,6 +51,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_map)
 
         getLocationPermission()
+       // initPlacesSuggestion()
 
     }
 
@@ -62,7 +62,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun sendDataBackToPreviousActivity() {
         val resultIntent = Intent().apply {
-            putExtra("address", markedLocation)
+            putExtra(Constants.TRANS_ADDRESS, markedLocation)
         }
         setResult(Activity.RESULT_OK, resultIntent)
     }
@@ -71,37 +71,39 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         try {
             if (mLocationPermissionGranted) {
-                val loaction = mFusedLocationProviderClient.lastLocation
+                var loaction = mFusedLocationProviderClient.lastLocation
                 loaction.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(baseContext, "location found",
-                                Toast.LENGTH_SHORT).show()
                         val currentLocation = task.result
+
                         if (currentLocation != null) {
 
                             val district =  getdistrictName(currentLocation.latitude,currentLocation.longitude)
                             val city = getCityName(currentLocation.latitude,currentLocation.longitude)
-                            val governorate = getGovernorateName(currentLocation.latitude,currentLocation.longitude)
+                            val gevornorate = getGovernorateName(currentLocation.latitude,currentLocation.longitude)
                             val country = getCountryName(currentLocation.latitude,currentLocation.longitude)
 
                             markedLocation[0] = district
                             markedLocation[1] = city
-                            markedLocation[2] = governorate
+                            markedLocation[2] = gevornorate
                             markedLocation[3] = country
 
-                            moveCamera(LatLng(currentLocation.latitude, currentLocation.longitude), DEFAULT_ZOOM,"${district}, ${city}, ${governorate}, ${country}")
+                            moveCamera(LatLng(currentLocation.latitude, currentLocation.longitude), DEFAULT_ZOOM,"${district}, ${city}, ${gevornorate}, $country")
                         }
-                    } else {
-                        Toast.makeText(baseContext, "couldn't find location",
-                                Toast.LENGTH_SHORT).show()
+                        else{
+                        }
                     }
+//                    else {
+//                        Toast.makeText(baseContext, "couldn't find location",
+//                                Toast.LENGTH_SHORT).show()
+//                    }
                 }
             }
         } catch (e: SecurityException) {
         }
     }
 
-    fun getLocationPermission() {
+    private fun getLocationPermission() {
         val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
         if (ContextCompat.checkSelfPermission(this, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -109,15 +111,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             mLocationPermissionGranted = true
             initMap()
         } else {
-            ActivityCompat.requestPermissions(this, permissions, locarionPermissionRequestCode)
+            ActivityCompat.requestPermissions(this, permissions, locationPermissionRequestCode)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         mLocationPermissionGranted = false
         when (requestCode) {
-            locarionPermissionRequestCode -> {
-                if (grantResults.size > 0) {
+            locationPermissionRequestCode -> {
+                if (grantResults.isNotEmpty()) {
                     for (i in grantResults) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionGranted = false
@@ -132,7 +134,46 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun initMap() {
+    fun initPlacesSuggestion(){
+        // Initialize the SDK
+      //  Places.initialize(applicationContext, getString(R.string.google_maps_api_key))
+
+//        val placesClient = Places.createClient(this)
+//
+//        val autocompleteFragment =
+//            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+//                    as AutocompleteSupportFragment
+//
+//        // Specify the types of place data to return.
+//        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+//
+//        // Set up a PlaceSelectionListener to handle the response.
+//        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+//            override fun onPlaceSelected(place: Place) {
+//
+//                Log.i("auto", "Place: ${place.name}, ${place.id}")
+//            }
+//
+//            override fun onError(p0: Status) {
+//
+//                Log.i("auto", "An error occurred: $p0")
+//            }
+//        })
+
+
+
+//        map_activity_search_input_txt.isFocusable = false
+//
+//        map_activity_search_input_txt.setOnClickListener {
+//            val fieldList =
+//                Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
+//            val autocompleteIntent =
+//                Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(this)
+//            startActivityForResult(autocompleteIntent,100)
+//        }
+    }
+
+    private fun initMap() {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
@@ -140,13 +181,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @Override
     override fun onMapReady(googleMap: GoogleMap) {
-        Toast.makeText(baseContext, "map is ready",
-                Toast.LENGTH_SHORT).show()
 
         mMap = googleMap
 
         if (mLocationPermissionGranted) {
             getDeviceLocation()
+
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return
@@ -160,20 +200,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val district =  getdistrictName(it.latitude,it.longitude)
             val city = getCityName(it.latitude,it.longitude)
-            val governorate = getGovernorateName(it.latitude,it.longitude)
+            val gevornorate = getGovernorateName(it.latitude,it.longitude)
             val country = getCountryName(it.latitude,it.longitude)
 
             markedLocation[0] = district
             markedLocation[1] = city
-            markedLocation[2] = governorate
+            markedLocation[2] = gevornorate
             markedLocation[3] = country
 
             val markerOptions = MarkerOptions()
             markerOptions.position(it)
-            markerOptions.title("${district}, ${city}, ${governorate}, ${country}")
+            markerOptions.title("${district}, ${city}, ${gevornorate}, $country")
             mMap.clear()
 
-            moveCamera(it,DEFAULT_ZOOM,"${district}, ${city}, ${governorate}, ${country}" )
+            moveCamera(it,DEFAULT_ZOOM,"${district}, ${city}, ${gevornorate}, $country" )
             mMap.addMarker(markerOptions)
         }
 
@@ -186,18 +226,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    fun initFun() {
-        map_activity_search_input_txt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (event != null) {
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
-                            event.action == KeyEvent.ACTION_DOWN || event.action == KeyEvent.KEYCODE_ENTER) {
-                        geoLocate()
-                    }
+    private fun initFun() {
+        map_activity_search_input_txt.setOnEditorActionListener { _, actionId, event ->
+            if (event != null) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
+                    event.action == KeyEvent.ACTION_DOWN || event.action == KeyEvent.KEYCODE_ENTER) {
+                    geoLocate()
                 }
-                return false
             }
-        })
+            false
+        }
 
         map_activity_gps_icon_img.setOnClickListener {
             mMap.clear()
@@ -214,10 +252,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         try {
             addressList = geocoder.getFromLocationName(searchInput, 1) as ArrayList<Address>
             if (addressList.size > 0) {
-                val address = addressList.get(0)
-                Toast.makeText(baseContext, address.toString(),
-                        Toast.LENGTH_SHORT).show()
-
+                val address = addressList[0]
                 moveCamera(LatLng(address.latitude,address.longitude),DEFAULT_ZOOM,address.getAddressLine(0))
             }
         } catch (e: IOException) {
@@ -226,13 +261,23 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+//        if(requestCode == 100 && resultCode == Activity.RESULT_OK){
+//            val place = Autocomplete.getPlaceFromIntent(data!!)
+//
+//           // map_activity_search_input_txt.text = place.address.
+//            map_activity_search_input_txt.setText(place.getAddress())
+//        }
+    }
+
     private fun hideSoftKeyboard(){
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     private fun moveCamera(latLng: LatLng, zoom: Float, title: String) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
-
             val options = MarkerOptions()
                 .position(latLng)
                 .title(title)
@@ -240,14 +285,22 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.addMarker(options)
 
         hideSoftKeyboard()
+
     }
 
     private fun getdistrictName(lat: Double, lon: Double):String{
         var district:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
+
+
         var address = geoCoder.getFromLocation(lat,lon,3)
 
-        district = address[0].locality
+        if (address != null){
+            if (address[0].locality != null){
+                district = address[0].locality
+            }
+
+        }
 
         return district
     }
@@ -255,19 +308,27 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getCityName(lat: Double, lon: Double):String{
         var cityName:String = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var address = geoCoder.getFromLocation(lat,lon,3)
+       var address = geoCoder.getFromLocation(lat,lon,3)
 
-        cityName = address[0].subAdminArea
+        if (address != null){
+            if(address[0].subAdminArea != null){
+                cityName = address[0].subAdminArea
+            }
+        }
 
         return cityName
     }
 
      private fun getGovernorateName(lat: Double, lon: Double):String{
-        var governorate:String = ""
+        var governorate = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
         var address = geoCoder.getFromLocation(lat,lon,3)
 
-        governorate = address[0].adminArea
+         if (address != null){
+             if (address[0].adminArea != null){
+                 governorate = address[0].adminArea
+             }
+         }
 
         return governorate
     }
@@ -277,9 +338,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         var geoCoder = Geocoder(this, Locale.getDefault())
         var address = geoCoder.getFromLocation(lat,lon,3)
 
-        countryName = address[0].countryName
+        if(address != null){
+            if(address[0].countryName != null){
+                countryName = address[0].countryName
+            }
+        }
 
         return countryName
     }
+
 
 }

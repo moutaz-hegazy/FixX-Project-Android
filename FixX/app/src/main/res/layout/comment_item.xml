@@ -19,6 +19,17 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible"/>
 
+    <ImageView
+        android:id="@+id/comment_item_profile_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="28dp"
+        android:background="@drawable/rounded_outline"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
 
     <TextView
         android:id="@+id/comment_item_username_lbl"

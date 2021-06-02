@@ -74,10 +74,5 @@ class ImagesAdapter(var data: ArrayList<Bitmap>) : RecyclerView.Adapter<ImagesAd
         }
     }
 
-//    private fun getImageFromUri(dataStr: String): Bitmap {
-//        val data: Uri = Uri.parse(dataStr)
-//        return MediaStore.Images.Media.getBitmap(context.contentResolver, data)
-//    }
-
     override fun getItemCount() = data.size
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/pattern1"
+    android:orientation="vertical"
+    tools:context=".jobs.jobsFragment"
+    android:id="@+id/jobs_fragment"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingTop="10dp"
+        android:text="@string/myJobs"
+        android:textAlignment="center"
+        android:textColor="#1F37BC"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/myJobs_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:background="@drawable/edit_txt_border"
+        app:tabIndicatorColor="#1F37BC"
+        app:tabIndicatorHeight="5dp"
+        app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:tabTextColor="@color/blue" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/myJobs_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_fadingtowhite">
+
+    </androidx.viewpager.widget.ViewPager>
+
+</LinearLayout>

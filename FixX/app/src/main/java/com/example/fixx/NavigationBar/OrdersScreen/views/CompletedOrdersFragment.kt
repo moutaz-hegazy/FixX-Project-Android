@@ -1,15 +1,12 @@
 package com.example.fixx.NavigationBar.OrdersScreen.views
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fixx.JobDetailsDisplay.JobDetailsDisplayActivity
 import com.example.fixx.POJOs.Job
-import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.FragmentCompletedOrdersBinding
 
 class CompletedOrdersFragment : Fragment() {

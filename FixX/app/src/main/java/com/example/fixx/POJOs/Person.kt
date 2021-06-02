@@ -10,5 +10,5 @@ abstract class Person(
     var uid : String? = null,
     var token : String? = null,
     var profilePicture: String? = null,
-    var locations: List<String>? = null
+    var locations: MutableList<String>? = null
 ) : Serializable

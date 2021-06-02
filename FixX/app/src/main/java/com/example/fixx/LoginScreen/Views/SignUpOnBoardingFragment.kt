@@ -1,5 +1,6 @@
 package com.example.fixx.LoginScreen.Views
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -136,6 +137,10 @@ class SignUpOnBoardingFragment : Fragment() {
         val sentDataBundle = Bundle()
         sentDataBundle.putParcelable("AppUserData", data)
         newSignUpTabFragment.arguments = sentDataBundle
-        fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, newSignUpTabFragment)?.commit()
+        if(getAppUserAccountType() == "Technician"){
+            fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, PickJob())?.commit()
+        }else{
+            fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, newSignUpTabFragment)?.commit()
+        }
     }
 }

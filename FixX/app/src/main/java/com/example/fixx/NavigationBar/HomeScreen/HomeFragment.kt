@@ -1,24 +1,25 @@
 package com.example.project.bottom_navigation_fragments
 
+//import com.example.fixx.jobs.jobsFragment
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.GridView
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
-import com.example.fixx.R
-import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
-
-import com.example.project.ServiceAdapter
 import com.example.fixx.POJOs.ServiceItem
+import com.example.fixx.NavigationBar.notification.NotificationFragment
+import com.example.fixx.R
 import com.example.fixx.constants.Constants
-import com.example.fixx.jobs.jobsFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.fragment.app.FragmentTransaction
-import com.example.fixx.inAppChatScreens.views.ChatLogActivity
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
+import com.example.fixx.jobs.JobsActivity
+import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
+import com.example.project.ServiceAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class HomeFragment : Fragment(){
@@ -28,11 +29,14 @@ class HomeFragment : Fragment(){
     private var arrayList = ArrayList<ServiceItem>()
     private var serviceAdapter : ServiceAdapter? =null
     var button: Button? = null
+    var notificationbtn : ImageView? = null
     var notificationCounter: NotificationCounter? = null
     var floatingActionButton: FloatingActionButton? = null
     var chatBtn : ImageView? = null
-
-
+//
+//    fun onBackPressed(): Boolean {
+//        return false
+//    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +64,12 @@ class HomeFragment : Fragment(){
 
 
         button = rootView.findViewById(R.id.homefragment_notificationcounter_button)
+        notificationbtn = rootView.findViewById(R.id.homefragment_notification_image_view)
+
+        notificationbtn?.setOnClickListener {
+            fragmentManager?.beginTransaction()?.replace(R.id.home_fragment_id, NotificationFragment())?.commit()
+        }
+
        notificationCounter =
               NotificationCounter(rootView.findViewById(R.id.homefragment_notificationcounter_card_view))
         // Inflate the layout for this fragment
@@ -76,7 +86,10 @@ class HomeFragment : Fragment(){
         floatingActionButton?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
 
-                fragmentManager?.beginTransaction()?.replace(R.id.home_fragment, jobsFragment())?.commit()
+               // fragmentManager?.beginTransaction()?.replace(R.id.home_fragment, jobsFragment())?.commit()
+                val intent = Intent (getActivity(), JobsActivity::class.java)
+                getActivity()?.startActivity(intent)
+
             }
         }
 

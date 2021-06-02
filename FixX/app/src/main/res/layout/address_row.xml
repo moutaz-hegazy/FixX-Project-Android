@@ -1,23 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/gradient_fadingtowhite"
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/address_rew_activity_address_lbl"
-            android:layout_width="match_parent"
+            android:id="@+id/address_row_addressName_lbl"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/edit_txt_border"
-            android:padding="10dp" />
+            android:layout_marginTop="10dp"
+            android:background="#00FFFFFF"
+            android:gravity="center"
+            android:text="Home"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/address_row_address_lbl"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/address_row_address_lbl"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <ImageButton
+            android:id="@+id/address_row_menu_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/ellipsis"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/address_row_address_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/address_row_addressName_lbl"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_txt_border"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="some text"
+
+            app:layout_constraintEnd_toStartOf="@+id/address_row_menu_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/address_row_addressName_lbl" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

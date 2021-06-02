@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.fixx.JobDetailsDisplay.JobDetailsDisplayActivity
+import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
@@ -82,7 +82,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     view.ongoingOrderAddressLbl.text = data[position].location
                     view.ongoingOrderLayout.setOnClickListener{
                         val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                        intent.putExtra(Constants.TRANS_JOB, data[position])
+                        intent.putExtra(Constants.TRANS_JOB_OBJECT, data[position])
                         context.startActivity(intent)
                     }
                 }

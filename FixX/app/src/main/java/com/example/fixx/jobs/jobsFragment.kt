@@ -12,7 +12,7 @@ import com.example.fixx.databinding.FragmentJobsBinding
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.google.android.material.tabs.TabLayout
 
-
+/*
 class jobsFragment : Fragment() {
 
     private lateinit var binding : FragmentJobsBinding
@@ -78,3 +78,4 @@ class jobsFragment : Fragment() {
 
 
     }
+*/

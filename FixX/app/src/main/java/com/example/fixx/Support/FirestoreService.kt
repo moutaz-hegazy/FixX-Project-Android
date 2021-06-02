@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
@@ -29,6 +30,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import java.lang.reflect.Field
 
 
 import java.util.*
@@ -98,7 +100,6 @@ object FirestoreService {
                 }
         }
     }
-
     fun fetchChatHistoryForChannel(
         channelName: String,
         observerHandler: (msg: ChatMessage) -> Unit,
@@ -133,6 +134,22 @@ object FirestoreService {
                     onCompletion(msgs)
                 }
             }
+    }
+
+    fun addBidder(uid : String, jobId : String, price: String, onCompletion:()->Unit){
+        db.collection("Jobs").document(jobId)
+            .update("bidders", mapOf(uid to price)).addOnSuccessListener {
+                onCompletion()
+            }
+    }
+
+    fun removeBidders(jobId : String){
+        db.collection("Jobs").document(jobId).update("bidders",null)
+    }
+
+    fun selectTechForJob(techId : String, jobId : String, price : String){
+        db.collection("Jobs").document(jobId)
+            .update(mapOf("techID" to techId, "price" to price.toInt() , "bidders" to null , "status" to Job.JobStatus.Accepted.rawValue))
     }
 
     fun fetchChatHistoryForInstance(
@@ -170,6 +187,7 @@ object FirestoreService {
                                                         }
                                                     }
                                                 }
+                                                onCompletion(arrayListOf(),"$uid-$contact")
                                             }
                                     }
                             }
@@ -222,6 +240,18 @@ object FirestoreService {
             .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
     }
 
+    fun fetchJobById(jobId : String, onSuccessHandler: (job : Job) -> Unit, onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).get()
+            .addOnSuccessListener { snapShot ->
+            val job = snapShot.toObject<Job>()
+                job?.let {
+                    onSuccessHandler(it)
+                }
+        }.addOnFailureListener {
+            onFailHandler()
+        }
+    }
+
     fun loginWithEmailAndPassword(
         email: String,
         password: String,
@@ -241,7 +271,7 @@ object FirestoreService {
     }
 
 
-    fun saveJobDetails(job: Job) {
+    fun saveJobDetails(job: Job, onSuccessHandler: (jobs: Job) -> Unit, onFailHandler: () -> Unit) {
         val map = HashMap<String, Any?>()
         job::class.memberProperties.forEach {
             map[it.name] = (it as KProperty1<Any, Any>).get(job)
@@ -251,9 +281,11 @@ object FirestoreService {
         db.collection("Jobs").add(map)
             .addOnSuccessListener {
                 it.update("jobId",it.id)
+                job.jobId = it.id
+                onSuccessHandler(job)
                 Log.i("TAG", "DocumentSnapshot successfully written!")
             }
-            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
+            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e); onFailHandler() }
     }
 
     
@@ -508,16 +540,28 @@ object FirestoreService {
         collectionName: String,
         fieldName: String,
         element: Any,
-        documentId: String
+        documentId: String,
+        onSuccessHandler: () -> Unit = {},
+        onFailHandler: () -> Unit = {}
     ) {
         Log.i("TAG", "updateJob: start updating $element")
         db.collection(collectionName).document(documentId)
             .update(fieldName, element)
-            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
-            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+            .addOnSuccessListener { onSuccessHandler() }
+            .addOnFailureListener { e -> Log.i("TAG", "update: error $e"); onFailHandler() }
     }
 
-    fun updateDocument(collectionName: String, map: MutableMap<String, Any>, documentId: String) {
+    fun updateUserLocations(loc : String, onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
+        db.collection("Users").document(auth.uid ?: "")
+            .update("locations", FieldValue.arrayUnion(loc))
+            .addOnSuccessListener {
+                onSuccessHandler()
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
+    fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String) {
         Log.i("TAG", "updateJob: start updating $map")
         db.collection(collectionName).document(documentId)
             .update(map)

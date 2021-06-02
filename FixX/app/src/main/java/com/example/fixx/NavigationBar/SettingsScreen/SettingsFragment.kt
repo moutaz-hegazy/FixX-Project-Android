@@ -1,32 +1,38 @@
 package com.example.project.bottom_navigation_fragments
 
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.fixx.Addresses.view.MyAddresses
+import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
-
-import kotlinx.android.synthetic.main.fragment_settings.*
-import com.example.fixx.Addresses.MyAdresses
-import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bottom_sheet_language.view.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import java.util.*
 
 
 class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,72 +41,95 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         var rootView = inflater.inflate(R.layout.fragment_settings, container, false)
 
+//         fragmentManager?.beginTransaction()?.replace(R.id.settings_fragment, HomeFragment())?.addToBackStack("tag" )?.commit()
 
 
-//            val popupMenu = PopupMenu(getActivity(), settingsfragment_language_linear_layout)
-//            popupMenu.menuInflater.inflate(R.menu.language_popup, popupMenu.menu)
-
-
-
-       // val menuItemView = view!!.findViewById<View>(R.id.settingsfragment_language_linear_layout)
-
-
-//        val popupMenu = PopupMenu(activity, menuItemView)
-//        popupMenu.getMenuInflater().inflate(R.menu.language_popup, popupMenu.getMenu())
-//
-//            popupMenu.setOnMenuItemClickListener { menuItem ->
-//
-//                val id = menuItem.itemId
-//
-//                if (id == R.id.language_english) {
-//
-//                    println("english")
-//                } else if (id == R.id.language_arabic) {
-//
-//                    println("arabic")
-//                }
-//
-//                false
-//
-//            }
-//
-//
-//            settingsfragment_language_linear_layout.setOnClickListener {
-//                popupMenu.show()
-//            }
-
-
-
-
-       
 
         val language = rootView.findViewById(R.id.settingsfragment_language_linear_layout) as LinearLayout
         language.setOnClickListener(object : View.OnClickListener {
             @RequiresApi(Build.VERSION_CODES.KITKAT)
             override fun onClick(v: View) {
 
-              //  val popupMenu = PopupMenu(getActivity(),view, Gravity.BOTTOM)
-//            popupMenu.menuInflater.inflate(R.menu.language_popup, popupMenu.menu)
+//                val popupMenu = PopupMenu(getActivity(),settingsfragment_language_linear_layout)
+//
+//                popupMenu.getMenuInflater().inflate(R.menu.language_popup, popupMenu.getMenu())
+//
+//            popupMenu.setOnMenuItemClickListener { menuItem ->
+//
+//                val id = menuItem.itemId
+//
+//               if (id == R.id.language_english) {
+//
+//                   println("english")
+//              } else if (id == R.id.language_arabic) {
+//
+//                    println("arabic")
+//               }
+//
+//               false
+//            }
+//                             popupMenu.show()
+                val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_language, null)
 
-                val popupMenu = PopupMenu(getActivity(),settingsfragment_language_linear_layout)
+                val dialog = BottomSheetDialog(btnsheet.context)
+                dialog.setContentView(btnsheet)
 
-                popupMenu.getMenuInflater().inflate(R.menu.language_popup, popupMenu.getMenu())
+                btnsheet.bottom_sheet_language_english.setOnClickListener {
 
-            popupMenu.setOnMenuItemClickListener { menuItem ->
+//                    val languageToLoad = "en" // your language
+//
+//                    val locale = Locale(languageToLoad)
+//                    Locale.setDefault(locale)
+//                    val config = Configuration()
+//                    config.locale = locale
+//                    context?.getResources()?.updateConfiguration(
+//                        config,
+//                        context?.getResources()!!.getDisplayMetrics()
+//                    )
 
-                val id = menuItem.itemId
+                    val res: Resources = context!!.resources
 
-               if (id == R.id.language_english) {
+                    val dm: DisplayMetrics = res.getDisplayMetrics()
+                    val conf: Configuration = res.getConfiguration()
+                    conf.setLocale(Locale("en")) // API 17+ only.
 
-                   println("english")
-              } else if (id == R.id.language_arabic) {
+                    res.updateConfiguration(conf, dm)
 
-                    println("arabic")
-               }
+                    dialog.dismiss()
 
-               false
-            }
-                             popupMenu.show()
+
+                }
+
+                btnsheet.bottom_sheet_language_arabic.setOnClickListener {
+
+//                    val languageToLoad = "ar" // your language
+//
+//                    val locale = Locale(languageToLoad)
+//                    Locale.setDefault(locale)
+//                    val config = Configuration()
+//                    config.locale = locale
+//                    context?.getResources()?.updateConfiguration(
+//                        config,
+//                        context?.getResources()!!.getDisplayMetrics()
+//                    )
+                    val res: Resources = context!!.resources
+
+                    val dm: DisplayMetrics = res.getDisplayMetrics()
+                    val conf: Configuration = res.getConfiguration()
+                    conf.setLocale(Locale("ar")) // API 17+ only.
+
+                    res.updateConfiguration(conf, dm)
+                    dialog.dismiss()
+
+                }
+
+
+
+                btnsheet.setOnClickListener {
+                    dialog.dismiss()
+
+                }
+                dialog.show()
 
 
             }
@@ -136,6 +165,18 @@ class SettingsFragment : Fragment() {
         rootView.settings_chat_layout.setOnClickListener {
             startActivity(Intent(context, NewMessageActivity::class.java))
         }
+
+//        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//
+////                fragmentManager?.beginTransaction()?.replace(R.id.settings_fragment, HomeFragment())?.commit()
+//                val transaction = activity?.supportFragmentManager?.beginTransaction()
+//                transaction?.replace(R.id.settings_fragment, HomeFragment())
+//                transaction?.commit()
+//
+//            }
+//        })
+
         return rootView
     }
 
@@ -154,7 +195,20 @@ class SettingsFragment : Fragment() {
     }
 
     private fun openAddressesScreen(){
-        startActivity(Intent(context, MyAdresses::class.java))
+        startActivity(Intent(context, MyAddresses::class.java))
     }
 
+
+//    override fun onBackPressed(): Boolean {
+//        return if (myCondition) {
+//            //action not popBackStack
+//            true
+//        } else {
+//            false
+//        }
+//    }
+
+
 }
+
+
