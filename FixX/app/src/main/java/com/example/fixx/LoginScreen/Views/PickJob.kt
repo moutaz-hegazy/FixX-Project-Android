@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.fragment_pick_job.*
 
 class PickJob : Fragment() {
@@ -37,11 +38,6 @@ class PickJob : Fragment() {
         jobs.add(getString(R.string.Pest_Control))
         jobs.add(getString(R.string.Wood_Painter))
         jobs.add(getString(R.string.Swimming_pool))
-
-
-
-
-
     }
 
 
@@ -58,7 +54,12 @@ class PickJob : Fragment() {
         setJobSpinner()
 
         pick_job_fragment_next_btn.setOnClickListener {
-            fragmentManager?.beginTransaction()?.replace(R.id.pick_job_fragment, TecnicianAddressFragment())?.commit()
+            arguments?.putString(Constants.TRANS_JOB, technicianJob)
+            TechnicianAddressFragment().apply {
+                this.arguments = this@PickJob.arguments
+            }.also {
+                fragmentManager?.beginTransaction()?.replace(R.id.pick_job_fragment, it)?.commit()
+            }
         }
     }
 
@@ -91,7 +92,7 @@ class PickJob : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                    technicianJob = pick_job_fragment_job_spinner.selectedItem.toString()
+                technicianJob = pick_job_fragment_job_spinner.selectedItem.toString()
             }
 
         }

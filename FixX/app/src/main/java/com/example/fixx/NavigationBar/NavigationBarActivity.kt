@@ -1,11 +1,13 @@
 package com.example.fixx.NavigationBar
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
 import com.example.fixx.POJOs.Person
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -20,6 +22,7 @@ class NavigationBarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_bar)
 
+        Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>>>"+FirestoreService.auth.currentUser?.email)
         supportActionBar?.hide()
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()

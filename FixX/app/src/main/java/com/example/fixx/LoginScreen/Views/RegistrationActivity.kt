@@ -1,6 +1,5 @@
 package com.example.fixx.LoginScreen.Views
 
-import android.app.job.JobScheduler
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -135,6 +134,18 @@ class RegistrationActivity : AppCompatActivity(){
         if(FirebaseAuth.getInstance().currentUser == null){
             FirestoreService.loginWithEmailAndPassword(Constants.DEFAULT_EMAIL,Constants.DEFAULT_PASSWORD,
                 onSuccessHandler = {}, onFailHandler = {})
+        }
+    }
+
+    override fun onBackPressed() {
+        if(tabLayout?.selectedTabPosition == 0){
+            super.onBackPressed()
+        }else{
+            if(supportFragmentManager.fragments.last() is SignUpOnBoardingFragment){
+                super.onBackPressed()
+            }else{
+                supportFragmentManager.beginTransaction().remove(supportFragmentManager.fragments.last()).commit()
+            }
         }
     }
 

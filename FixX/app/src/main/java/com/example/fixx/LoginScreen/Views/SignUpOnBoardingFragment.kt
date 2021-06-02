@@ -3,6 +3,7 @@ package com.example.fixx.LoginScreen.Views
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Details
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
 import java.util.regex.Pattern
 
 class SignUpOnBoardingFragment : Fragment() {
@@ -85,7 +87,7 @@ class SignUpOnBoardingFragment : Fragment() {
                         Toast.makeText(context , "this phone number already exists.",Toast.LENGTH_SHORT).show()
                     }else {
                         passAppUserData(phoneNumber, accountType)
-                        nextButton?.visibility = View.GONE
+                        //nextButton?.visibility = View.GONE
                     }
                 }
             }
@@ -133,13 +135,17 @@ class SignUpOnBoardingFragment : Fragment() {
 
     private fun passAppUserData(phoneNumber: String, accountType: String){
         var data = Details(phoneNumber, accountType)
-        val newSignUpTabFragment = SignUpTabFragment()
         val sentDataBundle = Bundle()
-        sentDataBundle.putParcelable("AppUserData", data)
-        newSignUpTabFragment.arguments = sentDataBundle
+        sentDataBundle.putSerializable(Constants.TRANS_USERDATA, data)
         if(getAppUserAccountType() == "Technician"){
-            fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, PickJob())?.commit()
+            PickJob().apply {
+                arguments = sentDataBundle
+            }.also {
+                fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, it)?.commit()
+            }
         }else{
+            val newSignUpTabFragment = SignUpTabFragment()
+            newSignUpTabFragment.arguments = sentDataBundle
             fragmentManager?.beginTransaction()?.replace(R.id.signup_onboarding_fragment_id, newSignUpTabFragment)?.commit()
         }
     }

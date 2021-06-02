@@ -277,6 +277,6 @@
     <string name="AlAttarin">Al Attarin</string>
     <string name="FirstAlRaml">First Al Raml</string>
     <string name="MustafaKamel">Mustafa Kamel</string>
-
+    <string name="AddAddress">Add atleast one work location</string>
 
 </resources>

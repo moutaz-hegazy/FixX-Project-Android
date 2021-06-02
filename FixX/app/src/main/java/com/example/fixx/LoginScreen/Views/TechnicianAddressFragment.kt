@@ -10,12 +10,13 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.fragment_tecnician_address.*
 import kotlinx.android.synthetic.main.fragment_tecnician_address.technician_address_fragment_recycler_view
 
-class TecnicianAddressFragment : Fragment() {
+class TechnicianAddressFragment : Fragment() {
 
-    var addresses = mutableListOf<String>()
+    var addresses = arrayListOf<String>()
 
     var cities = mutableListOf<String>()
     var area = mutableListOf<String>()
@@ -139,7 +140,7 @@ class TecnicianAddressFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }else{
-                addresses.add(pick_address_fragment_city_spinner.selectedItem.toString() + pick_address_fragment_area_spinner.selectedItem.toString())
+                addresses.add(pick_address_fragment_city_spinner.selectedItem.toString()+"," + pick_address_fragment_area_spinner.selectedItem.toString())
                 showAddressList()
                 pick_address_fragment_city_spinner.setSelection(0)
                 pick_address_fragment_area_spinner.setSelection(0)
@@ -148,7 +149,16 @@ class TecnicianAddressFragment : Fragment() {
         }
 
         pick_address_fragment_next_btn.setOnClickListener {
-            fragmentManager?.beginTransaction()?.replace(R.id.pick_tecnician_address_fragment, SignUpTabFragment())?.commit()
+            if(addresses.isNotEmpty()){
+                arguments?.putStringArrayList(Constants.TRANS_ADDRESS,addresses)
+                SignUpTabFragment().apply {
+                    this.arguments = this@TechnicianAddressFragment.arguments
+                }.also {
+                    fragmentManager?.beginTransaction()?.replace(R.id.pick_tecnician_address_fragment, it)?.commit()
+                }
+            }else{
+                Toast.makeText(context, getString(R.string.AddAddress),Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

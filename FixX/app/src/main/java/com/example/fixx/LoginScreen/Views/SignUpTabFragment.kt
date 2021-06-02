@@ -2,6 +2,7 @@ package com.example.fixx.LoginScreen.Views
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,6 +19,7 @@ import com.example.fixx.POJOs.Technician
 import com.example.fixx.POJOs.User
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.util.regex.Pattern
@@ -69,7 +71,7 @@ class SignUpTabFragment: Fragment() {
 
         val receivedDataBundle = arguments
         if (receivedDataBundle != null) {
-            val details = receivedDataBundle.getParcelable<Details>("AppUserData")
+            val details = receivedDataBundle.getSerializable(Constants.TRANS_USERDATA) as? Details
             if (details != null) {
                 passedPhoneNumber = details.phoneNumber
                 passedAccountType = details.accountType
@@ -268,7 +270,8 @@ class SignUpTabFragment: Fragment() {
         return User(passedPhoneNumber, passedAccountType, username, email)
     }
 
-    private fun createTechnicianObject(): Technician {
-        return Technician(passedPhoneNumber, passedAccountType, username, email)
+    private fun createTechnicianObject() = Technician(passedPhoneNumber, passedAccountType, username, email).apply {
+        jobTitle = arguments?.getString(Constants.TRANS_JOB)
+        workLocations = arguments?.getStringArrayList(Constants.TRANS_ADDRESS)
     }
 }
