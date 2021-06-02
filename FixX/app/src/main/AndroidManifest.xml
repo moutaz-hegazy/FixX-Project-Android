@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Addresses.MapActivity"
+            android:name=".Addresses.view.MapActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity
             android:name=".Addresses.view.AddAddressActivity"
