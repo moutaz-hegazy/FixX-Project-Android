@@ -359,16 +359,16 @@ class AddAddressActivity : AppCompatActivity() {
         val addressName = add_address_activity_address_name_txt.text.toString()
 
         addedAddress = addressName + "%" + add_address_activity_city_spinner.selectedItem.toString() + "," +
-                add_address_activity_area_spinner.selectedItem.toString()
+                add_address_activity_area_spinner.selectedItem.toString()+"/"
 
         if(!add_address_activity_street_txt.text.isNullOrEmpty()){
-            addedAddress += ": ${add_address_activity_street_txt.text}"
+            addedAddress += "street: ${add_address_activity_street_txt.text}"
         }
         if(!add_address_activity_building_number_txt.text.isNullOrEmpty()){
-            addedAddress += ", ${add_address_activity_building_number_txt.text}"
+            addedAddress += ",building: ${add_address_activity_building_number_txt.text}"
         }
         if(!add_address_activity_floor_txt.text.isNullOrEmpty()){
-            addedAddress += ", ${add_address_activity_floor_txt.text}"
+            addedAddress += ",floor: ${add_address_activity_floor_txt.text}"
         }
         if(!add_address_activity_notes_txt.text.isNullOrEmpty()){
             addedAddress += ", ${add_address_activity_notes_txt.text}"
