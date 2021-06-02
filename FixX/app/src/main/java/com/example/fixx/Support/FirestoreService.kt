@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
@@ -29,6 +30,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import java.lang.reflect.Field
 
 import java.util.*
 import kotlin.collections.ArrayList
@@ -537,13 +539,25 @@ object FirestoreService {
         collectionName: String,
         fieldName: String,
         element: Any,
-        documentId: String
+        documentId: String,
+        onSuccessHandler: () -> Unit = {},
+        onFailHandler: () -> Unit = {}
     ) {
         Log.i("TAG", "updateJob: start updating $element")
         db.collection(collectionName).document(documentId)
             .update(fieldName, element)
-            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
-            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+            .addOnSuccessListener { onSuccessHandler() }
+            .addOnFailureListener { e -> Log.i("TAG", "update: error $e"); onFailHandler() }
+    }
+
+    fun updateUserLocations(loc : String, onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
+        db.collection("Users").document(auth.uid ?: "")
+            .update("locations", FieldValue.arrayUnion(loc))
+            .addOnSuccessListener {
+                onSuccessHandler()
+            }.addOnFailureListener {
+                onFailHandler()
+            }
     }
 
     fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String) {

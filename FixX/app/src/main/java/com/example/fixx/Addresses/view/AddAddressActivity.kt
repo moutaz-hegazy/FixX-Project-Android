@@ -1,4 +1,4 @@
-package com.example.fixx.Addresses
+package com.example.fixx.Addresses.view
 
 import android.app.Activity
 import android.content.Intent
@@ -12,6 +12,8 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import com.example.fixx.Addresses.viewmodel.AddAddressViewmodel
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.google.android.gms.common.ConnectionResult
@@ -22,8 +24,7 @@ import kotlinx.android.synthetic.main.activity_add_address.*
 class AddAddressActivity : AppCompatActivity() {
 
 
-    var addedAddress = " "
-
+    private lateinit var addedAddress : String
     val cities = mutableListOf<String>()
     var area = mutableListOf<String>()
     val cairoArea = mutableListOf<String>()
@@ -154,7 +155,6 @@ class AddAddressActivity : AppCompatActivity() {
             } else {
 
                 sendDataBackToPreviousActivity()
-                finish()
             }
         }
     }
@@ -321,17 +321,35 @@ class AddAddressActivity : AppCompatActivity() {
     }
 
     private fun sendDataBackToPreviousActivity() {
-        addedAddress =
-            add_address_activity_address_name_txt.text.toString() + "," + add_address_activity_city_spinner.selectedItem.toString() + "," +
-                    add_address_activity_area_spinner.selectedItem.toString() + ":," + add_address_activity_street_txt.text + "," +
-                    add_address_activity_building_number_txt.text + "," +
-                    add_address_activity_floor_txt.text + "," +
-                    add_address_activity_notes_txt.text
+        val addressName = add_address_activity_address_name_txt.text.toString()
 
-        val resultIntent = Intent().apply {
-            putExtra(Constants.TRANS_ADDRESS, addedAddress)
+        addedAddress = addressName + "%" + add_address_activity_city_spinner.selectedItem.toString() + "," +
+                add_address_activity_area_spinner.selectedItem.toString()
+
+        if(!add_address_activity_street_txt.text.isNullOrEmpty()){
+            addedAddress += ": ${add_address_activity_street_txt.text}"
         }
-        setResult(Activity.RESULT_OK, resultIntent)
+        if(!add_address_activity_building_number_txt.text.isNullOrEmpty()){
+            addedAddress += ", ${add_address_activity_building_number_txt.text}"
+        }
+        if(!add_address_activity_floor_txt.text.isNullOrEmpty()){
+            addedAddress += ", ${add_address_activity_floor_txt.text}"
+        }
+        if(!add_address_activity_notes_txt.text.isNullOrEmpty()){
+            addedAddress += ", ${add_address_activity_notes_txt.text}"
+        }
+
+        AddAddressViewmodel(addedAddress,onSuccessBinding ={
+            Intent().apply {
+                putExtra(Constants.TRANS_ADDRESS, addedAddress)
+            }.also {
+                setResult(Activity.RESULT_OK, it)
+                finish()
+            }
+
+        },onFailBinding = {
+            Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT)
+        })
     }
 
 

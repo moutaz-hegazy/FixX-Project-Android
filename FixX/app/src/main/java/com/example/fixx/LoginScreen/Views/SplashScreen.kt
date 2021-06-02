@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
@@ -42,7 +43,9 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun checkLogin(): Boolean {
-        if(FirestoreService.auth.currentUser != null && FirestoreService.auth.currentUser?.email != "defaultaccount@default.com"){
+        if(FirestoreService.auth.currentUser != null
+            && FirestoreService.auth.currentUser?.email != "defaultaccount@default.com"){
+            Log.i("TAG", "checkLogin: HEERREE <<<<<<<<<<<<<<< ${FirestoreService.auth?.currentUser?.email} ")
             FirestoreService.fetchUserFromDB {
                     person ->
                 NavigationBarActivity.USER_OBJECT = person

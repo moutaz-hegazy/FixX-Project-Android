@@ -2,13 +2,11 @@ package com.example.fixx.Addresses.view
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fixx.Addresses.MyAddresses
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.address_row.view.*
 
@@ -19,8 +17,9 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
 
     inner class AddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener,
         View.OnLongClickListener {
-        val address = itemView.address_row_address_lbl!!
-        val optionMenu = itemView.address_row_options_menu!!
+        val titleLbl = itemView.address_row_addressName_lbl
+        val addressLbl = itemView.address_row_address_lbl!!
+        val optionMenuBtn = itemView.address_row_menu_btn!!
 
         init {
             itemView.setOnClickListener(this)
@@ -58,16 +57,21 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
 
     override fun onBindViewHolder(holder: AddressViewHolder, position: Int) {
         val currentItem = addressList[position]
-        holder.address.text = currentItem
-        holder.optionMenu.apply {
+        val title = currentItem.substringBefore("%")
+        if(title.isNotEmpty()){
+            holder.titleLbl.apply {
+                visibility = View.VISIBLE
+                text = title
+            }
+        }
+        holder.addressLbl.text = currentItem.substringAfter("%")
+        holder.optionMenuBtn.apply {
 
                 setOnClickListener{
-                    showPopupMenu(holder.optionMenu,position)
+                    showPopupMenu(holder.optionMenuBtn,position)
 
             }
         }
-
-
     }
 
     override fun getItemCount() = addressList.size
