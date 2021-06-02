@@ -40,6 +40,7 @@ class TecnicianAddressFragment : Fragment() {
         cairoArea.addAll(
             arrayOf(
                 getString(R.string.Area),
+                getString(R.string.Riyadah),
                 getString(R.string.AlShrouk),
                 getString(R.string.firstSettlement),
                 getString(R.string.FifthSettlement),

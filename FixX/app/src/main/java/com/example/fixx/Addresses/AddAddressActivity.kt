@@ -80,6 +80,7 @@ class AddAddressActivity : AppCompatActivity() {
         alexArea.addAll(
             arrayOf(
                 getString(R.string.Area),
+                getString(R.string.Riyadah),
                 getString(R.string.MoharamBek),
                 getString(R.string.AbuQir),
                 getString(R.string.Montaza),
@@ -181,12 +182,12 @@ class AddAddressActivity : AppCompatActivity() {
                     add_address_activity_city_spinner.setSelection(0, true)
                 }
 
-                if(cityFound && add_address_activity_city_spinner.selectedItem == getString(R.string.Cairo)){
+                if (cityFound && add_address_activity_city_spinner.selectedItem == getString(R.string.Cairo)) {
                     for (iterator in cairoArea.indices) {
-                        if (address!![1].contains(
+                        if (address!![0].contains(
                                 cairoArea[iterator],
                                 ignoreCase = true
-                            ) || address!![0].contains(cairoArea[iterator], ignoreCase = true)
+                            )
                         ) {
                             add_address_activity_area_spinner.post(Runnable {
                                 add_address_activity_area_spinner.setSelection(
@@ -196,13 +197,29 @@ class AddAddressActivity : AppCompatActivity() {
                             areaFound = true
                         }
                     }
-                }
-                else if (cityFound && add_address_activity_city_spinner.selectedItem == getString(R.string.Alexandria)){
+
+                    if (!areaFound) {
+                        for (iterator in cairoArea.indices) {
+                            if (address!![1].contains(
+                                    cairoArea[iterator],
+                                    ignoreCase = true
+                                )
+                            ) {
+                                add_address_activity_area_spinner.post(Runnable {
+                                    add_address_activity_area_spinner.setSelection(
+                                        iterator
+                                    )
+                                })
+                                areaFound = true
+                            }
+                        }
+                    }
+                } else if (cityFound && add_address_activity_city_spinner.selectedItem == getString(
+                        R.string.Alexandria
+                    )
+                ) {
                     for (iterator in alexArea.indices) {
-                        if (address!![1].contains(
-                                alexArea[iterator],
-                                ignoreCase = true
-                            ) || address!![0].contains(alexArea[iterator], ignoreCase = true)
+                        if (address!![0].contains(alexArea[iterator], ignoreCase = true)
                         ) {
                             add_address_activity_area_spinner.post(Runnable {
                                 add_address_activity_area_spinner.setSelection(
@@ -212,6 +229,24 @@ class AddAddressActivity : AppCompatActivity() {
                             areaFound = true
                         }
                     }
+
+                    if (!areaFound) {
+                        for (iterator in alexArea.indices) {
+                            if (address!![1].contains(
+                                    alexArea[iterator],
+                                    ignoreCase = true
+                                )
+                            ) {
+                                add_address_activity_area_spinner.post(Runnable {
+                                    add_address_activity_area_spinner.setSelection(
+                                        iterator
+                                    )
+                                })
+                                areaFound = true
+                            }
+                        }
+                    }
+
                 }
 
 
