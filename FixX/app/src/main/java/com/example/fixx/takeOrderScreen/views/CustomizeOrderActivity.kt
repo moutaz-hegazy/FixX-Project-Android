@@ -220,8 +220,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             description = binding.customizeOrderDescriptionTxt.text.toString()
             fromTime = selectedFromTime
             toTime = selectedToTime
-            var parsedJobLocation = location?.substringBefore(":")
-            location = parsedJobLocation
+            location = location
         }
     }
 

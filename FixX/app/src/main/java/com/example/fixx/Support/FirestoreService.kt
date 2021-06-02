@@ -497,7 +497,8 @@ object FirestoreService {
         var techniciansList = mutableListOf<Technician>()
 
         val docRef = db.collection("Users").whereEqualTo("accountType", "Technician")
-            .whereEqualTo("jobTitle", job).whereArrayContains("workLocations", location)
+            .whereEqualTo("jobTitle", job).whereArrayContains("workLocations",
+                location.substringAfter("%").substringBefore("/"))
         docRef.get().addOnSuccessListener { documentSnapshot ->
             for (document in documentSnapshot) {
 
