@@ -23,8 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fixx.Addresses.AddAddressActivity
-import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
+import com.example.fixx.Addresses.view.AddAddressActivity
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService

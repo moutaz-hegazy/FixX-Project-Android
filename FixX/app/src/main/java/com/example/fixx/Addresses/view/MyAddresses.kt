@@ -1,4 +1,4 @@
-package com.example.fixx.Addresses
+package com.example.fixx.Addresses.view
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -6,11 +6,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fixx.Addresses.view.RecycleAdapter
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.activity_my_adresses.*
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_my_adresses.*
 class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
 
     var myAddresses = mutableListOf<String>()
-    private val adapter = RecycleAdapter(myAddresses,this)
+    private lateinit var adapter : RecycleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +30,12 @@ class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
             title = getString(R.string.myAddressesTitle)
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
+
+        USER_OBJECT?.locations?.let{
+            myAddresses.addAll(it)
+        }
+
+        adapter = RecycleAdapter(myAddresses,this)
 
         showAddressList()
 
@@ -40,9 +47,13 @@ class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i("TAG", "onActivityResult: >>>>>>> 1")
         if (requestCode == Constants.START_ADDRESS_ACTIVITY_REQUEST_CODE) {
+            Log.i("TAG", "onActivityResult: >>>>>>> 2")
             if (resultCode == Activity.RESULT_OK) {
+                Log.i("TAG", "onActivityResult: >>>>>>> 3")
                 val address = data!!.getStringExtra(Constants.TRANS_ADDRESS)
+
                 myAddresses.add(address!!.toString())
 
                showAddressList()

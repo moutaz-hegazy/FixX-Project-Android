@@ -1,4 +1,4 @@
-package com.example.fixx.Addresses
+package com.example.fixx.Addresses.view
 
 import android.Manifest
 import android.app.Activity
@@ -252,10 +252,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         try {
             addressList = geocoder.getFromLocationName(searchInput, 1) as ArrayList<Address>
             if (addressList.size > 0) {
-                val address = addressList.get(0)
-//                Toast.makeText(baseContext, address.toString(),
-//                        Toast.LENGTH_SHORT).show()
-
+                val address = addressList[0]
                 moveCamera(LatLng(address.latitude,address.longitude),DEFAULT_ZOOM,address.getAddressLine(0))
             }
         } catch (e: IOException) {
@@ -323,9 +320,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
      private fun getGovernorateName(lat: Double, lon: Double):String{
-        var governorate:String = ""
+        var governorate = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-       var address = geoCoder.getFromLocation(lat,lon,3)
+        var address = geoCoder.getFromLocation(lat,lon,3)
 
          if (address != null){
              if (address[0].adminArea != null){
@@ -339,7 +336,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getCountryName(lat: Double, lon: Double):String{
         var countryName = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-       var address = geoCoder.getFromLocation(lat,lon,3)
+        var address = geoCoder.getFromLocation(lat,lon,3)
 
         if(address != null){
             if(address[0].countryName != null){
