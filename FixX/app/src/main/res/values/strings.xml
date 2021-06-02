@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id" translatable="false">408034756850919</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb408034756850919</string>
+
     <string name="app_name">FixX</string>
     <string name="google_maps_api_key">AIzaSyAwP8PF38zhUwteoi3kIZVolt0HCndTktk</string>
     <string name="enterLocation">select location</string>
