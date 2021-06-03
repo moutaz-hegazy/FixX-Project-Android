@@ -409,10 +409,19 @@ object FirestoreService {
                     queryResult->
                 queryResult.forEach {   document ->
                     val job = document.toObject<Job>()
-                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
                     retrievedJobs.add(job)
                 }
-                onSuccessHandler(retrievedJobs)
+                db.collection("Jobs").whereEqualTo("privateRequest", true )
+                    .whereArrayContains("bidders", auth.currentUser?.uid!!)
+                    .get().addOnSuccessListener { result ->
+                        result.forEach {   document ->
+                            val job = document.toObject<Job>()
+                            retrievedJobs.add(job)
+                        }
+                        onSuccessHandler(retrievedJobs)
+                    }.addOnFailureListener {
+                        onSuccessHandler(retrievedJobs)
+                    }
             }.addOnFailureListener {
                 onFailureHandler()
             }

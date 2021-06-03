@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.FirebaseService
@@ -27,15 +28,15 @@ class SplashScreen : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val languageToLoad = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
+        CURRENT_LANGUAGE = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
             .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
-        val locale = Locale(languageToLoad)
+        val locale = Locale(CURRENT_LANGUAGE)
         Locale.setDefault(locale)
         val config = Configuration()
         config.locale = locale
-        applicationContext.getResources()?.updateConfiguration(
+        applicationContext.resources?.updateConfiguration(
             config,
-            applicationContext.getResources()!!.getDisplayMetrics()
+            applicationContext.resources!!.displayMetrics
         )
 
         var appLogo = findViewById<ImageView>(R.id.appLogo)
@@ -45,18 +46,10 @@ class SplashScreen : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-
-        Handler().postDelayed({
-            val intent = if (checkLogin())
-                Intent(this, NavigationBarActivity::class.java)
-            else
-                Intent(this, RegistrationActivity::class.java)
-            startActivity(intent)
-            finish()
-        }, 3000)
+        checkLogin()
     }
 
-    private fun checkLogin(): Boolean {
+    private fun checkLogin(){
         if(FirestoreService.auth.currentUser != null
             && FirestoreService.auth.currentUser?.email != "defaultaccount@default.com"){
             Log.i("TAG", "checkLogin: HEERREE <<<<<<<<<<<<<<< ${FirestoreService.auth?.currentUser?.email} ")
@@ -84,13 +77,18 @@ class SplashScreen : AppCompatActivity() {
 //                    }.addOnFailureListener {
 //                        Log.i("TAG", "checkLogin: FALIURE <<<<<<<<<<<<<<< "+ it.localizedMessage)
 //                    }
+                Intent(applicationContext,NavigationBarActivity::class.java).also {
+                    startActivity(it)
+                    finish()
+                }
             }
-            return true
         }else{
-
-
-            return false
+            Handler().postDelayed({
+                Intent(this, RegistrationActivity::class.java).also {
+                    startActivity(it)
+                    finish()
+                }
+            }, 1500)
         }
-
     }
 }

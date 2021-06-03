@@ -27,6 +27,7 @@
         android:layout_height="78dp"
         android:background="@drawable/edit_txt_border"
         app:tabIndicatorColor="#1F37BC"
+        android:layoutDirection="ltr"
         app:tabIndicatorHeight="5dp"
         app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium"
         app:tabTextColor="@color/blue" />

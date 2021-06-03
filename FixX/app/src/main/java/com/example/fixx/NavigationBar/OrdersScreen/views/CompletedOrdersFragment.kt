@@ -30,18 +30,18 @@ class CompletedOrdersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val job1 = Job("","Painter","Alexandria,elmandaraQebly,20th st",Job.JobStatus.OnRequest).apply {
-            date = "13-june-2021"
-        }
-        val job2 = Job("","Parquet","Alexandria,elmandaraQebly,20th st",Job.JobStatus.Accepted).apply {
-            date = "15-june-2021"
-            price = 200
-        }
-        val job3 = Job("","Electrician","Alexandria,elmandaraQebly,20th st",Job.JobStatus.Accepted).apply {
-            date = "10-june-2021"
-            price = 350
-        }
-        jobs.addAll(arrayOf(job1,job2,job3))
+//        val job1 = Job("","Painter","Alexandria,elmandaraQebly,20th st",Job.JobStatus.OnRequest).apply {
+//            date = "13-june-2021"
+//        }
+//        val job2 = Job("","Parquet","Alexandria,elmandaraQebly,20th st",Job.JobStatus.Accepted).apply {
+//            date = "15-june-2021"
+//            price = 200
+//        }
+//        val job3 = Job("","Electrician","Alexandria,elmandaraQebly,20th st",Job.JobStatus.Accepted).apply {
+//            date = "10-june-2021"
+//            price = 350
+//        }
+//        jobs.addAll(arrayOf(job1,job2,job3))
 
         binding.completedRecycler.apply {
             layoutManager = LinearLayoutManager(context)

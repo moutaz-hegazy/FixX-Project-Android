@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.Addresses.view.AddAddressActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
@@ -90,7 +91,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         setJobType(serviceName)
         //Action bar configuration.
         supportActionBar?.apply {
-            title = "${getString(serviceName)} ${getString(R.string.Request)}"
+            title = if(CURRENT_LANGUAGE == "en") {
+                "${getString(serviceName)} ${getString(R.string.Request)}"
+            } else {
+                "${getString(R.string.Request)} ${getString(serviceName)}"
+            }
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
         //-----------------------------------------------------------

@@ -311,4 +311,6 @@
     <string name="Request">Request</string>
     <string name="Home">Home</string>
     <string name="Settings">Settings</string>
+    <string name="OrderLoadingFailed">Failed to load your requests.</string>
+    <string name="JobsLoadingFailed">Failed to load your jobs.</string>
 </resources>

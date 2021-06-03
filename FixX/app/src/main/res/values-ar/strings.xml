@@ -298,4 +298,6 @@
     <string name="PasswordUpdateFail">فشل فى تحديث كلمة السر.</string>
     <string name="WorkLocations">أماكن العمل</string>
     <string name="Request">طلب</string>
+    <string name="OrderLoadingFailed">فشل فى تحميل طلباتك</string>
+    <string name="JobsLoadingFailed">فشل فى تحميل قائمة الطلبات</string>
 </resources>
