@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import com.example.fixx.Addresses.view.MySpinnerAdapter
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.fragment_pick_job.*
 
@@ -19,6 +19,7 @@ class PickJob : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        jobs.add(getString(R.string.Job))
         jobs.add(getString(R.string.Plumber))
         jobs.add(getString(R.string.Painter))
         jobs.add(getString(R.string.Electrician))
@@ -63,7 +64,7 @@ class PickJob : Fragment() {
     }
 
     fun setJobSpinner(){
-        pick_job_fragment_job_spinner.adapter = ArrayAdapter<String>(
+        pick_job_fragment_job_spinner.adapter = MySpinnerAdapter<String>(
             requireContext(), android.R.layout.simple_spinner_dropdown_item,
             jobs
         ).also { adapter ->

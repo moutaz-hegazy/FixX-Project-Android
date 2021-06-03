@@ -12,7 +12,6 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import com.example.fixx.Addresses.viewmodel.AddAddressViewmodel
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
@@ -254,7 +253,7 @@ class AddAddressActivity : AppCompatActivity() {
 
 
     private fun setAreaSpinner() {
-        add_address_activity_area_spinner.adapter = ArrayAdapter<String>(
+        add_address_activity_area_spinner.adapter = MySpinnerAdapter<String>(
             this, android.R.layout.simple_spinner_dropdown_item,
             area
         ).also { adapter ->
@@ -290,7 +289,7 @@ class AddAddressActivity : AppCompatActivity() {
     }
 
     private fun setCitySpinner() {
-        add_address_activity_city_spinner.adapter = ArrayAdapter<String>(
+        add_address_activity_city_spinner.adapter = MySpinnerAdapter<String>(
             this, android.R.layout.simple_spinner_dropdown_item,
             cities
         ).also { adapter ->

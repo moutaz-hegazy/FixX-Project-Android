@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.fixx.Addresses.view.MySpinnerAdapter
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.fragment_tecnician_address.*
 import kotlinx.android.synthetic.main.fragment_tecnician_address.technician_address_fragment_recycler_view
@@ -163,7 +163,7 @@ class TecnicianAddressFragment : Fragment() {
 
     private fun setAreaSpinner() {
 
-        pick_address_fragment_area_spinner.adapter = ArrayAdapter<String>(
+        pick_address_fragment_area_spinner.adapter = MySpinnerAdapter<String>(
             requireContext(), android.R.layout.simple_spinner_dropdown_item,
             area
         ).also { adapter ->
@@ -198,7 +198,7 @@ class TecnicianAddressFragment : Fragment() {
     }
 
     private fun setCitySpinner() {
-        pick_address_fragment_city_spinner.adapter = ArrayAdapter<String>(
+        pick_address_fragment_city_spinner.adapter = MySpinnerAdapter<String>(
             requireContext(), android.R.layout.simple_spinner_dropdown_item,
             cities
         ).also { adapter ->
