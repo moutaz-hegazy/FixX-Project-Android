@@ -2,8 +2,6 @@ package com.example.project.bottom_navigation_fragments
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,14 +16,7 @@ import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJEC
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.NavigationBar.viewmodels.SettingsViewmodel
-import androidx.fragment.app.FragmentTransaction
-import com.example.fixx.Addresses.MyAddresses
-import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.LoginScreen.Views.SplashScreen
-import com.example.fixx.NavigationBar.NavigationBarActivity
-import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
-import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
-import com.example.fixx.NavigationBar.notification.NotificationFragment
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
@@ -33,7 +24,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.bottom_sheet_language.view.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
-import java.util.*
 
 
 class SettingsFragment : Fragment() {
@@ -59,23 +49,34 @@ class SettingsFragment : Fragment() {
                 btnsheet.bottom_sheet_language_english.setOnClickListener {
                     val languagePreferences = context?.getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,
                         Context.MODE_PRIVATE)
-                    languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE,"en")?.apply()
-                    dialog.dismiss()
 
-                    val refresh = Intent(context,SplashScreen::class.java)
-                    startActivity(refresh)
-                    activity?.finish()
+                    val currentLanguage = languagePreferences?.getString(Constants.CURRENT_LANGUAGE,"en") ?: "en"
+                    if(currentLanguage != "en") {
+                        languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE, "en")
+                            ?.apply()
+                        dialog.dismiss()
+
+                        val refresh = Intent(context, SplashScreen::class.java)
+                        startActivity(refresh)
+                        activity?.finish()
+                    }
+                    dialog.dismiss()
                 }
 
                 btnsheet.bottom_sheet_language_arabic.setOnClickListener {
                     val languagePreferences = context?.getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,
                         Context.MODE_PRIVATE)
-                    languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE,"ar")?.apply()
-                    dialog.dismiss()
+                    val currentLanguage = languagePreferences?.getString(Constants.CURRENT_LANGUAGE,"en") ?: "en"
+                    if(currentLanguage != "ar") {
+                        languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE, "ar")
+                            ?.apply()
+                        dialog.dismiss()
 
-                    val refresh = Intent(context,SplashScreen::class.java)
-                    startActivity(refresh)
-                    activity?.finish()
+                        val refresh = Intent(context, SplashScreen::class.java)
+                        startActivity(refresh)
+                        activity?.finish()
+                    }
+                    dialog.dismiss()
                 }
                 dialog.show()
             }
