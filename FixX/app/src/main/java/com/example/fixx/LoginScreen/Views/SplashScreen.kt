@@ -13,6 +13,7 @@ import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.FirebaseService
+import com.example.fixx.constants.Constants
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -25,14 +26,15 @@ class SplashScreen : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val languageToLoad = "ar" // your language
+        val languageToLoad = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
+            .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
         val locale = Locale(languageToLoad)
         Locale.setDefault(locale)
         val config = Configuration()
         config.locale = locale
-        this?.getResources()?.updateConfiguration(
+        applicationContext.getResources()?.updateConfiguration(
             config,
-            this?.getResources()!!.getDisplayMetrics()
+            applicationContext.getResources()!!.getDisplayMetrics()
         )
 
         var appLogo = findViewById<ImageView>(R.id.appLogo)
