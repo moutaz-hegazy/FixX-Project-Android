@@ -29,7 +29,8 @@
         <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".BaseActivity" />
         <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity" />
-        <activity android:name=".techOrderDetailsScreen.views.TechViewOrderScreen" />
+        <activity android:name=".techOrderDetailsScreen.views.TechViewOrderScreen"
+            android:windowSoftInputMode="adjustPan"/>
 
         <service
             android:name=".Support.FirebaseService"
