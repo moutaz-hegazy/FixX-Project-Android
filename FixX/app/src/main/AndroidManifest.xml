@@ -26,9 +26,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity">
-
-        </activity>
+        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity" />
         <activity android:name=".techOrderDetailsScreen.views.TechViewOrderScreen" />
 
         <service
@@ -40,7 +40,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".jobs.JobsActivity"/>
+        <activity android:name=".jobs.JobsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.TermsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
@@ -71,16 +71,13 @@
         </activity>
         <activity
             android:name=".Addresses.view.MapActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".Addresses.view.AddAddressActivity"
             android:label="Add Address" />
         <activity android:name=".MainActivity" />
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" />
-        <activity android:name=".Addresses.view.MyAddresses" />
-        <!-- added for maps -->
+        <activity android:name=".Addresses.view.MyAddresses" /> <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -95,6 +92,10 @@
         <activity android:name=".LoginScreen.Views.RegistrationActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".HomeActivity" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
     </application>
 
 </manifest>
