@@ -6,6 +6,7 @@ import com.example.fixx.R
 sealed class Constants {
 
     companion object{
+        const val START_WORK_ADDRESS_ACTIVITY_REQUEST_CODE = 400
         const val cameraPickerRequestCode = 1
         const val galleryPickerRequestCode = 2
         const val serviceName = "serviceName"

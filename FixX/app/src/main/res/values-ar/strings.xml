@@ -199,4 +199,7 @@
     <string name="Delete">حذف</string>
 
     <string name="Job">وظيفة</string>
+
+    <string name="myWokAddressesTitle">أماكن العمل الخاصة بى</string>
+    <string name="addWorkAddress">أضف مكان العمل الخاص بك</string>
 </resources>

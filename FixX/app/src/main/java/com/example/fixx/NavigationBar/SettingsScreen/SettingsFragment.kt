@@ -17,6 +17,7 @@ import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.R
+import com.example.fixx.WorkAddresses.view.MyWorkAddresses
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_language.view.*

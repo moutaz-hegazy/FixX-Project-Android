@@ -26,8 +26,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".NavigationBar.notification.NotificationActivity"></activity>
-        <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity"></activity>
+        <activity android:name=".WorkAddresses.view.AddWorkAddress"></activity>
+        <activity android:name=".WorkAddresses.view.MyWorkAddresses" />
+        <activity android:name=".NavigationBar.notification.NotificationActivity" />
+        <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity" />
         <activity android:name=".techOrderDetailsScreen.views.TechViewOrderScreen" />
 
         <service
@@ -70,14 +72,13 @@
         </activity>
         <activity
             android:name=".Addresses.view.MapActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".Addresses.view.AddAddressActivity"
             android:label="Add Address" />
         <activity android:name=".MainActivity" />
         <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" />
-        <activity android:name=".Addresses.view.MyAddresses" />
-        <!-- added for maps -->
+        <activity android:name=".Addresses.view.MyAddresses" /> <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

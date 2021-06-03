@@ -284,8 +284,8 @@
     <string name="Egypt">Eqypt</string>
 
     <string name="Job">Job</string>
-
-
+    <string name="myWokAddressesTitle">My Work Addresses</string>
+    <string name="addWorkAddress">Add Work Address</string>
 
 
 </resources>
