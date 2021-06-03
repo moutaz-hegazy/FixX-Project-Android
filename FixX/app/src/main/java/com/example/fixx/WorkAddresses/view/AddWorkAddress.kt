@@ -1,34 +1,30 @@
-package com.example.fixx.LoginScreen.Views
+package com.example.fixx.WorkAddresses.view
 
+
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.Addresses.view.MySpinnerAdapter
 import com.example.fixx.R
-import com.example.fixx.constants.Constants
-import kotlinx.android.synthetic.main.fragment_tecnician_address.*
-import kotlinx.android.synthetic.main.fragment_tecnician_address.technician_address_fragment_recycler_view
+import kotlinx.android.synthetic.main.activity_add_work_address.*
 
-class TechnicianAddressFragment : Fragment() {
+class AddWorkAddress : AppCompatActivity() {
 
-    var addresses = arrayListOf<String>()
-
-    var cities = mutableListOf<String>()
+    private lateinit var addedAddress: String
+    val cities = mutableListOf<String>()
     var area = mutableListOf<String>()
-    var cairoArea = mutableListOf<String>()
-    var alexArea = mutableListOf<String>()
+    val cairoArea = mutableListOf<String>()
+    val alexArea = mutableListOf<String>()
+
     val emptyArea = arrayOf("")
-
-
-    private val adapter = TechnicianAddressAdapter(addresses)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add_work_address)
 
         cities.addAll(
             arrayOf(
@@ -37,11 +33,9 @@ class TechnicianAddressFragment : Fragment() {
                 getString(R.string.Alexandria)
             )
         )
-
         cairoArea.addAll(
             arrayOf(
                 getString(R.string.Area),
-                getString(R.string.Riyadah),
                 getString(R.string.AlShrouk),
                 getString(R.string.firstSettlement),
                 getString(R.string.FifthSettlement),
@@ -72,9 +66,11 @@ class TechnicianAddressFragment : Fragment() {
             )
         )
 
+
         alexArea.addAll(
             arrayOf(
                 getString(R.string.Area),
+                getString(R.string.Riyadah),
                 getString(R.string.MoharamBek),
                 getString(R.string.AbuQir),
                 getString(R.string.Montaza),
@@ -96,11 +92,11 @@ class TechnicianAddressFragment : Fragment() {
                 getString(R.string.Miami),
                 getString(R.string.SanStifano),
                 getString(R.string.SidiBeshr),
+                getString(R.string.Smouha),
                 getString(R.string.SidiGaber),
                 getString(R.string.Shatebi),
                 getString(R.string.Sporting),
                 getString(R.string.Victoria),
-                getString(R.string.Smouha),
                 getString(R.string.Stanli),
                 getString(R.string.WaborElMaya),
                 getString(R.string.ElHanovil),
@@ -115,73 +111,48 @@ class TechnicianAddressFragment : Fragment() {
             )
         )
 
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tecnician_address, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        supportActionBar?.apply {
+            title = getString(R.string.addWorkAddress)
+            setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
+        }
 
         setCitySpinner()
-        showAddressList()
 
-        pick_address_fragment_add_address_btn.setOnClickListener {
-            if(pick_address_fragment_city_spinner.selectedItem == getString(R.string.City)){
-                Toast.makeText(
-                    context, getString(R.string.selectCity),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }else if (pick_address_fragment_area_spinner.selectedItem == getString(R.string.Area)){
-                Toast.makeText(
-                    context, getString(R.string.selectArea),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }else{
-                addresses.add(pick_address_fragment_city_spinner.selectedItem.toString()+"," + pick_address_fragment_area_spinner.selectedItem.toString())
-                showAddressList()
-                pick_address_fragment_city_spinner.setSelection(0)
-                pick_address_fragment_area_spinner.setSelection(0)
-            }
+        add_work_address_activity_add_address_btn.setOnClickListener {
 
-        }
-
-        pick_address_fragment_next_btn.setOnClickListener {
-            if(addresses.isNotEmpty()){
-                arguments?.putStringArrayList(Constants.TRANS_ADDRESS,addresses)
-                SignUpTabFragment().apply {
-                    this.arguments = this@TechnicianAddressFragment.arguments
-                }.also {
-                    fragmentManager?.beginTransaction()?.replace(R.id.pick_tecnician_address_fragment, it)?.commit()
+            if (add_work_address_activity_area_spinner.selectedItem == getString(R.string.Area) ||
+                add_work_address_activity_city_spinner.selectedItem == getString(R.string.City)
+            ) {
+                if (add_work_address_activity_city_spinner.selectedItem == getString(R.string.City)) {
+                    Toast.makeText(
+                        baseContext, getString(R.string.selectCity),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (add_work_address_activity_area_spinner.selectedItem == getString(R.string.Area)) {
+                    Toast.makeText(
+                        baseContext, getString(R.string.selectArea),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }else{
-                Toast.makeText(context, getString(R.string.AddAddress),Toast.LENGTH_SHORT).show()
+            } else {
+
+                sendDataBackToPreviousActivity()
             }
         }
     }
 
-    private fun showAddressList(){
-        technician_address_fragment_recycler_view.adapter = adapter
-        technician_address_fragment_recycler_view.layoutManager = LinearLayoutManager(context)
-        technician_address_fragment_recycler_view.setHasFixedSize(true)
-    }
 
     private fun setAreaSpinner() {
-
-        pick_address_fragment_area_spinner.adapter = MySpinnerAdapter<String>(
-            requireContext(), android.R.layout.simple_spinner_dropdown_item,
+        add_work_address_activity_area_spinner.adapter = MySpinnerAdapter<String>(
+            this, android.R.layout.simple_spinner_dropdown_item,
             area
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            pick_address_fragment_area_spinner.adapter = adapter
+            add_work_address_activity_area_spinner.adapter = adapter
+
         }
 
-        pick_address_fragment_area_spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+        add_work_address_activity_area_spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
             AdapterView.OnItemSelectedListener {
             override fun onItemClick(
                 parent: AdapterView<*>?,
@@ -207,16 +178,20 @@ class TechnicianAddressFragment : Fragment() {
         }
     }
 
+
     private fun setCitySpinner() {
-        pick_address_fragment_city_spinner.adapter = MySpinnerAdapter<String>(
-            requireContext(), android.R.layout.simple_spinner_dropdown_item,
+        add_work_address_activity_city_spinner.adapter = MySpinnerAdapter<String>(
+            this, android.R.layout.simple_spinner_dropdown_item,
             cities
         ).also { adapter ->
+
+
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            pick_address_fragment_city_spinner.adapter = adapter
+            add_work_address_activity_city_spinner.adapter = adapter
+
         }
 
-        pick_address_fragment_city_spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+        add_work_address_activity_city_spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
             AdapterView.OnItemSelectedListener {
             override fun onItemClick(
                 parent: AdapterView<*>?,
@@ -227,7 +202,7 @@ class TechnicianAddressFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                pick_address_fragment_city_spinner.setSelection(0)
+                add_work_address_activity_city_spinner.setSelection(0)
             }
 
             override fun onItemSelected(
@@ -237,8 +212,9 @@ class TechnicianAddressFragment : Fragment() {
                 id: Long
             ) {
 
-                area = when (pick_address_fragment_city_spinner.selectedItem) {
+                area = when (add_work_address_activity_city_spinner.selectedItem) {
                     getString(R.string.Cairo) -> {
+
                         cairoArea.toMutableList()
 
                     }
@@ -257,5 +233,27 @@ class TechnicianAddressFragment : Fragment() {
 
         }
 
+    }
+
+
+    private fun sendDataBackToPreviousActivity() {
+
+        addedAddress =
+            add_work_address_activity_city_spinner.selectedItem.toString() + "," +
+                    add_work_address_activity_area_spinner.selectedItem.toString() + "/"
+
+
+
+//        AddAddressViewmodel(addedAddress, onSuccessBinding = {
+//            Intent().apply {
+//                putExtra(Constants.TRANS_ADDRESS, addedAddress)
+//            }.also {
+//                setResult(Activity.RESULT_OK, it)
+               finish()
+//            }
+//
+//        }, onFailBinding = {
+//            Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT)
+//        })
     }
 }

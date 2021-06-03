@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_fadingtowhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <Spinner
+            android:paddingTop="30dp"
+            android:id="@+id/add_work_address_activity_city_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autofillHints="ChooseCity"
+            android:prompt="@string/app_name"
+            />
+
+        <Spinner
+            android:id="@+id/add_work_address_activity_area_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_work_address_activity_city_spinner"
+            android:layout_marginTop="10dp"
+            android:autofillHints="ChooseArea"
+            android:prompt="@string/app_name" />
+
+
+
+
+            <TextView
+                android:id="@+id/add_work_address_activity_add_address_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="175dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/button_bg"
+                android:text="@string/addAddressBtn"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:layout_below="@id/add_work_address_activity_area_spinner"
+                />
+
+
+
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

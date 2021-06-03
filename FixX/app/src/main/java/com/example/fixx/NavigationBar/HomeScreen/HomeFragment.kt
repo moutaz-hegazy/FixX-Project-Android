@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ServiceItem
-import com.example.fixx.NavigationBar.notification.NotificationFragment
+import com.example.fixx.NavigationBar.notification.NotificationActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
@@ -58,7 +58,7 @@ class HomeFragment : Fragment(){
         notificationbtn = rootView.findViewById(R.id.homefragment_notification_image_view)
 
         notificationbtn?.setOnClickListener {
-            fragmentManager?.beginTransaction()?.replace(R.id.home_fragment_id, NotificationFragment())?.commit()
+            startActivity(Intent (requireActivity(), NotificationActivity::class.java))
         }
 
        notificationCounter =
