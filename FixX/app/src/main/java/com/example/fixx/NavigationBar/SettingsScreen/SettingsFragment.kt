@@ -2,8 +2,11 @@ package com.example.project.bottom_navigation_fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.fixx.Addresses.view.MyAddresses
 import com.example.fixx.LoginScreen.Views.RegistrationActivity
+import com.example.fixx.LoginScreen.Views.SplashScreen
+import com.example.fixx.MainActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.NavigationBar.viewmodels.SettingsViewmodel
-import com.example.fixx.LoginScreen.Views.SplashScreen
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
@@ -24,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.bottom_sheet_language.view.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import java.util.*
 
 
 class SettingsFragment : Fragment() {
@@ -47,34 +52,52 @@ class SettingsFragment : Fragment() {
                 dialog.setContentView(btnsheet)
 
                 btnsheet.bottom_sheet_language_english.setOnClickListener {
-                    val languagePreferences = context?.getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,
-                        Context.MODE_PRIVATE)
+                    val languagePreferences = context?.getSharedPreferences(
+                        Constants.LANGUAGE_SHARED_PREFERENCES,
+                        Context.MODE_PRIVATE
+                    )
 
-                    val currentLanguage = languagePreferences?.getString(Constants.CURRENT_LANGUAGE,"en") ?: "en"
-                    if(currentLanguage != "en") {
+                    val currentLanguage = languagePreferences?.getString(
+                        Constants.CURRENT_LANGUAGE,
+                        "en"
+                    ) ?: "en"
+                    if (currentLanguage != "en") {
                         languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE, "en")
-                            ?.apply()
+                            ?.commit()
                         dialog.dismiss()
 
-                        val refresh = Intent(context, SplashScreen::class.java)
-                        startActivity(refresh)
-                        activity?.finish()
+                        val packageManager = context!!.packageManager
+                        val intent = packageManager.getLaunchIntentForPackage(context!!.packageName)
+                        val componentName = intent!!.component
+                        val mainIntent = Intent.makeRestartActivityTask(componentName)
+                        context!!.startActivity(mainIntent)
+                        Runtime.getRuntime().exit(0)
+
                     }
                     dialog.dismiss()
                 }
 
                 btnsheet.bottom_sheet_language_arabic.setOnClickListener {
-                    val languagePreferences = context?.getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,
-                        Context.MODE_PRIVATE)
-                    val currentLanguage = languagePreferences?.getString(Constants.CURRENT_LANGUAGE,"en") ?: "en"
-                    if(currentLanguage != "ar") {
+                    val languagePreferences = context?.getSharedPreferences(
+                        Constants.LANGUAGE_SHARED_PREFERENCES,
+                        Context.MODE_PRIVATE
+                    )
+                    val currentLanguage = languagePreferences?.getString(
+                        Constants.CURRENT_LANGUAGE,
+                        "en"
+                    ) ?: "en"
+                    if (currentLanguage != "ar") {
                         languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE, "ar")
-                            ?.apply()
+                            ?.commit()
                         dialog.dismiss()
 
-                        val refresh = Intent(context, SplashScreen::class.java)
-                        startActivity(refresh)
-                        activity?.finish()
+
+                        val packageManager = context!!.packageManager
+                        val intent = packageManager.getLaunchIntentForPackage(context!!.packageName)
+                        val componentName = intent!!.component
+                        val mainIntent = Intent.makeRestartActivityTask(componentName)
+                        context!!.startActivity(mainIntent)
+                        Runtime.getRuntime().exit(0)
                     }
                     dialog.dismiss()
                 }
@@ -93,7 +116,7 @@ class SettingsFragment : Fragment() {
         signOut.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 viewmodel.signoutAccount()
-                val intent = Intent (getActivity(), RegistrationActivity::class.java)
+                val intent = Intent(getActivity(), RegistrationActivity::class.java)
                 getActivity()?.startActivity(intent)
                 activity?.finish()
             }
@@ -135,14 +158,14 @@ class SettingsFragment : Fragment() {
 
     private fun openProfileActivity(){
 
-        val intent = Intent (getActivity(), ProfileActivity::class.java)
+        val intent = Intent(getActivity(), ProfileActivity::class.java)
         getActivity()?.startActivity(intent)
 
     }
 
     fun openHelpActivity(){
 
-        val intent = Intent (getActivity(), HelpActivity::class.java)
+        val intent = Intent(getActivity(), HelpActivity::class.java)
         getActivity()?.startActivity(intent)
 
     }
@@ -150,18 +173,6 @@ class SettingsFragment : Fragment() {
     private fun openAddressesScreen(){
         startActivity(Intent(context, MyAddresses::class.java))
     }
-
-
-//    override fun onBackPressed(): Boolean {
-//        return if (myCondition) {
-//            //action not popBackStack
-//            true
-//        } else {
-//            false
-//        }
-//    }
-
-
 }
 
 

@@ -11,14 +11,7 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:layout_above="@+id/bottom_navigation"
-       >
-
-       <Button
-           android:id="@+id/arenbtn"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="AR EN" />
-   </FrameLayout>
+       />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -29,5 +22,5 @@
         app:itemBackground="@color/purple_500"
         app:itemIconTint="#fff"
         app:itemTextColor="#fff"
-        app:menu="@menu/nav_menu"/>
+        app:menu="@menu/nav_menu" />
 </RelativeLayout>

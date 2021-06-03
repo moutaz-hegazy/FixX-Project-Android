@@ -17,6 +17,7 @@
     <string name="loading">برجاء الانتظار قليلا...</string>
 
 
+    <string name="SignOut">تسجيل الخروج</string>
 
     <string name="Painter">نقاش</string>
     <string name="Plumber">سباك</string>
@@ -278,4 +279,23 @@
     <string name="CancelJob">عمل ملغى</string>
     <string name="Job_Accepted">العمل الخاص بك</string>
     <string name="bidders">أصحاب العطاءات</string>
+    <string name="Home">الرئيسية</string>
+    <string name="Settings">الإعدادات</string>
+
+    <string name="AddAddress">أضف مكان العمل</string>
+    <string name="ImageUploadFailed">فشل فى تحديث الصورة</string>
+    <string name="AddNewName">أدخل اسم جديد</string>
+    <string name="NameUpdateFail">فشل فى تحديث اسم الحساب</string>
+    <string name="AddNewEmail">ادخل الايميل الجديد</string>
+    <string name="EmailUpdateFail">فشل فى تحديث الايميل</string>
+    <string name="EmailExists">هذا الايميل موجود بالفعل.</string>
+    <string name="AddNewPhoneNumber">ادخل رقم هاتف جديد.</string>
+    <string name="PhoneUpdateFail">فشل فى تحديث رقم الهاتف.</string>
+    <string name="PhoneExists">هذا الرقم موجود بالفعل.</string>
+    <string name="VerifyPassword">تحقق من كلمة السر.</string>
+    <string name="EnterPassword">أدخل كلمة سر من ستة أحرف</string>
+    <string name="WrongPassword">كلمة السر خاطئة.</string>
+    <string name="PasswordUpdateFail">فشل فى تحديث كلمة السر.</string>
+    <string name="WorkLocations">أماكن العمل</string>
+    <string name="Request">طلب</string>
 </resources>

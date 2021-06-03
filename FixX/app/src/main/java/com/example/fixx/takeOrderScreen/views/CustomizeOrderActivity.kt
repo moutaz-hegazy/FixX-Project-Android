@@ -90,7 +90,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         setJobType(serviceName)
         //Action bar configuration.
         supportActionBar?.apply {
-            title = getString(serviceName) + " Request"
+            title = "${getString(serviceName)} ${getString(R.string.Request)}"
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
         //-----------------------------------------------------------
