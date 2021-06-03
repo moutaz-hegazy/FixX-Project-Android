@@ -109,6 +109,15 @@ class SettingsFragment : Fragment() {
             openProfileActivity()
         }
 
+        if(USER_OBJECT?.accountType == "Technician"){
+            rootView.settings_WorkLocations_layOut.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    // open work locations view.
+                }
+            }
+        }
+
         rootView.settings_addresses_layOut.setOnClickListener {
             openAddressesScreen()
         }

@@ -65,6 +65,22 @@ class ProfileViewmodel (val person : Person){
         }
     }
 
+    fun updatePassword(newpassword: String,oldPassword : String, onSuccessBinding: () -> Unit,onFailBinding: () -> Unit){
+        val credentials = EmailAuthProvider.getCredential(person.email,oldPassword)
+        FirestoreService.auth.currentUser?.reauthenticate(credentials)?.addOnCompleteListener {
+            if(it.isSuccessful){
+                val user = FirebaseAuth.getInstance().currentUser
+                user?.updatePassword(newpassword)?.addOnCompleteListener {
+                    if(it.isSuccessful){
+                        onSuccessBinding()
+                    }else{
+                        onFailBinding()
+                    }
+                }
+            }
+        }
+    }
+
     fun updatePhoneNumber(phone : String, onSuccessBinding: () -> Unit,onFailBinding: (Boolean) -> Unit){
         FirestoreService.checkIfPhoneExists(phone){ exists->
             if(exists){

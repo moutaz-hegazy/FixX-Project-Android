@@ -290,4 +290,6 @@
     <string name="VerifyPassword">Verify your password</string>
     <string name="EnterPassword">password needs to be at least 6 characters.</string>
     <string name="WrongPassword">You entered wrong password.</string>
+    <string name="PasswordUpdateFail">Failed to update your password.</string>
+    <string name="WorkLocations">Work locations</string>
 </resources>

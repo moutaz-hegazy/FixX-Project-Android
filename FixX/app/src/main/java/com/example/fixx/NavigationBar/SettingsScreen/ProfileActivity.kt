@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_edit_email.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_email.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_name.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_name.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_edit_new_password.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_password.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_password.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_phone.*
@@ -71,7 +72,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.profileEditEmailImageButton.setOnClickListener {
-            showBottomSheetEnterPassword()
+            showBottomSheetEnterPassword(){ password ->
+                showBottomSheetEditEmail(password)
+            }
         }
 
         binding.profileEditPhoneImageButton.setOnClickListener {
@@ -79,7 +82,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.profileEditPasswordImageButton.setOnClickListener {
-            showBottomSheetEditPassword()
+            showBottomSheetEnterPassword(){ oldPassword ->
+                changePasswordBottomSheet(oldPassword)
+            }
         }
     }
 
@@ -191,7 +196,7 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun showBottomSheetEnterPassword(){
+    private fun showBottomSheetEnterPassword(onSuccessHanlder : (password: String) -> Unit){
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_password, null)
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet)
@@ -209,7 +214,7 @@ class ProfileActivity : AppCompatActivity() {
                 btnsheet.bottom_sheet_edit_password_next_button.isClickable = false
                 btnsheet.bottom_sheet_edit_password_cancel_button.isClickable = false
                 viewmodel.verifyPassword(password, onSuccessBinding = {
-                    showBottomSheetEditEmail(password)
+                    onSuccessHanlder(password)
                     dialog.dismiss()
                 },onFailBinding = {
                     Toast.makeText(this, getString(R.string.WrongPassword),Toast.LENGTH_SHORT).show()
@@ -294,16 +299,13 @@ class ProfileActivity : AppCompatActivity() {
                     if(repeated){
                         Toast.makeText(applicationContext, getString(R.string.PhoneExists),
                             Toast.LENGTH_LONG).show()
-                        btnsheet.bottom_sheet_edit_phone_edit_text.text.clear()
-                        btnsheet.bottom_sheet_edit_phone_save_button.isClickable = true
-                        btnsheet.bottom_sheet_edit_phone_cancel_button.isClickable = true
                     }else {
                         Toast.makeText(applicationContext, getString(R.string.PhoneUpdateFail),
                             Toast.LENGTH_LONG).show()
-                        btnsheet.bottom_sheet_edit_phone_edit_text.text.clear()
-                        btnsheet.bottom_sheet_edit_phone_save_button.isClickable = true
-                        btnsheet.bottom_sheet_edit_phone_cancel_button.isClickable = true
                     }
+                    btnsheet.bottom_sheet_edit_phone_edit_text.text.clear()
+                    btnsheet.bottom_sheet_edit_phone_save_button.isClickable = true
+                    btnsheet.bottom_sheet_edit_phone_cancel_button.isClickable = true
                 })
             }
         }
@@ -311,30 +313,75 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun showBottomSheetEditPassword() {
-        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_password, null)
+//    private fun showBottomSheetEditPassword() {
+//        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_password, null)
+//
+//        val dialog = BottomSheetDialog(this)
+//
+//        dialog.setContentView(btnsheet)
+//
+//        btnsheet.bottom_sheet_edit_password_cancel_button.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//
+//        btnsheet.bottom_sheet_edit_password_next_button.setOnClickListener {
+//            val password = btnsheet.bottom_sheet_edit_password_edit_text.text.toString()
+//            if(password.isNullOrEmpty() || password.length < 6){
+//                Toast.makeText(this, getString(R.string.EnterPassword),Toast.LENGTH_LONG).show()
+//                btnsheet.bottom_sheet_edit_password_edit_text.text.clear()
+//            }else{
+//                btnsheet.bottom_sheet_edit_password_next_button.isClickable = false
+//                btnsheet.bottom_sheet_edit_password_cancel_button.isClickable = false
+//                viewmodel.verifyPassword(password, onSuccessBinding = {
+//                    changePasswordBottomSheet(password)
+//                    dialog.dismiss()
+//                },onFailBinding = {
+//                    Toast.makeText(this, getString(R.string.WrongPassword),Toast.LENGTH_SHORT).show()
+//                    btnsheet.bottom_sheet_edit_password_edit_text.text.clear()
+//                    btnsheet.bottom_sheet_edit_password_next_button.isClickable = true
+//                    btnsheet.bottom_sheet_edit_password_cancel_button.isClickable = true
+//                })
+//            }
+//        }
+//        dialog.show()
+//
+//    }
 
-        val dialog = BottomSheetDialog(this)
-
-        dialog.setContentView(btnsheet)
-
-        btnsheet.bottom_sheet_edit_password_next_button.setOnClickListener {
-            dialog.dismiss()
-        }
-
-
-        btnsheet.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.show()
-
-    }
-
-    private fun changePasswordBottomSheet(){
+    private fun changePasswordBottomSheet(oldPassword : String){
         val nextbtnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_new_password, null)
         val newDialog = BottomSheetDialog(this)
         newDialog.setContentView(nextbtnsheet)
 
+        nextbtnsheet.bottom_sheet_edit_newpassword_cancel_button.setOnClickListener {
+            newDialog.dismiss()
+        }
+
+        nextbtnsheet.bottom_sheet_edit_newpassword_save_button.setOnClickListener {
+            val newPassword = nextbtnsheet.bottom_sheet_edit_newpassword_edit_text.text.toString()
+            val confirmedPassword = nextbtnsheet.bottom_sheet_edit_reenternewpassword_edit_text.text.toString()
+            if(newPassword.isNullOrEmpty() || newPassword.length < 6){
+                Toast.makeText(this, getString(R.string.EnterPassword),Toast.LENGTH_LONG).show()
+                nextbtnsheet.bottom_sheet_edit_newpassword_edit_text.text.clear()
+                nextbtnsheet.bottom_sheet_edit_reenternewpassword_edit_text.text.clear()
+            }else if(newPassword != confirmedPassword){
+                Toast.makeText(this, getString(R.string.WrongPassword),Toast.LENGTH_LONG).show()
+                nextbtnsheet.bottom_sheet_edit_newpassword_edit_text.text.clear()
+                nextbtnsheet.bottom_sheet_edit_reenternewpassword_edit_text.text.clear()
+            }else{
+                nextbtnsheet.bottom_sheet_edit_newpassword_save_button.isClickable = false
+                nextbtnsheet.bottom_sheet_edit_newpassword_cancel_button.isClickable = false
+                viewmodel.updatePassword(newPassword, oldPassword,
+                    onSuccessBinding = {
+                        newDialog.dismiss()
+                    },onFailBinding = {
+                        Toast.makeText(this, getString(R.string.PasswordUpdateFail),Toast.LENGTH_LONG).show()
+                        nextbtnsheet.bottom_sheet_edit_newpassword_edit_text.text.clear()
+                        nextbtnsheet.bottom_sheet_edit_reenternewpassword_edit_text.text.clear()
+                        nextbtnsheet.bottom_sheet_edit_newpassword_save_button.isClickable = true
+                        nextbtnsheet.bottom_sheet_edit_newpassword_cancel_button.isClickable = true
+                    })
+            }
+        }
         newDialog.show()
     }
 }

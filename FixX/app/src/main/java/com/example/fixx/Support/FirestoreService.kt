@@ -504,7 +504,9 @@ object FirestoreService {
             for (document in documentSnapshot) {
 
                 var t = document.toObject<Technician>()
-                techniciansList.add(t)
+                if(t.uid != auth.uid){
+                    techniciansList.add(t)
+                }
             }
             callback(techniciansList)
             Log.i("TAG1", "searchForTechnicianByJobAndLocation: ALL TECHNICIANS $techniciansList")
