@@ -14,11 +14,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.fixx.Addresses.view.MyAddresses
 import com.example.fixx.LoginScreen.Views.RegistrationActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
+import com.example.fixx.NavigationBar.viewmodels.SettingsViewmodel
 import com.example.fixx.R
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.bottom_sheet_language.view.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import java.util.*
@@ -26,67 +29,25 @@ import java.util.*
 
 class SettingsFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
+    private val viewmodel : SettingsViewmodel by lazy {
+        SettingsViewmodel()
     }
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         var rootView = inflater.inflate(R.layout.fragment_settings, container, false)
-
-//         fragmentManager?.beginTransaction()?.replace(R.id.settings_fragment, HomeFragment())?.addToBackStack("tag" )?.commit()
-
-
-
         val language = rootView.findViewById(R.id.settingsfragment_language_linear_layout) as LinearLayout
         language.setOnClickListener(object : View.OnClickListener {
             @RequiresApi(Build.VERSION_CODES.KITKAT)
             override fun onClick(v: View) {
-
-//                val popupMenu = PopupMenu(getActivity(),settingsfragment_language_linear_layout)
-//
-//                popupMenu.getMenuInflater().inflate(R.menu.language_popup, popupMenu.getMenu())
-//
-//            popupMenu.setOnMenuItemClickListener { menuItem ->
-//
-//                val id = menuItem.itemId
-//
-//               if (id == R.id.language_english) {
-//
-//                   println("english")
-//              } else if (id == R.id.language_arabic) {
-//
-//                    println("arabic")
-//               }
-//
-//               false
-//            }
-//                             popupMenu.show()
                 val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_language, null)
 
                 val dialog = BottomSheetDialog(btnsheet.context)
                 dialog.setContentView(btnsheet)
 
                 btnsheet.bottom_sheet_language_english.setOnClickListener {
-
-//                    val languageToLoad = "en" // your language
-//
-//                    val locale = Locale(languageToLoad)
-//                    Locale.setDefault(locale)
-//                    val config = Configuration()
-//                    config.locale = locale
-//                    context?.getResources()?.updateConfiguration(
-//                        config,
-//                        context?.getResources()!!.getDisplayMetrics()
-//                    )
-
                     val res: Resources = context!!.resources
 
                     val dm: DisplayMetrics = res.getDisplayMetrics()
@@ -96,22 +57,9 @@ class SettingsFragment : Fragment() {
                     res.updateConfiguration(conf, dm)
 
                     dialog.dismiss()
-
-
                 }
 
                 btnsheet.bottom_sheet_language_arabic.setOnClickListener {
-
-//                    val languageToLoad = "ar" // your language
-//
-//                    val locale = Locale(languageToLoad)
-//                    Locale.setDefault(locale)
-//                    val config = Configuration()
-//                    config.locale = locale
-//                    context?.getResources()?.updateConfiguration(
-//                        config,
-//                        context?.getResources()!!.getDisplayMetrics()
-//                    )
                     val res: Resources = context!!.resources
 
                     val dm: DisplayMetrics = res.getDisplayMetrics()
@@ -122,20 +70,12 @@ class SettingsFragment : Fragment() {
                     dialog.dismiss()
 
                 }
-
-
-
                 btnsheet.setOnClickListener {
                     dialog.dismiss()
-
                 }
                 dialog.show()
-
-
             }
         })
-
-
         val help = rootView.findViewById(R.id.settingsfragment_help_linear_layout) as LinearLayout
         help.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
@@ -144,15 +84,26 @@ class SettingsFragment : Fragment() {
             }
         })
 
-        val exit = rootView.findViewById(R.id.settingsfragment_exit_linear_layout) as LinearLayout
-        exit.setOnClickListener(object : View.OnClickListener {
+        val signOut = rootView.findViewById(R.id.settingsfragment_exit_linear_layout) as LinearLayout
+        signOut.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
+                viewmodel.signoutAccount()
                 val intent = Intent (getActivity(), RegistrationActivity::class.java)
                 getActivity()?.startActivity(intent)
-
+                activity?.finish()
             }
         })
 
+        rootView.settingsfragment_profile_name_lbl.text = USER_OBJECT?.name
+
+        if (USER_OBJECT?.profilePicture != null){
+            rootView.settingsfragment_profile_imageView.visibility = View.VISIBLE
+            Picasso.get().load(USER_OBJECT?.profilePicture?.second).into(rootView.settingsfragment_profile_imageView)
+        }
+        else{
+            rootView.settingsfragment_profile_imageText.visibility = View.VISIBLE
+            rootView.settingsfragment_profile_imageText.text = USER_OBJECT?.name?.first()?.toUpperCase().toString()
+        }
 
         rootView.settingsfragment_profile_linear_layout.setOnClickListener {
             openProfileActivity()
@@ -165,18 +116,6 @@ class SettingsFragment : Fragment() {
         rootView.settings_chat_layout.setOnClickListener {
             startActivity(Intent(context, NewMessageActivity::class.java))
         }
-
-//        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//
-////                fragmentManager?.beginTransaction()?.replace(R.id.settings_fragment, HomeFragment())?.commit()
-//                val transaction = activity?.supportFragmentManager?.beginTransaction()
-//                transaction?.replace(R.id.settings_fragment, HomeFragment())
-//                transaction?.commit()
-//
-//            }
-//        })
-
         return rootView
     }
 

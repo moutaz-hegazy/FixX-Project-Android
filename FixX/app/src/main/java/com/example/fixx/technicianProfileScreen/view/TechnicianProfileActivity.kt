@@ -77,7 +77,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
                 image.clipToOutline = true
             }
             image.visibility = View.VISIBLE
-            Picasso.get().load(technicianData?.profilePicture).into(image)
+            Picasso.get().load(technicianData?.profilePicture?.second).into(image)
         }
         else{
             imageLbl.visibility = View.VISIBLE

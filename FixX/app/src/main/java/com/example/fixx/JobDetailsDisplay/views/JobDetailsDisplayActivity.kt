@@ -73,7 +73,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(applicationContext).apply {
                     orientation = RecyclerView.HORIZONTAL
                 }
-                adapter = OrderImagesAdapter(images)
+                adapter = OrderImagesAdapter(images.map { it.second })
             }
         }
         if(!job.description.isNullOrEmpty()){
@@ -143,7 +143,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                     binding.bidderItemTechImageView.clipToOutline = true
                 }
                 binding.bidderItemTechImageView.visibility = View.VISIBLE
-                Picasso.get().load(tech.profilePicture)
+                Picasso.get().load(tech.profilePicture?.second)
                     .into(binding.bidderItemTechImageView)
             } else {
                 binding.bidderItemTechImageView.visibility = View.VISIBLE

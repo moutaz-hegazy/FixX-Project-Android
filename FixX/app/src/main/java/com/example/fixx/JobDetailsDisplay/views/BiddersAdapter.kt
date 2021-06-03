@@ -38,7 +38,7 @@ class JobDetailsBiddersAdapter(val data : List<String>, val prices : Map<String,
                     holder.binding.bidderItemTechImageView.clipToOutline = true
                 }
                 holder.binding.bidderItemTechImageView.visibility = View.VISIBLE
-                Picasso.get().load(tech.profilePicture).into( holder.binding.bidderItemTechImageView)
+                Picasso.get().load(tech.profilePicture?.second).into( holder.binding.bidderItemTechImageView)
             } else{
                 holder.binding.bidderItemTechImageView.visibility = View.VISIBLE
                 holder.binding.bidderItemTechImageLbl.text = tech.name.first().toUpperCase().toString()

@@ -10,14 +10,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
+import com.example.fixx.NavigationBar.viewmodels.ProfileViewmodel
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
+import com.example.fixx.databinding.ActivityProfileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_email.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_email.view.*
@@ -28,47 +33,52 @@ import kotlinx.android.synthetic.main.bottom_sheet_edit_password.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_phone.*
 import kotlinx.android.synthetic.main.bottom_sheet_edit_phone.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import kotlinx.android.synthetic.main.fragment_login_tab.*
 import java.io.ByteArrayOutputStream
 
 class ProfileActivity : AppCompatActivity() {
-    var floatingActionButton: FloatingActionButton? = null
+
     var bottomSheet: BottomSheetDialog? = null
     private var imagePath: Uri? = null
     private var imageUri: Uri? = null
+    private lateinit var binding : ActivityProfileBinding
+    private val viewmodel : ProfileViewmodel by lazy {
+        ProfileViewmodel(USER_OBJECT!!)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
 
+        binding.profileNameTextView.text = USER_OBJECT?.name
+        binding.profileEmailTextView.text = USER_OBJECT?.email
+        binding.profilePhoneTextView.text = USER_OBJECT?.phoneNumber
 
-        floatingActionButton = findViewById(R.id.profile_camera_floatingactionbutton)
-        floatingActionButton?.setOnClickListener(object : View.OnClickListener {
+        USER_OBJECT?.profilePicture?.let {
+            Picasso.get().load(it.second).into(binding.profileProfilepictureImageView)
+        }
+        binding.profileCameraFloatingactionbutton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
-
                 showBottomSheetDialog()
             }
-        }
+        })
 
-        )
-
-
-
-
-        profile_edit_name_image_button.setOnClickListener {
+        binding.profileEditNameImageButton.setOnClickListener {
             showBottomSheetEditName()
         }
 
-        profile_edit_email_image_button.setOnClickListener {
-            showBottomSheetEditEmail()
+        binding.profileEditEmailImageButton.setOnClickListener {
+            showBottomSheetEnterPassword()
         }
 
-        profile_edit_phone_image_button.setOnClickListener {
+        binding.profileEditPhoneImageButton.setOnClickListener {
             showBottomSheetEditPhone()
         }
 
-        profile_edit_password_image_button.setOnClickListener {
+        binding.profileEditPasswordImageButton.setOnClickListener {
             showBottomSheetEditPassword()
         }
     }
@@ -89,8 +99,16 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
 
-            image?.let {
-                profile_profilepicture_image_view.setImageBitmap(it)
+            imagePath?.let {
+                viewmodel.updateProfilePic(it,
+                    onSuccessBinding = {    link ->
+                        USER_OBJECT?.profilePicture = link
+                        image?.let {
+                            profile_profilepicture_image_view.setImageBitmap(it)
+                        }
+                    },onFailBinding = {
+                        Toast.makeText(this,getString(R.string.ImageUploadFailed),Toast.LENGTH_LONG).show()
+                    })
             }
         }
     }
@@ -144,37 +162,105 @@ class ProfileActivity : AppCompatActivity() {
 
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet)
-        btnsheet.setOnClickListener {
+        btnsheet.bottom_sheet_edit_name_cancel_button.setOnClickListener {
             dialog.dismiss()
+        }
 
-            btnsheet.bottom_sheet_edit_name_cancel_button.setOnClickListener {
+        btnsheet.bottom_sheet_edit_name_save_button.setOnClickListener {
+            val text = btnsheet.bottom_sheet_edit_name_edit_text.text.toString()
+            if(text.isNullOrEmpty()){
+                Toast.makeText(this, getString(R.string.AddNewName),Toast.LENGTH_SHORT).show()
+            }else if(text == USER_OBJECT?.name){
                 dialog.dismiss()
-            }
-
-            btnsheet.bottom_sheet_edit_name_save_button.setOnClickListener {
-                dialog.dismiss()
+            }else{
+                btnsheet.bottom_sheet_edit_name_save_button.isClickable = false
+                btnsheet.bottom_sheet_edit_name_cancel_button.isClickable = false
+                viewmodel.updateName(text, onSuccessBinding = {
+                    USER_OBJECT?.name = text
+                    binding.profileNameTextView.text = text
+                    dialog.dismiss()
+                },onFailBinding = {
+                    Toast.makeText(applicationContext, getString(R.string.NameUpdateFail),Toast.LENGTH_LONG).show()
+                    btnsheet.bottom_sheet_edit_name_edit_text.text.clear()
+                    btnsheet.bottom_sheet_edit_name_save_button.isClickable = true
+                    btnsheet.bottom_sheet_edit_name_cancel_button.isClickable = true
+                })
             }
         }
         dialog.show()
 
     }
 
+    private fun showBottomSheetEnterPassword(){
+        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_password, null)
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(btnsheet)
+        btnsheet.bottom_sheet_edit_password_cancel_button.setOnClickListener{
+            dialog.dismiss()
+        }
 
-    private fun showBottomSheetEditEmail() {
+        btnsheet.bottom_sheet_edit_password_lbl.text = getString(R.string.VerifyPassword)
+
+        btnsheet.bottom_sheet_edit_password_next_button.setOnClickListener {
+            val password = btnsheet.bottom_sheet_edit_password_edit_text.text.toString()
+            if(password.isNullOrEmpty() || password.length < 6){
+                Toast.makeText(this, getString(R.string.EnterPassword),Toast.LENGTH_LONG).show()
+            }else{
+                btnsheet.bottom_sheet_edit_password_next_button.isClickable = false
+                btnsheet.bottom_sheet_edit_password_cancel_button.isClickable = false
+                viewmodel.verifyPassword(password, onSuccessBinding = {
+                    showBottomSheetEditEmail(password)
+                    dialog.dismiss()
+                },onFailBinding = {
+                    Toast.makeText(this, getString(R.string.WrongPassword),Toast.LENGTH_SHORT).show()
+                    btnsheet.bottom_sheet_edit_password_edit_text.text.clear()
+                    btnsheet.bottom_sheet_edit_password_next_button.isClickable = true
+                    btnsheet.bottom_sheet_edit_password_cancel_button.isClickable = true
+                })
+            }
+        }
+
+        dialog.show()
+    }
+
+    private fun showBottomSheetEditEmail(password: String) {
 
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_email, null)
 
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet)
-        btnsheet.setOnClickListener {
+        btnsheet.bottom_sheet_edit_email_cancel_button.setOnClickListener {
             dialog.dismiss()
+        }
 
-            btnsheet.bottom_sheet_edit_email_cancel_button.setOnClickListener {
+        btnsheet.bottom_sheet_edit_email_save_button.setOnClickListener {
+            val text = btnsheet.bottom_sheet_edit_email_edit_text.text.toString()
+            if(text.isNullOrEmpty()){
+                Toast.makeText(this, getString(R.string.AddNewEmail),Toast.LENGTH_SHORT).show()
+            }else if(text == USER_OBJECT?.email){
                 dialog.dismiss()
-            }
-
-            btnsheet.bottom_sheet_edit_email_save_button.setOnClickListener {
-                dialog.dismiss()
+            }else{
+                btnsheet.bottom_sheet_edit_email_save_button.isClickable = false
+                btnsheet.bottom_sheet_edit_email_cancel_button.isClickable = false
+                viewmodel.updateEmail(text,password, onSuccessBinding = {
+                    USER_OBJECT?.email = text
+                    binding.profileEmailTextView.text = text
+                    dialog.dismiss()
+                },onFailBinding = { repeated ->
+                    if(repeated){
+                        Toast.makeText(applicationContext, getString(R.string.EmailExists),
+                            Toast.LENGTH_LONG).show()
+                        btnsheet.bottom_sheet_edit_email_edit_text.text.clear()
+                        btnsheet.bottom_sheet_edit_email_save_button.isClickable = true
+                        btnsheet.bottom_sheet_edit_email_cancel_button.isClickable = true
+                    }else {
+                        Toast.makeText(applicationContext, getString(R.string.EmailUpdateFail),
+                            Toast.LENGTH_LONG).show()
+                        btnsheet.bottom_sheet_edit_email_edit_text.text.clear()
+                        btnsheet.bottom_sheet_edit_email_save_button.isClickable = true
+                        btnsheet.bottom_sheet_edit_email_cancel_button.isClickable = true
+                    }
+                })
             }
         }
         dialog.show()
@@ -187,15 +273,38 @@ class ProfileActivity : AppCompatActivity() {
 
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet)
-        btnsheet.setOnClickListener {
+        btnsheet.bottom_sheet_edit_phone_cancel_button.setOnClickListener {
             dialog.dismiss()
+        }
 
-            btnsheet.bottom_sheet_edit_phone_cancel_button.setOnClickListener {
+        btnsheet.bottom_sheet_edit_phone_save_button.setOnClickListener {
+            val text = btnsheet.bottom_sheet_edit_phone_edit_text.text.toString()
+            if(text.isNullOrEmpty()){
+                Toast.makeText(this, getString(R.string.AddNewPhoneNumber),Toast.LENGTH_SHORT).show()
+            }else if(text == USER_OBJECT?.phoneNumber){
                 dialog.dismiss()
-            }
-
-            btnsheet.bottom_sheet_edit_phone_save_button.setOnClickListener {
-                dialog.dismiss()
+            }else{
+                btnsheet.bottom_sheet_edit_phone_save_button.isClickable = false
+                btnsheet.bottom_sheet_edit_phone_cancel_button.isClickable = false
+                viewmodel.updatePhoneNumber(text, onSuccessBinding = {
+                    USER_OBJECT?.phoneNumber = text
+                    binding.profilePhoneTextView.text = text
+                    dialog.dismiss()
+                },onFailBinding = { repeated ->
+                    if(repeated){
+                        Toast.makeText(applicationContext, getString(R.string.PhoneExists),
+                            Toast.LENGTH_LONG).show()
+                        btnsheet.bottom_sheet_edit_phone_edit_text.text.clear()
+                        btnsheet.bottom_sheet_edit_phone_save_button.isClickable = true
+                        btnsheet.bottom_sheet_edit_phone_cancel_button.isClickable = true
+                    }else {
+                        Toast.makeText(applicationContext, getString(R.string.PhoneUpdateFail),
+                            Toast.LENGTH_LONG).show()
+                        btnsheet.bottom_sheet_edit_phone_edit_text.text.clear()
+                        btnsheet.bottom_sheet_edit_phone_save_button.isClickable = true
+                        btnsheet.bottom_sheet_edit_phone_cancel_button.isClickable = true
+                    }
+                })
             }
         }
         dialog.show()
@@ -203,7 +312,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showBottomSheetEditPassword() {
-
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_password, null)
 
         val dialog = BottomSheetDialog(this)
@@ -212,14 +320,6 @@ class ProfileActivity : AppCompatActivity() {
 
         btnsheet.bottom_sheet_edit_password_next_button.setOnClickListener {
             dialog.dismiss()
-            val nextbtnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_new_password, null)
-            val newDialog = BottomSheetDialog(this)
-            newDialog.setContentView(nextbtnsheet)
-            nextbtnsheet.setOnClickListener {
-                newDialog.dismiss()
-            }
-
-            newDialog.show()
         }
 
 
@@ -228,5 +328,13 @@ class ProfileActivity : AppCompatActivity() {
         }
         dialog.show()
 
+    }
+
+    private fun changePasswordBottomSheet(){
+        val nextbtnsheet = layoutInflater.inflate(R.layout.bottom_sheet_edit_new_password, null)
+        val newDialog = BottomSheetDialog(this)
+        newDialog.setContentView(nextbtnsheet)
+
+        newDialog.show()
     }
 }

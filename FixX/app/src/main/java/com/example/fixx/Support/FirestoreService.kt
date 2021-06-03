@@ -27,6 +27,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
@@ -512,13 +513,13 @@ object FirestoreService {
 
     fun uploadImageToStorage(
         filePath: MutableList<Uri>,
-        onSuccessHandler: (MutableList<String>) -> Unit
+        onSuccessHandler: (MutableList<StringPair>) -> Unit
     ) {
-        var imagesPathsList = mutableListOf<String>()
+        var imagesPathsList = mutableListOf<StringPair>()
         if (filePath.isNotEmpty()) {
             for (image in filePath) {
                 var path = "Images/" + UUID.randomUUID().toString()
-                val imageRef = storageRef!!.child(path)
+                val imageRef = storageRef.child(path)
                 imageRef.putFile(image)
                     .continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> {
                         return@Continuation imageRef.downloadUrl
@@ -527,13 +528,17 @@ object FirestoreService {
                         var uri = it.result
                         Log.i("TAG", "uploadJobImage: ${it.result.toString()}")
                         if (uri != null) {
-                            imagesPathsList.add(uri.toString())
+                            imagesPathsList.add(StringPair(path,uri.toString()))
                             onSuccessHandler(imagesPathsList)
                         }
                     }
             }
 
         }
+    }
+
+    fun deleteImage(path : String){
+        storageRef.child(path).delete()
     }
 
     fun updateDocumentField(

@@ -94,7 +94,7 @@ class TechViewOrderScreen : AppCompatActivity() {
                             binding.techViewOrderUserImageView.clipToOutline = true
                         }
                         binding.techViewOrderUserImageView.visibility = View.VISIBLE
-                        Picasso.get().load(person.profilePicture)
+                        Picasso.get().load(person.profilePicture?.second)
                             .into(binding.techViewOrderUserImageView)
                     } else {
                         binding.techViewOrderUserImageLbl.visibility = View.VISIBLE
@@ -139,7 +139,7 @@ class TechViewOrderScreen : AppCompatActivity() {
                         layoutManager = LinearLayoutManager(applicationContext).apply {
                             orientation = RecyclerView.HORIZONTAL
                         }
-                        adapter = OrderImagesAdapter(images)
+                        adapter = OrderImagesAdapter(images.map { it.second })
                     }
                 }
             }, onFailBinding = {

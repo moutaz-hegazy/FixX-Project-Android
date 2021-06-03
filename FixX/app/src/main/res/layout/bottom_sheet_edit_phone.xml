@@ -19,10 +19,11 @@
         android:id="@+id/bottom_sheet_edit_phone_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="40dp"
-        android:hint="your phone"/>
+        android:ems="10"
+        android:hint="your phone"
+        android:inputType="number" />
 
     <LinearLayout
         android:layout_width="match_parent"

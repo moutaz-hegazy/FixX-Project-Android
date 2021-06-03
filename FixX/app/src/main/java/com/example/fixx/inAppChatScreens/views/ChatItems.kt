@@ -18,7 +18,7 @@ class ChatFromItem(val text: String, val user: Person): Item<ViewHolder>() {
         viewHolder.itemView.textview_from_row.text = text
         if (user.profilePicture != null){
             viewHolder.itemView.imageview_chat_from_row.visibility = View.VISIBLE
-            Picasso.get().load(user.profilePicture).into(viewHolder.itemView.imageview_chat_from_row)
+            Picasso.get().load(user.profilePicture?.second).into(viewHolder.itemView.imageview_chat_from_row)
         }
         else{
             viewHolder.itemView.chat_from_profile_lbl.visibility = View.VISIBLE
@@ -37,7 +37,7 @@ class ChatToItem(val text: String, val user: Person): Item<ViewHolder>() {
         viewHolder.itemView.textview_to_row.text = text
         if (user.profilePicture != null){
             viewHolder.itemView.imageview_chat_to_row.visibility = View.VISIBLE
-            Picasso.get().load(user.profilePicture).into(viewHolder.itemView.imageview_chat_to_row)
+            Picasso.get().load(user.profilePicture?.second).into(viewHolder.itemView.imageview_chat_to_row)
         }
         else{
             viewHolder.itemView.chat_to_profile_lbl.visibility = View.VISIBLE
@@ -57,7 +57,7 @@ class UserItem(val user: Person, val channel : String): Item<ViewHolder>() {
         viewHolder.itemView.username_textview_new_message.text = user.name
         if (user.profilePicture != null){
             viewHolder.itemView.imageview_new_message.visibility = View.VISIBLE
-            Picasso.get().load(user.profilePicture).into(viewHolder.itemView.imageview_new_message)
+            Picasso.get().load(user.profilePicture?.second).into(viewHolder.itemView.imageview_new_message)
         }
         else{
             viewHolder.itemView.Users_profile_lbl.visibility = View.VISIBLE

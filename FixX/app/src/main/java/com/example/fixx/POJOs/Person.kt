@@ -9,6 +9,6 @@ abstract class Person(
     var email: String = "",
     var uid : String? = null,
     var token : String? = null,
-    var profilePicture: String? = null,
+    var profilePicture: StringPair? = null,
     var locations: MutableList<String>? = null
 ) : Serializable

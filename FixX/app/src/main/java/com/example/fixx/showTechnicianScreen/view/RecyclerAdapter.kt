@@ -42,7 +42,7 @@ class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Conte
                 image.clipToOutline = true
             }
             image.visibility = View.VISIBLE
-            Picasso.get().load(arrayList[position].profilePicture).into(image)
+            Picasso.get().load(arrayList[position].profilePicture?.second).into(image)
         } else{
             imageLbl.visibility = View.VISIBLE
             imageLbl.text = arrayList[position].name.first().toUpperCase().toString()
