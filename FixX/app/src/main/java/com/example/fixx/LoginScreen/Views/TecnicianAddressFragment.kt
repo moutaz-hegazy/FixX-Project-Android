@@ -108,7 +108,9 @@ class TecnicianAddressFragment : Fragment() {
                 getString(R.string.Mansheya),
                 getString(R.string.AlAttarin),
                 getString(R.string.FirstAlRaml),
-                getString(R.string.MustafaKamel)
+                getString(R.string.MustafaKamel),
+                getString(R.string.EzbetSaad),
+                getString(R.string.Abis)
             )
         )
 
