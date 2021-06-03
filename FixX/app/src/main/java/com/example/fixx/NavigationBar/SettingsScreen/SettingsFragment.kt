@@ -2,20 +2,21 @@ package com.example.project.bottom_navigation_fragments
 
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.fixx.Addresses.MyAddresses
 import com.example.fixx.LoginScreen.Views.RegistrationActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
+import com.example.fixx.NavigationBar.notification.NotificationFragment
 import com.example.fixx.R
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -76,54 +77,78 @@ class SettingsFragment : Fragment() {
 
                 btnsheet.bottom_sheet_language_english.setOnClickListener {
 
-//                    val languageToLoad = "en" // your language
+                    val languageToLoad = "en" // your language
+
+                    val locale = Locale(languageToLoad)
+                    Locale.setDefault(locale)
+                    val config = Configuration()
+                    config.locale = locale
+                    context?.getResources()?.updateConfiguration(
+                        config,
+                        context?.getResources()!!.getDisplayMetrics()
+                    )
+
+//                    val res: Resources = context!!.resources
 //
-//                    val locale = Locale(languageToLoad)
-//                    Locale.setDefault(locale)
-//                    val config = Configuration()
-//                    config.locale = locale
-//                    context?.getResources()?.updateConfiguration(
-//                        config,
-//                        context?.getResources()!!.getDisplayMetrics()
-//                    )
-
-                    val res: Resources = context!!.resources
-
-                    val dm: DisplayMetrics = res.getDisplayMetrics()
-                    val conf: Configuration = res.getConfiguration()
-                    conf.setLocale(Locale("en")) // API 17+ only.
-
-                    res.updateConfiguration(conf, dm)
+//                    val dm: DisplayMetrics = res.getDisplayMetrics()
+//                    val conf: Configuration = res.getConfiguration()
+//                    conf.setLocale(Locale("en")) // API 17+ only.
+//
+//                    res.updateConfiguration(conf, dm)
 
                     dialog.dismiss()
+
+
+//                    val packageManager = context!!.packageManager
+//                    val intent =
+//                        packageManager.getLaunchIntentForPackage(context!!.packageName)
+//                    val componentName = intent!!.component
+//                    val mainIntent = Intent.makeRestartActivityTask(componentName)
+//                    context!!.startActivity(mainIntent)
+//                    Runtime.getRuntime().exit(0)
+
+                    val refresh = Intent(context,NavigationBarActivity::class.java)
+                    startActivity(refresh)
+
 
 
                 }
 
                 btnsheet.bottom_sheet_language_arabic.setOnClickListener {
 
-//                    val languageToLoad = "ar" // your language
+                    val languageToLoad = "ar" // your language
+                    val locale = Locale(languageToLoad)
+                    Locale.setDefault(locale)
+                    val config = Configuration()
+                    config.locale = locale
+                    context?.getResources()?.updateConfiguration(
+                        config,
+                        context?.getResources()!!.getDisplayMetrics()
+                    )
+
+//                    val res: Resources = context!!.resources
 //
-//                    val locale = Locale(languageToLoad)
-//                    Locale.setDefault(locale)
-//                    val config = Configuration()
-//                    config.locale = locale
-//                    context?.getResources()?.updateConfiguration(
-//                        config,
-//                        context?.getResources()!!.getDisplayMetrics()
-//                    )
-                    val res: Resources = context!!.resources
-
-                    val dm: DisplayMetrics = res.getDisplayMetrics()
-                    val conf: Configuration = res.getConfiguration()
-                    conf.setLocale(Locale("ar")) // API 17+ only.
-
-                    res.updateConfiguration(conf, dm)
+//                    val dm: DisplayMetrics = res.getDisplayMetrics()
+//                    val conf: Configuration = res.getConfiguration()
+//                    conf.setLocale(Locale("ar")) // API 17+ only.
+//
+//                    res.updateConfiguration(conf, dm)
                     dialog.dismiss()
+//                    val packageManager = context!!.packageManager
+//                    val intent =
+//                        packageManager.getLaunchIntentForPackage(context!!.packageName)
+//                    val componentName = intent!!.component
+//                    val mainIntent = Intent.makeRestartActivityTask(componentName)
+//                    context!!.startActivity(mainIntent)
+//                    Runtime.getRuntime().exit(0)
+
+
+
+
+                    val refresh = Intent(context,NavigationBarActivity::class.java)
+                    startActivity(refresh)
 
                 }
-
-
 
                 btnsheet.setOnClickListener {
                     dialog.dismiss()

@@ -18,7 +18,6 @@
 
 
 
-
     <string name="Painter">نقاش</string>
     <string name="Plumber">سباك</string>
     <string name="Electrician">كهربائى</string>
@@ -105,6 +104,16 @@
     <string name="no">لا</string>
     <string name="deleteDialogTitle">تأكيد مسح العنوان</string>
     <string name="deleteDialogQuestion">هل تريد مسح هذا العنوان؟</string>
+
+    <string name="exit">خروج</string>
+    <string name="stay">استمرار</string>
+    <string name="leaveDialogTitle">تأكيد مغادرة</string>
+    <string name="leaveDialogMsg">إذا غادرت لن يتم حفظ عنوانك</string>
+    <string name="leaveOrderDialogMsg">إذا غادرت لن يتم تسجيل طلبك</string>
+
+    <string name="deleteImageDialogTitle">تأكيد مسح</string>
+    <string name="deleteImageDialogMsg">هل انت متأكد انك تريد مسح هذه الصورة؟</string>
+
 
     <string name="addressTitleHint">حدد اسماً للعنوان</string>
     <string name="streetHint">شارع</string>

@@ -1,5 +1,6 @@
 package com.example.fixx.NavigationBar
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import com.example.fixx.R
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 
 class NavigationBarActivity : AppCompatActivity() {
@@ -21,6 +23,18 @@ class NavigationBarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_navigation_bar)
 
         supportActionBar?.hide()
+        
+        val languageToLoad = "ar" // your language
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        this?.getResources()?.updateConfiguration(
+            config,
+            this?.getResources()!!.getDisplayMetrics()
+        )
+
+
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()
         val settingsFragment = SettingsFragment()

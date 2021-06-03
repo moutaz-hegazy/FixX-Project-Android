@@ -1,12 +1,16 @@
 package com.example.fixx.takeOrderScreen.views
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.R
 import com.example.fixx.databinding.CustomizeOrderImageRecyclerItemBinding
@@ -61,10 +65,41 @@ class ImagesAdapter(var data: ArrayList<Bitmap>) : RecyclerView.Adapter<ImagesAd
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.image_menu_delete -> {
-                        Log.i("TAG", "showPopupMenu: Delete Pressed !!")
-                        data.removeAt(position)
-                        notifyDataSetChanged()
+
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle(R.string.deleteImageDialogTitle)
+                        builder.setMessage(R.string.deleteImageDialogMsg)
+                        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+                        builder.setPositiveButton(R.string.yes){dialogInterface, which ->
+                            Log.i("TAG", "showPopupMenu: Delete Pressed !!")
+                            data.removeAt(position)
+                            notifyDataSetChanged()
+
+                        }
+
+                        builder.setNegativeButton(R.string.no){dialogInterface, which ->
+
+                        }
+
+                        val alertDialog: AlertDialog = builder.create()
+                        alertDialog.setCancelable(false)
+                        alertDialog.show()
+                        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
+                        val positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                        with(positiveButton) {
+                            setTextColor(ContextCompat.getColor(context, R.color.red))
+                        }
+                        val negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                        with(negativeButton) {
+                            setTextColor(ContextCompat.getColor(context, R.color.green))
+                        }
+
+
                         true
+
+
                     }
                     else -> false
                 }
