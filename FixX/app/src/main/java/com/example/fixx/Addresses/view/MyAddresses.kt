@@ -2,6 +2,7 @@ package com.example.fixx.Addresses.view
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,6 +11,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
@@ -108,6 +111,16 @@ class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
         alertDialog.setCancelable(false)
         alertDialog.show()
          alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
+         val positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+         with(positiveButton) {
+             setTextColor(ContextCompat.getColor(context, R.color.red))
+         }
+         val negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+         with(negativeButton) {
+             setTextColor(ContextCompat.getColor(context, R.color.green))
+         }
+
 
      }
 

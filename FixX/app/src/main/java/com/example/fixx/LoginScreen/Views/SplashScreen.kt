@@ -2,6 +2,7 @@ package com.example.fixx.LoginScreen.Views
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,8 @@ import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.FirebaseService
+import com.example.fixx.constants.Constants
+import java.util.*
 
 @Suppress("DEPRECATION")
 class SplashScreen : AppCompatActivity() {
@@ -23,6 +26,17 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         supportActionBar?.hide()
+
+        val languageToLoad = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
+            .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        applicationContext.getResources()?.updateConfiguration(
+            config,
+            applicationContext.getResources()!!.getDisplayMetrics()
+        )
 
         var appLogo = findViewById<ImageView>(R.id.appLogo)
         appLogo.setImageResource(R.drawable.logo_app)

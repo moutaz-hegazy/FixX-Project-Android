@@ -1,11 +1,11 @@
 package com.example.project.bottom_navigation_fragments
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,16 @@ import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJEC
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.NavigationBar.viewmodels.SettingsViewmodel
+import androidx.fragment.app.FragmentTransaction
+import com.example.fixx.Addresses.MyAddresses
+import com.example.fixx.LoginScreen.Views.RegistrationActivity
+import com.example.fixx.LoginScreen.Views.SplashScreen
+import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
+import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
+import com.example.fixx.NavigationBar.notification.NotificationFragment
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
@@ -48,30 +57,25 @@ class SettingsFragment : Fragment() {
                 dialog.setContentView(btnsheet)
 
                 btnsheet.bottom_sheet_language_english.setOnClickListener {
-                    val res: Resources = context!!.resources
-
-                    val dm: DisplayMetrics = res.getDisplayMetrics()
-                    val conf: Configuration = res.getConfiguration()
-                    conf.setLocale(Locale("en")) // API 17+ only.
-
-                    res.updateConfiguration(conf, dm)
-
+                    val languagePreferences = context?.getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,
+                        Context.MODE_PRIVATE)
+                    languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE,"en")?.apply()
                     dialog.dismiss()
+
+                    val refresh = Intent(context,SplashScreen::class.java)
+                    startActivity(refresh)
+                    activity?.finish()
                 }
 
                 btnsheet.bottom_sheet_language_arabic.setOnClickListener {
-                    val res: Resources = context!!.resources
-
-                    val dm: DisplayMetrics = res.getDisplayMetrics()
-                    val conf: Configuration = res.getConfiguration()
-                    conf.setLocale(Locale("ar")) // API 17+ only.
-
-                    res.updateConfiguration(conf, dm)
+                    val languagePreferences = context?.getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,
+                        Context.MODE_PRIVATE)
+                    languagePreferences?.edit()?.putString(Constants.CURRENT_LANGUAGE,"ar")?.apply()
                     dialog.dismiss()
 
-                }
-                btnsheet.setOnClickListener {
-                    dialog.dismiss()
+                    val refresh = Intent(context,SplashScreen::class.java)
+                    startActivity(refresh)
+                    activity?.finish()
                 }
                 dialog.show()
             }

@@ -41,6 +41,8 @@ sealed class Constants {
         const val NOTIFICATION_TYPE_CHAT_MESSAGE = "chatMsg"
         const val NOTIFICATION_TYPE_USER_ACCEPT = "userAccept"
         const val TRANS_RESPONSE_BOOL = "responseBool"
+        const val LANGUAGE_SHARED_PREFERENCES = "languageSP"
+        const val CURRENT_LANGUAGE = "current_lang"
 
 //        val cities = arrayOf(getString(R.string.City),
 //                getString(R.string.Cairo),

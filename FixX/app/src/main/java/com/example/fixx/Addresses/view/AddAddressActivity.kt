@@ -1,6 +1,8 @@
 package com.example.fixx.Addresses.view
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -14,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import com.example.fixx.Addresses.viewmodel.AddAddressViewmodel
+import androidx.core.content.ContextCompat
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.google.android.gms.common.ConnectionResult
@@ -350,6 +353,39 @@ class AddAddressActivity : AppCompatActivity() {
         },onFailBinding = {
             Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT)
         })
+    }
+
+    override fun onBackPressed() {
+
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle(getString(R.string.leaveDialogTitle))
+        //set message for alert dialog
+        builder.setMessage(getString(R.string.leaveDialogMsg))
+
+        builder.setPositiveButton(getString(R.string.exit)){ _, _ ->
+            super.onBackPressed()
+        }
+        builder.setNegativeButton(getString(R.string.stay)){ _, _ ->
+
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
+        val positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        with(positiveButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.red))
+        }
+        val negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        with(negativeButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.green))
+        }
+
+
     }
 
 

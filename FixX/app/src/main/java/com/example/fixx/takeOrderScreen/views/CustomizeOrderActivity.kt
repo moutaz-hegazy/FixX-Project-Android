@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -444,4 +445,41 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
     }
+
+    override fun onBackPressed() {
+
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle(getString(R.string.leaveDialogTitle))
+        //set message for alert dialog
+        builder.setMessage(getString(R.string.leaveOrderDialogMsg))
+
+        //performing positive action
+        builder.setPositiveButton(getString(R.string.exit)){ _, _ ->
+           super.onBackPressed()
+        }
+        //performing negative action
+        builder.setNegativeButton(getString(R.string.stay)){ _, _ ->
+
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
+        val positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        with(positiveButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.red))
+        }
+        val negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        with(negativeButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.green))
+        }
+
+    }
+
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.fixx.NavigationBar
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +10,11 @@ import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
 import com.example.fixx.POJOs.Person
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 
 class NavigationBarActivity : AppCompatActivity() {
@@ -24,6 +28,19 @@ class NavigationBarActivity : AppCompatActivity() {
 
         Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>>>"+FirestoreService.auth.currentUser?.email)
         supportActionBar?.hide()
+
+        val languageToLoad = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+            .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        this.getResources()?.updateConfiguration(
+            config,
+            this.getResources()!!.getDisplayMetrics()
+        )
+
+
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()
         val settingsFragment = SettingsFragment()
