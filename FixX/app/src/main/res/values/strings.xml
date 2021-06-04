@@ -322,6 +322,13 @@
     <string name="Job">Job</string>
     <string name="myWokAddressesTitle">My Work Addresses</string>
     <string name="addWorkAddress">Add Work Address</string>
+    <string name="ExtendJob">Extend Job</string>
+    <string name="EditJob">Edit Job</string>
+    <string name="JobRemoveFail">Failed to remove this job.</string>
+    <string name="JobRemoved">Job Deleted</string>
+    <string name="SelectLocation">Please Select your Location.</string>
+    <string name="JobUploadFailed">Failed to upload this job</string>
+    <string name="JobUploaded">Job Uploaded.</string>
 
 
 </resources>

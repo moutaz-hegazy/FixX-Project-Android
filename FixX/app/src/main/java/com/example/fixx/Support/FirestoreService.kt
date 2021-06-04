@@ -384,6 +384,25 @@ object FirestoreService {
             }
     }
 
+    fun removeLocation(location: String){
+        Log.i("TAG", "removeLocation: >>>>>>>>>>>>>> here!!")
+        db.collection("Users").document(auth.currentUser?.uid!!)
+            .update("locations", FieldValue.arrayRemove(location))
+            .addOnSuccessListener {
+                Log.i("TAG", "removeLocation: DELETED <<<<<<<<<<<")
+            }.addOnFailureListener {
+                Log.i("TAG", "removeLocation: DELETE FAILED <<<<<<<<<<<")
+            }
+    }
+
+    fun removeJob(jobId : String, onSuccessHandler: () -> Unit, onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).delete().addOnSuccessListener {
+            onSuccessHandler()
+        }.addOnFailureListener {
+            onFailHandler()
+        }
+    }
+
     fun fetchMyCompletedOrderedJobs(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
         db.collection("Jobs").whereEqualTo("uid",auth.currentUser?.uid)

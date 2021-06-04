@@ -19,13 +19,26 @@
 
     <TextView
         android:id="@+id/jobDetails_location_lbl"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:text="Job Location"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/job_display_menu_btn"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
         app:layout_constraintTop_toTopOf="@+id/jobDetails_job_image" />
+
+    <ImageButton
+        android:id="@+id/job_display_menu_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/ellipsis"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
@@ -186,7 +199,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -4,12 +4,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
+import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
@@ -17,6 +21,7 @@ import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityJobDetailsDisplayBinding
 import com.example.fixx.inAppChatScreens.views.ChatLogActivity
+import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 import com.example.fixx.techOrderDetailsScreen.views.OrderImagesAdapter
 import com.example.fixx.technicianProfileScreen.view.TechnicianProfileActivity
 import com.squareup.picasso.Picasso
@@ -27,6 +32,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
     lateinit var  binding : ActivityJobDetailsDisplayBinding
     private var jobId : String? = null
     private lateinit var viewmodel : JobDetailsViewModel
+    private lateinit var loadedJob: Job
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +51,6 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 viewmodel = JobDetailsViewModel(it)
                 viewmodel.fetchJobfromDB(onSuccessBinding = { job ->
                     displayJobOnScreen(job)
-
                 }, onFailBinding = {
 
                 })
@@ -55,12 +60,16 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
 
 
     private fun displayJobOnScreen(job : Job){
+        loadedJob = job
         binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
         binding.jobDetailsDateLbl.text = getDateFor(job.status, job)
         binding.jobDetailsLocationLbl.text = job.location
         binding.jobDetailsFromTimeLbl.text = job.fromTime
         binding.jobDetailsToTimeLbl.text = job.toTime
         binding.jobDetailsStatusLbl.text = job.status.rawValue
+        binding.jobDisplayMenuBtn.setOnClickListener {
+            showPopupMenu(it, job.status)
+        }
         job.price?.let {
             binding.jobDetailsFinalPriceTitleLbl.visibility = View.VISIBLE
             binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
@@ -209,6 +218,52 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             "Wood_Painter" -> R.drawable.woodpainter
             "Swimming_pool" -> R.drawable.swimmingpool
             else -> null
+        }
+    }
+
+
+    private fun showPopupMenu(view : View,type: Job.JobStatus){
+        val popupMenu = PopupMenu(this,view)
+        popupMenu.apply {
+            menuInflater.inflate(
+                when(type){
+                    Job.JobStatus.Completed ->R.menu.image_long_press_menu
+                    Job.JobStatus.OnRequest ->R.menu.on_request_menu
+                    Job.JobStatus.Accepted  ->R.menu.accepted_job_menu
+                }
+                , menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.image_menu_delete,
+                    R.id.accepted_job_menu_delete,
+                    R.id.onRequest_menu_delete  -> {
+                        viewmodel.removeJob(onSuccessBinding = {
+                            Toast.makeText(this@JobDetailsDisplayActivity, R.string.JobRemoved, Toast.LENGTH_SHORT).show()
+                            finish()
+                        },onFailBinding = {
+                            Toast.makeText(this@JobDetailsDisplayActivity, R.string.JobRemoveFail, Toast.LENGTH_SHORT).show()
+                        })
+                        true
+                    }
+
+                    R.id.onRequest_menu_edit ->{
+                        Intent(this@JobDetailsDisplayActivity, CustomizeOrderActivity::class.java).apply{
+                            putExtra(Constants.TRANS_JOB_OBJECT, loadedJob)
+                        }.also {
+                            startActivity(it)
+                        }
+                        true
+                    }
+
+                    R.id.accepted_job_menu_extend ->{
+                        // extend activity.
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            show()
         }
     }
 }

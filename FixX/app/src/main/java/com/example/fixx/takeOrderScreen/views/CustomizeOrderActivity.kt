@@ -28,6 +28,7 @@ import com.example.fixx.Addresses.view.AddAddressActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
+import com.example.fixx.POJOs.StringPair
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
@@ -36,8 +37,13 @@ import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
 import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_customize_order.*
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,15 +92,20 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             }
         }
 
+
+
         Log.i("TAG", "onCreate: >>>>$selectedDate")
         val serviceName = intent.getIntExtra(Constants.serviceName, -1)
         setJobType(serviceName)
+
         //Action bar configuration.
         supportActionBar?.apply {
-            title = if(CURRENT_LANGUAGE == "en") {
-                "${getString(serviceName)} ${getString(R.string.Request)}"
-            } else {
-                "${getString(R.string.Request)} ${getString(serviceName)}"
+            if(serviceName != -1) {
+                title = if (CURRENT_LANGUAGE == "en") {
+                    "${getString(serviceName)} ${getString(R.string.Request)}"
+                } else {
+                    "${getString(R.string.Request)} ${getString(serviceName)}"
+                }
             }
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
@@ -198,22 +209,91 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
             if (validateJobData()) {
                 val job = createNewJob()
-                imagePathsStringArray?.forEach { image ->
+                binding.customizeOrderScrollView.visibility = View.INVISIBLE
+                binding.customizeOrderProgressBar.visibility = View.VISIBLE
+                imagePathsStringArray.forEach { image ->
                     imagePathsList2.add(Uri.parse(image))
                 }
                 CustomizeOrderViewModel(job, imagePathsList2,
                     onSuccessBinding = {
-                        Toast.makeText(applicationContext, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, R.string.JobUploaded, Toast.LENGTH_SHORT).show()
+                        finish()
                     }, onFaliureBinding = {
-                        Toast.makeText(applicationContext, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, R.string.JobUploadFailed, Toast.LENGTH_SHORT).show()
+                        binding.customizeOrderProgressBar.visibility = View.INVISIBLE
+                        binding.customizeOrderScrollView.visibility = View.VISIBLE
                     })
-                finish()
 
             }else{
-                Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,R.string.SelectLocation, Toast.LENGTH_SHORT).show()
             }
         }
         //------------------------------------------------------------------
+
+        val jobObject = intent.getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
+        jobObject?.let {
+            displayJobDetails(it)
+        }
+    }
+
+
+    private fun displayJobDetails(job : Job){
+
+        getStringResourse(job.type)?.let {
+            supportActionBar?.apply {
+                title = if (CURRENT_LANGUAGE == "en") {
+                    "${getString(it)} ${getString(R.string.Request)}"
+                } else {
+                    "${getString(R.string.Request)} ${getString(it)}"
+                }
+                setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
+            }
+        }
+
+        job.location?.substringBefore("%").let { addName->
+            if(!addName.isNullOrEmpty() &&  values.contains(addName)){
+                customizeOrder_pickLocation_spinner.setSelection(spinnerAdapter.getPosition(addName))
+            }else if(values.contains(job.location?.substringAfter("%"))){
+                customizeOrder_pickLocation_spinner.setSelection(spinnerAdapter.getPosition(addName))
+            }else {
+                if(!addName.isNullOrEmpty()){
+                    values.add(values.size-1, addName)
+                }else{
+                    values.add(values.size-1, job.location!!.substringAfter("%"))
+                }
+                spinnerAdapter.notifyDataSetChanged()
+                customizeOrder_pickLocation_spinner.setSelection(values.size -2)
+            }
+        }
+
+        loadImages(job.images)
+
+        binding.customizeOrderDateLbl.text = job.date
+        if(!job.fromTime.isNullOrEmpty()){
+            binding.customizeOrderFromTimeLbl.text = job.fromTime
+        }
+        if(!job.toTime.isNullOrEmpty()){
+            binding.customizeOrderFromTimeLbl.text = job.toTime
+        }
+        if(!job.description.isNullOrEmpty()){
+            binding.customizeOrderDescriptionTxt.setText(job.description)
+        }
+    }
+
+    private fun loadImages(pics : List<StringPair>?){
+        val bitmaps = mutableListOf<Bitmap>()
+        pics?.let { picsPair ->
+            CoroutineScope(Dispatchers.IO).launch {
+                picsPair.forEach {
+                    val bitmap = Picasso.get().load(it.second).get()
+                    bitmaps.add(bitmap)
+                }
+                CoroutineScope(Dispatchers.Main).launch{
+                    images.addAll(bitmaps)
+                    imagesAdapter.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     private fun validateJobData(): Boolean {
@@ -230,6 +310,29 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
     }
 
+    private fun getStringResourse(type : String) : Int?{
+        return when(type){
+            "Painter" -> R.string.Painter
+            "Plumber" -> R.string.Plumber
+            "Electrician" -> R.string.Electrician
+            "Carpenter" -> R.string.Carpenter
+            "Tiles_Handyman" -> R.string.Tiles_Handyman
+            "Parquet" -> R.string.Parquet
+            "Smith" -> R.string.Smith
+            "Decoration_Stones" -> R.string.Decoration_Stones
+            "Alumetal" -> R.string.Alumetal
+            "Air_Conditioner" -> R.string.Air_Conditioner
+            "Curtains" -> R.string.Curtains
+            "Glass" -> R.string.Glass
+            "Satellite" -> R.string.Satellite
+            "Gypsum_Works" -> R.string.Gypsum_Works
+            "Marble" -> R.string.Marble
+            "Pest_Control" -> R.string.Pest_Control
+            "Wood_Painter" -> R.string.Wood_Painter
+            "Swimming_pool" -> R.string.Swimming_pool
+            else -> null
+        }
+    }
 
     private fun setJobType(id: Int){
         when(id){

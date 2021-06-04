@@ -5,7 +5,8 @@ import com.example.fixx.Support.FirestoreService
 
 class OrdersViewmodel(val jobStatus : Job.JobStatus, val onSuccessBinder: (List<Job>)->Unit, val onFaiBinder:()->Unit) {
 
-    init {
+
+    fun loadData(){
         when (jobStatus){
             Job.JobStatus.Accepted,Job.JobStatus.OnRequest -> fetchOngoingJobs()
             Job.JobStatus.Completed -> fetchCompletedJobs()
@@ -18,5 +19,9 @@ class OrdersViewmodel(val jobStatus : Job.JobStatus, val onSuccessBinder: (List<
 
     private fun fetchCompletedJobs(){
         FirestoreService.fetchMyCompletedOrderedJobs(onSuccessBinder,onFaiBinder)
+    }
+
+    fun deleteJob(jobId:String, onSuccessBinder: () -> Unit, onFaiBinder: () -> Unit){
+        FirestoreService.removeJob(jobId,onSuccessBinder,onFaiBinder)
     }
 }

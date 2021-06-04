@@ -18,10 +18,11 @@ import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.CompletedOrdersRecyclerRowBinding
 import com.example.fixx.databinding.OngoingOrderRecyclerRowBinding
+import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 
 class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : RecyclerView.Adapter<OrdersAdapter.VH>() {
     lateinit var context: Context
-    lateinit var showJobDetailsHandler: (Int)-> Unit
+    lateinit var deleteHandler : (Int)->Unit
     class VH(var binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         context = parent.context
@@ -38,24 +39,34 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
         when(data[position].status) {
             Job.JobStatus.OnRequest -> {
                 val mRoot = holder.binding as? OngoingOrderRecyclerRowBinding
-                mRoot?.let { view ->
-                    view.ongoingOrderDateLbl.text = data[position].date
-                    view.ongoingOrderFromTimeLbl.text = context.getString(R.string.from) +
+                mRoot.let { view ->
+                    view?.ongoingOrderDateLbl?.text = data[position].date
+                    view?.ongoingOrderFromTimeLbl?.text = context.getString(R.string.from) +
                             (data[position].fromTime ?: "--:--")
-                    view.ongoingOrderToTimeLbl.text = context.getString(R.string.to) +
+                    view?.ongoingOrderToTimeLbl?.text = context.getString(R.string.to) +
                             (data[position].toTime ?: "--:--")
-                    view.ongoingOrderPriceLbl.text =
+                    view?.ongoingOrderPriceLbl?.text =
                         context.getString(R.string.price) + (data[position].price?.toString()
                             ?: context.getString(R.string.notDetermined))
-                    view.ongoingOrderStatusLbl.apply {
+                    view?.ongoingOrderStatusLbl?.apply {
                         text = context.getString(R.string.onRequest)
                         setTextColor(Color.GREEN)
                     }
-                    view.ongoingOrdersJobTypeLbl.text = data[position].type
+                    view?.ongoingOrdersJobTypeLbl?.text = data[position].type
                     getImageResourse(data[position].type)?.let {
-                        view.ongoingOrderJobImage.setImageResource(it)
+                        view?.ongoingOrderJobImage?.setImageResource(it)
                     }
-                    view.ongoingOrderAddressLbl.text = data[position].location
+                    view?.ongoingOrderAddressLbl?.text = data[position].location
+                    view?.ongoingOrderLayout?.setOnClickListener {
+                        Intent(context, JobDetailsDisplayActivity::class.java).apply {
+                            putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])
+                        }.also {
+                            context.startActivity(it)
+                        }
+                    }
+                    view?.ongoingOrderMenuBtn?.setOnClickListener {
+                        showPopupMenu(view?.ongoingOrderMenuBtn, position, Job.JobStatus.OnRequest)
+                    }
                 }
             }
 
@@ -80,10 +91,15 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                         view.ongoingOrderJobImage.setImageResource(it)
                     }
                     view.ongoingOrderAddressLbl.text = data[position].location
-                    view.ongoingOrderLayout.setOnClickListener{
-                        val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                        intent.putExtra(Constants.TRANS_JOB_OBJECT, data[position])
-                        context.startActivity(intent)
+                    view.ongoingOrderLayout.setOnClickListener {
+                        Intent(context, JobDetailsDisplayActivity::class.java).apply {
+                            putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])
+                        }.also {
+                            context.startActivity(it)
+                        }
+                    }
+                    view?.ongoingOrderMenuBtn?.setOnClickListener {
+                        showPopupMenu(view?.ongoingOrderMenuBtn,position,Job.JobStatus.Accepted)
                     }
                 }
             }
@@ -98,10 +114,15 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                         view.completedOrderJobImage.setImageResource(it)
                     }
                     view.completedOrderAddressLbl.text = data[position].location
-                    view.completedOrderLayout.setOnClickListener{
-                        val intent = Intent(context, JobDetailsDisplayActivity::class.java)
-                        intent.putExtra(Constants.TRANS_JOB, data[position])
-                        context.startActivity(intent)
+                    view.completedOrderLayout.setOnClickListener {
+                        Intent(context, JobDetailsDisplayActivity::class.java).apply {
+                            putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])
+                        }.also {
+                            context.startActivity(it)
+                        }
+                    }
+                    view?.completedOrderMenuBtn?.setOnClickListener {
+                        showPopupMenu(view?.completedOrderMenuBtn,position,Job.JobStatus.Completed)
                     }
                 }
             }
@@ -132,21 +153,42 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
         }
     }
 
-    private fun showPopupMenu(view : View , position : Int){
+    private fun showPopupMenu(view : View , position : Int,type: Job.JobStatus){
         val popupMenu = PopupMenu(context,view)
         popupMenu.apply {
+            menuInflater.inflate(
+                            when(type){
+                                Job.JobStatus.Completed ->R.menu.image_long_press_menu
+                                Job.JobStatus.OnRequest ->R.menu.on_request_menu
+                                Job.JobStatus.Accepted  ->R.menu.accepted_job_menu
+                          }
+                , menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.image_menu_delete -> {
-                        Log.i("TAG", "showPopupMenu: Delete Pressed !!")
-                        data.removeAt(position)
-                        notifyDataSetChanged()
+                    R.id.image_menu_delete,
+                    R.id.accepted_job_menu_delete,
+                    R.id.onRequest_menu_delete  -> {
+                        deleteHandler(position)
                         true
                     }
+
+                    R.id.onRequest_menu_edit ->{
+                        Intent(context, CustomizeOrderActivity::class.java).apply{
+                            putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])
+                        }.also {
+                            context?.startActivity(it)
+                        }
+                        true
+                    }
+
+                    R.id.accepted_job_menu_extend ->{
+                        // extend activity.
+                        true
+                    }
+
                     else -> false
                 }
             }
-            menuInflater.inflate(R.menu.image_long_press_menu, menu)
             show()
         }
     }

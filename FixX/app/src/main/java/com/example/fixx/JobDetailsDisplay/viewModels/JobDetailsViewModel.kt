@@ -59,4 +59,8 @@ class JobDetailsViewModel(private val jobId : String) {
                 Log.e("TAG", e.toString())
             }
         }
+
+    fun removeJob(onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
+        FirestoreService.removeJob(jobId, onSuccessBinding, onFailBinding)
+    }
 }

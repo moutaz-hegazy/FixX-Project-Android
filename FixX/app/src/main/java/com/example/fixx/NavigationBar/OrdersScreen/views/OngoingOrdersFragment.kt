@@ -1,6 +1,9 @@
 package com.example.fixx.NavigationBar.OrdersScreen.views
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.SyncStateContract
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +15,9 @@ import com.example.fixx.NavigationBar.OrdersScreen.viewModels.OrdersViewmodel
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.FragmentOngoingOrdersBinding
+import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 
 class OngoingOrdersFragment : Fragment() {
 
@@ -21,8 +26,10 @@ class OngoingOrdersFragment : Fragment() {
     val viewmodel : OrdersViewmodel by lazy {
         OrdersViewmodel(Job.JobStatus.OnRequest, onSuccessBinder = {    receivedJobs->
             jobs.addAll(receivedJobs)
+            binding.onGoingProgressBar.visibility = View.INVISIBLE
             jobsAdapter.notifyDataSetChanged()
         },onFaiBinder = {
+            binding.onGoingProgressBar.visibility = View.INVISIBLE
             Toast.makeText(context, context?.getString(R.string.OrderLoadingFailed),Toast.LENGTH_LONG).show()
         })
     }
@@ -31,6 +38,22 @@ class OngoingOrdersFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewmodel
+        jobsAdapter.deleteHandler = {   position ->
+            viewmodel.deleteJob(jobs[position].jobId, onSuccessBinder = {
+                jobs.removeAt(position)
+                jobsAdapter.notifyItemRemoved(position)
+            }, onFaiBinder = {
+                Toast.makeText(context,context?.getString(R.string.JobRemoveFail),Toast.LENGTH_SHORT).show()
+            })
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        jobs.clear()
+        jobsAdapter.notifyDataSetChanged()
+        viewmodel.loadData()
+
     }
 
     override fun onCreateView(
