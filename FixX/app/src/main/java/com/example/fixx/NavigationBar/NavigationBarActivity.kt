@@ -19,20 +19,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 
 
-public class NavigationBarActivity : AppCompatActivity() {
-
-    var AREBButton: Button? = null
-    private var mCurrentLocale: Locale? = null
+class NavigationBarActivity : AppCompatActivity() {
 
     companion object{
         var USER_OBJECT : Person? = null
+        var CURRENT_LANGUAGE = "en"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_navigation_bar)
-
-        Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>>>"+FirestoreService.auth.currentUser?.email)
-        supportActionBar?.hide()
 
         val languageToLoad = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
             .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
@@ -40,10 +34,16 @@ public class NavigationBarActivity : AppCompatActivity() {
         Locale.setDefault(locale)
         val config = Configuration()
         config.locale = locale
-        this.getResources()?.updateConfiguration(
+        this.resources?.updateConfiguration(
             config,
-            this.getResources()!!.getDisplayMetrics()
+            this.resources!!.displayMetrics
         )
+
+        setContentView(R.layout.activity_navigation_bar)
+
+        Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>>>"+FirestoreService.auth.currentUser?.email)
+        supportActionBar?.hide()
+
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val homeFragment = HomeFragment()
         val settingsFragment = SettingsFragment()

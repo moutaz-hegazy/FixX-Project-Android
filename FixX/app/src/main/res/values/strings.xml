@@ -6,7 +6,7 @@
     <string name="google_maps_api_key">AIzaSyCye7MCW8Dzvy_U4S5kb-E5j-kIXoWSfCk</string>
     <string name="enterLocation">select location</string>
     <string name="CustomizeOrderTitle">Customize Order</string>
-    <string name="Delete">delete</string>
+    <string name="Delete">Delete</string>
     <string name="Gallery">Gallery</string>
     <string name="Camera">Camera</string>
     <string name="DefaultDate">on : Any day</string>
@@ -311,4 +311,24 @@
     <string name="Request">Request</string>
     <string name="Home">Home</string>
     <string name="Settings">Settings</string>
+    <string name="OrderLoadingFailed">Failed to load your requests.</string>
+    <string name="JobsLoadingFailed">Failed to load your jobs.</string>
+    <string name="Riyadah">AR Riyadah</string>
+    <string name="EzbetSaad">Ezbet Saad</string>
+    <string name="Abis">Abis</string>
+
+    <string name="Egypt">Eqypt</string>
+
+    <string name="Job">Job</string>
+    <string name="myWokAddressesTitle">My Work Addresses</string>
+    <string name="addWorkAddress">Add Work Address</string>
+    <string name="ExtendJob">Extend Job</string>
+    <string name="EditJob">Edit Job</string>
+    <string name="JobRemoveFail">Failed to remove this job.</string>
+    <string name="JobRemoved">Job Deleted</string>
+    <string name="SelectLocation">Please Select your Location.</string>
+    <string name="JobUploadFailed">Failed to upload this job</string>
+    <string name="JobUploaded">Job Uploaded.</string>
+
+
 </resources>

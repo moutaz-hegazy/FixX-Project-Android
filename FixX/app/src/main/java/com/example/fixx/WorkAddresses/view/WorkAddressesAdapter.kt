@@ -1,4 +1,4 @@
-package com.example.fixx.Addresses.view
+package com.example.fixx.WorkAddresses.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.R
-import com.example.fixx.Support.FirestoreService
 import kotlinx.android.synthetic.main.address_row.view.*
 
-class RecycleAdapter(private val addressList: MutableList<String>, private val listener: MyAddresses) :
-    RecyclerView.Adapter<RecycleAdapter.AddressViewHolder>() {
+
+class WorkAddressesAdapter(private val addressList: MutableList<String>, private val listener: MyWorkAddresses) :
+    RecyclerView.Adapter<WorkAddressesAdapter.AddressViewHolder>() {
 
     lateinit var context: Context
 
@@ -68,8 +68,8 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
         holder.addressLbl.text = currentItem.substringAfter("%")
         holder.optionMenuBtn.apply {
 
-                setOnClickListener{
-                    showPopupMenu(holder.optionMenuBtn,position)
+            setOnClickListener{
+                showPopupMenu(holder.optionMenuBtn,position)
 
             }
         }
@@ -105,8 +105,6 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
 
         //performing positive action
         builder.setPositiveButton(context.getString(R.string.yes)){dialogInterface, which ->
-            val address = list[position]
-            FirestoreService.removeLocation(address)
             list.removeAt(position)
             notifyDataSetChanged()
         }

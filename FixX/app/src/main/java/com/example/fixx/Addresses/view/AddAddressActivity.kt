@@ -11,10 +11,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import com.example.fixx.Addresses.viewmodel.AddAddressViewmodel
 import androidx.core.content.ContextCompat
 import com.example.fixx.R
@@ -27,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_add_address.*
 class AddAddressActivity : AppCompatActivity() {
 
 
-    private lateinit var addedAddress : String
+    private lateinit var addedAddress: String
     val cities = mutableListOf<String>()
     var area = mutableListOf<String>()
     val cairoArea = mutableListOf<String>()
@@ -84,6 +82,7 @@ class AddAddressActivity : AppCompatActivity() {
         alexArea.addAll(
             arrayOf(
                 getString(R.string.Area),
+                getString(R.string.Riyadah),
                 getString(R.string.MoharamBek),
                 getString(R.string.AbuQir),
                 getString(R.string.Montaza),
@@ -105,11 +104,11 @@ class AddAddressActivity : AppCompatActivity() {
                 getString(R.string.Miami),
                 getString(R.string.SanStifano),
                 getString(R.string.SidiBeshr),
+                getString(R.string.Smouha),
                 getString(R.string.SidiGaber),
                 getString(R.string.Shatebi),
                 getString(R.string.Sporting),
                 getString(R.string.Victoria),
-                getString(R.string.Smouha),
                 getString(R.string.Stanli),
                 getString(R.string.WaborElMaya),
                 getString(R.string.ElHanovil),
@@ -118,7 +117,9 @@ class AddAddressActivity : AppCompatActivity() {
                 getString(R.string.Mansheya),
                 getString(R.string.AlAttarin),
                 getString(R.string.FirstAlRaml),
-                getString(R.string.MustafaKamel)
+                getString(R.string.MustafaKamel),
+                getString(R.string.EzbetSaad),
+                getString(R.string.Abis)
             )
         )
 
@@ -170,26 +171,41 @@ class AddAddressActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == Constants.START_ADDRESS_MAP_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val address = data!!.getStringArrayExtra(Constants.TRANS_ADDRESS)
+
+                add_address_activity_address_name_txt.setText("")
+                add_address_activity_notes_txt.setText("")
+                add_address_activity_building_number_txt.setText("")
+                add_address_activity_floor_txt.setText("")
+                add_address_activity_street_txt.setText("")
+
+                val address = data!!.getStringExtra(Constants.TRANS_ADDRESS)
 
                 var cityFound = false
                 var areaFound = false
-                for (iterator in cities.indices) {
-                    if (address!![2].contains(cities[iterator], ignoreCase = true)) {
+
+                for (iterator in Constants.cities.indices) {
+                    if (address!!.contains(Constants.cities[iterator], ignoreCase = true)
+                        || address!!.contains(Constants.citiesInArabic[iterator], ignoreCase = true)
+                    ) {
                         add_address_activity_city_spinner.setSelection(iterator, true)
                         cityFound = true
+                        break
                     }
                 }
+
                 if (!cityFound) {
                     add_address_activity_city_spinner.setSelection(0, true)
                 }
 
-                if(cityFound && add_address_activity_city_spinner.selectedItem == getString(R.string.Cairo)){
-                    for (iterator in cairoArea.indices) {
-                        if (address!![1].contains(
-                                cairoArea[iterator],
+                if (cityFound && add_address_activity_city_spinner.selectedItem == getString(R.string.Cairo)) {
+                    for (iterator in Constants.cairoArea.indices) {
+                        if (address!!.contains(
+                                Constants.cairoArea[iterator],
                                 ignoreCase = true
-                            ) || address!![0].contains(cairoArea[iterator], ignoreCase = true)
+                            ) || address!!.contains(
+                                Constants.cairoAreaInArabic[iterator],
+                                ignoreCase = true
+                            )
                         ) {
                             add_address_activity_area_spinner.post(Runnable {
                                 add_address_activity_area_spinner.setSelection(
@@ -197,25 +213,33 @@ class AddAddressActivity : AppCompatActivity() {
                                 )
                             })
                             areaFound = true
+                            break
                         }
                     }
-                }
-                else if (cityFound && add_address_activity_city_spinner.selectedItem == getString(R.string.Alexandria)){
-                    for (iterator in alexArea.indices) {
-                        if (address!![1].contains(
-                                alexArea[iterator],
-                                ignoreCase = true
-                            ) || address!![0].contains(alexArea[iterator], ignoreCase = true)
-                        ) {
-                            add_address_activity_area_spinner.post(Runnable {
-                                add_address_activity_area_spinner.setSelection(
-                                    iterator
+
+                } else
+                    if (cityFound && add_address_activity_city_spinner.selectedItem == getString(
+                            R.string.Alexandria
+                        )
+                    ) {
+                        for (iterator in Constants.alexArea.indices) {
+                            if (address!!.contains(Constants.alexArea[iterator], ignoreCase = true)
+                                || address!!.contains(
+                                    Constants.alexAreaInArabic[iterator],
+                                    ignoreCase = true
                                 )
-                            })
-                            areaFound = true
+                            ) {
+                                add_address_activity_area_spinner.post(Runnable {
+                                    add_address_activity_area_spinner.setSelection(
+                                        iterator
+                                    )
+                                })
+                                areaFound = true
+                                break
+                            }
                         }
+
                     }
-                }
 
 
                 if (!areaFound) {
@@ -224,6 +248,8 @@ class AddAddressActivity : AppCompatActivity() {
                     })
                 }
             }
+
+            
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -236,12 +262,13 @@ class AddAddressActivity : AppCompatActivity() {
 
 
     private fun setAreaSpinner() {
-        add_address_activity_area_spinner.adapter = ArrayAdapter<String>(
+        add_address_activity_area_spinner.adapter = MySpinnerAdapter<String>(
             this, android.R.layout.simple_spinner_dropdown_item,
             area
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             add_address_activity_area_spinner.adapter = adapter
+
         }
 
         add_address_activity_area_spinner.onItemSelectedListener = object : OnItemClickListener,
@@ -271,12 +298,15 @@ class AddAddressActivity : AppCompatActivity() {
     }
 
     private fun setCitySpinner() {
-        add_address_activity_city_spinner.adapter = ArrayAdapter<String>(
+        add_address_activity_city_spinner.adapter = MySpinnerAdapter<String>(
             this, android.R.layout.simple_spinner_dropdown_item,
             cities
         ).also { adapter ->
+
+
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             add_address_activity_city_spinner.adapter = adapter
+
         }
 
         add_address_activity_city_spinner.onItemSelectedListener = object : OnItemClickListener,
@@ -326,23 +356,24 @@ class AddAddressActivity : AppCompatActivity() {
     private fun sendDataBackToPreviousActivity() {
         val addressName = add_address_activity_address_name_txt.text.toString()
 
-        addedAddress = addressName + "%" + add_address_activity_city_spinner.selectedItem.toString() + "," +
-                add_address_activity_area_spinner.selectedItem.toString()+"/"
+        addedAddress =
+            addressName + "%" + add_address_activity_city_spinner.selectedItem.toString() + "," +
+                    add_address_activity_area_spinner.selectedItem.toString() + "/"
 
-        if(!add_address_activity_street_txt.text.isNullOrEmpty()){
+        if (!add_address_activity_street_txt.text.isNullOrEmpty()) {
             addedAddress += "street: ${add_address_activity_street_txt.text}"
         }
-        if(!add_address_activity_building_number_txt.text.isNullOrEmpty()){
+        if (!add_address_activity_building_number_txt.text.isNullOrEmpty()) {
             addedAddress += ",building: ${add_address_activity_building_number_txt.text}"
         }
-        if(!add_address_activity_floor_txt.text.isNullOrEmpty()){
+        if (!add_address_activity_floor_txt.text.isNullOrEmpty()) {
             addedAddress += ",floor: ${add_address_activity_floor_txt.text}"
         }
-        if(!add_address_activity_notes_txt.text.isNullOrEmpty()){
+        if (!add_address_activity_notes_txt.text.isNullOrEmpty()) {
             addedAddress += ", ${add_address_activity_notes_txt.text}"
         }
 
-        AddAddressViewmodel(addedAddress,onSuccessBinding ={
+        AddAddressViewmodel(addedAddress, onSuccessBinding = {
             Intent().apply {
                 putExtra(Constants.TRANS_ADDRESS, addedAddress)
             }.also {
@@ -350,7 +381,7 @@ class AddAddressActivity : AppCompatActivity() {
                 finish()
             }
 
-        },onFailBinding = {
+        }, onFailBinding = {
             Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT)
         })
     }
@@ -386,6 +417,92 @@ class AddAddressActivity : AppCompatActivity() {
         }
 
 
+    }
+
+
+    private fun setAddedCity(spinnerCity: String): String {
+        var city = spinnerCity
+        var cityFound = false
+        for (iterator in Constants.cities.indices) {
+            if (spinnerCity.equals(Constants.cities[iterator])) {
+                cityFound = true
+            }
+        }
+        if (!cityFound) {
+            for (iterator in Constants.citiesInArabic.indices) {
+                if (spinnerCity.equals(Constants.citiesInArabic[iterator])) {
+                    city = getCityEnglishName(spinnerCity)
+                }
+            }
+        }
+
+        return city
+    }
+
+    private fun setAddedArea(spinnerArea: String, spinnerCity: String): String {
+        var area = spinnerArea
+        var areaFound = false
+
+        if (spinnerCity.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexArea.indices) {
+                if (spinnerArea.equals(Constants.alexArea[iterator])) {
+                    areaFound = true
+                }
+            }
+            if (!areaFound) {
+                for (iterator in Constants.alexAreaInArabic.indices) {
+                    if (spinnerArea.equals(Constants.alexAreaInArabic[iterator])) {
+                        area = getAreaEnglishName(spinnerArea, spinnerCity)
+                    }
+                }
+            }
+        } else if (spinnerCity.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoArea.indices) {
+                if (spinnerArea.equals(Constants.cairoArea[iterator])) {
+                    areaFound = true
+                }
+            }
+            if (!areaFound) {
+                for (iterator in Constants.cairoAreaInArabic.indices) {
+                    if (spinnerArea.equals(Constants.cairoAreaInArabic[iterator])) {
+                        area = getAreaEnglishName(spinnerArea, spinnerCity)
+                    }
+                }
+            }
+        }
+
+
+        return area
+    }
+
+    private fun getCityEnglishName(city: String): String {
+        var myCity = city
+        for (iterator in Constants.citiesInArabic.indices) {
+            if (city.equals(Constants.citiesInArabic[iterator])) {
+                myCity = Constants.cities[iterator]
+            }
+        }
+        return myCity
+    }
+
+    private fun getAreaEnglishName(area: String, city: String): String {
+        var myArea = area
+
+        if (city.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoAreaInArabic.indices) {
+                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
+                    myArea = Constants.cairoArea[iterator]
+                }
+            }
+        } else if (city.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexAreaInArabic.indices) {
+                if (area.equals(Constants.alexAreaInArabic[iterator])) {
+                    myArea = Constants.alexArea[iterator]
+                }
+            }
+        }
+
+        return myArea
     }
 
 

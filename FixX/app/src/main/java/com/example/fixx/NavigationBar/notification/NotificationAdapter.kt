@@ -14,7 +14,7 @@ import com.example.fixx.POJOs.Notifications
 import com.example.fixx.R
 import kotlinx.android.synthetic.main.notification_row.view.*
 
-class NotificationAdapter(private val notificationList: MutableList<Notifications>, private val listener:NotificationFragment) :
+class NotificationAdapter(private val notificationList: MutableList<Notifications>, private val listener:NotificationActivity) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     lateinit var context: Context

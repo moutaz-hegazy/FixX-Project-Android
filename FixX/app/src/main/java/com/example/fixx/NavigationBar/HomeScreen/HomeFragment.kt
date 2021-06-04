@@ -11,8 +11,9 @@ import android.widget.GridView
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ServiceItem
-import com.example.fixx.NavigationBar.notification.NotificationFragment
+import com.example.fixx.NavigationBar.notification.NotificationActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
@@ -33,16 +34,6 @@ class HomeFragment : Fragment(){
     var notificationCounter: NotificationCounter? = null
     var floatingActionButton: FloatingActionButton? = null
     var chatBtn : ImageView? = null
-//
-//    fun onBackPressed(): Boolean {
-//        return false
-//    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +58,7 @@ class HomeFragment : Fragment(){
         notificationbtn = rootView.findViewById(R.id.homefragment_notification_image_view)
 
         notificationbtn?.setOnClickListener {
-            fragmentManager?.beginTransaction()?.replace(R.id.home_fragment_id, NotificationFragment())?.commit()
+            startActivity(Intent (requireActivity(), NotificationActivity::class.java))
         }
 
        notificationCounter =
@@ -82,20 +73,15 @@ class HomeFragment : Fragment(){
             val intent = Intent (getActivity(), NewMessageActivity::class.java)
             getActivity()?.startActivity(intent)
         }
-        floatingActionButton = rootView.findViewById(R.id.home_jobs_floatingactionbutton)
-        floatingActionButton?.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
 
-               // fragmentManager?.beginTransaction()?.replace(R.id.home_fragment, jobsFragment())?.commit()
-                val intent = Intent (getActivity(), JobsActivity::class.java)
-                getActivity()?.startActivity(intent)
-
+        if (USER_OBJECT?.accountType == "Technician") {
+            floatingActionButton = rootView.findViewById(R.id.home_jobs_floatingactionbutton)
+            floatingActionButton?.visibility = View.VISIBLE
+            floatingActionButton?.setOnClickListener {
+                val intent = Intent(activity, JobsActivity::class.java)
+                activity?.startActivity(intent)
             }
         }
-
-        )
-
-
         return rootView
     }
 

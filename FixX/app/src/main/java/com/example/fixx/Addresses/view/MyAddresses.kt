@@ -16,8 +16,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.activity_my_adresses.*
+import kotlinx.android.synthetic.main.fragment_login_tab.*
 
 
 class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
@@ -98,6 +100,9 @@ class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
 
         //performing positive action
         builder.setPositiveButton(getString(R.string.yes)){ _, _ ->
+            Log.i("TAG", "confirmDeleteDialog: try to remove <<<<<<<<<<<")
+            val address = list[position]
+            FirestoreService.removeLocation(address)
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
         }

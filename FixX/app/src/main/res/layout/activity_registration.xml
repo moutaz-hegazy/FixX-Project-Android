@@ -54,6 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layoutDirection="ltr"
             app:layout_constraintVertical_bias="0"
             app:tabIndicatorColor="@color/turquoise"
             app:tabIndicatorHeight="2dp"

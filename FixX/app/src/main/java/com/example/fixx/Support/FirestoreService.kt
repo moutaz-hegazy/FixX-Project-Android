@@ -384,6 +384,25 @@ object FirestoreService {
             }
     }
 
+    fun removeLocation(location: String){
+        Log.i("TAG", "removeLocation: >>>>>>>>>>>>>> here!!")
+        db.collection("Users").document(auth.currentUser?.uid!!)
+            .update("locations", FieldValue.arrayRemove(location))
+            .addOnSuccessListener {
+                Log.i("TAG", "removeLocation: DELETED <<<<<<<<<<<")
+            }.addOnFailureListener {
+                Log.i("TAG", "removeLocation: DELETE FAILED <<<<<<<<<<<")
+            }
+    }
+
+    fun removeJob(jobId : String, onSuccessHandler: () -> Unit, onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).delete().addOnSuccessListener {
+            onSuccessHandler()
+        }.addOnFailureListener {
+            onFailHandler()
+        }
+    }
+
     fun fetchMyCompletedOrderedJobs(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
         db.collection("Jobs").whereEqualTo("uid",auth.currentUser?.uid)
@@ -409,10 +428,19 @@ object FirestoreService {
                     queryResult->
                 queryResult.forEach {   document ->
                     val job = document.toObject<Job>()
-                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
                     retrievedJobs.add(job)
                 }
-                onSuccessHandler(retrievedJobs)
+                db.collection("Jobs").whereEqualTo("privateRequest", true )
+                    .whereArrayContains("bidders", auth.currentUser?.uid!!)
+                    .get().addOnSuccessListener { result ->
+                        result.forEach {   document ->
+                            val job = document.toObject<Job>()
+                            retrievedJobs.add(job)
+                        }
+                        onSuccessHandler(retrievedJobs)
+                    }.addOnFailureListener {
+                        onSuccessHandler(retrievedJobs)
+                    }
             }.addOnFailureListener {
                 onFailureHandler()
             }

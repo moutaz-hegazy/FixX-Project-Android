@@ -1,3 +1,5 @@
 package com.example.fixx.POJOs
 
-data class StringPair(val first : String = "", val  second : String = "")
+import java.io.Serializable
+
+data class StringPair(val first : String = "", val  second : String = ""):Serializable

@@ -298,4 +298,16 @@
     <string name="PasswordUpdateFail">فشل فى تحديث كلمة السر.</string>
     <string name="WorkLocations">أماكن العمل</string>
     <string name="Request">طلب</string>
+    <string name="OrderLoadingFailed">فشل فى تحميل طلباتك</string>
+    <string name="JobsLoadingFailed">فشل فى تحميل قائمة الطلبات</string>
+    <string name="Riyadah">الرياضة</string>
+    <string name="EzbetSaad">عزبة سعد</string>
+    <string name="Abis">أبيس</string>
+
+    <string name="Egypt">مصر</string>
+
+    <string name="Job">صنعة</string>
+
+    <string name="myWokAddressesTitle">أماكن العمل الخاصة بى</string>
+    <string name="addWorkAddress">أضف مكان العمل الخاص بك</string>
 </resources>
