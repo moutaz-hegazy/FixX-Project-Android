@@ -1,6 +1,7 @@
 package com.example.fixx.NavigationBar.OrdersScreen.views
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,7 @@ class CompletedOrdersFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.i("TAG", "onStart: in completed orders.............")
         jobs.clear()
         jobFDetailsAdapter.notifyDataSetChanged()
         viewmodel.loadData()

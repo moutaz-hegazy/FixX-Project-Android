@@ -50,6 +50,7 @@ class OngoingOrdersFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.i("TAG", "onStart: in ongoing orders.............")
         jobs.clear()
         jobsAdapter.notifyDataSetChanged()
         viewmodel.loadData()

@@ -454,7 +454,7 @@ object FirestoreService {
                     queryResult->
                 queryResult.forEach {   document ->
                     val job = document.toObject<Job>()
-                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    Log.i("TAG", "fetchMyCompletedJobs: >>>> $job")
                     retrievedJobs.add(job)
                 }
                 onSuccessHandler(retrievedJobs)

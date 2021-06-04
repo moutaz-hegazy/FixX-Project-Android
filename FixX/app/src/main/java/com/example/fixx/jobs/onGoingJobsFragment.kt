@@ -1,6 +1,7 @@
 package com.example.fixx.jobs
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,9 @@ class onGoingJobsFragment : Fragment() {
         }
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        Log.i("TAG", "onStart: in ongoing.............")
+    }
 
 }
