@@ -332,10 +332,12 @@
     <string name="JobUploaded">Job Uploaded.</string>
     <string name="AddWorkLocation">Add Work Location</string>
     <string name="AddressExists">This Address already Exists.</string>
-    <string name="deleteLocationQuestion">Do you to delete this Work Location ?</string>
-    <string name="deleteLocaionTitle">Confirm Deletng Work Location</string>
+    <string name="deleteLocationQuestion">Do you want to delete this Work Location ?</string>
+    <string name="deleteLocaionTitle">Confirm Deleting Work Location</string>
     <string name="WorkLocationAddFail">Failed to add work location.</string>
     <string name="LocationRemoveFailed">Failed to Delete Location.</string>
+    <string name="deleteJobRequestQuestion">Do you want to delete this job request?</string>
+    <string name="deleteJobRequest">Confirm Deleting Job Request</string>
 
 
 </resources>

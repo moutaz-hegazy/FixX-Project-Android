@@ -1,23 +1,17 @@
 package com.example.fixx.NavigationBar.OrdersScreen.views
 
-import android.content.Intent
+
 import android.os.Bundle
-import android.provider.SyncStateContract
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.NavigationBar.OrdersScreen.viewModels.OrdersViewmodel
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
-import com.example.fixx.Support.FirestoreService
-import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.FragmentOngoingOrdersBinding
-import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 
 class OngoingOrdersFragment : Fragment() {
 
