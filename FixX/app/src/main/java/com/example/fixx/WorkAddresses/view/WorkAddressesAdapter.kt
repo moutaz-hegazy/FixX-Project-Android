@@ -11,7 +11,8 @@ import com.example.fixx.R
 import kotlinx.android.synthetic.main.address_row.view.*
 
 
-class WorkAddressesAdapter(private val addressList: MutableList<String>, private val listener: MyWorkAddresses) :
+class WorkAddressesAdapter(private val addressList: MutableList<String>, private val listener: MyWorkAddresses,
+                           val locationDeleteHandler: (location : String)-> Unit) :
     RecyclerView.Adapter<WorkAddressesAdapter.AddressViewHolder>() {
 
     lateinit var context: Context
@@ -58,19 +59,11 @@ class WorkAddressesAdapter(private val addressList: MutableList<String>, private
 
     override fun onBindViewHolder(holder: AddressViewHolder, position: Int) {
         val currentItem = addressList[position]
-        val title = currentItem.substringBefore("%")
-        if(title.isNotEmpty()){
-            holder.titleLbl.apply {
-                visibility = View.VISIBLE
-                text = title
-            }
-        }
-        holder.addressLbl.text = currentItem.substringAfter("%")
-        holder.optionMenuBtn.apply {
 
+        holder.addressLbl.text = currentItem
+        holder.optionMenuBtn.apply {
             setOnClickListener{
                 showPopupMenu(holder.optionMenuBtn,position)
-
             }
         }
     }
@@ -97,16 +90,15 @@ class WorkAddressesAdapter(private val addressList: MutableList<String>, private
     private fun confirmDeleteDialog(position: Int, list: MutableList<String>){
         val builder = AlertDialog.Builder(context)
         //set title for alert dialog
-        builder.setTitle(context.getString(R.string.deleteDialogTitle))
+        builder.setTitle(context.getString(R.string.deleteLocaionTitle))
         //set message for alert dialog
-        builder.setMessage(context.getString(R.string.deleteDialogQuestion))
+        builder.setMessage(context.getString(R.string.deleteLocationQuestion))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
 
         //performing positive action
         builder.setPositiveButton(context.getString(R.string.yes)){dialogInterface, which ->
-            list.removeAt(position)
-            notifyDataSetChanged()
+            locationDeleteHandler(addressList[position])
         }
         //performing negative action
         builder.setNegativeButton(context.getString(R.string.no)){dialogInterface, which ->

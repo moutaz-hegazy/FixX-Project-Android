@@ -138,7 +138,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     fun placesSuggestions(){
-        Places.initialize(applicationContext, "AIzaSyAJFoav8N_4Urccyq0HSynjzS835Y9HPCk")
+        Places.initialize(applicationContext, "AIzaSyCVOvMSNN18_AJKQjfKfoWKxsYNF5GNxK0")
         map_activity_search_input_txt.setOnClickListener {
             val fieldList: List<Place.Field> =
                 listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
@@ -146,7 +146,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(this)
             startActivityForResult(intent, Constants.PLACES_AUTOCOMPLETE_REQUEST_CODE)
         }
-
     }
 
     private fun initMap() {

@@ -1,15 +1,19 @@
 package com.example.fixx.WorkAddresses.view
 
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import com.example.fixx.Addresses.view.MySpinnerAdapter
 import com.example.fixx.R
+import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.activity_add_work_address.*
 
 class AddWorkAddress : AppCompatActivity() {
@@ -240,20 +244,14 @@ class AddWorkAddress : AppCompatActivity() {
 
         addedAddress =
             add_work_address_activity_city_spinner.selectedItem.toString() + "," +
-                    add_work_address_activity_area_spinner.selectedItem.toString() + "/"
+                    add_work_address_activity_area_spinner.selectedItem.toString()
 
 
-
-//        AddAddressViewmodel(addedAddress, onSuccessBinding = {
-//            Intent().apply {
-//                putExtra(Constants.TRANS_ADDRESS, addedAddress)
-//            }.also {
-//                setResult(Activity.RESULT_OK, it)
-               finish()
-//            }
-//
-//        }, onFailBinding = {
-//            Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT)
-//        })
+            Intent().apply {
+                putExtra(Constants.TRANS_ADDRESS,addedAddress)
+            }.also {
+                setResult(Activity.RESULT_OK, it)
+                finish()
+            }
     }
 }

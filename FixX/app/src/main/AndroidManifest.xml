@@ -44,7 +44,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".jobs.JobsActivity" />
+        <activity android:name=".jobs.views.JobsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.TermsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
         <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />

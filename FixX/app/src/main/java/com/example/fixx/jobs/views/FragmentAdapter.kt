@@ -1,4 +1,4 @@
-package com.example.fixx.jobs
+package com.example.fixx.jobs.views
 
 import android.content.Context
 import androidx.fragment.app.Fragment

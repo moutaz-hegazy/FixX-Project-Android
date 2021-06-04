@@ -50,7 +50,7 @@
         android:layout_marginBottom="10dp"
         android:layout_weight=".2"
         android:backgroundTint="@color/turquoise"
-        android:text="@string/addAddressBtn"
+        android:text="@string/AddWorkLocation"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />

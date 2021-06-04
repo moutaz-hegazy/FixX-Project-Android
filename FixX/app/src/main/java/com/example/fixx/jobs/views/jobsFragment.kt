@@ -1,26 +1,44 @@
-package com.example.fixx.jobs
+package com.example.fixx.jobs.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.addCallback
+import com.example.fixx.NavigationBar.OrdersScreen.views.FragmentsAdapter
 import com.example.fixx.R
-import com.example.fixx.databinding.ActivityJobsBinding
+import com.example.fixx.databinding.FragmentJobsBinding
+import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.google.android.material.tabs.TabLayout
 
-class JobsActivity : AppCompatActivity() {
+/*
+class jobsFragment : Fragment() {
 
-    private lateinit var binding : ActivityJobsBinding
+    private lateinit var binding : FragmentJobsBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityJobsBinding.inflate(layoutInflater)
-        val view = binding.root
+//        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+//
+//            fragmentManager?.beginTransaction()?.replace(R.id.jobs_fragment, HomeFragment())?.commit()
+//
+//        }
+    }
 
-        setContentView(view)
-        supportActionBar?.hide()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
 
-      //  binding = ActivityJobsBinding.inflate(inflater, container, false)
+        binding = FragmentJobsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.myJobsTablayout.apply {
             newTab().setText(R.string.onGoingJobs).let {
                 binding.myJobsTablayout.addTab(it)
@@ -37,7 +55,7 @@ class JobsActivity : AppCompatActivity() {
         }
 
         binding.myJobsViewPager.apply {
-            adapter = FragmentAdapter(getSupportFragmentManager() ,context,binding.myJobsTablayout.tabCount)
+            adapter = FragmentAdapter(childFragmentManager,context,binding.myJobsTablayout.tabCount)
             addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.myJobsTablayout))
         }
 
@@ -52,4 +70,12 @@ class JobsActivity : AppCompatActivity() {
     }
 
 
-}
+
+
+
+
+
+
+
+    }
+*/

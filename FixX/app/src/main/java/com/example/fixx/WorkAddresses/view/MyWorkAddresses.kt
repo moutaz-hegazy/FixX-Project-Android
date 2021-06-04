@@ -12,29 +12,36 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
+import com.example.fixx.WorkAddresses.viewmodels.WorkAddressesViewmodel
 import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.activity_my_work_addresses.*
 
 class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickListener {
 
-    var myWorkAddresses = mutableListOf<String>()
+    private var myWorkAddresses = mutableListOf<String>()
     private lateinit var adapter : WorkAddressesAdapter
+    private lateinit var viewmodel : WorkAddressesViewmodel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_work_addresses)
 
+        viewmodel = WorkAddressesViewmodel(USER_OBJECT!!.uid!!)
         supportActionBar?.apply {
             title = getString(R.string.myWokAddressesTitle)
             setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF6200EE")))
         }
 
-//        NavigationBarActivity.USER_OBJECT?.locations?.let{
-//            myWorkAddresses.addAll(it)
-//        }
+        (USER_OBJECT as? Technician)?.workLocations?.let{
+            myWorkAddresses.addAll(it)
+        }
 
-        adapter = WorkAddressesAdapter(myWorkAddresses,this)
+        adapter = WorkAddressesAdapter(myWorkAddresses,this){
+            deleteLocation(it)
+        }
 
         showAddressList()
 
@@ -45,20 +52,38 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         }
     }
 
+    private fun deleteLocation(location : String){
+        viewmodel.removeWorkLocation(location, onSuccessBinding = {
+            myWorkAddresses.remove(location)
+            (USER_OBJECT as? Technician)?.workLocations?.remove(location)
+            adapter.notifyDataSetChanged()
+        },onFailBinding = {
+            Toast.makeText(this, R.string.LocationRemoveFailed, Toast.LENGTH_SHORT).show()
+        })
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.i("TAG", "onActivityResult: >>>>>>> 1")
         if (requestCode == Constants.START_WORK_ADDRESS_ACTIVITY_REQUEST_CODE) {
-            Log.i("TAG", "onActivityResult: >>>>>>> 2")
             if (resultCode == Activity.RESULT_OK) {
-                Log.i("TAG", "onActivityResult: >>>>>>> 3")
                 val address = data!!.getStringExtra(Constants.TRANS_ADDRESS)
+                if(address.isNullOrEmpty()){
 
-                myWorkAddresses.add(address!!.toString())
-
-                showAddressList()
-                adapter.notifyDataSetChanged()
-                // Toast.makeText(this, address, Toast.LENGTH_SHORT).show()
-
+                }else if(!myWorkAddresses.contains(address)){
+                    viewmodel.addNewWorkLocation(address, onSuccessBinding = {
+                        myWorkAddresses.add(address)
+                        (USER_OBJECT as? Technician)?.apply {
+                            Log.i("TAG", "onActivityResult: IAM TECHNICIAN <<<<<<<$address")
+                            workLocations?.add(address)
+                        }
+                        showAddressList()
+                        adapter.notifyDataSetChanged()
+                    }, onFailBinding = {
+                        Toast.makeText(this, R.string.WorkLocationAddFail, Toast.LENGTH_SHORT)
+                            .show()
+                    })
+                }else{
+                    Toast.makeText(this, R.string.AddressExists, Toast.LENGTH_SHORT).show()
+                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -89,15 +114,14 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
     private fun confirmDeleteDialog(position: Int, list: MutableList<String>){
         val builder = AlertDialog.Builder(this)
         //set title for alert dialog
-        builder.setTitle(getString(R.string.deleteDialogTitle))
+        builder.setTitle(getString(R.string.deleteLocaionTitle))
         //set message for alert dialog
-        builder.setMessage(getString(R.string.deleteDialogQuestion))
+        builder.setMessage(getString(R.string.deleteLocationQuestion))
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         //performing positive action
         builder.setPositiveButton(getString(R.string.yes)){ _, _ ->
-            list.removeAt(position)
-            adapter.notifyItemRemoved(position)
+            deleteLocation(myWorkAddresses[position])
         }
         //performing negative action
         builder.setNegativeButton(getString(R.string.no)){ _, _ ->

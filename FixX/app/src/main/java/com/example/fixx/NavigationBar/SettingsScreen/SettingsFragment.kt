@@ -22,6 +22,7 @@ import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.NavigationBar.viewmodels.SettingsViewmodel
 import com.example.fixx.R
+import com.example.fixx.WorkAddresses.view.MyWorkAddresses
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -142,6 +143,9 @@ class SettingsFragment : Fragment() {
                 visibility = View.VISIBLE
                 setOnClickListener {
                     // open work locations view.
+                    Intent(context, MyWorkAddresses::class.java).also {
+                        context.startActivity(it)
+                    }
                 }
             }
         }

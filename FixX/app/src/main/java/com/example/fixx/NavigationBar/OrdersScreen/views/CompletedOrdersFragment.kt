@@ -49,7 +49,6 @@ class CompletedOrdersFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.i("TAG", "onStart: in completed orders.............")
         jobs.clear()
         jobFDetailsAdapter.notifyDataSetChanged()
         viewmodel.loadData()

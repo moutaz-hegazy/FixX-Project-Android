@@ -395,6 +395,16 @@ object FirestoreService {
             }
     }
 
+    fun removeWorkLocation(location: String, onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
+        db.collection("Users").document(auth.currentUser?.uid!!)
+            .update("workLocations", FieldValue.arrayRemove(location))
+            .addOnSuccessListener {
+                onSuccessHandler()
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
     fun removeJob(jobId : String, onSuccessHandler: () -> Unit, onFailHandler: () -> Unit){
         db.collection("Jobs").document(jobId).delete().addOnSuccessListener {
             onSuccessHandler()
@@ -448,6 +458,7 @@ object FirestoreService {
 
     fun fetchMyCompletedWork(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
+        Log.i("TAG", "fetchMyCompletedWork: <<<<<<<<<<, Fetch from DB !!")
         db.collection("Jobs").whereEqualTo("techID",auth.currentUser?.uid)
             .whereEqualTo("status",Job.JobStatus.Completed.rawValue)
             .get().addOnSuccessListener {
@@ -590,6 +601,16 @@ object FirestoreService {
     fun updateUserLocations(loc : String, onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
         db.collection("Users").document(auth.uid ?: "")
             .update("locations", FieldValue.arrayUnion(loc))
+            .addOnSuccessListener {
+                onSuccessHandler()
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
+    fun updateWorkLocations(loc : String, onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
+        db.collection("Users").document(auth.uid ?: "")
+            .update("workLocations", FieldValue.arrayUnion(loc))
             .addOnSuccessListener {
                 onSuccessHandler()
             }.addOnFailureListener {

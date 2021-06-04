@@ -3,7 +3,8 @@
     <string name="fb_login_protocol_scheme" translatable="false">fb408034756850919</string>
 
     <string name="app_name">FixX</string>
-    <string name="google_maps_api_key">AIzaSyCye7MCW8Dzvy_U4S5kb-E5j-kIXoWSfCk</string>
+    <!--string name="google_maps_api_key">AIzaSyCye7MCW8Dzvy_U4S5kb-E5j-kIXoWSfCk</string-->
+    <string name="google_maps_api_key">AIzaSyCVOvMSNN18_AJKQjfKfoWKxsYNF5GNxK0</string>
     <string name="enterLocation">select location</string>
     <string name="CustomizeOrderTitle">Customize Order</string>
     <string name="Delete">Delete</string>
@@ -329,6 +330,12 @@
     <string name="SelectLocation">Please Select your Location.</string>
     <string name="JobUploadFailed">Failed to upload this job</string>
     <string name="JobUploaded">Job Uploaded.</string>
+    <string name="AddWorkLocation">Add Work Location</string>
+    <string name="AddressExists">This Address already Exists.</string>
+    <string name="deleteLocationQuestion">Do you to delete this Work Location ?</string>
+    <string name="deleteLocaionTitle">Confirm Deletng Work Location</string>
+    <string name="WorkLocationAddFail">Failed to add work location.</string>
+    <string name="LocationRemoveFailed">Failed to Delete Location.</string>
 
 
 </resources>

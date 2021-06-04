@@ -17,7 +17,7 @@ import com.example.fixx.NavigationBar.notification.NotificationActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
-import com.example.fixx.jobs.JobsActivity
+import com.example.fixx.jobs.views.JobsActivity
 import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 import com.example.project.ServiceAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
