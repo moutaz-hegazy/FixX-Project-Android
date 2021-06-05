@@ -36,6 +36,9 @@ class TechnicianProfileActivity : AppCompatActivity() {
     private lateinit var viewModel : TechnicianProfileViewModel
     private lateinit var techProfileRecycler : RecyclerView
     private lateinit var adapter : TechnicianProfileRecyclerAdapter
+    private val customizeOrderViewmodel : CustomizeOrderViewModel by lazy {
+        CustomizeOrderViewModel()
+    }
 
     lateinit var image : ImageView
     lateinit var imageLbl : TextView
@@ -47,6 +50,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
     var imagesPaths : Array<String>? = null
     var job : Job? = null
     val imagesUris = mutableListOf<Uri>()
+    private var editMode = false
 
     private var jobUploaded = false
 
@@ -61,6 +65,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
         job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
         imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS) as? Array<String>
         val showOnly = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
+        editMode = intent.getBooleanExtra(Constants.TRANS_EDIT_MODE,false)
 
         techName = findViewById(R.id.technician_profile_name_lbl)
         image = findViewById(R.id.technician_profile_img)
@@ -92,17 +97,31 @@ class TechnicianProfileActivity : AppCompatActivity() {
 
             job?.let { job ->
                 job.privateRequest = true
-                CustomizeOrderViewModel(job, imagesUris,
-                    onSuccessBinding = {
-                        Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                        viewModel.sendNotification(
-                            JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
-                                NavigationBarActivity.USER_OBJECT?.name ?: "",
-                                R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
-                            ))
-                    }, onFaliureBinding = {
-                        Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
-                    })
+                if(editMode){
+                    customizeOrderViewmodel.updateJob(job, imagesUris,
+                        onSuccessBinding = {
+                            Toast.makeText(this, R.string.JobUpdated, Toast.LENGTH_SHORT).show()
+                            viewModel.sendNotification(
+                                JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
+                                    NavigationBarActivity.USER_OBJECT?.name ?: "",
+                                    R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
+                                ))
+                        }, onFailureBinding = {
+                            Toast.makeText(this, R.string.JobUpdateFailed, Toast.LENGTH_SHORT).show()
+                        })
+                }else{
+                    customizeOrderViewmodel.uploadJob(job, imagesUris,
+                        onSuccessBinding = {
+                            Toast.makeText(this, R.string.JobUploaded, Toast.LENGTH_SHORT).show()
+                            viewModel.sendNotification(
+                                JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
+                                    NavigationBarActivity.USER_OBJECT?.name ?: "",
+                                    R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
+                                ))
+                        }, onFailureBinding = {
+                            Toast.makeText(this, R.string.JobUploadFailed, Toast.LENGTH_SHORT).show()
+                        })
+                }
                 jobUploaded = true
             }
             bookBtn?.isClickable = false

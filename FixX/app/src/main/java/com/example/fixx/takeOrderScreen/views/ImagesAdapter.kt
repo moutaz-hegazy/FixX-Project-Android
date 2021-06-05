@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.R
 import com.example.fixx.databinding.CustomizeOrderImageRecyclerItemBinding
 
-class ImagesAdapter(var data: ArrayList<Bitmap>) : RecyclerView.Adapter<ImagesAdapter.VH>() {
+class ImagesAdapter(var data: ArrayList<Bitmap>,
+                    val deleteImageHandler: (position:Int)->Unit) : RecyclerView.Adapter<ImagesAdapter.VH>() {
     lateinit var scrollToPositionHandler : (position : Int)->Unit
     lateinit var imagePickerHandler : ()->Unit
     lateinit var context: Context
@@ -73,8 +74,7 @@ class ImagesAdapter(var data: ArrayList<Bitmap>) : RecyclerView.Adapter<ImagesAd
 
                         builder.setPositiveButton(R.string.yes){dialogInterface, which ->
                             Log.i("TAG", "showPopupMenu: Delete Pressed !!")
-                            data.removeAt(position)
-                            notifyDataSetChanged()
+                            deleteImageHandler(position)
 
                         }
 

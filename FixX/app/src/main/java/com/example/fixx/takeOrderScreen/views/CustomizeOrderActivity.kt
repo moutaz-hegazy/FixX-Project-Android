@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -54,8 +55,13 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private lateinit var binding: ActivityCustomizeOrderBinding
     private val values = arrayListOf<String>("Select Location", "Add new Location")
     private val images = arrayListOf<Bitmap>()
+    private val viewModel : CustomizeOrderViewModel by lazy{
+        CustomizeOrderViewModel()
+    }
 
     private var imagePath : Uri? = null
+
+    private val deletedImagesInEditMode = arrayListOf<String?>()
 
     private var imagePathsList = arrayListOf<Uri>()
     private var imagePathsStringArray = arrayListOf<String>()
@@ -72,10 +78,31 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private var selectedJobType : String = ""
 
     private val imagesAdapter : ImagesAdapter by lazy {
-        ImagesAdapter(images)
+        ImagesAdapter(images){  position ->
+            if(editMode){
+                if(position < (jobObject?.images?.size ?: 0)+1){
+                    // image should be deleted from database.
+                    deletedImagesInEditMode.add(jobObject?.images?.get(position -1 )?.first)
+                    jobObject?.images?.removeAt(position -1)
+
+                }else{
+                    imagePathsStringArray.removeAt(position-1)
+                }
+            }else{
+                imagePathsStringArray.removeAt(position-1)
+            }
+            images.removeAt(position)
+            imagesAdapter.notifyDataSetChanged()
+        }
     }
 
     private lateinit var spinnerAdapter : SpinnerAdapter<String>
+
+    private var editMode = false
+
+    private var serviceName : Int = -1
+
+    private var jobObject : Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +122,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
 
         Log.i("TAG", "onCreate: >>>>$selectedDate")
-        val serviceName = intent.getIntExtra(Constants.serviceName, -1)
+        serviceName = intent.getIntExtra(Constants.serviceName, -1)
         setJobType(serviceName)
 
         //Action bar configuration.
@@ -153,7 +180,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                 val timeString =  "${SimpleDateFormat("HH:mm").format(calender.time)}"
                 binding.customizeOrderFromTimeLbl.text = "from : ${timeString}"
-                selectedFromTime = timeString
+                if(editMode){
+                    jobObject?.fromTime = timeString
+                }else {
+                    selectedFromTime = timeString
+                }
             }
 
             TimePickerDialog(
@@ -171,7 +202,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                 val timeString =  "${SimpleDateFormat("HH:mm").format(calender.time)}"
                 binding.customizeOrderToTimeLbl.text = "to : $timeString"
-                selectedToTime = timeString
+                if(editMode){
+                    jobObject?.toTime = timeString
+                }else{
+                    selectedToTime = timeString
+                }
             }
 
             TimePickerDialog(
@@ -190,14 +225,23 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                 val selectTechIntent =
                     Intent(applicationContext, ShowTechniciansScreen::class.java).apply {
+                        flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                         putExtra(Constants.serviceName, serviceName)
                         putExtra(Constants.TRANS_JOB, job)
-                        /*putExtra(Constants.TRANS_IMAGES,images.subList(1,images.size).toTypedArray())
-                          putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsList.toTypedArray())*/
                         putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsStringArray.toTypedArray())
 
                     }
                 startActivityForResult(selectTechIntent,Constants.TECH_LIST_REQUEST_CODE)
+            }else if(editMode){
+                jobObject?.description = binding.customizeOrderDescriptionTxt.text.toString()
+                Intent(applicationContext, ShowTechniciansScreen::class.java).apply {
+                    putExtra(Constants.serviceName, serviceName)
+                    putExtra(Constants.TRANS_JOB, jobObject)
+                    putExtra(Constants.TRANS_IMAGES_PATHS,imagePathsStringArray.toTypedArray())
+                    putExtra(Constants.TRANS_EDIT_MODE,editMode)
+                }.also {
+                    startActivityForResult(it,Constants.TECH_LIST_REQUEST_CODE)
+                }
             }else{
                 Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
             }
@@ -214,15 +258,35 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 imagePathsStringArray.forEach { image ->
                     imagePathsList2.add(Uri.parse(image))
                 }
-                CustomizeOrderViewModel(job, imagePathsList2,
+                viewModel.uploadJob(job, imagePathsList2,
                     onSuccessBinding = {
                         Toast.makeText(applicationContext, R.string.JobUploaded, Toast.LENGTH_SHORT).show()
                         finish()
-                    }, onFaliureBinding = {
+                    }, onFailureBinding = {
                         Toast.makeText(applicationContext, R.string.JobUploadFailed, Toast.LENGTH_SHORT).show()
                         binding.customizeOrderProgressBar.visibility = View.INVISIBLE
                         binding.customizeOrderScrollView.visibility = View.VISIBLE
                     })
+
+            }else if(editMode){
+                deletedImagesInEditMode.forEach {
+                    viewModel.removeImage(it)
+                }
+                binding.customizeOrderScrollView.visibility = View.INVISIBLE
+                binding.customizeOrderProgressBar.visibility = View.VISIBLE
+                jobObject?.description = binding.customizeOrderDescriptionTxt.text.toString()
+                imagePathsStringArray.forEach { image ->
+                    imagePathsList2.add(Uri.parse(image))
+                }
+                jobObject?.privateRequest = false
+                viewModel.updateJob(jobObject!!, imagePathsList2,onSuccessBinding = {
+                    Toast.makeText(applicationContext, R.string.JobUpdated, Toast.LENGTH_SHORT).show()
+                    finish()
+                }, onFailureBinding = {
+                    Toast.makeText(applicationContext, R.string.JobUpdateFailed, Toast.LENGTH_SHORT).show()
+                    binding.customizeOrderProgressBar.visibility = View.INVISIBLE
+                    binding.customizeOrderScrollView.visibility = View.VISIBLE
+                })
 
             }else{
                 Toast.makeText(this,R.string.SelectLocation, Toast.LENGTH_SHORT).show()
@@ -230,7 +294,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
         //------------------------------------------------------------------
 
-        val jobObject = intent.getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
+        jobObject = intent.getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
         jobObject?.let {
             displayJobDetails(it)
         }
@@ -239,7 +303,9 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private fun displayJobDetails(job : Job){
 
+        editMode = true
         getStringResourse(job.type)?.let {
+            serviceName = it
             supportActionBar?.apply {
                 title = if (CURRENT_LANGUAGE == "en") {
                     "${getString(it)} ${getString(R.string.Request)}"
@@ -289,7 +355,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     bitmaps.add(bitmap)
                 }
                 CoroutineScope(Dispatchers.Main).launch{
-                    images.addAll(bitmaps)
+                    images.addAll(1,bitmaps)
                     imagesAdapter.notifyDataSetChanged()
                 }
             }
@@ -398,14 +464,14 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     }
                 }
             }
-            image?.let{
-                images.add(it)
-                imagesAdapter.notifyDataSetChanged()
-            }
             //Log.i("TAG", "onActivityResult: will upload  ${imagePath.toString()}")
             imagePath?.let {
                 imagePathsList.add(it)
                 imagePathsStringArray.add(it.toString())
+                image?.let{
+                    images.add(it)
+                    imagesAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
@@ -432,7 +498,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }else if(position == 0 ){
 
         }else{
-            selectedLocation = values[position]
+            if(editMode){
+                jobObject?.location = values[position]
+            }else {
+                selectedLocation = values[position]
+            }
         }
         Toast.makeText(this, values[position], Toast.LENGTH_SHORT).show()
     }
@@ -481,7 +551,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         val viewFormatter = SimpleDateFormat("dd-MMM-YYYY")
         val viewFormattedDate = viewFormatter.format(calendar.time)
         binding.customizeOrderDateLbl.text = "On : $viewFormattedDate"
-        selectedDate = viewFormattedDate
+        if(editMode){
+            jobObject?.date = viewFormattedDate
+        }else {
+            selectedDate = viewFormattedDate
+        }
     }
 
     // camera permission Code ->
@@ -585,9 +659,5 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         with(negativeButton) {
             setTextColor(ContextCompat.getColor(context, R.color.green))
         }
-
     }
-
-
-
 }

@@ -45,6 +45,7 @@ sealed class Constants {
         const val TRANS_RESPONSE_BOOL = "responseBool"
         const val LANGUAGE_SHARED_PREFERENCES = "languageSP"
         const val CURRENT_LANGUAGE = "current_lang"
+        const val TRANS_EDIT_MODE = "editMode"
 
         val cities = arrayOf("City","Cairo", "Alexandria")
         val citiesInArabic = arrayOf("مدينة","القاهرة", "الإسكندرية")

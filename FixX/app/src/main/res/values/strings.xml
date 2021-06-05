@@ -336,6 +336,8 @@
     <string name="deleteLocaionTitle">Confirm Deletng Work Location</string>
     <string name="WorkLocationAddFail">Failed to add work location.</string>
     <string name="LocationRemoveFailed">Failed to Delete Location.</string>
+    <string name="JobUpdated">Job Updated.</string>
+    <string name="JobUpdateFailed">Job update failed.</string>
 
 
 </resources>

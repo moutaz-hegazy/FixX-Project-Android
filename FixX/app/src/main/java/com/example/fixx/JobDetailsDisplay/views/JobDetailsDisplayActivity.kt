@@ -94,7 +94,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         if (job.techID != null) {
             Log.i("TAG", "onCreate: Here 11 <<<<<<<<")
             loadSingleTechnician(job.techID!!)
-        } else {
+        } else if(!job.bidders.isNullOrEmpty()) {
             job.bidders?.let { map ->
                 Log.i("TAG", "onCreate: Here 44 <<<<<<<<"+ job.privateRequest + job)
                 if (job.privateRequest) {

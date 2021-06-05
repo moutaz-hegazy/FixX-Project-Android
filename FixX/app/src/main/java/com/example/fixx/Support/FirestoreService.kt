@@ -271,6 +271,10 @@ object FirestoreService {
             })
     }
 
+//    fun updateJobDetails(jobId:String, changes : MutableMap<String,Object>){
+//        //db.collection("Jobs").document(jobId).update()
+//    }
+
 
     fun saveJobDetails(job: Job, onSuccessHandler: (jobs: Job) -> Unit, onFailHandler: () -> Unit) {
         val map = HashMap<String, Any?>()
@@ -618,11 +622,13 @@ object FirestoreService {
             }
     }
 
-    fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String) {
+    fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String,
+                       onSuccessHandler: () -> Unit,
+                       onFailureHandler: () -> Unit) {
         Log.i("TAG", "updateJob: start updating $map")
         db.collection(collectionName).document(documentId)
             .update(map)
-            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
-            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+            .addOnSuccessListener { onSuccessHandler()}
+            .addOnFailureListener { onFailureHandler() }
     }
 }
