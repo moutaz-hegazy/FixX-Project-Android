@@ -57,6 +57,8 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
             myWorkAddresses.remove(location)
             (USER_OBJECT as? Technician)?.workLocations?.remove(location)
             adapter.notifyDataSetChanged()
+            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkLocation(location)
+            viewmodel.unsubscribeFromTopic(topic)
         },onFailBinding = {
             Toast.makeText(this, R.string.LocationRemoveFailed, Toast.LENGTH_SHORT).show()
         })
@@ -74,9 +76,7 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
                         (USER_OBJECT as? Technician)?.apply {
                             Log.i("TAG", "onActivityResult: IAM TECHNICIAN <<<<<<<$address")
                             workLocations?.add(address)
-                            val topic = (USER_OBJECT!! as Technician).jobTitle!!+"%"+address.replace(" ", "_", true)
-                                .replace("-", "_", true)
-                                .replace(",", ".")
+                            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkLocation(address)
                             Log.i("TAG", "onActivityResult: >>>>$topic")
                             viewmodel.subscribeToTopic(topic)
                         }
@@ -139,5 +139,44 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         alertDialog.show()
         alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
 
+    }
+
+    fun getWorkLocation(location: String) : String{
+        val city = location.substringBefore(",")
+        val area = location.substringAfter(",")
+
+        return "%"+getCityEnglishName(city).replace(" ","_", true)+"."+
+                getAreaEnglishName(area,city).replace(" ","_",true).
+                replace("-","_",true)
+    }
+
+    private fun getCityEnglishName(city: String): String {
+        var myCity = city
+        for (iterator in Constants.citiesInArabic.indices) {
+            if (city.equals(Constants.citiesInArabic[iterator])) {
+                myCity = Constants.cities[iterator]
+            }
+        }
+        return myCity
+    }
+
+    private fun getAreaEnglishName(area: String, city: String): String {
+        var myArea = area
+
+        if (city.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoAreaInArabic.indices) {
+                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
+                    myArea = Constants.cairoArea[iterator]
+                }
+            }
+        } else if (city.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexAreaInArabic.indices) {
+                if (area.equals(Constants.alexAreaInArabic[iterator])) {
+                    myArea = Constants.alexArea[iterator]
+                }
+            }
+        }
+
+        return myArea
     }
 }

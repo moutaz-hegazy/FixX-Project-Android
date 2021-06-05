@@ -36,8 +36,8 @@ class WorkAddressesViewmodel(val uid : String) {
 
     fun unsubscribeFromTopic(topic : String){
         FirebaseMessaging.getInstance()
-            .unsubscribeFromTopic("/$topic").addOnSuccessListener {
-                Log.i("TAG", "checkLogin: SUBSCRIPED <<<<<<<<<<<<<<<")
+            .unsubscribeFromTopic("$topic").addOnSuccessListener {
+                Log.i("TAG", "checkLogin: UNSUBSCRIPED <<<<<<<<<<<<<<<")
             }.addOnCompleteListener { task ->
                 Log.i("TAG", "checkLogin: COMPLETE <<<<<<<<<<<<<<<")
                 var msg = "SUCCESS !!"

@@ -246,7 +246,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     startActivityForResult(it,Constants.TECH_LIST_REQUEST_CODE)
                 }
             }else{
-                Toast.makeText(this,"Please Select your Location", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,R.string.SelectLocation, Toast.LENGTH_SHORT).show()
             }
         }
         //---------------------------------------------------------------
@@ -255,11 +255,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         binding.customizeOrederPublishBtn.setOnClickListener {
 
             if (validateJobData()) {
-                val topic = selectedJobType+"%"+
-                        selectedLocation?.substringAfter("%")?.substringBefore("/")
-                            ?.replace(" ","_",true)
-                            ?.replace("-","_",true)
-                            ?.replace(",",".",true)
+                val topic = selectedJobType+getWorkLocation(selectedLocation!!.substringAfter("%")
+                    .substringBefore("/"))
                 Log.i("TAG", "onCreate: >>>>>>>>>>>>$topic")
                 val job = createNewJob()
                 binding.customizeOrderScrollView.visibility = View.INVISIBLE
@@ -271,8 +268,8 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     onSuccessBinding = {
                         Toast.makeText(applicationContext, R.string.JobUploaded, Toast.LENGTH_SHORT).show()
                         viewModel.sendNotification(MultiJobRequestPushNotification(
-                            JobRequestData(Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST, USER_OBJECT!!.uid!!,
-                                R.string.JobRequestTitle,R.string.MultiJobRequest,it.jobId),topic))
+                            JobRequestData(Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST, USER_OBJECT!!.name,
+                                R.string.JobRequestTitle,R.string.MultiJobRequest,it.jobId),"/topics/$topic"))
                         finish()
                     }, onFailureBinding = {
                         Toast.makeText(applicationContext, R.string.JobUploadFailed, Toast.LENGTH_SHORT).show()
@@ -282,11 +279,9 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
             }else if(editMode){
 
-                val topic = selectedJobType+"%"+
-                        jobObject?.location?.substringAfter("%")?.substringBefore("/")
-                            ?.replace(" ","_",true)
-                            ?.replace("-","_",true)
-                            ?.replace(",",".",true)
+                val topic = selectedJobType+getWorkLocation(jobObject!!.location!!.substringAfter("%")
+                    .substringBefore("/"))
+                Log.i("TAG", "onCreate: >>>>>>>>>>>>$topic")
 
                 deletedImagesInEditMode.forEach {
                     viewModel.removeImage(it)
@@ -301,7 +296,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 viewModel.updateJob(jobObject!!, imagePathsList2,onSuccessBinding = {   job ->
                     Toast.makeText(applicationContext, R.string.JobUpdated, Toast.LENGTH_SHORT).show()
                     viewModel.sendNotification(MultiJobRequestPushNotification(
-                        JobRequestData(Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST, USER_OBJECT!!.uid!!,
+                        JobRequestData(Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST, USER_OBJECT!!.name,
                             R.string.JobRequestTitle,R.string.MultiJobRequest,job.jobId),topic))
                     finish()
                 }, onFailureBinding = {
@@ -681,5 +676,44 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         with(negativeButton) {
             setTextColor(ContextCompat.getColor(context, R.color.green))
         }
+    }
+
+    fun getWorkLocation(location: String) : String{
+        val city = location.substringBefore(",")
+        val area = location.substringAfter(",")
+
+        return "%"+getCityEnglishName(city).replace(" ","_", true)+"."+
+                getAreaEnglishName(area,city).replace(" ","_",true).
+                replace("-","_",true)
+    }
+
+    private fun getCityEnglishName(city: String): String {
+        var myCity = city
+        for (iterator in Constants.citiesInArabic.indices) {
+            if (city.equals(Constants.citiesInArabic[iterator])) {
+                myCity = Constants.cities[iterator]
+            }
+        }
+        return myCity
+    }
+
+    private fun getAreaEnglishName(area: String, city: String): String {
+        var myArea = area
+
+        if (city.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoAreaInArabic.indices) {
+                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
+                    myArea = Constants.cairoArea[iterator]
+                }
+            }
+        } else if (city.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexAreaInArabic.indices) {
+                if (area.equals(Constants.alexAreaInArabic[iterator])) {
+                    myArea = Constants.alexArea[iterator]
+                }
+            }
+        }
+
+        return myArea
     }
 }
