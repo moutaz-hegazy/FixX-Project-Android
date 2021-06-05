@@ -338,6 +338,7 @@
     <string name="LocationRemoveFailed">Failed to Delete Location.</string>
     <string name="JobUpdated">Job Updated.</string>
     <string name="JobUpdateFailed">Job update failed.</string>
+    <string name="MultiJobRequest">requested a job in your work location</string>
 
 
 </resources>

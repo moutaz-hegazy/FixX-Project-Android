@@ -34,6 +34,9 @@ import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
+import com.example.fixx.inAppChatScreens.model.ChatPushNotification
+import com.example.fixx.showTechnicianScreen.models.JobRequestData
+import com.example.fixx.showTechnicianScreen.models.MultiJobRequestPushNotification
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
 import com.example.fixx.takeOrderScreen.contracts.DateSelected
 import com.example.fixx.takeOrderScreen.viewModels.CustomizeOrderViewModel
@@ -252,6 +255,12 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         binding.customizeOrederPublishBtn.setOnClickListener {
 
             if (validateJobData()) {
+                val topic = selectedJobType+"%"+
+                        selectedLocation?.substringAfter("%")?.substringBefore("/")
+                            ?.replace(" ","_",true)
+                            ?.replace("-","_",true)
+                            ?.replace(",",".",true)
+                Log.i("TAG", "onCreate: >>>>>>>>>>>>$topic")
                 val job = createNewJob()
                 binding.customizeOrderScrollView.visibility = View.INVISIBLE
                 binding.customizeOrderProgressBar.visibility = View.VISIBLE
@@ -261,6 +270,9 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 viewModel.uploadJob(job, imagePathsList2,
                     onSuccessBinding = {
                         Toast.makeText(applicationContext, R.string.JobUploaded, Toast.LENGTH_SHORT).show()
+                        viewModel.sendNotification(MultiJobRequestPushNotification(
+                            JobRequestData(Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST, USER_OBJECT!!.uid!!,
+                                R.string.JobRequestTitle,R.string.MultiJobRequest,it.jobId),topic))
                         finish()
                     }, onFailureBinding = {
                         Toast.makeText(applicationContext, R.string.JobUploadFailed, Toast.LENGTH_SHORT).show()
@@ -269,6 +281,13 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     })
 
             }else if(editMode){
+
+                val topic = selectedJobType+"%"+
+                        jobObject?.location?.substringAfter("%")?.substringBefore("/")
+                            ?.replace(" ","_",true)
+                            ?.replace("-","_",true)
+                            ?.replace(",",".",true)
+
                 deletedImagesInEditMode.forEach {
                     viewModel.removeImage(it)
                 }
@@ -279,8 +298,11 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     imagePathsList2.add(Uri.parse(image))
                 }
                 jobObject?.privateRequest = false
-                viewModel.updateJob(jobObject!!, imagePathsList2,onSuccessBinding = {
+                viewModel.updateJob(jobObject!!, imagePathsList2,onSuccessBinding = {   job ->
                     Toast.makeText(applicationContext, R.string.JobUpdated, Toast.LENGTH_SHORT).show()
+                    viewModel.sendNotification(MultiJobRequestPushNotification(
+                        JobRequestData(Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST, USER_OBJECT!!.uid!!,
+                            R.string.JobRequestTitle,R.string.MultiJobRequest,job.jobId),topic))
                     finish()
                 }, onFailureBinding = {
                     Toast.makeText(applicationContext, R.string.JobUpdateFailed, Toast.LENGTH_SHORT).show()

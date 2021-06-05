@@ -74,6 +74,11 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
                         (USER_OBJECT as? Technician)?.apply {
                             Log.i("TAG", "onActivityResult: IAM TECHNICIAN <<<<<<<$address")
                             workLocations?.add(address)
+                            val topic = (USER_OBJECT!! as Technician).jobTitle!!+"%"+address.replace(" ", "_", true)
+                                .replace("-", "_", true)
+                                .replace(",", ".")
+                            Log.i("TAG", "onActivityResult: >>>>$topic")
+                            viewmodel.subscribeToTopic(topic)
                         }
                         showAddressList()
                         adapter.notifyDataSetChanged()

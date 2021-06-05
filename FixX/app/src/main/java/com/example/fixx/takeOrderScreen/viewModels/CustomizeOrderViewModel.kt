@@ -6,8 +6,16 @@ import android.util.Log
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.StringPair
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.Support.TaskHandler
 import com.example.fixx.constants.Constants
+import com.example.fixx.inAppChatScreens.model.ChatPushNotification
+import com.example.fixx.showTechnicianScreen.models.MultiJobRequestPushNotification
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.logging.Handler
 
 class CustomizeOrderViewModel() {
@@ -67,6 +75,20 @@ class CustomizeOrderViewModel() {
     fun removeImage(imageId : String?){
         imageId?.let {
             FirestoreService.deleteImage(it)
+        }
+    }
+
+
+    fun sendNotification(notification: MultiJobRequestPushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postAreaJobNotification(notification)
+            if(response.isSuccessful) {
+                Log.d("TAG", "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e("TAG", response.errorBody()!!.string())
+            }
+        } catch(e: Exception) {
+            Log.e("TAG", e.toString())
         }
     }
 }
