@@ -67,13 +67,8 @@ class FirebaseService : FirebaseMessagingService() {
                     }
                     pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",pendingIntent)
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
@@ -85,13 +80,8 @@ class FirebaseService : FirebaseMessagingService() {
                     }
                     pendingIntent = getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT)
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",pendingIntent)
             }
 
             Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->{
@@ -105,16 +95,24 @@ class FirebaseService : FirebaseMessagingService() {
                     }
                     pendingIntent = getPendingIntent(2,PendingIntent.FLAG_UPDATE_CURRENT)
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle("${p0.data["user"]}")
-                    .setContentText("${p0.data["message"]}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification("${p0.data["user"]}","${p0.data["message"]}",pendingIntent)
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
+                var pendingIntent : PendingIntent
+                TaskStackBuilder.create(applicationContext).apply {
+                    addNextIntentWithParentStack(Intent(applicationContext,TechViewOrderScreen::class.java))
+                    editIntentAt(0).apply {
+                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    }
+                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    pendingIntent)
+            }
+
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->{
                 var pendingIntent : PendingIntent
                 TaskStackBuilder.create(applicationContext).apply {
                     addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
@@ -123,24 +121,45 @@ class FirebaseService : FirebaseMessagingService() {
                     }
                     pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    pendingIntent)
+            }
+
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->{
+                var pendingIntent : PendingIntent
+                TaskStackBuilder.create(applicationContext).apply {
+                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
+                    editIntentAt(0).apply {
+                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    }
+                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    pendingIntent)
+            }
+
+            Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
+                var pendingIntent : PendingIntent
+                TaskStackBuilder.create(applicationContext).apply {
+                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
+                    editIntentAt(0).apply {
+                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    }
+                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    pendingIntent)
             }
 
             else ->{
                 val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                pendingIntent)
+
             }
         }
 //        val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
@@ -154,6 +173,17 @@ class FirebaseService : FirebaseMessagingService() {
 
         notificationManager.notify(notificationId,notification)
     }
+
+
+    private fun createNotification(title : String, content:String, pendingIntent : PendingIntent)
+    =    NotificationCompat.Builder(this,CHANNEL_ID)
+        .setContentTitle(title)
+        .setContentText(content)
+        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+        .setAutoCancel(true)
+        .setContentIntent(pendingIntent)
+        .build()
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager){

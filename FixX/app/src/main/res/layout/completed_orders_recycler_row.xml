@@ -19,7 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="wrap_content">
 
 
             <ImageView
@@ -27,49 +27,46 @@
                 android:layout_width="104dp"
                 android:layout_height="88dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_outline"
                 android:src="@drawable/ic_launcher_background"
-                app:layout_constraintBottom_toBottomOf="@+id/completed_order_price_lbl"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/alumetal" />
+                app:srcCompat="@drawable/alumetal"
+                tools:layout_editor_absoluteY="7dp" />
 
             <TextView
                 android:id="@+id/completed_orders_jobType_lbl"
                 android:layout_width="115dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
                 android:hint="Order Type"
                 android:paddingTop="10dp"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/completed_order_job_image"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/completed_order_job_image" />
 
             <TextView
                 android:id="@+id/completed_order_date_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="16dp"
                 android:text="TextView"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/completed_order_job_image"
-                app:layout_constraintTop_toBottomOf="@+id/completed_orders_jobType_lbl"
+                app:layout_constraintStart_toEndOf="@+id/textView6"
+                app:layout_constraintTop_toTopOf="@+id/textView6"
                 tools:text="On : 13-may-22222" />
 
             <TextView
                 android:id="@+id/completed_order_price_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="8dp"
                 android:text="TextView"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/completed_order_date_lbl"
-                app:layout_constraintTop_toBottomOf="@+id/completed_order_date_lbl"
-                tools:text="Price : not determined" />
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintTop_toTopOf="@+id/textView4"
+                tools:text="500" />
 
             <ImageButton
                 android:id="@+id/completed_order_menu_btn"
@@ -85,14 +82,45 @@
                 android:id="@+id/completedOrderAddressLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
                 android:lines="1"
                 android:text="TextView"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Alexandria,elmandraQuebly,20thst" />
+                app:layout_constraintTop_toBottomOf="@+id/completed_order_job_image"
+                tools:text="Alexandria,elmandraQuebly,20thst"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/price"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/textView6"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/LE"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/completed_order_price_lbl"
+                app:layout_constraintTop_toTopOf="@+id/completed_order_price_lbl" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/On"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/completed_orders_jobType_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/completed_orders_jobType_lbl" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

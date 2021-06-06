@@ -149,7 +149,8 @@ object FirestoreService {
     }
 
     fun removeTechnicianFromJob(jobId : String){
-        db.collection("Jobs").document(jobId).update("techID",null)
+        db.collection("Jobs").document(jobId).update(mapOf("techID" to null, "status" to Job.JobStatus.OnRequest,
+            "price" to null))
     }
 
     fun selectTechForJob(techId : String, jobId : String, price : String){

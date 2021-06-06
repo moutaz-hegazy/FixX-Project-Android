@@ -51,8 +51,8 @@ class TechViewOrderViewModel() {
         FirestoreService.removeTechnicianFromJob(jobId)
     }
 
-    fun completeJob(jobId : String, onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
-        FirestoreService.updateDocumentField(Constants.JOBS_COLLECTION,"status",Job.JobStatus.Completed.rawValue,
-            jobId, onSuccessBinding,onFailBinding)
+    fun completeJob(jobId : String,date:String, onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
+        FirestoreService.updateDocument(Constants.JOBS_COLLECTION, mapOf("status" to Job.JobStatus.Completed.rawValue,
+            "completionDate" to date),jobId,onSuccessBinding,onFailBinding)
     }
 }

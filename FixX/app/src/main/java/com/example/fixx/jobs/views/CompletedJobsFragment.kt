@@ -36,12 +36,9 @@ class CompletedJobsFragment : Fragment() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-        jobs.clear()
-        jobsAdapter.notifyDataSetChanged()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewmodel.loadData()
-
     }
 
     override fun onCreateView(

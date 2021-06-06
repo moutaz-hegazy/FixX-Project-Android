@@ -24,6 +24,8 @@ import com.example.fixx.techOrderDetailsScreen.models.ReplyNotificationData
 import com.example.fixx.techOrderDetailsScreen.models.TechReplyPushNotification
 import com.example.fixx.techOrderDetailsScreen.viewModels.TechViewOrderViewModel
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TechViewOrderScreen : AppCompatActivity() {
 
@@ -72,7 +74,11 @@ class TechViewOrderScreen : AppCompatActivity() {
                                 if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
                                     binding.techViewOrderPriceTxt.error = "enter a price"
                                 } else {
-                                    job?.bidders?.put(USER_OBJECT!!.uid!!,binding.techViewOrderPriceTxt.text.toString())
+                                    if(job?.bidders == null){
+                                        job?.bidders = mutableMapOf(USER_OBJECT!!.uid!! to binding.techViewOrderPriceTxt.text.toString())
+                                    }else{
+                                        job?.bidders?.put(USER_OBJECT!!.uid!!,binding.techViewOrderPriceTxt.text.toString())
+                                    }
                                     viewModel.addToBidders(job!!.jobId, job!!.bidders!!) {
                                         contact?.token?.let { token ->
                                             TechReplyPushNotification(
@@ -86,6 +92,7 @@ class TechViewOrderScreen : AppCompatActivity() {
                                                 arrayOf(token)
                                             ).also {
                                                 viewModel.sendReplyNotification(it)
+                                                finish()
                                             }
                                         }
                                     }
@@ -95,7 +102,8 @@ class TechViewOrderScreen : AppCompatActivity() {
                         binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
                         binding.techViewOrderAccountLbl.text = returnedJob.price.toString()
                         binding.techViewOrderCompletedBtn.setOnClickListener {
-                            viewModel.completeJob(returnedJob.jobId,onSuccessBinding = {
+                            val currentData = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
+                            viewModel.completeJob(returnedJob.jobId,currentData,onSuccessBinding = {
                                 contact?.token?.let {token ->
                                     TechReplyPushNotification(
                                         ReplyNotificationData(
