@@ -5,6 +5,7 @@ import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.RetrofitInstance
+import com.example.fixx.constants.Constants
 import com.example.fixx.techOrderDetailsScreen.models.ReplyNotificationData
 import com.example.fixx.techOrderDetailsScreen.models.TechReplyPushNotification
 import com.google.gson.Gson
@@ -36,11 +37,17 @@ class TechViewOrderViewModel() {
         FirestoreService.fetchJobById(jobId,onSuccessBinding,onFailBinding)
     }
 
-    fun addToBidders(uid : String?, jobId : String, price : String , onSuccessBinding: () -> Unit){
-        uid?.let { it ->
-            FirestoreService.addBidder(uid,jobId,price){
-                onSuccessBinding()
-            }
+    fun addToBidders(jobId : String,bidders: Map<String,String> , onSuccessBinding: () -> Unit){
+        FirestoreService.addBidder(jobId,bidders){
+            onSuccessBinding()
         }
+    }
+
+    fun removeSelfFromBidders(jobId:String){
+        FirestoreService.removeBidders(jobId)
+    }
+
+    fun canceledJob(jobId: String) {
+        FirestoreService.removeTechnicianFromJob(jobId)
     }
 }

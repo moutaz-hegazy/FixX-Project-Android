@@ -1,5 +1,7 @@
 package com.example.fixx.techOrderDetailsScreen.views
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -7,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
@@ -49,8 +52,8 @@ class TechViewOrderScreen : AppCompatActivity() {
         }
 
         jobId?.let {    jobID ->
-            viewModel.fetchJobFromDB(jobID, onSuccessBinding = {
-                job = it
+            viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob->
+                job = returnedJob
                 viewModel.fetchUserFromDB(job?.uid) { person ->
                     contact = person
 
@@ -62,31 +65,33 @@ class TechViewOrderScreen : AppCompatActivity() {
                         }
                     }
 
-                    binding.techViewOrderConfirmBtn.setOnClickListener {
-                        if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
-                            binding.techViewOrderPriceTxt.error = "enter a price"
-                        } else {
-                            viewModel.addToBidders(
-                                USER_OBJECT?.uid,
-                                jobID,
-                                binding.techViewOrderPriceTxt.text.toString()
-                            ) {
-                                contact?.token?.let { token ->
-                                    TechReplyPushNotification(
-                                        ReplyNotificationData(
-                                            Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
-                                            USER_OBJECT?.name ?: "",
-                                            R.string.RequestConfirmed,
-                                            R.string.ConfirmMessage, job?.jobId!!,
-                                            binding.techViewOrderPriceTxt.text.toString()
-                                        ),
-                                        arrayOf(token)
-                                    ).also {
-                                        viewModel.sendReplyNotification(it)
+                    if(returnedJob.status == Job.JobStatus.OnRequest){
+                        binding.techViewOrderConfirmPriceLayout.visibility = View.VISIBLE
+                        binding.techViewOrderConfirmBtn.setOnClickListener {
+                                if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
+                                    binding.techViewOrderPriceTxt.error = "enter a price"
+                                } else {
+                                    job?.bidders?.put(USER_OBJECT!!.uid!!,binding.techViewOrderPriceTxt.text.toString())
+                                    viewModel.addToBidders(job!!.jobId, job!!.bidders!!) {
+                                        contact?.token?.let { token ->
+                                            TechReplyPushNotification(
+                                                ReplyNotificationData(
+                                                    Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
+                                                    USER_OBJECT?.name ?: "",
+                                                    R.string.RequestConfirmed,
+                                                    R.string.ConfirmMessage, job?.jobId!!,
+                                                    binding.techViewOrderPriceTxt.text.toString()
+                                                ),
+                                                arrayOf(token)
+                                            ).also {
+                                                viewModel.sendReplyNotification(it)
+                                            }
+                                        }
                                     }
                                 }
-                            }
                         }
+                    }else{
+                        
                     }
 
                     if (person?.profilePicture != null) {
@@ -104,17 +109,50 @@ class TechViewOrderScreen : AppCompatActivity() {
                     binding.techViewOrderUserNameLbl.text = person?.name
                 }
 
-                binding.techViewOrderDenyBtn.setOnClickListener {
-                    contact?.token?.let { token ->
-                        TechReplyPushNotification(
-                            ReplyNotificationData(
-                                Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
-                                USER_OBJECT?.name ?: "",
-                                R.string.RequestDenied,
-                                R.string.DenyMessage, job!!.jobId
-                            ),
-                            arrayOf(token)
-                        )
+                binding.techViewOrderDenyBtn.apply {
+                    if(returnedJob.privateRequest && returnedJob.status == Job.JobStatus.OnRequest){
+                        visibility = View.VISIBLE
+                        setOnClickListener{
+                            cancelJobDialog (R.string.Deny, R.string.DenyDialogMsg) {
+                                contact?.token?.let { token ->
+                                    TechReplyPushNotification(
+                                        ReplyNotificationData(
+                                            Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
+                                            USER_OBJECT?.name ?: "",
+                                            R.string.RequestDenied,
+                                            R.string.DenyMessage, job!!.jobId
+                                        ),
+                                        arrayOf(token)
+                                    ).also {
+                                        viewModel.sendReplyNotification(it)
+                                    }
+                                    viewModel.removeSelfFromBidders(jobID)
+                                    this@TechViewOrderScreen.finish()
+                                }
+                            }
+                        }
+                    }else if(returnedJob.status == Job.JobStatus.Accepted){
+                        visibility = View.VISIBLE
+                        text = getString(R.string.CancelJob)
+                        setOnClickListener {
+                            cancelJobDialog(R.string.CancelJobTitle,R.string.CancelJobMsg){
+                                contact?.token?.let { token ->
+                                    TechReplyPushNotification(
+                                        ReplyNotificationData(
+                                            Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL,
+                                            USER_OBJECT?.name ?: "",
+                                            R.string.RequestCanceled,
+                                            R.string.CancelMessage, job!!.jobId
+                                        ),
+                                        arrayOf(token)
+                                    ).also {
+                                        viewModel.sendReplyNotification(it)
+                                    }
+                                    viewModel.canceledJob(job!!.jobId)
+                                    this@TechViewOrderScreen.finish()
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -147,5 +185,40 @@ class TechViewOrderScreen : AppCompatActivity() {
                 finish()
             })
         }
+    }
+
+
+    private fun cancelJobDialog(title : Int,message:Int,onAcceptHandler:()->Unit){
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle(getString(title))
+        //set message for alert dialog
+        builder.setMessage(getString(message))
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton(getString(R.string.yes)){ _, _ ->
+            onAcceptHandler()
+        }
+        //performing negative action
+        builder.setNegativeButton(getString(R.string.no)){ _, _ ->
+
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
+        val positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        with(positiveButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.red))
+        }
+        val negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        with(negativeButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.green))
+        }
+
     }
 }

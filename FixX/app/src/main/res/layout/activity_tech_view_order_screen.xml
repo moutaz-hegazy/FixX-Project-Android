@@ -351,6 +351,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@android:color/holo_red_dark"
+        android:visibility="invisible"
         android:text="@string/Deny"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tech_view_order_chat_btn"

@@ -137,15 +137,19 @@ object FirestoreService {
             }
     }
 
-    fun addBidder(uid : String, jobId : String, price: String, onCompletion:()->Unit){
+    fun addBidder(jobId : String, bidders:Map<String,String>, onCompletion:()->Unit){
         db.collection("Jobs").document(jobId)
-            .update("bidders", mapOf(uid to price)).addOnSuccessListener {
+            .update("bidders", bidders).addOnSuccessListener {
                 onCompletion()
             }
     }
 
     fun removeBidders(jobId : String){
         db.collection("Jobs").document(jobId).update("bidders",null)
+    }
+
+    fun removeTechnicianFromJob(jobId : String){
+        db.collection("Jobs").document(jobId).update("techID",null)
     }
 
     fun selectTechForJob(techId : String, jobId : String, price : String){

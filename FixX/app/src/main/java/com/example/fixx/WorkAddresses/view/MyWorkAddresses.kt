@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
@@ -36,7 +37,11 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         }
 
         (USER_OBJECT as? Technician)?.workLocations?.let{
-            myWorkAddresses.addAll(it)
+            if(CURRENT_LANGUAGE == "en"){
+                myWorkAddresses.addAll(it)
+            }else {
+                myWorkAddresses.addAll(getLocationsInArabic(it))
+            }
         }
 
         adapter = WorkAddressesAdapter(myWorkAddresses,this){
@@ -71,7 +76,7 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
                 if(address.isNullOrEmpty()){
 
                 }else if(!myWorkAddresses.contains(address)){
-                    viewmodel.addNewWorkLocation(address, onSuccessBinding = {
+                    viewmodel.addNewWorkLocation(getEnglishAddress(address), onSuccessBinding = {
                         myWorkAddresses.add(address)
                         (USER_OBJECT as? Technician)?.apply {
                             Log.i("TAG", "onActivityResult: IAM TECHNICIAN <<<<<<<$address")
@@ -95,6 +100,11 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         }
     }
 
+    private fun getEnglishAddress(address: String) : String{
+        val city = address.substringBefore(",")
+        return "${getCityEnglishName(city)},${getAreaEnglishName(address.substringAfter(","),city)}"
+    }
+
     private fun showAddressList(){
         if (myWorkAddresses.isNotEmpty()){
             my_work_addresses_activity_no_address_txt.visibility = View.INVISIBLE
@@ -115,6 +125,23 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
     }
 
 
+    private fun getLocationsInArabic(locations : List<String>) = locations.map {
+        getArabicLocation(it)
+    }
+
+    private fun getArabicLocation(address : String): String {
+        val city = address.substringBefore(",")
+        val area = address.substringAfter(",")
+        val arCity = Constants.citiesInArabic[Constants.cities.indexOf(city)]
+        val arArea = if(city == "Cairo"){
+            Constants.cairoAreaInArabic[Constants.cairoArea.indexOf(area)]
+        }else if(city == "Alexandria"){
+            Constants.alexAreaInArabic[Constants.alexArea.indexOf(area)]
+        }else{
+            ""
+        }
+        return "$arCity,$arArea"
+    }
 
     private fun confirmDeleteDialog(position: Int, list: MutableList<String>){
         val builder = AlertDialog.Builder(this)

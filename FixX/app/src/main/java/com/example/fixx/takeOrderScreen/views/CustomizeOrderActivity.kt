@@ -700,11 +700,10 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private fun getAreaEnglishName(area: String, city: String): String {
         var myArea = area
 
-        if (city.equals(getString(R.string.Cairo))) {
-            for (iterator in Constants.cairoAreaInArabic.indices) {
-                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
-                    myArea = Constants.cairoArea[iterator]
-                }
+        if (city == getString(R.string.Cairo)) {
+            if(Constants.cairoAreaInArabic.contains(myArea)){
+                myArea = Constants.cairoArea[Constants.cairoAreaInArabic.indexOf(myArea)]
+                Log.i("TAG", "getAreaEnglishName: HERERERE<<<<<<<<<<<<<<<")
             }
         } else if (city.equals(getString(R.string.Alexandria))) {
             for (iterator in Constants.alexAreaInArabic.indices) {

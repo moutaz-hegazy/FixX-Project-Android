@@ -39,6 +39,7 @@ sealed class Constants {
         const val TECH_DETAILS_REQUESTCODE = 301
         const val NOTIFICATION_TYPE_TECH_REPLY_CONFIRM = "techReplyConfirm"
         const val NOTIFICATION_TYPE_TECH_REPLY_DENY = "techReplyDeny"
+        const val NOTIFICATION_TYPE_TECH_REPLY_CANCEL = "techReplyCancel"
         const val NOTIFICATION_TYPE_USER_JOB_REQUEST = "jobRequest"
         const val NOTIFICATION_TYPE_CHAT_MESSAGE = "chatMsg"
         const val NOTIFICATION_TYPE_USER_ACCEPT = "userAccept"

@@ -2,6 +2,7 @@ package com.example.fixx.LoginScreen.Views
 
 import android.app.Application
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
@@ -48,6 +50,9 @@ class RegistrationActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setLanguage(CURRENT_LANGUAGE)
+
         setContentView(R.layout.activity_registration)
 
         supportActionBar?.hide()
@@ -228,5 +233,17 @@ class RegistrationActivity : AppCompatActivity(){
     private fun initializeFacebook(application: Application) {
         FacebookSdk.sdkInitialize(application)
         AppEventsLogger.activateApp(application, application.getString(R.string.facebook_app_id))
+    }
+
+    private fun setLanguage(lang : String){
+        CURRENT_LANGUAGE = lang
+        val locale = Locale(CURRENT_LANGUAGE)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        this.resources?.updateConfiguration(
+            config,
+            this.resources!!.displayMetrics
+        )
     }
 }

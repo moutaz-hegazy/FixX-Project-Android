@@ -176,13 +176,13 @@
     <string name="AlShrouk">الشروق</string>
     <string name="firstSettlement">التجمع الأول</string>
     <string name="FifthSettlement">التجمع الخامس</string>
-    <string name="Madenti">مدينتى</string>
+    <string name="Madenti">مدينتي</string>
     <string name="AlRehab">الرحاب</string>
     <string name="tenthOfRamadan">العاشر من رمضان</string>
     <string name="BadrCity">مدينة بدر</string>
     <string name="Heliopolis">هليوبليس</string>
     <string name="Zamalek">الزمالك</string>
-    <string name="NasserCity">مدينة ناصر</string>
+    <string name="NasserCity">مدينة نصر</string>
     <string name="Qobbah">القبة</string>
     <string name="Maadi">المعادى</string>
     <string name="Mokkatm">المقطم</string>
@@ -212,23 +212,23 @@
     <string name="Dekhela">الدخيلة</string>
     <string name="Bokli">بوكلى</string>
     <string name="BorgAlArab">برج العرب</string>
-    <string name="AlQabari">القبارى</string>
-    <string name="Fleming">فليمينج</string>
+    <string name="AlQabari">القباري</string>
+    <string name="Fleming">فليمنج</string>
     <string name="Janklees">جناكليس</string>
     <string name="Gleem">جليم</string>
     <string name="KafrAbdou">كفر عبده</string>
     <string name="Louran">لوران</string>
     <string name="ElMandara">المندرة</string>
-    <string name="Miami">ميامي</string>
-    <string name="SanStifano">سان استيفانو</string>
-    <string name="SidiBeshr">سيدى بشر</string>
-    <string name="SidiGaber">سيدى جابر</string>
-    <string name="Shatebi">الشاطبى</string>
+    <string name="Miami">ميامى</string>
+    <string name="SanStifano">سان استفانو</string>
+    <string name="SidiBeshr">سيدي بشر</string>
+    <string name="SidiGaber">سيدي جابر</string>
+    <string name="Shatebi">الشاطبي</string>
     <string name="Sporting">سبورتنج</string>
     <string name="Victoria">فيكتوريا</string>
     <string name="Smouha">سموحة</string>
-    <string name="Stanli">ستانلى</string>
-    <string name="WaborElMaya">وابور المية</string>
+    <string name="Stanli">ستانلي</string>
+    <string name="WaborElMaya">وابور المياة</string>
     <string name="ElHanovil">الهانوفيل</string>
     <string name="ElBitash">البطاش</string>
     <string name="QismBabSharqi">قسم باب شرقي</string>
@@ -236,10 +236,12 @@
     <string name="AlAttarin">العطارين</string>
     <string name="FirstAlRaml">أول الرمل</string>
     <string name="MustafaKamel">مصطفى كامل</string>
-    <string name="DefaultDate">فى: يوم ما</string>
-    <string name="FromTime">من: وقت ما</string>
+
+
+    <string name="DefaultDate">فى: أى يوم</string>
+    <string name="FromTime">من: أى وقت</string>
     <string name="timer">المؤقت</string>
-    <string name="ToTime">إلى: وقت ما</string>
+    <string name="ToTime">إلى: أى وقت</string>
     <string name="OrderDesc">وصف الطلب</string>
     <string name="selectTech">اختر الفنى</string>
     <string name="availableOrder">متاحة</string>
@@ -276,7 +278,7 @@
     <string name="Job_Accept_Msg">قبول السعر الذى قدمته</string>
     <string name="TotalAccount">جملة الرصيد:</string>
     <string name="JobCompleted">عمل مكتمل</string>
-    <string name="CancelJob">عمل ملغى</string>
+    <string name="CancelJob">إلغاء العمل</string>
     <string name="Job_Accepted">العمل الخاص بك</string>
     <string name="bidders">أصحاب العطاءات</string>
     <string name="Home">الرئيسية</string>
@@ -310,4 +312,22 @@
 
     <string name="myWokAddressesTitle">أماكن العمل الخاصة بى</string>
     <string name="addWorkAddress">أضف مكان العمل الخاص بك</string>
+    <string name="ExtendJob">طلب زائد</string>
+    <string name="EditJob">تعديل الطلب</string>
+    <string name="JobRemoveFail">فشل فى مسح الطلب</string>
+    <string name="JobRemoved">تم مسح الطلب</string>
+    <string name="SelectLocation">برجاء اختيار عنوانك</string>
+    <string name="JobUploadFailed">فشل فى رفع الطلب</string>
+    <string name="JobUploaded">تم رفع الطلب</string>
+    <string name="AddWorkLocation">أضف منطقة العمل</string>
+    <string name="AddressExists">هذا العنوان موجود بالفعل</string>
+    <string name="deleteLocationQuestion">هل ترغب فى مسح منطة العمل؟</string>
+    <string name="deleteLocaionTitle">تأكيد على مسح منطقة العمل</string>
+    <string name="WorkLocationAddFail">فشل فى اضافة منطقة العمل</string>
+    <string name="LocationRemoveFailed">فشل فى مسح العنوان</string>
+    <string name="JobUpdated">تم رفع الطلب</string>
+    <string name="JobUpdateFailed">فشل فى رفع الطلب</string>
+    <string name="MultiJobRequest">قام بطلب خدمة فى منطقة عملك</string>
+    <string name="selectLanguageTitle">اختيار اللغة</string>
+    <string name="SelectLanguageMsg">اختر لغتك المفضلة</string>
 </resources>
