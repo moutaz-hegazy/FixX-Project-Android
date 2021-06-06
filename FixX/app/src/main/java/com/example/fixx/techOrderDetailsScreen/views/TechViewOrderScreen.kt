@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -90,8 +91,27 @@ class TechViewOrderScreen : AppCompatActivity() {
                                     }
                                 }
                         }
-                    }else{
-                        
+                    }else if(returnedJob.status == Job.JobStatus.Accepted){
+                        binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
+                        binding.techViewOrderAccountLbl.text = returnedJob.price.toString()
+                        binding.techViewOrderCompletedBtn.setOnClickListener {
+                            viewModel.completeJob(returnedJob.jobId,onSuccessBinding = {
+                                contact?.token?.let {token ->
+                                    TechReplyPushNotification(
+                                        ReplyNotificationData(
+                                            Constants.NOTIFICATION_TYPE_JOB_COMPLETED,
+                                            USER_OBJECT!!.name,R.string.JobCompletedTitle, R.string.JobCompletedMsg,
+                                            returnedJob.jobId, binding.techViewOrderPriceTxt.text.toString()),
+                                        arrayOf(token)).also {
+                                        viewModel.sendReplyNotification(it)
+                                        Toast.makeText(applicationContext,R.string.JobCompletedTitle,Toast.LENGTH_SHORT).show()
+                                        finish()
+                                    }
+                                }
+                            },onFailBinding = {
+                                Toast.makeText(applicationContext,R.string.JobStatusFail,Toast.LENGTH_SHORT).show()
+                            })
+                        }
                     }
 
                     if (person?.profilePicture != null) {

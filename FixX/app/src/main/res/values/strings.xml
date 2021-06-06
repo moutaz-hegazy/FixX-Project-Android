@@ -346,6 +346,9 @@
     <string name="CancelJobTitle">Cancel Job</string>
     <string name="CancelJobMsg">Do you want to cancel this job?</string>
     <string name="DenyDialogMsg">Do you want to deny this request?</string>
+    <string name="JobCompletedTitle">Job Completed</string>
+    <string name="JobCompletedMsg">Completed your request</string>
+    <string name="JobStatusFail">Job Status Update Failed</string>
 
 
 </resources>

@@ -50,4 +50,9 @@ class TechViewOrderViewModel() {
     fun canceledJob(jobId: String) {
         FirestoreService.removeTechnicianFromJob(jobId)
     }
+
+    fun completeJob(jobId : String, onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
+        FirestoreService.updateDocumentField(Constants.JOBS_COLLECTION,"status",Job.JobStatus.Completed.rawValue,
+            jobId, onSuccessBinding,onFailBinding)
+    }
 }
