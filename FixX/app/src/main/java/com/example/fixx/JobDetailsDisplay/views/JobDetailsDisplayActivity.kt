@@ -109,9 +109,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                                 visibility = View.VISIBLE
                                 setOnClickListener {
                                     // Accept price.
-                                    viewmodel.setTechnicianUidWithPrice(techUid,
-                                        map[techUid] ?: "")
-                                    viewmodel.sendAcceptNotification(techUid,tech.token!!, USER_OBJECT!!.name)
+                                    acceptTechnician(tech,map[techUid]!!)
                                     this.visibility = View.INVISIBLE
                                     binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
                                 }
@@ -130,13 +128,26 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 } else {
                     Log.i("TAG", "onCreate: Here 33 <<<<<<<<")
                     job.bidders?.let { bidders ->
+                        binding.jobDetailsBiddersTitleLbl.visibility = View.VISIBLE
                         binding.jobDetailsBiddersRecycler.apply {
+                            val techs = mutableListOf<Technician>()
                             visibility = View.VISIBLE
-                            adapter = JobDetailsBiddersAdapter(
-                                bidders.keys.toList(),
-                                bidders
-                            ) { uid, onSuccess, onFail ->
-                                viewmodel.getTechnician(uid, onSuccess, onFail)
+                            adapter = JobDetailsBiddersAdapter(techs, bidders){ tech,price ->
+                                acceptTechnician(tech,price)
+                                visibility = View.GONE
+                                binding.jobDetailsBiddersTitleLbl.visibility = View.GONE
+                                loadAcceptedTech(tech,price)
+                            }
+                            layoutManager = LinearLayoutManager(this@JobDetailsDisplayActivity)
+                            Log.i("TAG", "displayJobOnScreen: <<<<<<<<<<<"+bidders)
+                            bidders.forEach {
+                                viewmodel.getTechnician(it.key, onSuccessBinding = { tech ->
+                                    Log.i("TAG", "displayJobOnScreen: HERE 1")
+                                    techs.add(tech)
+                                    adapter?.notifyDataSetChanged()
+                                }, onFailBinding = {
+
+                                })
                             }
                         }
                     }
@@ -145,49 +156,65 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadAcceptedTech(tech:Technician, price: String? = null){
+        if (tech.profilePicture != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                binding.bidderItemTechImageView.clipToOutline = true
+            }
+            binding.bidderItemTechImageView.visibility = View.VISIBLE
+            Picasso.get().load(tech.profilePicture?.second)
+                .into(binding.bidderItemTechImageView)
+        } else {
+            binding.bidderItemTechImageView.visibility = View.VISIBLE
+            binding.bidderItemTechImageLbl.text =
+                tech.name.first().toUpperCase().toString()
+        }
+        binding.bidderItemTechNameLbl.text = tech.name
+        binding.bidderItemTechRating.rating = tech.rating?.toFloat() ?: 0f
+        binding.jobDetailsTechLayout.setOnClickListener {
+            Intent(this, TechnicianProfileActivity::class.java).apply {
+                putExtra(Constants.TRANS_RESPONSE_BOOL, true)
+                putExtra(Constants.TRANS_USERDATA,tech)
+            }.also {
+                startActivity(it)
+            }
+        }
+        binding.bidderItemTechChatBtn.setOnClickListener {
+            Intent(this, ChatLogActivity::class.java).apply {
+                putExtra(Constants.TRANS_USERDATA, tech)
+            }.also {
+                startActivity(it)
+            }
+        }
+        binding.bidderItemTechCallBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${tech.phoneNumber}")
+            startActivity(intent)
+        }
+        binding.jobDetailsTechLayout.visibility = View.VISIBLE
+
+        price?.let {
+            binding.jobDetailsFinalPriceLbl.text = it
+            binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
+            binding.jobDetailsFinalPriceTitleLbl.visibility = View.VISIBLE
+        }
+    }
+
     private fun loadSingleTechnician(uid : String, onLoadCompleted : ((Technician) -> Unit)? = null){
         viewmodel.getTechnician(uid, onSuccessBinding = { tech ->
-            if (tech.profilePicture != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    binding.bidderItemTechImageView.clipToOutline = true
-                }
-                binding.bidderItemTechImageView.visibility = View.VISIBLE
-                Picasso.get().load(tech.profilePicture?.second)
-                    .into(binding.bidderItemTechImageView)
-            } else {
-                binding.bidderItemTechImageView.visibility = View.VISIBLE
-                binding.bidderItemTechImageLbl.text =
-                    tech.name.first().toUpperCase().toString()
-            }
-            binding.bidderItemTechNameLbl.text = tech.name
-            binding.bidderItemTechRating.rating = tech.rating?.toFloat() ?: 0f
-            binding.jobDetailsTechLayout.setOnClickListener {
-                Intent(this, TechnicianProfileActivity::class.java).apply {
-                    putExtra(Constants.TRANS_RESPONSE_BOOL, true)
-                    putExtra(Constants.TRANS_USERDATA,tech)
-                }.also {
-                    startActivity(it)
-                }
-            }
-            binding.bidderItemTechChatBtn.setOnClickListener {
-                Intent(this, ChatLogActivity::class.java).apply {
-                    putExtra(Constants.TRANS_USERDATA, tech)
-                }.also {
-                    startActivity(it)
-                }
-            }
-            binding.bidderItemTechCallBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_DIAL)
-                intent.data = Uri.parse("tel:${tech.phoneNumber}")
-                startActivity(intent)
-            }
-
+            loadAcceptedTech(tech)
             onLoadCompleted?.let {
                 it(tech)
             }
         }, onFailBinding = {
 
         })
+    }
+
+    private fun acceptTechnician(tech:Technician,price : String){
+        viewmodel.setTechnicianUidWithPrice(tech.uid!!,
+            price)
+        viewmodel.sendAcceptNotification(tech.uid!!,tech.token!!, USER_OBJECT!!.name)
     }
 
     private fun getDateFor(status: Job.JobStatus, job: Job) : String{

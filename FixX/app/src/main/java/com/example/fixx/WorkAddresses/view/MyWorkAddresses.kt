@@ -57,12 +57,14 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         }
     }
 
-    private fun deleteLocation(location : String){
+    private fun deleteLocation(position: Int){
+        val location = (USER_OBJECT as? Technician)?.workLocations?.get(position) ?: ""
+        Log.i("TAG", "deleteLocation: >>>>>> $location")
         viewmodel.removeWorkLocation(location, onSuccessBinding = {
-            myWorkAddresses.remove(location)
-            (USER_OBJECT as? Technician)?.workLocations?.remove(location)
+            myWorkAddresses.removeAt(position)
+            (USER_OBJECT as? Technician)?.workLocations?.removeAt(position)
             adapter.notifyDataSetChanged()
-            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkLocation(location)
+            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkTopic(location)
             viewmodel.unsubscribeFromTopic(topic)
         },onFailBinding = {
             Toast.makeText(this, R.string.LocationRemoveFailed, Toast.LENGTH_SHORT).show()
@@ -81,7 +83,7 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
                         (USER_OBJECT as? Technician)?.apply {
                             Log.i("TAG", "onActivityResult: IAM TECHNICIAN <<<<<<<$address")
                             workLocations?.add(address)
-                            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkLocation(address)
+                            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkTopic(address)
                             Log.i("TAG", "onActivityResult: >>>>$topic")
                             viewmodel.subscribeToTopic(topic)
                         }
@@ -153,7 +155,7 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
 
         //performing positive action
         builder.setPositiveButton(getString(R.string.yes)){ _, _ ->
-            deleteLocation(myWorkAddresses[position])
+            deleteLocation(position)
         }
         //performing negative action
         builder.setNegativeButton(getString(R.string.no)){ _, _ ->
@@ -168,7 +170,7 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
 
     }
 
-    fun getWorkLocation(location: String) : String{
+    fun getWorkTopic(location: String) : String{
         val city = location.substringBefore(",")
         val area = location.substringAfter(",")
 

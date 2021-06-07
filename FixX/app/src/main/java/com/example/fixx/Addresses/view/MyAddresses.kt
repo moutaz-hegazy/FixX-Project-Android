@@ -103,6 +103,7 @@ class MyAddresses : AppCompatActivity(),RecycleAdapter.OnItemClickListener {
             Log.i("TAG", "confirmDeleteDialog: try to remove <<<<<<<<<<<")
             val address = list[position]
             FirestoreService.removeLocation(address)
+            USER_OBJECT?.locations?.removeAt(position)
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
         }

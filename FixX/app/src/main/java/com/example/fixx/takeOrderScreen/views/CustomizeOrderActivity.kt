@@ -279,7 +279,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
             }else if(editMode){
 
-                val topic = selectedJobType+getWorkLocation(jobObject!!.location!!.substringAfter("%")
+                val topic = jobObject!!.type+getWorkLocation(jobObject!!.location!!.substringAfter("%")
                     .substringBefore("/"))
                 Log.i("TAG", "onCreate: >>>>>>>>>>>>$topic")
 

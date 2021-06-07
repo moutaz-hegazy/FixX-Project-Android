@@ -5,34 +5,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.POJOs.Job
+import com.example.fixx.R
 import com.example.fixx.databinding.FragmentAvailableJobsBinding
-
+import com.example.fixx.jobs.viewModels.JobsViewModel
 
 
 class AvailableJobsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     var jobs = arrayListOf<Job>()
     lateinit var binding: FragmentAvailableJobsBinding
-
+    val viewmodel: JobsViewModel by lazy {
+        JobsViewModel(Job.JobStatus.OnRequest, onSuccessBinder = {
+            jobs.addAll(it)
+            binding.availableJobsProgressBar.visibility = View.INVISIBLE
+            jobsAdapter.notifyDataSetChanged()
+        },onFailBinder = {
+            binding.availableJobsProgressBar.visibility = View.INVISIBLE
+            Toast.makeText(context, R.string.JobsLoadingFailed, Toast.LENGTH_SHORT).show()
+        })
+    }
+    val jobsAdapter = JobsAdapter(jobs, Job.JobStatus.OnRequest)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val job1 = Job("","Painter","Alexandria,elmandaraQebly,20th st", Job.JobStatus.OnRequest).apply {
-            date = "13-june-2021"
-        }
-        val job2 = Job("","Parquet","Alexandria,elmandaraQebly,20th st", Job.JobStatus.Accepted).apply {
-            date = "15-june-2021"
-            price = 200
-        }
-        val job3 = Job("","Electrician","Alexandria,elmandaraQebly,20th st",
-            Job.JobStatus.Accepted).apply {
-            date = "10-june-2021"
-            price = 350
-        }
-        jobs.addAll(arrayOf(job1,job2,job3))
-
+        viewmodel.loadData()
     }
 
     override fun onCreateView(
@@ -46,11 +45,9 @@ class AvailableJobsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         binding.availableJobsRecycler.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = JobsAdapter(jobs, Job.JobStatus.OnRequest)
+            adapter = jobsAdapter
         }
     }
 

@@ -483,11 +483,12 @@ object FirestoreService {
             }
     }
 
-    fun fetchAvailableWork(jobTitle : String, workLocations : ArrayList<String>,
+    fun fetchAvailableWork(jobTitle : String, workLocations : List<String>,
                            onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
         db.collection("Jobs").whereEqualTo("status",Job.JobStatus.OnRequest.rawValue)
             .whereEqualTo("type",jobTitle)
+            .whereEqualTo("privateRequest",false)
             .whereIn("location",workLocations)
             .get().addOnSuccessListener {
                     queryResult->

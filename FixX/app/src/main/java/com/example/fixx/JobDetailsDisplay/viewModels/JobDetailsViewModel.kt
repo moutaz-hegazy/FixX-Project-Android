@@ -27,6 +27,7 @@ class JobDetailsViewModel(private val jobId : String) {
 
     fun getTechnician(techId : String, onSuccessBinding: (tech: Technician) -> Unit, onFailBinding: () -> Unit){
         FirestoreService.fetchUserFromDB(techId){   person ->
+            Log.i("TAG", "getTechnician: HERE 2")
             val tech = person as? Technician
             if(tech != null){
                 onSuccessBinding(tech)
