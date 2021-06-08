@@ -349,6 +349,10 @@
     <string name="JobCompletedTitle">Job Completed</string>
     <string name="JobCompletedMsg">Completed your request</string>
     <string name="JobStatusFail">Job Status Update Failed</string>
+    <string name="CancelBidding">Cancel My Bidding</string>
+    <string name="YourBidding">your bidding: </string>
+    <string name="FailedToRemoveBidder">Failed to remove your bidding</string>
+    <string name="CancelBiddingMsg">Do you want to cancel this bidding?</string>
 
 
 </resources>

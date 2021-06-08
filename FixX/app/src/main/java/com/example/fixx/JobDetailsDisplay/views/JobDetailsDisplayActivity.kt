@@ -63,7 +63,12 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         loadedJob = job
         binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
         binding.jobDetailsDateLbl.text = getDateFor(job.status, job)
-        binding.jobDetailsLocationLbl.text = job.location
+        val locName = job.location?.substringBefore("%")
+        if(!locName.isNullOrEmpty()){
+            binding?.jobDetailsLocationLbl?.text = locName
+        }else{
+            binding?.jobDetailsLocationLbl?.text = job.location?.substringAfter("%")
+        }
         binding.jobDetailsFromTimeLbl.text = job.fromTime
         binding.jobDetailsToTimeLbl.text = job.toTime
         binding.jobDetailsStatusLbl.text = job.status.rawValue
@@ -191,6 +196,12 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             intent.data = Uri.parse("tel:${tech.phoneNumber}")
             startActivity(intent)
         }
+
+        binding.jobDetailsTechAcceptBtn.visibility = View.INVISIBLE
+        binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
+        binding.bidderItemConfirmPriceLbl.visibility = View.INVISIBLE
+        binding.bidderItemConfirmPriceTitleLbl.visibility = View.INVISIBLE
+
         binding.jobDetailsTechLayout.visibility = View.VISIBLE
 
         price?.let {

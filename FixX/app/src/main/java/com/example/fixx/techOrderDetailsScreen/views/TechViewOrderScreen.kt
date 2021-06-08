@@ -3,7 +3,9 @@ package com.example.fixx.techOrderDetailsScreen.views
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.media.Image
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +28,7 @@ import com.example.fixx.techOrderDetailsScreen.viewModels.TechViewOrderViewModel
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.reflect.jvm.internal.impl.renderer.ClassifierNamePolicy
 
 class TechViewOrderScreen : AppCompatActivity() {
 
@@ -41,6 +44,8 @@ class TechViewOrderScreen : AppCompatActivity() {
     var job : Job? = null
 
     var contact : Person? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -51,170 +56,220 @@ class TechViewOrderScreen : AppCompatActivity() {
 
         intent.apply {
             jobId = getStringExtra(Constants.TRANS_JOB)
-
+            job = getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
         }
 
-        jobId?.let {    jobID ->
-            viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob->
-                job = returnedJob
-                viewModel.fetchUserFromDB(job?.uid) { person ->
-                    contact = person
+        if(job != null){
+            displayJobDetails(job!!)
+        }else{
+            jobId?.let {    jobID ->
+                viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob->
+                    displayJobDetails(returnedJob)
+                }, onFailBinding = {
 
-                    binding.techViewOrderChatBtn.setOnClickListener {
-                        Intent(this, ChatLogActivity::class.java).apply {
-                            putExtra(Constants.TRANS_USERDATA, contact)
-                        }.also {
-                            startActivity(it)
-                        }
-                    }
-
-                    if(returnedJob.status == Job.JobStatus.OnRequest){
-                        binding.techViewOrderConfirmPriceLayout.visibility = View.VISIBLE
-                        binding.techViewOrderConfirmBtn.setOnClickListener {
-                                if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
-                                    binding.techViewOrderPriceTxt.error = "enter a price"
-                                } else {
-                                    if(job?.bidders == null){
-                                        job?.bidders = mutableMapOf(USER_OBJECT!!.uid!! to binding.techViewOrderPriceTxt.text.toString())
-                                    }else{
-                                        job?.bidders?.put(USER_OBJECT!!.uid!!,binding.techViewOrderPriceTxt.text.toString())
-                                    }
-                                    viewModel.addToBidders(job!!.jobId, job!!.bidders!!) {
-                                        contact?.token?.let { token ->
-                                            TechReplyPushNotification(
-                                                ReplyNotificationData(
-                                                    Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
-                                                    USER_OBJECT?.name ?: "",
-                                                    R.string.RequestConfirmed,
-                                                    R.string.ConfirmMessage, job?.jobId!!,
-                                                    binding.techViewOrderPriceTxt.text.toString()
-                                                ),
-                                                arrayOf(token)
-                                            ).also {
-                                                viewModel.sendReplyNotification(it)
-                                                finish()
-                                            }
-                                        }
-                                    }
-                                }
-                        }
-                    }else if(returnedJob.status == Job.JobStatus.Accepted){
-                        binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
-                        binding.techViewOrderAccountLbl.text = returnedJob.price.toString()
-                        binding.techViewOrderCompletedBtn.setOnClickListener {
-                            val currentData = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
-                            viewModel.completeJob(returnedJob.jobId,currentData,onSuccessBinding = {
-                                contact?.token?.let {token ->
-                                    TechReplyPushNotification(
-                                        ReplyNotificationData(
-                                            Constants.NOTIFICATION_TYPE_JOB_COMPLETED,
-                                            USER_OBJECT!!.name,R.string.JobCompletedTitle, R.string.JobCompletedMsg,
-                                            returnedJob.jobId, binding.techViewOrderPriceTxt.text.toString()),
-                                        arrayOf(token)).also {
-                                        viewModel.sendReplyNotification(it)
-                                        Toast.makeText(applicationContext,R.string.JobCompletedTitle,Toast.LENGTH_SHORT).show()
-                                        finish()
-                                    }
-                                }
-                            },onFailBinding = {
-                                Toast.makeText(applicationContext,R.string.JobStatusFail,Toast.LENGTH_SHORT).show()
-                            })
-                        }
-                    }
-
-                    if (person?.profilePicture != null) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            binding.techViewOrderUserImageView.clipToOutline = true
-                        }
-                        binding.techViewOrderUserImageView.visibility = View.VISIBLE
-                        Picasso.get().load(person.profilePicture?.second)
-                            .into(binding.techViewOrderUserImageView)
-                    } else {
-                        binding.techViewOrderUserImageLbl.visibility = View.VISIBLE
-                        binding.techViewOrderUserImageLbl.text =
-                            person?.name?.first()?.toUpperCase().toString()
-                    }
-                    binding.techViewOrderUserNameLbl.text = person?.name
-                }
-
-                binding.techViewOrderDenyBtn.apply {
-                    if(returnedJob.privateRequest && returnedJob.status == Job.JobStatus.OnRequest){
-                        visibility = View.VISIBLE
-                        setOnClickListener{
-                            cancelJobDialog (R.string.Deny, R.string.DenyDialogMsg) {
-                                contact?.token?.let { token ->
-                                    TechReplyPushNotification(
-                                        ReplyNotificationData(
-                                            Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
-                                            USER_OBJECT?.name ?: "",
-                                            R.string.RequestDenied,
-                                            R.string.DenyMessage, job!!.jobId
-                                        ),
-                                        arrayOf(token)
-                                    ).also {
-                                        viewModel.sendReplyNotification(it)
-                                    }
-                                    viewModel.removeSelfFromBidders(jobID)
-                                    this@TechViewOrderScreen.finish()
-                                }
-                            }
-                        }
-                    }else if(returnedJob.status == Job.JobStatus.Accepted){
-                        visibility = View.VISIBLE
-                        text = getString(R.string.CancelJob)
-                        setOnClickListener {
-                            cancelJobDialog(R.string.CancelJobTitle,R.string.CancelJobMsg){
-                                contact?.token?.let { token ->
-                                    TechReplyPushNotification(
-                                        ReplyNotificationData(
-                                            Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL,
-                                            USER_OBJECT?.name ?: "",
-                                            R.string.RequestCanceled,
-                                            R.string.CancelMessage, job!!.jobId
-                                        ),
-                                        arrayOf(token)
-                                    ).also {
-                                        viewModel.sendReplyNotification(it)
-                                    }
-                                    viewModel.canceledJob(job!!.jobId)
-                                    this@TechViewOrderScreen.finish()
-                                }
-                            }
-                        }
-                    }
-                }
-
-                binding.techViewOrderAddressLbl.text = job?.location
-                binding.techViewOrderDateLbl.text = job?.date
-                binding.techViewOrderFromTimeLbl.text = job?.fromTime
-                binding.techViewOrderToTimeLbl.text = job?.toTime
-                if(job?.description.isNullOrEmpty()){
-                    binding.techViewOrderDescTitleLbl.text = getString(R.string.No_Description)
-                    binding.techViewOrderDescTitleLbl.setTextColor(Color.GRAY)
-                }else{
-                    binding.techViewOrderDescriptionLbl.apply {
-                        visibility = View.VISIBLE
-                        text = job?.description
-                    }
-                }
-
-                job?.images?.let { images ->
-                    binding.techViewOrderImagesLbl.visibility = View.VISIBLE
-                    binding.techViewOrderImagesRecycler.apply {
-                        visibility = View.VISIBLE
-                        layoutManager = LinearLayoutManager(applicationContext).apply {
-                            orientation = RecyclerView.HORIZONTAL
-                        }
-                        adapter = OrderImagesAdapter(images.map { it.second })
-                    }
-                }
-            }, onFailBinding = {
-
-                finish()
-            })
+                    finish()
+                })
+            }
         }
     }
 
+
+    private fun displayJobDetails(passedJob : Job){
+        this.job = passedJob
+        configurebottomLayout()
+        fetchAndDisplayUserData()
+        configueDenyButton()
+
+        binding.techViewOrderAddressLbl.text = job?.location?.substringAfter("%")
+        binding.techViewOrderDateLbl.text = job?.date
+        binding.techViewOrderFromTimeLbl.text = job?.fromTime
+        binding.techViewOrderToTimeLbl.text = job?.toTime
+        if(job?.description.isNullOrEmpty()){
+            binding.techViewOrderDescTitleLbl.text = getString(R.string.No_Description)
+            binding.techViewOrderDescTitleLbl.setTextColor(Color.GRAY)
+        }else{
+            binding.techViewOrderDescriptionLbl.apply {
+                visibility = View.VISIBLE
+                text = job?.description
+            }
+        }
+
+        job?.images?.let { images ->
+            binding.techViewOrderImagesLbl.visibility = View.VISIBLE
+            binding.techViewOrderImagesRecycler.apply {
+                visibility = View.VISIBLE
+                layoutManager = LinearLayoutManager(applicationContext).apply {
+                    orientation = RecyclerView.HORIZONTAL
+                }
+                adapter = OrderImagesAdapter(images.map { it.second })
+            }
+        }
+    }
+
+    private fun configueDenyButton(){
+        if (job!!.privateRequest && job?.status == Job.JobStatus.OnRequest) {
+            applyDenySettings()
+        } else if (job?.status == Job.JobStatus.Accepted) {
+            applyCancelSettings()
+        }
+    }
+
+    private fun applyCancelSettings(){
+        binding.techViewOrderDenyBtn.apply {
+            visibility = View.VISIBLE
+            text = getString(R.string.CancelJob)
+            setOnClickListener {
+                cancelJobDialog(R.string.CancelJobTitle, R.string.CancelJobMsg) {
+                    contact?.token?.let { token ->
+                        TechReplyPushNotification(
+                            ReplyNotificationData(
+                                Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL,
+                                USER_OBJECT?.name ?: "",
+                                R.string.RequestCanceled,
+                                R.string.CancelMessage, job!!.jobId
+                            ),
+                            arrayOf(token)
+                        ).also {
+                            viewModel.sendReplyNotification(it)
+                        }
+                        viewModel.canceledJob(job!!.jobId)
+                        this@TechViewOrderScreen.finish()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun applyDenySettings(){
+        binding.techViewOrderDenyBtn.apply {
+            visibility = View.VISIBLE
+            setOnClickListener{
+                cancelJobDialog (R.string.Deny, R.string.DenyDialogMsg) {
+                    contact?.token?.let { token ->
+                        TechReplyPushNotification(
+                            ReplyNotificationData(
+                                Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY,
+                                USER_OBJECT?.name ?: "",
+                                R.string.RequestDenied,
+                                R.string.DenyMessage, job!!.jobId
+                            ),
+                            arrayOf(token)
+                        ).also {
+                            viewModel.sendReplyNotification(it)
+                        }
+                        viewModel.removeBidders(job!!.jobId)
+                        this@TechViewOrderScreen.finish()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchAndDisplayUserData(){
+        viewModel.fetchUserFromDB(job?.uid) { person ->
+            contact = person
+
+            binding.techViewOrderChatBtn.setOnClickListener {
+                Intent(this, ChatLogActivity::class.java).apply {
+                    putExtra(Constants.TRANS_USERDATA, contact)
+                }.also {
+                    startActivity(it)
+                }
+            }
+            if (person?.profilePicture != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    binding.techViewOrderUserImageView.clipToOutline = true
+                }
+                binding.techViewOrderUserImageView.visibility = View.VISIBLE
+                Picasso.get().load(person.profilePicture?.second)
+                    .into(binding.techViewOrderUserImageView)
+            } else {
+                binding.techViewOrderUserImageLbl.visibility = View.VISIBLE
+                binding.techViewOrderUserImageLbl.text =
+                    person?.name?.first()?.toUpperCase().toString()
+            }
+            binding.techViewOrderUserNameLbl.text = person?.name
+        }
+    }
+
+    private fun configurebottomLayout(){
+        when {
+            job?.bidders?.keys?.contains(USER_OBJECT!!.uid) == true -> displayBidderInfoBottom()
+            job?.status == Job.JobStatus.OnRequest -> displayBiddingDetailsBottom()
+            job?.status == Job.JobStatus.Accepted -> displayCompleteJobBottom()
+        }
+    }
+
+    private fun displayBidderInfoBottom(){
+        binding.techViewOrderBidFactLayout.visibility = View.VISIBLE
+        binding.techViewBiddingValueLbl.text = job?.bidders?.get(USER_OBJECT?.uid)
+        binding.techViewOrderCancelBiddingBtn.setOnClickListener {
+            cancelJobDialog(R.string.CancelBidding, R.string.CancelBiddingMsg){
+                job?.bidders?.remove(USER_OBJECT?.uid)
+                viewModel.removeSelfFromBidders(job!!.jobId,job!!.bidders!!,onSuccessBinding = {
+                    finish()
+                },onFailBinding = {
+                    Toast.makeText(this,R.string.FailedToRemoveBidder,Toast.LENGTH_SHORT).show()
+                })
+            }
+        }
+    }
+
+    private fun displayBiddingDetailsBottom(){
+        binding.techViewOrderConfirmPriceLayout.visibility = View.VISIBLE
+        binding.techViewOrderConfirmBtn.setOnClickListener {
+            if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
+                binding.techViewOrderPriceTxt.error = "enter a price"
+            } else {
+                if(job?.bidders == null){
+                    job?.bidders = mutableMapOf(USER_OBJECT!!.uid!! to binding.techViewOrderPriceTxt.text.toString())
+                }else{
+                    job?.bidders?.put(USER_OBJECT!!.uid!!,binding.techViewOrderPriceTxt.text.toString())
+                }
+                viewModel.addToBidders(job!!.jobId, job!!.bidders!!) {
+                    contact?.token?.let { token ->
+                        TechReplyPushNotification(
+                            ReplyNotificationData(
+                                Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM,
+                                USER_OBJECT?.name ?: "",
+                                R.string.RequestConfirmed,
+                                R.string.ConfirmMessage, job?.jobId!!,
+                                binding.techViewOrderPriceTxt.text.toString()
+                            ),
+                            arrayOf(token)
+                        ).also {
+                            viewModel.sendReplyNotification(it)
+                            finish()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun displayCompleteJobBottom(){
+        binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
+        binding.techViewOrderAccountLbl.text = job?.price.toString()
+        binding.techViewOrderCompletedBtn.setOnClickListener {
+            val currentData = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
+            viewModel.completeJob(job!!.jobId,currentData,onSuccessBinding = {
+                contact?.token?.let {token ->
+                    TechReplyPushNotification(
+                        ReplyNotificationData(
+                            Constants.NOTIFICATION_TYPE_JOB_COMPLETED,
+                            USER_OBJECT!!.name,R.string.JobCompletedTitle, R.string.JobCompletedMsg,
+                            job!!.jobId, binding.techViewOrderPriceTxt.text.toString()),
+                        arrayOf(token)).also {
+                        viewModel.sendReplyNotification(it)
+                        Toast.makeText(applicationContext,R.string.JobCompletedTitle,Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+            },onFailBinding = {
+                Toast.makeText(applicationContext,R.string.JobStatusFail,Toast.LENGTH_SHORT).show()
+            })
+        }
+    }
 
     private fun cancelJobDialog(title : Int,message:Int,onAcceptHandler:()->Unit){
         val builder = AlertDialog.Builder(this)

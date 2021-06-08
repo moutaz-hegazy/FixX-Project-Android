@@ -31,8 +31,10 @@ class onGoingJobsFragment : Fragment() {
     }
     var jobsAdapter: JobsAdapter = JobsAdapter(jobs,Job.JobStatus.Accepted)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
+        jobs.clear()
+        jobsAdapter.notifyDataSetChanged()
         viewmodel.loadData()
     }
 
@@ -55,10 +57,4 @@ class onGoingJobsFragment : Fragment() {
             adapter = jobsAdapter
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("TAG", "onStart: in ongoing.............")
-    }
-
 }

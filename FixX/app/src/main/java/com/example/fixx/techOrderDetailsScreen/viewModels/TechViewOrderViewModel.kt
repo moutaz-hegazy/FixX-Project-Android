@@ -43,8 +43,14 @@ class TechViewOrderViewModel() {
         }
     }
 
-    fun removeSelfFromBidders(jobId:String){
+    fun removeBidders(jobId:String){
         FirestoreService.removeBidders(jobId)
+    }
+
+    fun removeSelfFromBidders(jobId: String, restOfBidders : Map<String,String>,
+                              onSuccessBinding: () -> Unit,onFailBinding: () -> Unit){
+        FirestoreService.updateDocumentField(Constants.JOBS_COLLECTION,"bidders",restOfBidders,
+            jobId,onSuccessBinding,onFailBinding)
     }
 
     fun canceledJob(jobId: String) {

@@ -17,6 +17,7 @@ import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.CompletedOrdersRecyclerRowBinding
+import com.example.fixx.databinding.OngoingJobRecyclerRowBinding
 import com.example.fixx.databinding.OngoingOrderRecyclerRowBinding
 import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
@@ -69,34 +70,34 @@ class JobsAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycler
             }
 
             Job.JobStatus.Accepted -> {
-                val mRoot = holder.binding as? OngoingOrderRecyclerRowBinding
+                val mRoot = holder.binding as? OngoingJobRecyclerRowBinding
                 mRoot?.let { view ->
-                    view.ongoingOrderDateLbl.text = data[position].date
-                    view.ongoingOrderFromTimeLbl.text = context.getString(R.string.from) +
+                    view.ongoingJobDateLbl.text = data[position].date
+                    view.ongoingJobFromTimeLbl.text = context.getString(R.string.from) +
                             (data[position].fromTime ?: "--:--")
-                    view.ongoingOrderToTimeLbl.text = context.getString(R.string.to) +
+                    view.ongoingJobToTimeLbl.text = context.getString(R.string.to) +
                             (data[position].toTime ?: "--:--")
-                    view.ongoingOrderPriceLbl.text = """${context.getString(R.string.price)} ${
+                    view.ongoingJobPriceLbl.text = """${context.getString(R.string.price)} ${
                         (data[position].price?.toString()
                             ?: context.getString(R.string.notDetermined))
                     } LE"""
-                    view.ongoingOrderStatusLbl.apply {
+                    view.ongoingJobStatusLbl.apply {
                         text = context.getString(R.string.accepted)
                         setTextColor(Color.BLUE)
                     }
-                    view.ongoingOrdersJobTypeLbl.text = data[position].type
+                    view.ongoingJobsJobTypeLbl.text = data[position].type
                     getImageResourse(data[position].type)?.let {
-                        view.ongoingOrderJobImage.setImageResource(it)
+                        view.ongoingJobImage.setImageResource(it)
                     }
-                    view.ongoingOrderAddressLbl.text = data[position].location?.substringAfter("%")
-                    view.ongoingOrderLayout.setOnClickListener {
+                    view.ongoingJobAddressLbl.text = data[position].location?.substringAfter("%")
+                    view.ongoingJobLayout.setOnClickListener {
                         Intent(context, TechViewOrderScreen::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@JobsAdapter.data[position])
                         }.also {
                             context.startActivity(it)
                         }
                     }
-                    view?.ongoingOrderMenuBtn?.visibility = View.INVISIBLE
+                    view?.ongoingJobMenuBtn?.visibility = View.INVISIBLE
                 }
             }
 

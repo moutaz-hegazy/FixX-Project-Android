@@ -11,6 +11,7 @@ import com.example.fixx.POJOs.Job
 import com.example.fixx.R
 import com.example.fixx.databinding.FragmentAvailableJobsBinding
 import com.example.fixx.jobs.viewModels.JobsViewModel
+import kotlinx.android.synthetic.main.activity_show_technicians_screen.*
 
 
 class AvailableJobsFragment : Fragment() {
@@ -20,17 +21,19 @@ class AvailableJobsFragment : Fragment() {
     val viewmodel: JobsViewModel by lazy {
         JobsViewModel(Job.JobStatus.OnRequest, onSuccessBinder = {
             jobs.addAll(it)
-            binding.availableJobsProgressBar.visibility = View.INVISIBLE
+            binding.availableJobProgressPar.visibility = View.INVISIBLE
             jobsAdapter.notifyDataSetChanged()
         },onFailBinder = {
-            binding.availableJobsProgressBar.visibility = View.INVISIBLE
+            binding.availableJobProgressPar.visibility = View.INVISIBLE
             Toast.makeText(context, R.string.JobsLoadingFailed, Toast.LENGTH_SHORT).show()
         })
     }
     val jobsAdapter = JobsAdapter(jobs, Job.JobStatus.OnRequest)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
+        jobs.clear()
+        jobsAdapter.notifyDataSetChanged()
         viewmodel.loadData()
     }
 
@@ -45,11 +48,9 @@ class AvailableJobsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.availableJobsRecycler.apply {
+            binding.availableJobsRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = jobsAdapter
         }
     }
-
-
 }

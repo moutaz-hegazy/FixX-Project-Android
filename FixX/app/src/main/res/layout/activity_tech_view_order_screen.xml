@@ -286,6 +286,64 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tech_view_order_bidFact_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/textView77"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingTop="8dp"
+            android:text="@string/YourBidding"
+            app:layout_constraintBottom_toTopOf="@+id/tech_view_order_cancelBidding_btn"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/tech_view_order_cancelBidding_btn"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/blue"
+            android:text="@string/CancelBidding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tech_view_bidding_value_lbl"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="4dp"
+            android:ems="10"
+            android:gravity="center_vertical"
+            android:inputType="number"
+            android:paddingTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/textView77"
+            app:layout_constraintTop_toTopOf="@+id/textView77"
+            tools:text="1500" />
+
+        <TextView
+            android:id="@+id/textView78"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/LE"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tech_view_bidding_value_lbl"
+            app:layout_constraintTop_toTopOf="@+id/tech_view_bidding_value_lbl" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tech_view_order_totalAccount_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
