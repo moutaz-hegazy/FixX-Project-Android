@@ -33,6 +33,7 @@ class onGoingJobsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.i("TAG", "onStart: TEST <<<<<<<< 11")
         jobs.clear()
         jobsAdapter.notifyDataSetChanged()
         viewmodel.loadData()

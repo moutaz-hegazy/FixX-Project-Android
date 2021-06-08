@@ -80,14 +80,14 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
             binding.jobDetailsFinalPriceLbl.text = "$it ${getString(R.string.LE)}"
         }
-        job.images?.let { images ->
+        if(!job.images.isNullOrEmpty()){
             binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
             binding.jobDetailsImagesRecycler.apply {
                 visibility = View.VISIBLE
                 layoutManager = LinearLayoutManager(applicationContext).apply {
                     orientation = RecyclerView.HORIZONTAL
                 }
-                adapter = OrderImagesAdapter(images.map { it.second })
+                adapter = OrderImagesAdapter(job.images!!.map { it.second })
             }
         }
         if(!job.description.isNullOrEmpty()){

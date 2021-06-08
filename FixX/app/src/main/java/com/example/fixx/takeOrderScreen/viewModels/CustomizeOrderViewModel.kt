@@ -39,7 +39,7 @@ class CustomizeOrderViewModel() {
 
     fun updateJob(job: Job, newImagesUris: MutableList<Uri>, onSuccessBinding: (job:Job) -> Unit, onFailureBinding: () -> Unit){
         Thread{
-            val jobChanges = mutableMapOf("location" to job.location!!,
+            val jobChanges = mutableMapOf("location" to job.location!!,"areaLocation" to job.areaLocation!!,
                 "date" to job.date, "fromTime" to (job.fromTime ?: ""), "toTime" to (job.toTime ?: ""),
                 "images" to (job.images?: listOf<StringPair>()),
                 "description" to job.description,"bidders" to mapOf<String,String>(),"privateRequest" to job.privateRequest)

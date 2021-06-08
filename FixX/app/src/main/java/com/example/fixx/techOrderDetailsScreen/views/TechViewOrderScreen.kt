@@ -78,7 +78,7 @@ class TechViewOrderScreen : AppCompatActivity() {
         this.job = passedJob
         configurebottomLayout()
         fetchAndDisplayUserData()
-        configueDenyButton()
+        configureDenyButton()
 
         binding.techViewOrderAddressLbl.text = job?.location?.substringAfter("%")
         binding.techViewOrderDateLbl.text = job?.date
@@ -94,19 +94,19 @@ class TechViewOrderScreen : AppCompatActivity() {
             }
         }
 
-        job?.images?.let { images ->
+        if(job?.images?.isNullOrEmpty() == false) {
             binding.techViewOrderImagesLbl.visibility = View.VISIBLE
             binding.techViewOrderImagesRecycler.apply {
                 visibility = View.VISIBLE
                 layoutManager = LinearLayoutManager(applicationContext).apply {
                     orientation = RecyclerView.HORIZONTAL
                 }
-                adapter = OrderImagesAdapter(images.map { it.second })
+                adapter = OrderImagesAdapter(job?.images!!.map { it.second })
             }
         }
     }
 
-    private fun configueDenyButton(){
+    private fun configureDenyButton(){
         if (job!!.privateRequest && job?.status == Job.JobStatus.OnRequest) {
             applyDenySettings()
         } else if (job?.status == Job.JobStatus.Accepted) {

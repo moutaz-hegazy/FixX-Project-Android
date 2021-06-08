@@ -1,6 +1,7 @@
 package com.example.fixx.jobs.views
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ class AvailableJobsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.i("TAG", "onStart: TEST <<<<<<<<<<<<<<<<, 22!!")
         jobs.clear()
         jobsAdapter.notifyDataSetChanged()
         viewmodel.loadData()
@@ -40,7 +42,7 @@ class AvailableJobsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentAvailableJobsBinding.inflate(inflater, container, false)
         return binding.root
