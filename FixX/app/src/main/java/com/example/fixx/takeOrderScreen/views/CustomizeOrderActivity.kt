@@ -389,7 +389,6 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             description = binding.customizeOrderDescriptionTxt.text.toString()
             fromTime = selectedFromTime
             toTime = selectedToTime
-            location = location
         }
     }
 
@@ -518,7 +517,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             if(editMode){
                 jobObject?.location = values[position]
             }else {
-                selectedLocation = values[position]
+                selectedLocation = USER_OBJECT!!.locations!!.get(position-1)
             }
         }
         Toast.makeText(this, values[position], Toast.LENGTH_SHORT).show()

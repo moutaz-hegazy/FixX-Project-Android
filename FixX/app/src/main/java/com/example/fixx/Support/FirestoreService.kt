@@ -483,18 +483,18 @@ object FirestoreService {
             }
     }
 
-    fun fetchAvailableWork(jobTitle : String, workLocations : List<String>,
+    fun fetchAvailableWork(jobTitle : String, workLocations : ArrayList<String>,
                            onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
         db.collection("Jobs").whereEqualTo("status",Job.JobStatus.OnRequest.rawValue)
             .whereEqualTo("type",jobTitle)
             .whereEqualTo("privateRequest",false)
-            .whereIn("location",workLocations)
+            .whereIn("areaLocation",workLocations)
             .get().addOnSuccessListener {
                     queryResult->
                 queryResult.forEach {   document ->
                     val job = document.toObject<Job>()
-                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    Log.i("TAG", "AVAILABLE: >>>> $job")
                     retrievedJobs.add(job)
                 }
                 onSuccessHandler(retrievedJobs)
