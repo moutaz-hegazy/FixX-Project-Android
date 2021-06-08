@@ -353,6 +353,7 @@
     <string name="YourBidding">your bidding: </string>
     <string name="FailedToRemoveBidder">Failed to remove your bidding</string>
     <string name="CancelBiddingMsg">Do you want to cancel this bidding?</string>
+    <string name="RateTech">Rate this technician</string>
 
 
 </resources>

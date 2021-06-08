@@ -321,6 +321,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
 
+        <Button
+            android:id="@+id/jobDetails_techRate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="@string/RateTech"
+            android:visibility="invisible"
+            app:backgroundTint="@color/turquoise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

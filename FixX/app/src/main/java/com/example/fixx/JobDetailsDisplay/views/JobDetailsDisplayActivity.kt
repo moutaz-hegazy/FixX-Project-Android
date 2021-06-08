@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
@@ -24,7 +25,10 @@ import com.example.fixx.inAppChatScreens.views.ChatLogActivity
 import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 import com.example.fixx.techOrderDetailsScreen.views.OrderImagesAdapter
 import com.example.fixx.technicianProfileScreen.view.TechnicianProfileActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_rating.view.*
 
 
 class JobDetailsDisplayActivity : AppCompatActivity() {
@@ -96,67 +100,92 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             binding.jobDetailsDescriptionLbl.visibility = View.VISIBLE
         }
 
+        displayTechnicianData(job)
+    }
+
+    private fun displayTechnicianData(job : Job){
         if (job.techID != null) {
-            Log.i("TAG", "onCreate: Here 11 <<<<<<<<")
-            loadSingleTechnician(job.techID!!)
-        } else if(!job.bidders.isNullOrEmpty()) {
-            job.bidders?.let { map ->
-                Log.i("TAG", "onCreate: Here 44 <<<<<<<<"+ job.privateRequest + job)
-                if (job.privateRequest) {
-                    Log.i("TAG", "onCreate: Here 22 <<<<<<<<")
-                    map.keys.first().let { techUid ->
-                        binding.jobDetailsTechLayout.visibility = View.VISIBLE
-                        loadSingleTechnician(techUid) { tech->
-                            binding.bidderItemConfirmPriceTitleLbl.visibility = View.VISIBLE
-                            binding.bidderItemConfirmPriceLbl.text = "${map[techUid]} ${getString(R.string.LE)}"
-                            binding.bidderItemConfirmPriceLbl.visibility = View.VISIBLE
-                            binding.jobDetailsTechAcceptBtn.apply {
-                                visibility = View.VISIBLE
-                                setOnClickListener {
-                                    // Accept price.
-                                    acceptTechnician(tech,map[techUid]!!)
-                                    this.visibility = View.INVISIBLE
-                                    binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
-                                }
-                            }
-                            binding.jobDetailsTechCancelBtn.apply {
-                                visibility = View.VISIBLE
-                                setOnClickListener {
-                                    viewmodel.removeSingleBidder()
-                                    binding.jobDetailsTechLayout.visibility = View.INVISIBLE
-                                    // show dialog Edit or delete job.
-
-                                }
+            loadSingleTechnician(job.techID!!){
+                if(job.status == Job.JobStatus.Completed){
+                    binding.jobDetailsTechRateBtn.apply {
+                        if(job.rateable){
+                            binding.jobDetailsTechRateBtn.setOnClickListener {
+                                showBottomSheetDialog()
                             }
                         }
-                    }
-                } else {
-                    Log.i("TAG", "onCreate: Here 33 <<<<<<<<")
-                    job.bidders?.let { bidders ->
-                        binding.jobDetailsBiddersTitleLbl.visibility = View.VISIBLE
-                        binding.jobDetailsBiddersRecycler.apply {
-                            val techs = mutableListOf<Technician>()
-                            visibility = View.VISIBLE
-                            adapter = JobDetailsBiddersAdapter(techs, bidders){ tech,price ->
-                                acceptTechnician(tech,price)
-                                visibility = View.GONE
-                                binding.jobDetailsBiddersTitleLbl.visibility = View.GONE
-                                loadAcceptedTech(tech,price)
-                            }
-                            layoutManager = LinearLayoutManager(this@JobDetailsDisplayActivity)
-                            Log.i("TAG", "displayJobOnScreen: <<<<<<<<<<<"+bidders)
-                            bidders.forEach {
-                                viewmodel.getTechnician(it.key, onSuccessBinding = { tech ->
-                                    Log.i("TAG", "displayJobOnScreen: HERE 1")
-                                    techs.add(tech)
-                                    adapter?.notifyDataSetChanged()
-                                }, onFailBinding = {
-
-                                })
-                            }
-                        }
+                        visibility = View.VISIBLE
                     }
                 }
+            }
+        } else if(!job.bidders.isNullOrEmpty()) {
+            loadBidders(job)
+        }
+    }
+
+    private fun loadBidders(job : Job){
+        job.bidders?.let { map ->
+            Log.i("TAG", "onCreate: Here 44 <<<<<<<<"+ job.privateRequest + job)
+            if (job.privateRequest) {
+                Log.i("TAG", "onCreate: Here 22 <<<<<<<<")
+                map.keys.first().let { techUid ->
+                    binding.jobDetailsTechLayout.visibility = View.VISIBLE
+                    loadSingleTechnician(techUid) { tech->
+                        loadPrivateTechnician(tech, map)
+                    }
+                }
+            } else {
+                Log.i("TAG", "onCreate: Here 33 <<<<<<<<")
+                job.bidders?.let { bidders ->
+                    loadAllBidders(bidders)
+                }
+            }
+        }
+    }
+
+    private fun loadPrivateTechnician(tech : Technician , map : Map<String,String>){
+        binding.bidderItemConfirmPriceTitleLbl.visibility = View.VISIBLE
+        binding.bidderItemConfirmPriceLbl.text = "${map[tech.uid]} ${getString(R.string.LE)}"
+        binding.bidderItemConfirmPriceLbl.visibility = View.VISIBLE
+        binding.jobDetailsTechAcceptBtn.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                // Accept price.
+                acceptTechnician(tech,map[tech.uid]!!)
+                this.visibility = View.INVISIBLE
+                binding.jobDetailsTechCancelBtn.visibility = View.INVISIBLE
+            }
+        }
+        binding.jobDetailsTechCancelBtn.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                viewmodel.removeSingleBidder()
+                binding.jobDetailsTechLayout.visibility = View.INVISIBLE
+                // show dialog Edit or delete job.
+            }
+        }
+    }
+
+    private fun loadAllBidders(bidders : Map<String,String>){
+        binding.jobDetailsBiddersTitleLbl.visibility = View.VISIBLE
+        binding.jobDetailsBiddersRecycler.apply {
+            val techs = mutableListOf<Technician>()
+            visibility = View.VISIBLE
+            adapter = JobDetailsBiddersAdapter(techs, bidders){ tech,price ->
+                acceptTechnician(tech,price)
+                visibility = View.GONE
+                binding.jobDetailsBiddersTitleLbl.visibility = View.GONE
+                loadAcceptedTech(tech,price)
+            }
+            layoutManager = LinearLayoutManager(this@JobDetailsDisplayActivity)
+            Log.i("TAG", "displayJobOnScreen: <<<<<<<<<<<"+bidders)
+            bidders.forEach {
+                viewmodel.getTechnician(it.key, onSuccessBinding = { tech ->
+                    Log.i("TAG", "displayJobOnScreen: HERE 1")
+                    techs.add(tech)
+                    adapter?.notifyDataSetChanged()
+                }, onFailBinding = {
+
+                })
             }
         }
     }
@@ -303,5 +332,12 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             }
             show()
         }
+    }
+
+    private fun showBottomSheetDialog(){
+        val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_rating, null)
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(bottomSheet.rootView)
+        dialog.show()
     }
 }
