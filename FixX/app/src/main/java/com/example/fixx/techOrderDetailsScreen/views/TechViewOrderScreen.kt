@@ -59,6 +59,7 @@ class TechViewOrderScreen : AppCompatActivity() {
         intent.apply {
             val bundle = getBundleExtra(Constants.TRANS_DATA_BUNDLE)
             jobId = bundle?.getString(Constants.TRANS_JOB)
+            Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>. $bundle<<<<<<<<<<,,")
             job = getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
         }
 

@@ -68,10 +68,8 @@ class NavigationBarActivity : AppCompatActivity() {
             }
         }
 
-
         setContentView(R.layout.activity_navigation_bar)
 
-        Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>>>"+FirestoreService.auth.currentUser?.email)
         supportActionBar?.hide()
 
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)

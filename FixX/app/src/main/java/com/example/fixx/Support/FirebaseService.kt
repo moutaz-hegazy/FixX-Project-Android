@@ -65,16 +65,15 @@ class FirebaseService : FirebaseMessagingService() {
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
-                    ,startHomeActivity(bundle))
+                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM))
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
-                val bundle = Bundle().apply {
-                    putString(Constants.TRANS_JOB,p0.data["jobId"])
-                }
+                val bundle = Bundle()
+                bundle.putString(Constants.TRANS_JOB,p0.data["jobId"])
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
-                    ,startHomeActivity(bundle))
+                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST))
             }
 
             Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->{
@@ -84,7 +83,7 @@ class FirebaseService : FirebaseMessagingService() {
                     putBoolean(Constants.TRANS_RESPONSE_BOOL,true)
                 }
                 notification = createNotification("${p0.data["user"]}","${p0.data["message"]}"
-                    ,startHomeActivity(bundle))
+                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_CHAT_MESSAGE))
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
@@ -93,7 +92,7 @@ class FirebaseService : FirebaseMessagingService() {
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle))
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_ACCEPT))
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->{
@@ -102,7 +101,7 @@ class FirebaseService : FirebaseMessagingService() {
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle))
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY))
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->{
@@ -111,7 +110,7 @@ class FirebaseService : FirebaseMessagingService() {
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle))
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL))
             }
 
             Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
@@ -120,7 +119,7 @@ class FirebaseService : FirebaseMessagingService() {
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle))
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_JOB_COMPLETED))
             }
 
             else ->{}
@@ -128,13 +127,14 @@ class FirebaseService : FirebaseMessagingService() {
         notificationManager.notify(notificationId,notification)
     }
 
-    private fun startHomeActivity(bundle : Bundle) : PendingIntent{
+    private fun startHomeActivity(bundle : Bundle, notificationType : String) : PendingIntent{
         var pendingIntent : PendingIntent
         TaskStackBuilder.create(applicationContext).apply {
             addNextIntentWithParentStack(Intent(applicationContext,NavigationBarActivity::class.java))
             editIntentAt(0).apply {
                 putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
                 putExtra(Constants.TRANSIT_FROM_NOTIFICATION,true)
+                putExtra(Constants.TRANS_NOTIFICATION_TYPE,notificationType)
             }
             pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
         }
