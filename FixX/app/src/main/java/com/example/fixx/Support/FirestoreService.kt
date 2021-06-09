@@ -73,6 +73,7 @@ object FirestoreService {
     ) {
         uid?.let {
             db.collection("Users").document(it).get().addOnSuccessListener { snapShot ->
+                Log.i("TAG", "fetchUserFromDB: FETCH SUCCESS <<<<<<<<<<<")
                 val type = snapShot.data?.get("accountType") as? String
                 type?.let {
                     when (it) {
@@ -80,6 +81,8 @@ object FirestoreService {
                         "Technician" -> onCompletion(snapShot.toObject<Technician>())
                     }
                 }
+            }.addOnFailureListener {
+                Log.i("TAG", "fetchUserFromDB: <<<<<<<< FAILED ????")
             }
         }
     }
@@ -110,6 +113,16 @@ object FirestoreService {
         db.collection("Chats").document(channelName)
             .collection("Messages")
             .orderBy("timestamp", Query.Direction.ASCENDING).apply {
+                get().addOnSuccessListener { snapShot ->
+                    snapShot.forEach { msgsSnapShot ->
+                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
+                        val msg = msgsSnapShot.toObject<ChatMessage>()
+                        msgs.add(msg)
+                    }
+                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
+                    onCompletion(msgs)
+                }
+
                 addSnapshotListener { value, error ->
                     error?.let {
                         Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
@@ -122,16 +135,6 @@ object FirestoreService {
                         }
                     }
                     display = true
-                }
-
-                get().addOnSuccessListener { snapShot ->
-                    snapShot.forEach { msgsSnapShot ->
-                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
-                        val msg = msgsSnapShot.toObject<ChatMessage>()
-                        msgs.add(msg)
-                    }
-                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
-                    onCompletion(msgs)
                 }
             }
     }

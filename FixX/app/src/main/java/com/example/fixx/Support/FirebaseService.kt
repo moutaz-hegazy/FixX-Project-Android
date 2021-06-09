@@ -89,7 +89,7 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["message"]}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_CHAT_MESSAGE)
                 )
-                val channelId = p0.data["id"] as Int
+                val channelId = p0.data["id"]?.toInt() ?: 0
                 Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> $channelId")
                 notificationManager.notify(channelId, notification)
             }

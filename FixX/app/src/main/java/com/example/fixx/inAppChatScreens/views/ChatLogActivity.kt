@@ -48,27 +48,30 @@ class ChatLogActivity : AppCompatActivity() {
         if(fromNotification){
             channel = bundle?.getString(Constants.TRANS_CHAT_CHANNEL)
             val contactUid = bundle?.getString(Constants.TRANS_CONTACT_UID)
-            chatLogVm = ChatLogViewModel(channel,contactUid,
+            Log.i(TAG, "onCreate:  %%??>>>>>>$contactUid")
+            chatLogVm = ChatLogViewModel(channel, contactUid,
                 observer = { msg ->
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
                     displayMsg(msg)
                     adapter.notifyDataSetChanged()
-                },onCompletion = { msgs ->
-                    chatLogVm.fetchContact(){
-                        contact = it!!
-                        setButton()
-                        Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
-                        msgs.forEach {
-                                msg ->
-                            displayMsg(msg)
-                            adapter.notifyDataSetChanged()
-                        }
-                        supportActionBar?.apply {
-                            title = contact.name
-                        }
+                }, onCompletion = { msgs ->
+                    msgs.forEach { msg ->
+                        displayMsg(msg)
+                        adapter.notifyDataSetChanged()
                     }
                 })
+            chatLogVm.fetchContact() {
+                contact = it!!
+                Log.i(TAG, "onCreate: >>>>>>>> contact >>>>>>>>> ${contact.name}")
+
+                supportActionBar?.apply {
+                    title = contact.name
+                }
+                chatLogVm.fetchChatHistory()
+                setButton()
+            }
         }else{
+            Log.i(TAG, "onCreate: IAM IN THE ELSE <<<<<<<<<<<<")
             contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
             supportActionBar?.apply {
                 title = contact.name
@@ -87,6 +90,7 @@ class ChatLogActivity : AppCompatActivity() {
                         adapter.notifyDataSetChanged()
                     }
                 })
+            chatLogVm.fetchChatHistory()
         }
     }
 
