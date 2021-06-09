@@ -29,6 +29,7 @@ import com.example.fixx.techOrderDetailsScreen.viewModels.TechViewOrderViewModel
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 import kotlin.reflect.jvm.internal.impl.renderer.ClassifierNamePolicy
 
 class TechViewOrderScreen : AppCompatActivity() {
@@ -259,6 +260,8 @@ class TechViewOrderScreen : AppCompatActivity() {
             val currentDate = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
             val newRating = (((USER_OBJECT!! as Technician).rating ?: 2.5) + 4)/2
             val jobCount = (USER_OBJECT!! as Technician).jobsCount++
+            val increase = ((job?.price?.toDouble()?:0.0) * 0.1) + (((job?.price?.toDouble()?:0.0)*(0.8))/5)
+            val monthlyRating = ((USER_OBJECT!! as Technician).monthlyRating?.toDouble() ?: 0.0) + increase
             viewModel.completeJob(job!!.jobId,currentDate,onSuccessBinding = {
                 contact?.token?.let {token ->
                     TechReplyPushNotification(
@@ -271,11 +274,10 @@ class TechViewOrderScreen : AppCompatActivity() {
                         Toast.makeText(applicationContext,R.string.JobCompletedTitle,Toast.LENGTH_SHORT).show()
                     }
                 }
-                viewModel.updateRatingAndJobCount(USER_OBJECT!!.uid!!,newRating,jobCount,onSuccessBinding = {
-                    finish()
-                },onFailBinding = {
-
-                })
+                viewModel.updateRatingAndJobCount(USER_OBJECT!!.uid!!,newRating,monthlyRating.roundToInt(),jobCount,
+                    onSuccessBinding = {
+                        finish()
+                    },onFailBinding = {})
             },onFailBinding = {
                 Toast.makeText(applicationContext,R.string.JobStatusFail,Toast.LENGTH_SHORT).show()
                 binding.techViewOrderCompletedBtn.apply {

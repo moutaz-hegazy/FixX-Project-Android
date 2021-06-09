@@ -112,7 +112,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                     binding.jobDetailsTechRateBtn.apply {
                         if(job.rateable){
                             binding.jobDetailsTechRateBtn.setOnClickListener {
-                                showBottomSheetDialog(tech,job.jobId)
+                                showBottomSheetDialog(tech,job.jobId, job.price ?: 0)
                             }
                         }
                         visibility = View.VISIBLE
@@ -336,7 +336,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBottomSheetDialog(tech : Technician,jobId:String){
+    private fun showBottomSheetDialog(tech : Technician,jobId:String, price: Int){
         val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_rating, null)
         val dialog = BottomSheetDialog(this)
         bottomSheet.rootView.bootom_sheet_submit_btn.setOnClickListener {
@@ -349,9 +349,12 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 val commentObj = Comment(USER_OBJECT!!.name,commentValue, USER_OBJECT?.profilePicture?.second
                     ,SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time),null
                     , System.currentTimeMillis(), rating.toDouble())
-
                 val finalRating = ((rating.toDouble()-4)/2) + (tech.rating ?: 2.5)
-                viewmodel.postRatingAndCommentToTechnician(jobId,tech.uid!!,finalRating,commentObj,0.0
+
+                val increase = (((price.toDouble())*((rating.toDouble() - 4.0)/5))/5)
+                val monthlyRating = ((USER_OBJECT!! as Technician).monthlyRating?.toDouble() ?: 0.0) + increase
+
+                viewmodel.postRatingAndCommentToTechnician(jobId,tech.uid!!,finalRating,commentObj,monthlyRating
                     ,onSuccessBinding = {
                         dialog.dismiss()
                     },onFailBinding = {

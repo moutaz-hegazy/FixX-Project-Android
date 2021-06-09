@@ -5,6 +5,6 @@ class Technician(phoneNumber: String = "", accountType: String = "", name: Strin
     var jobTitle: String? = null
     var workLocations: ArrayList<String>? = null
     var rating: Double? = null
-    var monthlyRating: Double? = null
+    var monthlyRating: Int? = null
     var jobsCount : Int = 0
 }
