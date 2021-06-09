@@ -165,8 +165,10 @@ class SignUpTabFragment: Fragment() {
                                 FirestoreService.saveUserData(technician,
                                     onSuccessHandler = {
                                             person ->
-                                        (person as? Technician)?.workLocations?.forEach {
-                                            viewmodel.subscribeToTopic(getWorkTopic(it))
+                                        (person as? Technician)?.apply {
+                                            workLocations?.forEach {
+                                                viewmodel.subscribeToTopic(this.jobTitle+getWorkTopic(it))
+                                            }
                                         }
                                         USER_OBJECT = person
                                         startActivity(Intent(context, NavigationBarActivity::class.java))
