@@ -25,7 +25,6 @@ data class Job (val uid: String? = null, val type : String = "",
     }
     var areaLocation : String? = null
     var rateable : Boolean = false
-    var commentable : Boolean = false
 
     constructor(uid: String? = null, type : String = "",
                 location: String? = null,

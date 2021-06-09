@@ -137,6 +137,31 @@ object FirestoreService {
             }
     }
 
+    fun addRatingAndComment(techId:String, rating : Double, extraRating: Double, comment: Comment,
+                            onSuccessHandler: () -> Unit, onFailHandler: () -> Unit) {
+        db.collection("Users").document(techId).apply {
+            update(mapOf("rating" to rating, "monthlyRating" to extraRating))
+
+            collection("Comments").document(auth.currentUser?.uid!!).get()
+                .addOnSuccessListener { snap ->
+                    if (snap.exists()) {
+                        snap.reference.update("comment", comment).addOnSuccessListener {
+                            onSuccessHandler()
+                        }.addOnFailureListener {
+                            onFailHandler()
+                        }
+                    } else {
+                        snap.reference.set(mapOf("comment" to comment)).addOnSuccessListener {
+                            onSuccessHandler()
+                        }.addOnFailureListener {
+                            onFailHandler()
+
+                        }
+                    }
+                }
+        }
+    }
+
     fun addBidder(jobId : String, bidders:Map<String,String>, onCompletion:()->Unit){
         db.collection("Jobs").document(jobId)
             .update("bidders", bidders).addOnSuccessListener {

@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.Addresses.view.MySpinnerAdapter
+import com.example.fixx.LoginScreen.viewmodels.RegisterViewmodel
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.fragment_tecnician_address.*
@@ -250,12 +251,8 @@ class TechnicianAddressFragment : Fragment() {
                         emptyArea.toMutableList()
                     }
                 }
-
                 setAreaSpinner()
-
             }
-
         }
-
     }
 }

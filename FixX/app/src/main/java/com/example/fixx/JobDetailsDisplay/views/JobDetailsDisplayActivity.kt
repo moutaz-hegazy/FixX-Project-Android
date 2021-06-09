@@ -1,5 +1,6 @@
 package com.example.fixx.JobDetailsDisplay.views
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -14,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
-import com.example.fixx.LoginScreen.Views.RegistrationActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
+import com.example.fixx.POJOs.Comment
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
@@ -29,6 +30,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_rating.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class JobDetailsDisplayActivity : AppCompatActivity() {
@@ -37,7 +40,6 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
     private var jobId : String? = null
     private lateinit var viewmodel : JobDetailsViewModel
     private lateinit var loadedJob: Job
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,12 +107,12 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
 
     private fun displayTechnicianData(job : Job){
         if (job.techID != null) {
-            loadSingleTechnician(job.techID!!){
+            loadSingleTechnician(job.techID!!){tech ->
                 if(job.status == Job.JobStatus.Completed){
                     binding.jobDetailsTechRateBtn.apply {
                         if(job.rateable){
                             binding.jobDetailsTechRateBtn.setOnClickListener {
-                                showBottomSheetDialog()
+                                showBottomSheetDialog(tech,job.jobId)
                             }
                         }
                         visibility = View.VISIBLE
@@ -334,9 +336,29 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBottomSheetDialog(){
+    private fun showBottomSheetDialog(tech : Technician,jobId:String){
         val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_rating, null)
         val dialog = BottomSheetDialog(this)
+        bottomSheet.rootView.bootom_sheet_submit_btn.setOnClickListener {
+            val rating = bottomSheet.rootView.bootom_sheet_ratingBar.rating
+            if(rating == 0.0f){
+                Toast.makeText(this,R.string.GiveRating, Toast.LENGTH_SHORT).show()
+            }else{
+                val comment = bottomSheet.rootView.bootom_sheet_comment_txt.text.toString()
+                val commentValue = if(comment.isNullOrEmpty())null; else comment    //<<<<<<<<<<<< take care land mine
+                val commentObj = Comment(USER_OBJECT!!.name,commentValue, USER_OBJECT?.profilePicture?.second
+                    ,SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time),null
+                    , System.currentTimeMillis(), rating.toDouble())
+
+                val finalRating = ((rating.toDouble()-4)/2) + (tech.rating ?: 2.5)
+                viewmodel.postRatingAndCommentToTechnician(jobId,tech.uid!!,finalRating,commentObj,0.0
+                    ,onSuccessBinding = {
+                        dialog.dismiss()
+                    },onFailBinding = {
+                        Toast.makeText(this, R.string.CommentFail,Toast.LENGTH_SHORT).show()
+                    })
+            }
+        }
         dialog.setContentView(bottomSheet.rootView)
         dialog.show()
     }

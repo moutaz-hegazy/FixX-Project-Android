@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.fixx.POJOs.Details
 import com.example.fixx.HomeActivity
+import com.example.fixx.LoginScreen.viewmodels.RegisterViewmodel
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Technician
@@ -41,6 +42,10 @@ class SignUpTabFragment: Fragment() {
     var signUpButton: Button? = null
 
     var dummyButton: Button? = null
+
+    private val viewmodel : RegisterViewmodel by lazy {
+        RegisterViewmodel()
+    }
 
 
     private val passwordRegex =
@@ -118,36 +123,6 @@ class SignUpTabFragment: Fragment() {
             }
         })
 
-/*        dummyButton?.setOnClickListener(View.OnClickListener {
-            username = usernameEditText?.text.toString()
-            email = emailEditText?.text.toString()
-            password = passwordEditText?.text.toString()
-            confirmedPassword = confirmPasswordEditText?.text.toString()
-
-            if(validateSignUpForm2(email, password, confirmedPassword)){
-                startActivity(Intent(context, HomeActivity::class.java))
-            }
-
-            if(username.isEmpty())
-                usernameEditText?.error = "This field is required"
-            if(email.isEmpty())
-                emailEditText?.error = "This field is required"
-            if(password.isEmpty())
-                passwordEditText?.error = "This field is required"
-            if(confirmedPassword.isEmpty())
-                confirmPasswordEditText?.error = "This field is required"
-
-            if (passedAccountType == "User"){
-                var user: User = createUserObject()
-                Log.i("TAG", user.phoneNumber)
-
-            }
-            else if (passedAccountType == "Technician"){
-                val technician: Technician = createTechnicianObject()
-                Log.i("TAG", technician.phoneNumber)
-            }
-        })*/
-
         signUpButton?.setOnClickListener(View.OnClickListener {
             username = usernameEditText?.text.toString()
             email = emailEditText?.text.toString()
@@ -190,6 +165,9 @@ class SignUpTabFragment: Fragment() {
                                 FirestoreService.saveUserData(technician,
                                     onSuccessHandler = {
                                             person ->
+                                        (person as? Technician)?.workLocations?.forEach {
+                                            viewmodel.subscribeToTopic(getWorkTopic(it))
+                                        }
                                         USER_OBJECT = person
                                         startActivity(Intent(context, NavigationBarActivity::class.java))
                                         activity?.finish()
@@ -204,26 +182,6 @@ class SignUpTabFragment: Fragment() {
                 }
             }
         })
-
-/*            Toast.makeText(context, "WORKS!!!", Toast.LENGTH_SHORT).show()
-            username = usernameEditText?.text.toString()
-            email = emailEditText?.text.toString()
-            password = passwordEditText?.text.toString()
-            confirmedPassword = confirmPasswordEditText?.text.toString()
-
-            if(username.isEmpty())
-                usernameEditText?.error = "This field is required"
-            if(email.isEmpty())
-                emailEditText?.error = "This field is required"
-            if(password.isEmpty())
-                passwordEditText?.error = "This field is required"
-            if(confirmedPassword.isEmpty())
-                confirmPasswordEditText?.error = "This field is required"
-
-            if(validateSignUpForm2(email, password, confirmedPassword)){
-              startActivity(Intent(context, HomeActivity::class.java))
-            }*/
-//        })
         return root
     }
 
@@ -273,5 +231,44 @@ class SignUpTabFragment: Fragment() {
     private fun createTechnicianObject() = Technician(passedPhoneNumber, passedAccountType, username, email).apply {
         jobTitle = arguments?.getString(Constants.TRANS_JOB)
         workLocations = arguments?.getStringArrayList(Constants.TRANS_ADDRESS)
+    }
+
+    fun getWorkTopic(location: String) : String{
+        val city = location.substringBefore(",")
+        val area = location.substringAfter(",")
+
+        return "%"+getCityEnglishName(city).replace(" ","_", true)+"."+
+                getAreaEnglishName(area,city).replace(" ","_",true).
+                replace("-","_",true)
+    }
+
+    private fun getCityEnglishName(city: String): String {
+        var myCity = city
+        for (iterator in Constants.citiesInArabic.indices) {
+            if (city.equals(Constants.citiesInArabic[iterator])) {
+                myCity = Constants.cities[iterator]
+            }
+        }
+        return myCity
+    }
+
+    private fun getAreaEnglishName(area: String, city: String): String {
+        var myArea = area
+
+        if (city.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoAreaInArabic.indices) {
+                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
+                    myArea = Constants.cairoArea[iterator]
+                }
+            }
+        } else if (city.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexAreaInArabic.indices) {
+                if (area.equals(Constants.alexAreaInArabic[iterator])) {
+                    myArea = Constants.alexArea[iterator]
+                }
+            }
+        }
+
+        return myArea
     }
 }
