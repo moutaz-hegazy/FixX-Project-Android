@@ -115,8 +115,8 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                             binding.jobDetailsTechRateBtn.setOnClickListener {
                                 showBottomSheetDialog(tech,job.jobId, job.price ?: 0)
                             }
+                            visibility = View.VISIBLE
                         }
-                        visibility = View.VISIBLE
                     }
                 }
             }
@@ -291,7 +291,6 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
     }
 
-
     private fun showPopupMenu(view : View,type: Job.JobStatus){
         val popupMenu = PopupMenu(this,view)
         popupMenu.apply {
@@ -357,6 +356,8 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
 
                 viewmodel.postRatingAndCommentToTechnician(jobId,tech.uid!!,finalRating,commentObj,monthlyRating
                     ,onSuccessBinding = {
+                        binding.jobDetailsTechRateBtn.visibility = View.INVISIBLE
+                        binding.bidderItemTechRating.rating = finalRating.toFloat()
                         dialog.dismiss()
                     },onFailBinding = {
                         Toast.makeText(this, R.string.CommentFail,Toast.LENGTH_SHORT).show()

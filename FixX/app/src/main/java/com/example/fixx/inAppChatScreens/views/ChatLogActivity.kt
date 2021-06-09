@@ -100,7 +100,8 @@ class ChatLogActivity : AppCompatActivity() {
                 binding.edittextChatLog.text.clear()
                 contact.token?.let {    token ->
                     ChatPushNotification(NotificationData(Constants.NOTIFICATION_TYPE_CHAT_MESSAGE,
-                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: "", USER_OBJECT?.uid ?: ""),
+                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: "", USER_OBJECT?.uid ?: "",
+                        USER_OBJECT!!.phoneNumber.toInt()),
                         arrayOf(token)).also {
                             chatLogVm.sendNotification(it)
                         }

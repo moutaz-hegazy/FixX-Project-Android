@@ -51,6 +51,7 @@ sealed class Constants {
         const val TRANSIT_FROM_NOTIFICATION = "fromNotification"
         const val TRANS_NOTIFICATION_TYPE = "notificationType"
         const val TRANS_DATA_BUNDLE = "dataBundle"
+        const val NOTIFICATION_GROUP = "fixXNotGroup"
 
         val cities = arrayOf("City","Cairo", "Alexandria")
         val citiesInArabic = arrayOf("مدينة","القاهرة", "الإسكندرية")

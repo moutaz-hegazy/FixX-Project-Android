@@ -51,7 +51,7 @@ class FirebaseService : FirebaseMessagingService() {
         Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> MESSAGE RECEIVED <<<<<<<<")
         val intent = Intent(this,NavigationBarActivity::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationId = Random.nextInt()
+        val chatNotificationId = 500
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             createNotificationChannel(notificationManager)
@@ -66,6 +66,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
                     ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
@@ -74,16 +75,23 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
                     ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
-            Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->{
+            Constants.NOTIFICATION_TYPE_CHAT_MESSAGE -> {
                 val bundle = Bundle().apply {
-                    putString(Constants.TRANS_CONTACT_UID,p0.data["uid"])
-                    putString(Constants.TRANS_CHAT_CHANNEL,p0.data["channel"])
-                    putBoolean(Constants.TRANS_RESPONSE_BOOL,true)
+                    putString(Constants.TRANS_CONTACT_UID, p0.data["uid"])
+                    putString(Constants.TRANS_CHAT_CHANNEL, p0.data["channel"])
+                    putBoolean(Constants.TRANS_RESPONSE_BOOL, true)
                 }
-                notification = createNotification("${p0.data["user"]}","${p0.data["message"]}"
-                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_CHAT_MESSAGE))
+                notification = createNotification(
+                    "${p0.data["user"]}",
+                    "${p0.data["message"]}",
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_CHAT_MESSAGE)
+                )
+                val channelId = p0.data["id"] as Int
+                Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> $channelId")
+                notificationManager.notify(channelId, notification)
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
@@ -93,6 +101,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_ACCEPT))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->{
@@ -102,6 +111,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->{
@@ -111,6 +121,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
             Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
@@ -120,11 +131,12 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_JOB_COMPLETED))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
             else ->{}
         }
-        notificationManager.notify(notificationId,notification)
+
     }
 
     private fun startHomeActivity(bundle : Bundle, notificationType : String) : PendingIntent{
@@ -148,9 +160,26 @@ class FirebaseService : FirebaseMessagingService() {
         .setContentText(content)
         .setSmallIcon(R.drawable.ic_baseline_notifications_24)
         .setAutoCancel(true)
+        .setGroup(Constants.NOTIFICATION_GROUP)
         .setContentIntent(pendingIntent)
         .build()
 
+    private fun buildSummaryNotification() =  NotificationCompat.Builder(this, CHANNEL_ID)
+        .setContentTitle("SUMMARY")
+        //set content text to support devices running API level < 24
+        .setContentText("Two new messages")
+        .setSmallIcon(R.drawable.call_icon)
+        //build summary info into InboxStyle template
+        .setStyle(NotificationCompat.InboxStyle()
+            .addLine("Alex Faarborg Check this out")
+            .addLine("Jeff Chang Launch Party")
+            .setBigContentTitle("2 new messages")
+            .setSummaryText("janedoe@example.com"))
+        //specify which group this notification belongs to
+        .setGroup(Constants.NOTIFICATION_GROUP)
+        //set this notification as the summary for the group
+        .setGroupSummary(true)
+        .build()
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager){
