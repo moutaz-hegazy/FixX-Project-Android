@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Person
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityTechViewOrderScreenBinding
@@ -251,8 +252,14 @@ class TechViewOrderScreen : AppCompatActivity() {
         binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
         binding.techViewOrderAccountLbl.text = job?.price.toString()
         binding.techViewOrderCompletedBtn.setOnClickListener {
-            val currentData = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
-            viewModel.completeJob(job!!.jobId,currentData,onSuccessBinding = {
+            binding.techViewOrderCompletedBtn.apply {
+                isClickable = false
+                setBackgroundColor(Color.GRAY)
+            }
+            val currentDate = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
+            val newRating = (((USER_OBJECT!! as Technician).rating ?: 2.5) + 4)/2
+            val jobCount = (USER_OBJECT!! as Technician).jobsCount++
+            viewModel.completeJob(job!!.jobId,currentDate,onSuccessBinding = {
                 contact?.token?.let {token ->
                     TechReplyPushNotification(
                         ReplyNotificationData(
@@ -262,11 +269,19 @@ class TechViewOrderScreen : AppCompatActivity() {
                         arrayOf(token)).also {
                         viewModel.sendReplyNotification(it)
                         Toast.makeText(applicationContext,R.string.JobCompletedTitle,Toast.LENGTH_SHORT).show()
-                        finish()
                     }
                 }
+                viewModel.updateRatingAndJobCount(USER_OBJECT!!.uid!!,newRating,jobCount,onSuccessBinding = {
+                    finish()
+                },onFailBinding = {
+
+                })
             },onFailBinding = {
                 Toast.makeText(applicationContext,R.string.JobStatusFail,Toast.LENGTH_SHORT).show()
+                binding.techViewOrderCompletedBtn.apply {
+                    isClickable = true
+                    setBackgroundColor(Color.BLUE)
+                }
             })
         }
     }

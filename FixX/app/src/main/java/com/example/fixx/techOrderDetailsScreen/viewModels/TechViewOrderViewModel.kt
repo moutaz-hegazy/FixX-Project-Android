@@ -61,4 +61,9 @@ class TechViewOrderViewModel() {
         FirestoreService.updateDocument(Constants.JOBS_COLLECTION, mapOf("status" to Job.JobStatus.Completed.rawValue,
             "completionDate" to date, "rateable" to true,"commentable" to true),jobId,onSuccessBinding,onFailBinding)
     }
+
+    fun updateRatingAndJobCount(uid : String,rating : Double, jobCount : Int,onSuccessBinding: () -> Unit,onFailBinding: () -> Unit){
+        FirestoreService.updateDocument(Constants.USERS_COLLECTION, mapOf("rating" to rating, "jobsCount" to jobCount),
+            uid,onSuccessBinding,onFailBinding)
+    }
 }

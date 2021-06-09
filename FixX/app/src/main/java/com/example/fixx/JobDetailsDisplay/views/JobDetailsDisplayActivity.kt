@@ -201,7 +201,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             Picasso.get().load(tech.profilePicture?.second)
                 .into(binding.bidderItemTechImageView)
         } else {
-            binding.bidderItemTechImageView.visibility = View.VISIBLE
+            binding.bidderItemTechImageLbl.visibility = View.VISIBLE
             binding.bidderItemTechImageLbl.text =
                 tech.name.first().toUpperCase().toString()
         }
