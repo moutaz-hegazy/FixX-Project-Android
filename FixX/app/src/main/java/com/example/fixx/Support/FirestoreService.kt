@@ -71,7 +71,6 @@ object FirestoreService {
         uid: String? = auth.currentUser?.uid,
         onCompletion: (user: Person?) -> Unit
     ) {
-        var userData: Person? = null
         uid?.let {
             db.collection("Users").document(it).get().addOnSuccessListener { snapShot ->
                 val type = snapShot.data?.get("accountType") as? String

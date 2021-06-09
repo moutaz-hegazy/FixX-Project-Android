@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -59,119 +60,85 @@ class FirebaseService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         when(p0.data["type"]){
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM ->{
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
-                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",pendingIntent)
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
+                    ,startHomeActivity(bundle))
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,TechViewOrderScreen::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobID"])
-                    }
-                    pendingIntent = getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
-                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",pendingIntent)
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
+                    ,startHomeActivity(bundle))
             }
 
             Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->{
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,ChatLogActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_CONTACT_UID,p0.data["uid"])
-                        putExtra(Constants.TRANS_CHAT_CHANNEL,p0.data["channel"])
-                        putExtra(Constants.TRANS_RESPONSE_BOOL,true)
-                    }
-                    pendingIntent = getPendingIntent(2,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_CONTACT_UID,p0.data["uid"])
+                    putString(Constants.TRANS_CHAT_CHANNEL,p0.data["channel"])
+                    putBoolean(Constants.TRANS_RESPONSE_BOOL,true)
                 }
-                notification = createNotification("${p0.data["user"]}","${p0.data["message"]}",pendingIntent)
+                notification = createNotification("${p0.data["user"]}","${p0.data["message"]}"
+                    ,startHomeActivity(bundle))
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,TechViewOrderScreen::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    pendingIntent)
+                    startHomeActivity(bundle))
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->{
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    pendingIntent)
+                    startHomeActivity(bundle))
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->{
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    pendingIntent)
+                    startHomeActivity(bundle))
             }
 
             Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
                 notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    pendingIntent)
+                    startHomeActivity(bundle))
             }
 
-            else ->{
-                val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
-                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                pendingIntent)
-
-            }
+            else ->{}
         }
-//        val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
-//        val notification = NotificationCompat.Builder(this,CHANNEL_ID)
-//            .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-//            .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-//            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-//            .setAutoCancel(true)
-//            .setContentIntent(pendingIntent)
-//            .build()
-
         notificationManager.notify(notificationId,notification)
+    }
+
+    private fun startHomeActivity(bundle : Bundle) : PendingIntent{
+        var pendingIntent : PendingIntent
+        TaskStackBuilder.create(applicationContext).apply {
+            addNextIntentWithParentStack(Intent(applicationContext,NavigationBarActivity::class.java))
+            editIntentAt(0).apply {
+                putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
+                putExtra(Constants.TRANSIT_FROM_NOTIFICATION,true)
+            }
+            pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        return pendingIntent
     }
 
 

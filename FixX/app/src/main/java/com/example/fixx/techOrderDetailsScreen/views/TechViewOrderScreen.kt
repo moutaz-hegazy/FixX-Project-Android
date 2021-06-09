@@ -57,7 +57,8 @@ class TechViewOrderScreen : AppCompatActivity() {
         }
 
         intent.apply {
-            jobId = getStringExtra(Constants.TRANS_JOB)
+            val bundle = getBundleExtra(Constants.TRANS_DATA_BUNDLE)
+            jobId = bundle?.getString(Constants.TRANS_JOB)
             job = getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
         }
 

@@ -41,9 +41,13 @@ class ChatLogActivity : AppCompatActivity() {
 
         recyclerview_chat_log.adapter = adapter
         channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
-        val fromNotification = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
+
+        // from notification.
+        val bundle = intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE)
+        val fromNotification =bundle?.getBoolean(Constants.TRANS_RESPONSE_BOOL,false) ?: false
         if(fromNotification){
-            val contactUid = intent.getStringExtra(Constants.TRANS_CONTACT_UID)
+            channel = bundle?.getString(Constants.TRANS_CHAT_CHANNEL)
+            val contactUid = bundle?.getString(Constants.TRANS_CONTACT_UID)
             chatLogVm = ChatLogViewModel(channel,contactUid,
                 observer = { msg ->
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")

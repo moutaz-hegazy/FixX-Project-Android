@@ -1,6 +1,8 @@
 package com.example.fixx.NavigationBar
 
+import android.app.usage.ConfigurationStats
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -8,11 +10,15 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
+import com.example.fixx.NavigationBar.viewmodels.NavBarViewmodel
 import com.example.fixx.POJOs.Person
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
+import com.example.fixx.inAppChatScreens.views.ChatLogActivity
+import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,6 +45,30 @@ class NavigationBarActivity : AppCompatActivity() {
             this.resources!!.displayMetrics
         )
 
+        if (intent.getBooleanExtra(Constants.TRANSIT_FROM_NOTIFICATION, false)) {
+            NavBarViewmodel().fetchUser() { person ->
+                USER_OBJECT = person
+                when (intent.getStringExtra(Constants.TRANS_NOTIFICATION_TYPE)) {
+                    Constants.NOTIFICATION_TYPE_JOB_COMPLETED ->
+                        navigateToActivity(JobDetailsDisplayActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->
+                        navigateToActivity(JobDetailsDisplayActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->
+                        navigateToActivity(JobDetailsDisplayActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM ->
+                        navigateToActivity(JobDetailsDisplayActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST ->
+                        navigateToActivity(TechViewOrderScreen::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    Constants.NOTIFICATION_TYPE_USER_ACCEPT ->
+                        navigateToActivity(TechViewOrderScreen::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->
+                        navigateToActivity(ChatLogActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
+                    else -> {}
+                }
+            }
+        }
+
+
         setContentView(R.layout.activity_navigation_bar)
 
         Log.i("TAG", "onCreate: >>>>>>>>>>>>>>>>>"+FirestoreService.auth.currentUser?.email)
@@ -63,6 +93,14 @@ class NavigationBarActivity : AppCompatActivity() {
             }
 
             true
+        }
+    }
+
+    private fun navigateToActivity(activity : Class<*>, bundle : Bundle?){
+        Intent(this,activity).apply {
+            putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
+        }.also {
+            startActivity(it)
         }
     }
 

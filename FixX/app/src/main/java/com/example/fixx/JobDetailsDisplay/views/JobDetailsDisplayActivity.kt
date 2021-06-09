@@ -45,7 +45,8 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityJobDetailsDisplayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        jobId = intent.getStringExtra(Constants.TRANS_JOB)
+        val bundle = intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE)
+        jobId = bundle?.getString(Constants.TRANS_JOB)
 
         val jobObject = intent.getSerializableExtra(Constants.TRANS_JOB_OBJECT) as? Job
 

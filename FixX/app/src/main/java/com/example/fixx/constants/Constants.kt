@@ -48,6 +48,9 @@ sealed class Constants {
         const val LANGUAGE_SHARED_PREFERENCES = "languageSP"
         const val CURRENT_LANGUAGE = "current_lang"
         const val TRANS_EDIT_MODE = "editMode"
+        const val TRANSIT_FROM_NOTIFICATION = "fromNotification"
+        const val TRANS_NOTIFICATION_TYPE = "notificationType"
+        const val TRANS_DATA_BUNDLE = "dataBundle"
 
         val cities = arrayOf("City","Cairo", "Alexandria")
         val citiesInArabic = arrayOf("مدينة","القاهرة", "الإسكندرية")
