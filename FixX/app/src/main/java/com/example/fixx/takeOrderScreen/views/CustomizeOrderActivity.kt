@@ -293,6 +293,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     imagePathsList2.add(Uri.parse(image))
                 }
                 jobObject?.privateRequest = false
+                jobObject?.privateTechUid = null
                 viewModel.updateJob(jobObject!!, imagePathsList2,onSuccessBinding = {   job ->
                     Toast.makeText(applicationContext, R.string.JobUpdated, Toast.LENGTH_SHORT).show()
                     viewModel.sendNotification(MultiJobRequestPushNotification(

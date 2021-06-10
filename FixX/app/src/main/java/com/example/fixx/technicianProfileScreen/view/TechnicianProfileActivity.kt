@@ -97,6 +97,7 @@ class TechnicianProfileActivity : AppCompatActivity() {
 
             job?.let { job ->
                 job.privateRequest = true
+                job.privateTechUid = technicianData?.uid
                 if(editMode){
                     customizeOrderViewmodel.updateJob(job, imagesUris,
                         onSuccessBinding = {

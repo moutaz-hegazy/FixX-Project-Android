@@ -97,6 +97,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
             adapter.bookTechnician = { position ->
                 job?.let { job ->
                     job.privateRequest = true
+                    job.privateTechUid = adapter.arrayList[position].uid
                     if(editMode){
                         customizeViewmodel.updateJob(job, imagesUris,
                             onSuccessBinding = {

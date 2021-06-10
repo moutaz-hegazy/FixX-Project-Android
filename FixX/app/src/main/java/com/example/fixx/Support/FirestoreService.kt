@@ -445,14 +445,16 @@ object FirestoreService {
                     retrievedJobs.add(job)
                 }
                 db.collection("Jobs").whereEqualTo("privateRequest", true )
-                    .whereArrayContains("bidders", auth.currentUser?.uid!!)
+                    .whereEqualTo("privateTechUid",auth.uid)
                     .get().addOnSuccessListener { result ->
+                        Log.i("TAG", "fetchMyOngoingWork: <<<<<<<<<<<<< got Private ")
                         result.forEach {   document ->
                             val job = document.toObject<Job>()
                             retrievedJobs.add(job)
                         }
                         onSuccessHandler(retrievedJobs)
                     }.addOnFailureListener {
+                        Log.i("TAG", "fetchMyOngoingWork: >>>>>>>>>>>>>>> Private failed")
                         onSuccessHandler(retrievedJobs)
                     }
             }.addOnFailureListener {
