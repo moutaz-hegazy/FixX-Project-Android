@@ -2,6 +2,7 @@ package com.example.fixx.inAppChatScreens.viewModels
 
 import android.util.Log
 import com.example.fixx.POJOs.ChatMessage
+import com.example.fixx.POJOs.ContactInfo
 import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.RetrofitInstance
@@ -49,6 +50,10 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
 //            FirestoreService.sendChatMessage(message, ch)
             FirestoreService.sendChatMessageTest(ch,message)
         }
+    }
+
+    fun addContactToList(contact: String){
+        FirestoreService.addNewChatContatct(ContactInfo(contact,channel))
     }
 
     fun sendNotification(notification: ChatPushNotification) = CoroutineScope(Dispatchers.IO).launch {

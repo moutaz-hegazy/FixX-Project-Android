@@ -197,6 +197,14 @@ object FirestoreService {
         }
     }
 
+    fun addNewChatContatct(contactInfo : ContactInfo){
+        contactsRef.child(auth.uid!!).child(contactInfo.uid!!).get().addOnSuccessListener {
+            if(!it.exists()){
+                it.ref.setValue(contactInfo)
+            }
+        }
+    }
+
     fun sendChatMessageTest(channel : String, msg : ChatMessage){
         chatsRef.child(channel).child(chatsRef.push().key!!).setValue(msg)
     }

@@ -88,6 +88,7 @@ class ChatLogActivity : AppCompatActivity() {
                     title = contact.name
                 }
                 chatLogVm.fetchChatHistory()
+                chatLogVm.addContactToList(it.uid!!)
                 setButton()
             }
         }else{
