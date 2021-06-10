@@ -446,6 +446,7 @@ object FirestoreService {
                 }
                 db.collection("Jobs").whereEqualTo("privateRequest", true )
                     .whereEqualTo("privateTechUid",auth.uid)
+                    .whereEqualTo("status",Job.JobStatus.OnRequest.rawValue)
                     .get().addOnSuccessListener { result ->
                         Log.i("TAG", "fetchMyOngoingWork: <<<<<<<<<<<<< got Private ")
                         result.forEach {   document ->

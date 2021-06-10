@@ -408,11 +408,10 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
     }
 
     private fun calculateRating(oldRating : Double, newRating : Double,reviews : Int) :Double{
-        var oldValue : Double = 0.0
-        if(reviews == 1){
-            oldValue = 2.5
+        var oldValue = if(reviews == 1){
+            2.5
         }else{
-            oldValue = ((oldRating * reviews) - 4)/reviews -1
+            ((oldRating * reviews) - 4)/reviews -1
         }
         return ((newRating - oldValue)/reviews) + oldRating
     }

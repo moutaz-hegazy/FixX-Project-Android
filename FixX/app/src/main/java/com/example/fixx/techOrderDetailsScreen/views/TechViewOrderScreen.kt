@@ -299,7 +299,7 @@ class TechViewOrderScreen : AppCompatActivity() {
                 setBackgroundColor(Color.GRAY)
             }
             val currentDate = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
-            val jobCount = (USER_OBJECT!! as Technician).jobsCount++
+            val jobCount = ++(USER_OBJECT!! as Technician).jobsCount
             val increase = ((job?.price?.toDouble()?:0.0) * 0.1) + (((job?.price?.toDouble()?:0.0)*(0.8))/5)
             val monthlyRating = ((USER_OBJECT!! as Technician).monthlyRating?.toDouble() ?: 0.0) + increase
             val reviews = (USER_OBJECT!! as Technician).reviewCount + 1
