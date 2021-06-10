@@ -1,7 +1,6 @@
 package com.example.fixx.showTechnicianScreen.view
 
 import android.app.Activity
-import android.content.ContentProvider
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -36,9 +35,13 @@ class ShowTechniciansScreen : AppCompatActivity() {
     private lateinit var techRecycler : RecyclerView
     private lateinit var adapter : RecyclerAdapter
 
+    private val customizeViewmodel : CustomizeOrderViewModel by lazy {
+        CustomizeOrderViewModel()
+    }
+
     private var serviceName : Int? = null
     private var job : Job? = null
-    private var parsedJobLocation : String? = null
+    private var editMode = false
     val imagesUris = mutableListOf<Uri>()
     var imagesPaths = arrayOf<String>()
 
@@ -48,16 +51,11 @@ class ShowTechniciansScreen : AppCompatActivity() {
 
         serviceName = intent.getIntExtra(Constants.serviceName,-1)
         job = intent.getSerializableExtra(Constants.TRANS_JOB) as? Job
-        //val images = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES)
-        //val imagesPaths = intent.getParcelableArrayExtra(Constants.TRANS_IMAGES_PATHS)
         imagesPaths = intent.getStringArrayExtra(Constants.TRANS_IMAGES_PATHS) as Array<String>
+        editMode = intent.getBooleanExtra(Constants.TRANS_EDIT_MODE,false)
 
         Log.i("TAG2", "onCreate: ${imagesPaths?.size} ")
         Log.i("TAG2", "onCreate: ${job?.location} ")
-        /*parsedJobLocation = job?.location?.substringBefore(":")
-        job?.location = parsedJobLocation
-        Log.i("TAG2", "onCreate: $parsedJobLocation ")*/
-
 
         // get list of Uri instead of the received strings to upload
         imagesPaths?.forEach { image ->
@@ -99,17 +97,31 @@ class ShowTechniciansScreen : AppCompatActivity() {
             adapter.bookTechnician = { position ->
                 job?.let { job ->
                     job.privateRequest = true
-                    CustomizeOrderViewModel(job, imagesUris,
-                        onSuccessBinding = {
-                            Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
-                            viewModel.sendNotification(
-                                JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
-                                    USER_OBJECT?.name ?: "",
-                                    R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
-                                ), position)
-                        }, onFaliureBinding = {
-                            Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
-                        })
+                    if(editMode){
+                        customizeViewmodel.updateJob(job, imagesUris,
+                            onSuccessBinding = {
+                                Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                                viewModel.sendNotification(
+                                    JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
+                                        USER_OBJECT?.name ?: "",
+                                        R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
+                                    ), position)
+                            }, onFailureBinding = {
+                                Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                            })
+                    }else{
+                        customizeViewmodel.uploadJob(job, imagesUris,
+                            onSuccessBinding = {
+                                Toast.makeText(this, "Job Uploaded.", Toast.LENGTH_SHORT).show()
+                                viewModel.sendNotification(
+                                    JobRequestData( Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST,
+                                        USER_OBJECT?.name ?: "",
+                                        R.string.JobRequestTitle,R.string.SingleJobRequest, it.jobId
+                                    ), position)
+                            }, onFailureBinding = {
+                                Toast.makeText(this, "Job Upload Failed.", Toast.LENGTH_SHORT).show()
+                            })
+                    }
                     val returnIntent = Intent()
                     returnIntent.putExtra(Constants.TECH_LIST_BOOLEAN, true)
                     setResult(Activity.RESULT_OK, returnIntent)
@@ -123,6 +135,8 @@ class ShowTechniciansScreen : AppCompatActivity() {
                 toProfile.putExtra(Constants.TRANS_USERDATA, viewModel.newList[it])
                 toProfile.putExtra(Constants.TRANS_JOB, job)
                 toProfile.putExtra(Constants.TRANS_IMAGES_PATHS, imagesPaths)
+                toProfile.putExtra(Constants.TRANS_EDIT_MODE,editMode)
+                toProfile.flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 startActivityForResult(toProfile, Constants.TECH_DETAILS_REQUESTCODE)
             }
 

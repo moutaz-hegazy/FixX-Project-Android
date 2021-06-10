@@ -1,20 +1,9 @@
-package com.example.fixx.WorkAddresses.viewmodels
+package com.example.fixx.LoginScreen.viewmodels
 
 import android.util.Log
-import com.example.fixx.Support.FirestoreService
-import com.example.fixx.constants.Constants
 import com.google.firebase.messaging.FirebaseMessaging
 
-class WorkAddressesViewmodel(val uid : String) {
-
-    fun addNewWorkLocation(location : String, onSuccessBinding: ()->Unit, onFailBinding: ()->Unit){
-        FirestoreService.updateWorkLocations(location, onSuccessBinding, onFailBinding)
-    }
-
-    fun removeWorkLocation(location: String, onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
-        FirestoreService.removeWorkLocation(location, onSuccessBinding, onFailBinding)
-    }
-
+class RegisterViewmodel() {
     fun subscribeToTopic(topic : String){
         FirebaseMessaging.getInstance()
             .subscribeToTopic("$topic").addOnSuccessListener {
@@ -52,5 +41,4 @@ class WorkAddressesViewmodel(val uid : String) {
                 Log.i("TAG", "checkLogin: FALIURE <<<<<<<<<<<<<<< " + it.localizedMessage)
             }
     }
-
 }

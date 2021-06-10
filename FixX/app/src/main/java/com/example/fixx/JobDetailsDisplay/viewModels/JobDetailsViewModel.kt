@@ -2,6 +2,7 @@ package com.example.fixx.JobDetailsDisplay.viewModels
 
 import android.provider.SyncStateContract
 import android.util.Log
+import com.example.fixx.POJOs.Comment
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
@@ -27,6 +28,7 @@ class JobDetailsViewModel(private val jobId : String) {
 
     fun getTechnician(techId : String, onSuccessBinding: (tech: Technician) -> Unit, onFailBinding: () -> Unit){
         FirestoreService.fetchUserFromDB(techId){   person ->
+            Log.i("TAG", "getTechnician: HERE 2")
             val tech = person as? Technician
             if(tech != null){
                 onSuccessBinding(tech)
@@ -62,5 +64,15 @@ class JobDetailsViewModel(private val jobId : String) {
 
     fun removeJob(onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
         FirestoreService.removeJob(jobId, onSuccessBinding, onFailBinding)
+    }
+
+    fun postRatingAndCommentToTechnician(jobId:String,techId : String, rate : Double, comment : Comment, extraRating:Double,
+                                         onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
+        FirestoreService.addRatingAndComment(techId,rate,extraRating,comment,onSuccessHandler = {
+            FirestoreService.updateDocumentField(Constants.JOBS_COLLECTION,"rateable",false
+                ,jobId,onSuccessBinding,onFailBinding)
+        },onFailHandler = {
+            onFailBinding()
+        })
     }
 }

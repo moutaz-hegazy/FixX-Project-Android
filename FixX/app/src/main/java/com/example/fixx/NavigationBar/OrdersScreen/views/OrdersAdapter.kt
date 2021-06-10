@@ -59,7 +59,12 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     getImageResourse(data[position].type)?.let {
                         view?.ongoingOrderJobImage?.setImageResource(it)
                     }
-                    view?.ongoingOrderAddressLbl?.text = data[position].location
+                    val locName = data[position].location?.substringBefore("%")
+                    if(!locName.isNullOrEmpty()){
+                        view?.ongoingOrderAddressLbl?.text = locName
+                    }else{
+                        view?.ongoingOrderAddressLbl?.text = data[position].location?.substringAfter("%")
+                    }
                     view?.ongoingOrderLayout?.setOnClickListener {
                         Intent(context, JobDetailsDisplayActivity::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])
@@ -93,7 +98,12 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     getImageResourse(data[position].type)?.let {
                         view.ongoingOrderJobImage.setImageResource(it)
                     }
-                    view.ongoingOrderAddressLbl.text = data[position].location
+                    val locName = data[position].location?.substringBefore("%")
+                    if(!locName.isNullOrEmpty()){
+                        view?.ongoingOrderAddressLbl?.text = locName
+                    }else{
+                        view?.ongoingOrderAddressLbl?.text = data[position].location?.substringAfter("%")
+                    }
                     view.ongoingOrderLayout.setOnClickListener {
                         Intent(context, JobDetailsDisplayActivity::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])
@@ -116,7 +126,12 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     getImageResourse(data[position].type)?.let {
                         view.completedOrderJobImage.setImageResource(it)
                     }
-                    view.completedOrderAddressLbl.text = data[position].location
+                    val locName = data[position].location?.substringBefore("%")
+                    if(!locName.isNullOrEmpty()){
+                        view?.completedOrderAddressLbl?.text = locName
+                    }else{
+                        view?.completedOrderAddressLbl?.text = data[position].location?.substringAfter("%")
+                    }
                     view.completedOrderLayout.setOnClickListener {
                         Intent(context, JobDetailsDisplayActivity::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@OrdersAdapter.data[position])

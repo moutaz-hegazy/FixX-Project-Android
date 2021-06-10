@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
@@ -36,7 +37,11 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         }
 
         (USER_OBJECT as? Technician)?.workLocations?.let{
-            myWorkAddresses.addAll(it)
+            if(CURRENT_LANGUAGE == "en"){
+                myWorkAddresses.addAll(it)
+            }else {
+                myWorkAddresses.addAll(getLocationsInArabic(it))
+            }
         }
 
         adapter = WorkAddressesAdapter(myWorkAddresses,this){
@@ -52,11 +57,15 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         }
     }
 
-    private fun deleteLocation(location : String){
+    private fun deleteLocation(position: Int){
+        val location = (USER_OBJECT as? Technician)?.workLocations?.get(position) ?: ""
+        Log.i("TAG", "deleteLocation: >>>>>> $location")
         viewmodel.removeWorkLocation(location, onSuccessBinding = {
-            myWorkAddresses.remove(location)
-            (USER_OBJECT as? Technician)?.workLocations?.remove(location)
+            myWorkAddresses.removeAt(position)
+            (USER_OBJECT as? Technician)?.workLocations?.removeAt(position)
             adapter.notifyDataSetChanged()
+            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkTopic(location)
+            viewmodel.unsubscribeFromTopic(topic)
         },onFailBinding = {
             Toast.makeText(this, R.string.LocationRemoveFailed, Toast.LENGTH_SHORT).show()
         })
@@ -69,11 +78,14 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
                 if(address.isNullOrEmpty()){
 
                 }else if(!myWorkAddresses.contains(address)){
-                    viewmodel.addNewWorkLocation(address, onSuccessBinding = {
+                    viewmodel.addNewWorkLocation(getEnglishAddress(address), onSuccessBinding = {
                         myWorkAddresses.add(address)
                         (USER_OBJECT as? Technician)?.apply {
                             Log.i("TAG", "onActivityResult: IAM TECHNICIAN <<<<<<<$address")
                             workLocations?.add(address)
+                            val topic = (USER_OBJECT!! as Technician).jobTitle!!+getWorkTopic(address)
+                            Log.i("TAG", "onActivityResult: >>>>$topic")
+                            viewmodel.subscribeToTopic(topic)
                         }
                         showAddressList()
                         adapter.notifyDataSetChanged()
@@ -88,6 +100,11 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun getEnglishAddress(address: String) : String{
+        val city = address.substringBefore(",")
+        return "${getCityEnglishName(city)},${getAreaEnglishName(address.substringAfter(","),city)}"
     }
 
     private fun showAddressList(){
@@ -110,6 +127,23 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
     }
 
 
+    private fun getLocationsInArabic(locations : List<String>) = locations.map {
+        getArabicLocation(it)
+    }
+
+    private fun getArabicLocation(address : String): String {
+        val city = address.substringBefore(",")
+        val area = address.substringAfter(",")
+        val arCity = Constants.citiesInArabic[Constants.cities.indexOf(city)]
+        val arArea = if(city == "Cairo"){
+            Constants.cairoAreaInArabic[Constants.cairoArea.indexOf(area)]
+        }else if(city == "Alexandria"){
+            Constants.alexAreaInArabic[Constants.alexArea.indexOf(area)]
+        }else{
+            ""
+        }
+        return "$arCity,$arArea"
+    }
 
     private fun confirmDeleteDialog(position: Int, list: MutableList<String>){
         val builder = AlertDialog.Builder(this)
@@ -121,7 +155,7 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
 
         //performing positive action
         builder.setPositiveButton(getString(R.string.yes)){ _, _ ->
-            deleteLocation(myWorkAddresses[position])
+            deleteLocation(position)
         }
         //performing negative action
         builder.setNegativeButton(getString(R.string.no)){ _, _ ->
@@ -134,5 +168,44 @@ class MyWorkAddresses : AppCompatActivity(), WorkAddressesAdapter.OnItemClickLis
         alertDialog.show()
         alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
 
+    }
+
+    fun getWorkTopic(location: String) : String{
+        val city = location.substringBefore(",")
+        val area = location.substringAfter(",")
+
+        return "%"+getCityEnglishName(city).replace(" ","_", true)+"."+
+                getAreaEnglishName(area,city).replace(" ","_",true).
+                replace("-","_",true)
+    }
+
+    private fun getCityEnglishName(city: String): String {
+        var myCity = city
+        for (iterator in Constants.citiesInArabic.indices) {
+            if (city.equals(Constants.citiesInArabic[iterator])) {
+                myCity = Constants.cities[iterator]
+            }
+        }
+        return myCity
+    }
+
+    private fun getAreaEnglishName(area: String, city: String): String {
+        var myArea = area
+
+        if (city.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoAreaInArabic.indices) {
+                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
+                    myArea = Constants.cairoArea[iterator]
+                }
+            }
+        } else if (city.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexAreaInArabic.indices) {
+                if (area.equals(Constants.alexAreaInArabic[iterator])) {
+                    myArea = Constants.alexArea[iterator]
+                }
+            }
+        }
+
+        return myArea
     }
 }

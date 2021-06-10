@@ -38,10 +38,10 @@ class CompletedJobsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.i("TAG", "onStart: >>>>>>>>> 77")
         jobs.clear()
         jobsAdapter.notifyDataSetChanged()
         viewmodel.loadData()
-
     }
 
     override fun onCreateView(

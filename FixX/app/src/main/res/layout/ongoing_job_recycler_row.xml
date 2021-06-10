@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ongoing_job_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -116,12 +117,13 @@
 
             <TextView
                 android:id="@+id/ongoing_job_address_lbl"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:lines="1"
                 android:text="TextView"
                 android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/ongoing_jobs_jobType_lbl"
                 app:layout_constraintTop_toBottomOf="@+id/ongoing_jobs_jobType_lbl"
                 tools:text="Alexandria,elmandraQuebly,20thst" />

@@ -41,30 +41,37 @@ class ChatLogActivity : AppCompatActivity() {
 
         recyclerview_chat_log.adapter = adapter
         channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
-        val fromNotification = intent.getBooleanExtra(Constants.TRANS_RESPONSE_BOOL,false)
+
+        // from notification.
+        val bundle = intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE)
+        val fromNotification =bundle?.getBoolean(Constants.TRANS_RESPONSE_BOOL,false) ?: false
         if(fromNotification){
-            val contactUid = intent.getStringExtra(Constants.TRANS_CONTACT_UID)
-            chatLogVm = ChatLogViewModel(channel,contactUid,
+            channel = bundle?.getString(Constants.TRANS_CHAT_CHANNEL)
+            val contactUid = bundle?.getString(Constants.TRANS_CONTACT_UID)
+            Log.i(TAG, "onCreate:  %%??>>>>>>$contactUid")
+            chatLogVm = ChatLogViewModel(channel, contactUid,
                 observer = { msg ->
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
                     displayMsg(msg)
                     adapter.notifyDataSetChanged()
-                },onCompletion = { msgs ->
-                    chatLogVm.fetchContact(){
-                        contact = it!!
-                        setButton()
-                        Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
-                        msgs.forEach {
-                                msg ->
-                            displayMsg(msg)
-                            adapter.notifyDataSetChanged()
-                        }
-                        supportActionBar?.apply {
-                            title = contact.name
-                        }
+                }, onCompletion = { msgs ->
+                    msgs.forEach { msg ->
+                        displayMsg(msg)
+                        adapter.notifyDataSetChanged()
                     }
                 })
+            chatLogVm.fetchContact() {
+                contact = it!!
+                Log.i(TAG, "onCreate: >>>>>>>> contact >>>>>>>>> ${contact.name}")
+
+                supportActionBar?.apply {
+                    title = contact.name
+                }
+                chatLogVm.fetchChatHistory()
+                setButton()
+            }
         }else{
+            Log.i(TAG, "onCreate: IAM IN THE ELSE <<<<<<<<<<<<")
             contact = intent.getSerializableExtra(Constants.TRANS_USERDATA) as Person
             supportActionBar?.apply {
                 title = contact.name
@@ -83,6 +90,7 @@ class ChatLogActivity : AppCompatActivity() {
                         adapter.notifyDataSetChanged()
                     }
                 })
+            chatLogVm.fetchChatHistory()
         }
     }
 
@@ -96,7 +104,8 @@ class ChatLogActivity : AppCompatActivity() {
                 binding.edittextChatLog.text.clear()
                 contact.token?.let {    token ->
                     ChatPushNotification(NotificationData(Constants.NOTIFICATION_TYPE_CHAT_MESSAGE,
-                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: "", USER_OBJECT?.uid ?: ""),
+                        USER_OBJECT!!.name, txt, channel ?: chatLogVm.channel ?: "", USER_OBJECT?.uid ?: "",
+                        USER_OBJECT!!.phoneNumber.toInt()),
                         arrayOf(token)).also {
                             chatLogVm.sendNotification(it)
                         }

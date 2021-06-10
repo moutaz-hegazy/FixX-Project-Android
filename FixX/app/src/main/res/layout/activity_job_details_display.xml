@@ -91,21 +91,24 @@
         android:text="@string/bidders"
         android:textColor="@color/red"
         android:textSize="20sp"
-        android:visibility="gone"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/jobDetails_images_recycler"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/jobDetails_job_image"
         app:layout_constraintTop_toBottomOf="@+id/jobDetails_images_recycler" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobDetails_bidders_recycler"
         android:layout_width="match_parent"
-        android:layout_height="214dp"
-        android:layout_marginTop="12dp"
-        android:visibility="gone"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/textview_border"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_biddersTitle_lbl">
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_biddersTitle_lbl"
+        app:layout_constraintVertical_bias="0.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -185,9 +188,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobDetails_images_recycler"
-        android:layout_width="373dp"
-        android:layout_height="83dp"
+        android:layout_width="0dp"
+        android:layout_height="85dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
         app:layout_constraintHorizontal_bias="0.136"
@@ -199,7 +203,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -278,7 +282,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:text="@string/OfferedPrice"
             app:layout_constraintEnd_toEndOf="@+id/bidderItem_tech_rating"
             app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating" />
@@ -289,7 +293,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="TextView"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="@+id/bidderItem_confirmPriceTitle_lbl"
             app:layout_constraintTop_toBottomOf="@+id/bidderItem_confirmPriceTitle_lbl"
             tools:text="999" />
@@ -301,7 +305,7 @@
             android:layout_marginStart="60dp"
             android:layout_marginTop="10dp"
             android:text="@string/Accept"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:backgroundTint="#009688"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bidderItem_techChat_btn" />
@@ -312,8 +316,19 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="60dp"
             android:text="@string/Cancel"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:backgroundTint="#ED1808"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
+
+        <Button
+            android:id="@+id/jobDetails_techRate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="@string/RateTech"
+            android:visibility="invisible"
+            app:backgroundTint="@color/turquoise"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
 

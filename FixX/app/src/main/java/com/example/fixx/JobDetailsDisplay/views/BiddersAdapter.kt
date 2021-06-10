@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,8 @@ import com.example.fixx.inAppChatScreens.views.ChatLogActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_job_details_display.view.*
 
-class JobDetailsBiddersAdapter(val data : List<String>, val prices : Map<String,String>,
-                               val loadTechnicianHandler : (techId : String,
-                                                            onSuccessHandler : (tech : Technician)->Unit,
-                                                            onFailHandler : ()->Unit) -> Unit)
+class JobDetailsBiddersAdapter(val data : List<Technician>, val prices : Map<String,String>,
+                               val onAcceptHandler : (Technician,String)-> Unit)
         : RecyclerView.Adapter<JobDetailsBiddersAdapter.VH>() {
     lateinit var context: Context
 
@@ -32,42 +31,40 @@ class JobDetailsBiddersAdapter(val data : List<String>, val prices : Map<String,
     }
     override fun onBindViewHolder(holder: VH, position: Int) {
 
-        excuteHandler(data[position], onSuccessHandler = {  tech ->
-            if (tech.profilePicture != null){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.binding.bidderItemTechImageView.clipToOutline = true
-                }
-                holder.binding.bidderItemTechImageView.visibility = View.VISIBLE
-                Picasso.get().load(tech.profilePicture?.second).into( holder.binding.bidderItemTechImageView)
-            } else{
-                holder.binding.bidderItemTechImageView.visibility = View.VISIBLE
-                holder.binding.bidderItemTechImageLbl.text = tech.name.first().toUpperCase().toString()
+        if (data[position].profilePicture != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.binding.bidderItemTechImageView.clipToOutline = true
             }
+            holder.binding.bidderItemTechImageView.visibility = View.VISIBLE
+            Picasso.get().load(data[position].profilePicture?.second)
+                .into(holder.binding.bidderItemTechImageView)
+        } else {
+            Log.i("TAG", "onBindViewHolder: <<<<<<<<<<<NNNNNNNNNNNNNNNNNNN >>>> ${data[position].name}")
+            holder.binding.bidderItemTechImageLbl.visibility = View.VISIBLE
+            holder.binding.bidderItemTechImageLbl.text =
+                data[position].name.first().toUpperCase().toString()
+        }
 
-            holder.binding.bidderItemConfirmPriceLbl.text = prices[tech.uid]
-            holder.binding.bidderItemTechImageLbl.text = tech.name
-            holder.binding.bidderItemTechRating.rating = tech.rating?.toFloat() ?: 0.0f
+        holder.binding.bidderItemConfirmPriceLbl.text = prices[data[position].uid]
+        holder.binding.bidderItemTechNameLbl.text = data[position].name
+        holder.binding.bidderItemTechRating.rating = data[position].rating?.toFloat() ?: 0.0f
 
-            holder.binding.bidderItemTechChatBtn.setOnClickListener {
-                Intent(context, ChatLogActivity::class.java).apply {
-                    putExtra(Constants.TRANS_USERDATA, this@JobDetailsBiddersAdapter.data[position])
-                }.also {
-                    context.startActivity(it)
-                }
+        holder.binding.bidderItemTechChatBtn.setOnClickListener {
+            Intent(context, ChatLogActivity::class.java).apply {
+                putExtra(Constants.TRANS_USERDATA, this@JobDetailsBiddersAdapter.data[position])
+            }.also {
+                context.startActivity(it)
             }
-            holder.binding.bidderItemTechCallBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_DIAL)
-                intent.data = Uri.parse("tel:${tech.phoneNumber}")
-                context.startActivity(intent)
-            }
-        },onFailHandler = {
-            // failure code.
-        })
-    }
+        }
+        holder.binding.bidderItemTechCallBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${data[position].phoneNumber}")
+            context.startActivity(intent)
+        }
 
-    private fun excuteHandler (techId : String, onSuccessHandler : (tech : Technician)->Unit,
-                               onFailHandler : ()->Unit){
-        loadTechnicianHandler(techId,onSuccessHandler,onFailHandler)
+        holder.binding.bidderItemAcceptBtn.setOnClickListener {
+            onAcceptHandler(data[position], prices[data[position].uid]!!)
+        }
     }
 
     override fun getItemCount() = data.size

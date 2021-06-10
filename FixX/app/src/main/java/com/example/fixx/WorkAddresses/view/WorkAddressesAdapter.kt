@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.address_row.view.*
 
 
 class WorkAddressesAdapter(private val addressList: MutableList<String>, private val listener: MyWorkAddresses,
-                           val locationDeleteHandler: (location : String)-> Unit) :
+                           val locationDeleteHandler: (position : Int)-> Unit) :
     RecyclerView.Adapter<WorkAddressesAdapter.AddressViewHolder>() {
 
     lateinit var context: Context
@@ -98,7 +98,7 @@ class WorkAddressesAdapter(private val addressList: MutableList<String>, private
 
         //performing positive action
         builder.setPositiveButton(context.getString(R.string.yes)){dialogInterface, which ->
-            locationDeleteHandler(addressList[position])
+            locationDeleteHandler(position)
         }
         //performing negative action
         builder.setNegativeButton(context.getString(R.string.no)){dialogInterface, which ->

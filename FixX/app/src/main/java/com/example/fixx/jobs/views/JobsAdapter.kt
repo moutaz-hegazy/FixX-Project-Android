@@ -56,7 +56,7 @@ class JobsAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycler
                     getImageResourse(data[position].type)?.let {
                         view?.ongoingOrderJobImage?.setImageResource(it)
                     }
-                    view?.ongoingOrderAddressLbl?.text = data[position].location
+                    view?.ongoingOrderAddressLbl?.text = data[position].location?.substringAfter("%")
                     view?.ongoingOrderLayout?.setOnClickListener {
                         Intent(context, TechViewOrderScreen::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@JobsAdapter.data[position])
@@ -88,7 +88,7 @@ class JobsAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycler
                     getImageResourse(data[position].type)?.let {
                         view.ongoingOrderJobImage.setImageResource(it)
                     }
-                    view.ongoingOrderAddressLbl.text = data[position].location
+                    view.ongoingOrderAddressLbl.text = data[position].location?.substringAfter("%")
                     view.ongoingOrderLayout.setOnClickListener {
                         Intent(context, TechViewOrderScreen::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@JobsAdapter.data[position])
@@ -109,7 +109,7 @@ class JobsAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycler
                     getImageResourse(data[position].type)?.let {
                         view.completedOrderJobImage.setImageResource(it)
                     }
-                    view.completedOrderAddressLbl.text = data[position].location
+                    view.completedOrderAddressLbl.text = data[position].location?.substringAfter("%")
                     view.completedOrderLayout.setOnClickListener {
                         Intent(context, TechViewOrderScreen::class.java).apply {
                             putExtra(Constants.TRANS_JOB_OBJECT, this@JobsAdapter.data[position])

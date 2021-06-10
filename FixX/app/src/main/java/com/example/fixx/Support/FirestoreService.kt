@@ -71,9 +71,9 @@ object FirestoreService {
         uid: String? = auth.currentUser?.uid,
         onCompletion: (user: Person?) -> Unit
     ) {
-        var userData: Person? = null
         uid?.let {
             db.collection("Users").document(it).get().addOnSuccessListener { snapShot ->
+                Log.i("TAG", "fetchUserFromDB: FETCH SUCCESS <<<<<<<<<<<")
                 val type = snapShot.data?.get("accountType") as? String
                 type?.let {
                     when (it) {
@@ -81,6 +81,8 @@ object FirestoreService {
                         "Technician" -> onCompletion(snapShot.toObject<Technician>())
                     }
                 }
+            }.addOnFailureListener {
+                Log.i("TAG", "fetchUserFromDB: <<<<<<<< FAILED ????")
             }
         }
     }
@@ -111,6 +113,16 @@ object FirestoreService {
         db.collection("Chats").document(channelName)
             .collection("Messages")
             .orderBy("timestamp", Query.Direction.ASCENDING).apply {
+                get().addOnSuccessListener { snapShot ->
+                    snapShot.forEach { msgsSnapShot ->
+                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
+                        val msg = msgsSnapShot.toObject<ChatMessage>()
+                        msgs.add(msg)
+                    }
+                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
+                    onCompletion(msgs)
+                }
+
                 addSnapshotListener { value, error ->
                     error?.let {
                         Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
@@ -124,28 +136,48 @@ object FirestoreService {
                     }
                     display = true
                 }
-
-                get().addOnSuccessListener { snapShot ->
-                    snapShot.forEach { msgsSnapShot ->
-                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
-                        val msg = msgsSnapShot.toObject<ChatMessage>()
-                        msgs.add(msg)
-                    }
-                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
-                    onCompletion(msgs)
-                }
             }
     }
 
-    fun addBidder(uid : String, jobId : String, price: String, onCompletion:()->Unit){
+    fun addRatingAndComment(techId:String, rating : Double, extraRating: Double, comment: Comment,
+                            onSuccessHandler: () -> Unit, onFailHandler: () -> Unit) {
+        db.collection("Users").document(techId).apply {
+            update(mapOf("rating" to rating, "monthlyRating" to extraRating))
+
+            collection("Comments").document(auth.currentUser?.uid!!).get()
+                .addOnSuccessListener { snap ->
+                    if (snap.exists()) {
+                        snap.reference.update("comment", comment).addOnSuccessListener {
+                            onSuccessHandler()
+                        }.addOnFailureListener {
+                            onFailHandler()
+                        }
+                    } else {
+                        snap.reference.set(mapOf("comment" to comment)).addOnSuccessListener {
+                            onSuccessHandler()
+                        }.addOnFailureListener {
+                            onFailHandler()
+
+                        }
+                    }
+                }
+        }
+    }
+
+    fun addBidder(jobId : String, bidders:Map<String,String>, onCompletion:()->Unit){
         db.collection("Jobs").document(jobId)
-            .update("bidders", mapOf(uid to price)).addOnSuccessListener {
+            .update("bidders", bidders).addOnSuccessListener {
                 onCompletion()
             }
     }
 
     fun removeBidders(jobId : String){
         db.collection("Jobs").document(jobId).update("bidders",null)
+    }
+
+    fun removeTechnicianFromJob(jobId : String){
+        db.collection("Jobs").document(jobId).update(mapOf("techID" to null, "status" to Job.JobStatus.OnRequest,
+            "price" to null))
     }
 
     fun selectTechForJob(techId : String, jobId : String, price : String){
@@ -270,6 +302,10 @@ object FirestoreService {
                 }
             })
     }
+
+//    fun updateJobDetails(jobId:String, changes : MutableMap<String,Object>){
+//        //db.collection("Jobs").document(jobId).update()
+//    }
 
 
     fun saveJobDetails(job: Job, onSuccessHandler: (jobs: Job) -> Unit, onFailHandler: () -> Unit) {
@@ -479,12 +515,13 @@ object FirestoreService {
         val retrievedJobs = ArrayList<Job>()
         db.collection("Jobs").whereEqualTo("status",Job.JobStatus.OnRequest.rawValue)
             .whereEqualTo("type",jobTitle)
-            .whereIn("location",workLocations)
+            .whereEqualTo("privateRequest",false)
+            .whereIn("areaLocation",workLocations)
             .get().addOnSuccessListener {
                     queryResult->
                 queryResult.forEach {   document ->
                     val job = document.toObject<Job>()
-                    Log.i("TAG", "fetchMyOngoingOrderedJobs: >>>> $job")
+                    Log.i("TAG", "AVAILABLE: >>>> $job")
                     retrievedJobs.add(job)
                 }
                 onSuccessHandler(retrievedJobs)
@@ -618,11 +655,13 @@ object FirestoreService {
             }
     }
 
-    fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String) {
+    fun updateDocument(collectionName: String, map: Map<String, Any>, documentId: String,
+                       onSuccessHandler: () -> Unit,
+                       onFailureHandler: () -> Unit) {
         Log.i("TAG", "updateJob: start updating $map")
         db.collection(collectionName).document(documentId)
             .update(map)
-            .addOnSuccessListener { Log.i("TAG", "update: DocumentSnapshot updated successfully") }
-            .addOnFailureListener { e -> Log.i("TAG", "update: error $e") }
+            .addOnSuccessListener { onSuccessHandler()}
+            .addOnFailureListener { onFailureHandler() }
     }
 }

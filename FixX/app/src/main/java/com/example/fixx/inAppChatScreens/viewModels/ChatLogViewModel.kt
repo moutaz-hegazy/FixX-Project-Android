@@ -16,14 +16,15 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
                         private val observer : (msg : ChatMessage)->Unit,
                         private val onCompletion : (msgs : ArrayList<ChatMessage>)->Unit){
 
-    init {
+    fun fetchChatHistory(){
         if(channel != null){
+            Log.i("TAG", ">>>> : with channel ")
             FirestoreService.fetchChatHistoryForChannel(channel!!, observer, onCompletion)
         }else{
             contact?.let {
                 FirestoreService.fetchChatHistoryForInstance(it, observer,
                     onCompletion = {
-                        chatMsgs, channelName ->
+                            chatMsgs, channelName ->
                         channel = channelName
                         onCompletion(chatMsgs)
                     })

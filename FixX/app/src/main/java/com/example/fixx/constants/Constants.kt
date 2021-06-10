@@ -39,12 +39,19 @@ sealed class Constants {
         const val TECH_DETAILS_REQUESTCODE = 301
         const val NOTIFICATION_TYPE_TECH_REPLY_CONFIRM = "techReplyConfirm"
         const val NOTIFICATION_TYPE_TECH_REPLY_DENY = "techReplyDeny"
+        const val NOTIFICATION_TYPE_TECH_REPLY_CANCEL = "techReplyCancel"
         const val NOTIFICATION_TYPE_USER_JOB_REQUEST = "jobRequest"
         const val NOTIFICATION_TYPE_CHAT_MESSAGE = "chatMsg"
         const val NOTIFICATION_TYPE_USER_ACCEPT = "userAccept"
+        const val NOTIFICATION_TYPE_JOB_COMPLETED = "jobCompleted"
         const val TRANS_RESPONSE_BOOL = "responseBool"
         const val LANGUAGE_SHARED_PREFERENCES = "languageSP"
         const val CURRENT_LANGUAGE = "current_lang"
+        const val TRANS_EDIT_MODE = "editMode"
+        const val TRANSIT_FROM_NOTIFICATION = "fromNotification"
+        const val TRANS_NOTIFICATION_TYPE = "notificationType"
+        const val TRANS_DATA_BUNDLE = "dataBundle"
+        const val NOTIFICATION_GROUP = "fixXNotGroup"
 
         val cities = arrayOf("City","Cairo", "Alexandria")
         val citiesInArabic = arrayOf("مدينة","القاهرة", "الإسكندرية")

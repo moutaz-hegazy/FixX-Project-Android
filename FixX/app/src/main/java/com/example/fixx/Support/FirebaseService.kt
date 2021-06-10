@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -50,7 +51,7 @@ class FirebaseService : FirebaseMessagingService() {
         Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> MESSAGE RECEIVED <<<<<<<<")
         val intent = Intent(this,NavigationBarActivity::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationId = Random.nextInt()
+        val chatNotificationId = 500
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             createNotificationChannel(notificationManager)
@@ -59,101 +60,126 @@ class FirebaseService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         when(p0.data["type"]){
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM ->{
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
+                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,TechViewOrderScreen::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobID"])
-                    }
-                    pendingIntent = getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT)
-                }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                val bundle = Bundle()
+                bundle.putString(Constants.TRANS_JOB,p0.data["jobId"])
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
+                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
-            Constants.NOTIFICATION_TYPE_CHAT_MESSAGE ->{
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,ChatLogActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_CONTACT_UID,p0.data["uid"])
-                        putExtra(Constants.TRANS_CHAT_CHANNEL,p0.data["channel"])
-                        putExtra(Constants.TRANS_RESPONSE_BOOL,true)
-                    }
-                    pendingIntent = getPendingIntent(2,PendingIntent.FLAG_UPDATE_CURRENT)
+            Constants.NOTIFICATION_TYPE_CHAT_MESSAGE -> {
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_CONTACT_UID, p0.data["uid"])
+                    putString(Constants.TRANS_CHAT_CHANNEL, p0.data["channel"])
+                    putBoolean(Constants.TRANS_RESPONSE_BOOL, true)
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle("${p0.data["user"]}")
-                    .setContentText("${p0.data["message"]}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(
+                    "${p0.data["user"]}",
+                    "${p0.data["message"]}",
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_CHAT_MESSAGE)
+                )
+                val channelId = p0.data["id"]?.toInt() ?: 0
+                Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> $channelId")
+                notificationManager.notify(channelId, notification)
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
-                var pendingIntent : PendingIntent
-                TaskStackBuilder.create(applicationContext).apply {
-                    addNextIntentWithParentStack(Intent(applicationContext,JobDetailsDisplayActivity::class.java))
-                    editIntentAt(0).apply {
-                        putExtra(Constants.TRANS_JOB,p0.data["jobId"])
-                    }
-                    pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
                 }
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_ACCEPT))
+                notificationManager.notify(chatNotificationId,notification)
             }
 
-            else ->{
-                val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
-                notification = NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-                    .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-                    .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->{
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                }
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY))
+                notificationManager.notify(chatNotificationId,notification)
             }
+
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->{
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                }
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL))
+                notificationManager.notify(chatNotificationId,notification)
+            }
+
+            Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
+                val bundle = Bundle().apply {
+                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                }
+                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_JOB_COMPLETED))
+                notificationManager.notify(chatNotificationId,notification)
+            }
+
+            else ->{}
         }
-//        val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
-//        val notification = NotificationCompat.Builder(this,CHANNEL_ID)
-//            .setContentTitle(getString(p0.data["title"]?.toInt() ?: 0))
-//            .setContentText("${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}")
-//            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-//            .setAutoCancel(true)
-//            .setContentIntent(pendingIntent)
-//            .build()
 
-        notificationManager.notify(notificationId,notification)
     }
+
+    private fun startHomeActivity(bundle : Bundle, notificationType : String) : PendingIntent{
+        var pendingIntent : PendingIntent
+        TaskStackBuilder.create(applicationContext).apply {
+            addNextIntentWithParentStack(Intent(applicationContext,NavigationBarActivity::class.java))
+            editIntentAt(0).apply {
+                putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
+                putExtra(Constants.TRANSIT_FROM_NOTIFICATION,true)
+                putExtra(Constants.TRANS_NOTIFICATION_TYPE,notificationType)
+            }
+            pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        return pendingIntent
+    }
+
+
+    private fun createNotification(title : String, content:String, pendingIntent : PendingIntent)
+    =    NotificationCompat.Builder(this,CHANNEL_ID)
+        .setContentTitle(title)
+        .setContentText(content)
+        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+        .setAutoCancel(true)
+        .setGroup(Constants.NOTIFICATION_GROUP)
+        .setContentIntent(pendingIntent)
+        .build()
+
+    private fun buildSummaryNotification() =  NotificationCompat.Builder(this, CHANNEL_ID)
+        .setContentTitle("SUMMARY")
+        //set content text to support devices running API level < 24
+        .setContentText("Two new messages")
+        .setSmallIcon(R.drawable.call_icon)
+        //build summary info into InboxStyle template
+        .setStyle(NotificationCompat.InboxStyle()
+            .addLine("Alex Faarborg Check this out")
+            .addLine("Jeff Chang Launch Party")
+            .setBigContentTitle("2 new messages")
+            .setSummaryText("janedoe@example.com"))
+        //specify which group this notification belongs to
+        .setGroup(Constants.NOTIFICATION_GROUP)
+        //set this notification as the summary for the group
+        .setGroupSummary(true)
+        .build()
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager){

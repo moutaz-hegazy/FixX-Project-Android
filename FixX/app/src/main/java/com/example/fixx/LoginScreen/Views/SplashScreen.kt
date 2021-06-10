@@ -1,5 +1,6 @@
 package com.example.fixx.LoginScreen.Views
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -28,8 +29,28 @@ class SplashScreen : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        CURRENT_LANGUAGE = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
-            .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
+        val lang = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
+            .getString(Constants.CURRENT_LANGUAGE,"none")
+
+        if(lang == "none"){
+            Log.i("TAG", "onCreate: <<<<<<<<<<<< NULL")
+            chooseLanguageDialog()
+        }else {
+            Log.i("TAG", "onCreate: <<<<<<<<<<<< not Null :'(")
+            setLanguage(lang ?: "en")
+            checkLogin()
+        }
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        var appLogo = findViewById<ImageView>(R.id.appLogo)
+        appLogo.setImageResource(R.drawable.logo_app)
+    }
+
+    private fun setLanguage(lang : String){
+        CURRENT_LANGUAGE = lang
         val locale = Locale(CURRENT_LANGUAGE)
         Locale.setDefault(locale)
         val config = Configuration()
@@ -38,17 +59,12 @@ class SplashScreen : AppCompatActivity() {
             config,
             applicationContext.resources!!.displayMetrics
         )
-
-        var appLogo = findViewById<ImageView>(R.id.appLogo)
-        appLogo.setImageResource(R.drawable.logo_app)
-
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        checkLogin()
     }
 
+    private fun saveCurrentLnaguage(lang : String){
+        getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES,Context.MODE_PRIVATE)
+            .edit().putString(Constants.CURRENT_LANGUAGE,lang).apply()
+    }
     private fun checkLogin(){
         if(FirestoreService.auth.currentUser != null
             && FirestoreService.auth.currentUser?.email != "defaultaccount@default.com"){
@@ -57,26 +73,6 @@ class SplashScreen : AppCompatActivity() {
                     person ->
                 NavigationBarActivity.USER_OBJECT = person
                 FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-//                FirebaseMessaging.getInstance().token.addOnSuccessListener {
-//                    FirebaseService.token = it
-//                }
-
-//                FirebaseMessaging.getInstance()
-//                    .subscribeToTopic("${Constants.CHAT_TOPIC}_${person?.uid}").addOnSuccessListener {
-//                        Log.i("TAG", "checkLogin: SUBSCRIPED <<<<<<<<<<<<<<<")
-//                    }.addOnCompleteListener { task ->
-//                        Log.i("TAG", "checkLogin: COMPLETE <<<<<<<<<<<<<<<")
-//                        var msg = "SUCCESS !!"
-//                        if (!task.isSuccessful) {
-//                            msg = "FAIL !!"
-//                        }
-//                        Log.d("TAG", msg)
-//                        //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-//                    }.addOnCanceledListener {
-//                        Log.i("TAG", "checkLogin: CANCELED <<<<<<<<<<<<<<<")
-//                    }.addOnFailureListener {
-//                        Log.i("TAG", "checkLogin: FALIURE <<<<<<<<<<<<<<< "+ it.localizedMessage)
-//                    }
                 Intent(applicationContext,NavigationBarActivity::class.java).also {
                     startActivity(it)
                     finish()
@@ -90,5 +86,35 @@ class SplashScreen : AppCompatActivity() {
                 }
             }, 1500)
         }
+    }
+
+
+    private fun chooseLanguageDialog(){
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle(getString(R.string.selectLanguageTitle))
+        //set message for alert dialog
+        builder.setMessage(getString(R.string.SelectLanguageMsg))
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton("English"){ _, _ ->
+            saveCurrentLnaguage("en")
+            setLanguage("en")
+            checkLogin()
+        }
+        //performing negative action
+        builder.setNegativeButton("العربية"){ _, _ ->
+            saveCurrentLnaguage("ar")
+            setLanguage("ar")
+            checkLogin()
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
     }
 }

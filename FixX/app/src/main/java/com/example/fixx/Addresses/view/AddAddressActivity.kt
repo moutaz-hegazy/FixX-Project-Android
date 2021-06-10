@@ -504,6 +504,4 @@ class AddAddressActivity : AppCompatActivity() {
 
         return myArea
     }
-
-
 }

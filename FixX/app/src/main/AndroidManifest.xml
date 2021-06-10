@@ -26,8 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".BaseActivity" />
         <activity android:name=".WorkAddresses.view.AddWorkAddress"></activity>
         <activity android:name=".WorkAddresses.view.MyWorkAddresses" />
         <activity android:name=".NavigationBar.notification.NotificationActivity" />
