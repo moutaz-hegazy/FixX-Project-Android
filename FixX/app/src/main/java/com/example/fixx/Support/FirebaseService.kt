@@ -65,7 +65,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM)
                 )
                 notificationManager.notify(notificationId, notification)
 
@@ -84,7 +84,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST)
                 )
                 notificationManager.notify(notificationId, notification)
             }
@@ -98,16 +98,17 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     "${p0.data["user"]}",
                     "${p0.data["message"]}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_CHAT_MESSAGE)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_CHAT_MESSAGE)
                 )
                 val channelId = p0.data["id"]?.toInt() ?: 0
                 notificationManager.notify(channelId, notification)
-                Intent(this,BroadcastReceiver::class.java).apply {
+                Intent(this, BroadcastReceiver::class.java).apply {
                     action = Constants.CHAT_RECEIVER_FILTER
-                    putExtra(Constants.CHANNEL_ID,channelId)
+                    putExtra(Constants.CHANNEL_ID, channelId)
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
+
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
@@ -117,7 +118,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_USER_ACCEPT)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_USER_ACCEPT)
                 )
                 notificationManager.notify(notificationId, notification)
                 Intent(this,BroadcastReceiver::class.java).apply {
@@ -137,7 +138,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY)
                 )
                 notificationManager.notify(notificationId, notification)
 
@@ -157,7 +158,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL)
                 )
                 notificationManager.notify(notificationId, notification)
 
@@ -177,7 +178,7 @@ class FirebaseService : FirebaseMessagingService() {
                 notification = createNotification(
                     getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_JOB_COMPLETED)
+                    navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_JOB_COMPLETED)
                 )
                 notificationManager.notify(notificationId, notification)
 
@@ -195,34 +196,44 @@ class FirebaseService : FirebaseMessagingService() {
 
     }
 
-//    private fun applicationInForeground(): Boolean {
-//        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-//        val services = activityManager.runningAppProcesses
-//        var isActivityFound = false
-//        if (services[0].processName.equals(packageName, ignoreCase = true)
-//            && services[0].importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-//        ) {
-//            isActivityFound = true
-//        }
-////        Log.i("TAG", "applicationInForeground: >>>>>>>>>>>>${activityManager.getRunningTasks(1).get(0).topActivity?.packageName}")
-//        return isActivityFound
-//    }
+    private fun applicationInForeground(): Boolean {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val services = activityManager.runningAppProcesses
+        var isActivityFound = false
+        if (services[0].processName.equals(packageName, ignoreCase = true)
+            && services[0].importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+        ) {
+            isActivityFound = true
+        }
+        Log.i("TAG", "applicationInForeground: >>>>>>>>>>>>${activityManager.getRunningTasks(1)[0].topActivity?.className}")
+        return isActivityFound
+    }
 
-    private fun startHomeActivity(bundle: Bundle, notificationType: String) : PendingIntent{
+    private fun navigateToActivity(bundle: Bundle, notificationType: String) : PendingIntent{
         var pendingIntent : PendingIntent
-        TaskStackBuilder.create(applicationContext).apply {
-            addNextIntentWithParentStack(
-                Intent(
-                    applicationContext,
-                    NavigationBarActivity::class.java
-                )
-            )
-            editIntentAt(0).apply {
-                putExtra(Constants.TRANS_DATA_BUNDLE, bundle)
-                putExtra(Constants.TRANSIT_FROM_NOTIFICATION, true)
+        if(applicationInForeground()){
+            Intent(applicationContext,PushNotificationReceiver::class.java).apply {
+                putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
                 putExtra(Constants.TRANS_NOTIFICATION_TYPE, notificationType)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }.also {
+                pendingIntent = PendingIntent.getBroadcast(applicationContext,70,it,0)
             }
-            pendingIntent = getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
+        }else{
+            TaskStackBuilder.create(applicationContext).apply {
+                addNextIntentWithParentStack(
+                    Intent(
+                        applicationContext,
+                        NavigationBarActivity::class.java
+                    )
+                )
+                editIntentAt(0).apply {
+                    putExtra(Constants.TRANS_DATA_BUNDLE, bundle)
+                    putExtra(Constants.TRANSIT_FROM_NOTIFICATION, true)
+                    putExtra(Constants.TRANS_NOTIFICATION_TYPE, notificationType)
+                }
+                pendingIntent = getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
         }
         return pendingIntent
     }

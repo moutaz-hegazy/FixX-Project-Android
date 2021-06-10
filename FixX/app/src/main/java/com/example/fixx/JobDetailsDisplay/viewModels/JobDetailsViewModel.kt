@@ -66,9 +66,9 @@ class JobDetailsViewModel(private val jobId : String) {
         FirestoreService.removeJob(jobId, onSuccessBinding, onFailBinding)
     }
 
-    fun postRatingAndCommentToTechnician(jobId:String,techId : String, rate : Double, comment : Comment, extraRating:Double,
+    fun postRatingAndCommentToTechnician(jobId:String,techId : String, rate : Double, comment : Comment, extraRating:Double,reviews : Int,
                                          onSuccessBinding: () -> Unit, onFailBinding: () -> Unit){
-        FirestoreService.addRatingAndComment(techId,rate,extraRating,comment,onSuccessHandler = {
+        FirestoreService.addRatingAndComment(techId,rate,extraRating,comment,reviews,onSuccessHandler = {
             FirestoreService.updateDocumentField(Constants.JOBS_COLLECTION,"rateable",false
                 ,jobId,onSuccessBinding,onFailBinding)
         },onFailHandler = {

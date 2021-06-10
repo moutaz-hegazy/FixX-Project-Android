@@ -139,7 +139,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/technician_profile_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/technician_profile_book_btn"
@@ -152,7 +152,7 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:text="@string/Book_Now"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

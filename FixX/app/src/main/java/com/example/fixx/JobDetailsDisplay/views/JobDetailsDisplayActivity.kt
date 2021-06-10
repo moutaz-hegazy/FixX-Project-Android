@@ -387,12 +387,13 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 val commentObj = Comment(USER_OBJECT!!.name,commentValue, USER_OBJECT?.profilePicture?.second
                     ,SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time),null
                     , System.currentTimeMillis(), rating.toDouble())
-                val finalRating = ((rating.toDouble()-4)/2) + (tech.rating ?: 2.5)
+                val reviews = tech.reviewCount + 1
+                val finalRating = calculateRating(tech.rating!!,rating.toDouble(),reviews)
 
                 val increase = (((price.toDouble())*((rating.toDouble() - 4.0)/5))/5)
-                val monthlyRating = ((USER_OBJECT!! as Technician).monthlyRating?.toDouble() ?: 0.0) + increase
+                val monthlyRating = (tech.monthlyRating?.toDouble() ?: 0.0) + increase
 
-                viewmodel.postRatingAndCommentToTechnician(jobId,tech.uid!!,finalRating,commentObj,monthlyRating
+                viewmodel.postRatingAndCommentToTechnician(jobId,tech.uid!!,finalRating,commentObj,monthlyRating,reviews
                     ,onSuccessBinding = {
                         binding.jobDetailsTechRateBtn.visibility = View.INVISIBLE
                         binding.bidderItemTechRating.rating = finalRating.toFloat()
@@ -404,5 +405,15 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
         dialog.setContentView(bottomSheet.rootView)
         dialog.show()
+    }
+
+    private fun calculateRating(oldRating : Double, newRating : Double,reviews : Int) :Double{
+        var oldValue : Double = 0.0
+        if(reviews == 1){
+            oldValue = 2.5
+        }else{
+            oldValue = ((oldRating * reviews) - 4)/reviews -1
+        }
+        return ((newRating - oldValue)/reviews) + oldRating
     }
 }

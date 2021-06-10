@@ -193,10 +193,10 @@ object FirestoreService {
         chatsRef.child(channel).child(chatsRef.push().key!!).setValue(msg)
     }
 
-    fun addRatingAndComment(techId:String, rating : Double, extraRating: Double, comment: Comment,
+    fun addRatingAndComment(techId:String, rating : Double, extraRating: Double, comment: Comment,reviews : Int,
                             onSuccessHandler: () -> Unit, onFailHandler: () -> Unit) {
         db.collection("Users").document(techId).apply {
-            update(mapOf("rating" to rating, "monthlyRating" to extraRating))
+            update(mapOf("rating" to rating, "monthlyRating" to extraRating,"reviewCount" to reviews))
 
             collection("Comments").document(auth.currentUser?.uid!!).get()
                 .addOnSuccessListener { snap ->

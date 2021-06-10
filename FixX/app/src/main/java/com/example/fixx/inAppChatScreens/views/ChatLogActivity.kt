@@ -41,14 +41,14 @@ class ChatLogActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChatLogBinding
     private var channel : String? = null
     private lateinit var chatLogVm : ChatLogViewModel
-
+    private lateinit var nManager :NotificationManager
     private val chatReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
             val channelId = intent?.getIntExtra(Constants.CHANNEL_ID,-1)
             channelId?.let {
                 if(it != -1){
                     Log.i(TAG, "onReceive: >>>>>>> $it")
-                    val nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     nManager.cancel(it)
                 }
             }
@@ -59,6 +59,9 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChatLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
         recyclerview_chat_log.adapter = adapter
         channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
 
@@ -77,6 +80,7 @@ class ChatLogActivity : AppCompatActivity() {
                 })
             chatLogVm.fetchContact() {
                 contact = it!!
+                nManager.cancel(contact.phoneNumber.toInt())
                 Log.i(TAG, "onCreate: >>>>>>>> contact >>>>>>>>> ${contact.name}")
 
                 supportActionBar?.apply {
@@ -92,6 +96,7 @@ class ChatLogActivity : AppCompatActivity() {
             supportActionBar?.apply {
                 title = contact.name
             }
+            nManager.cancel(contact.phoneNumber.toInt())
             chatLogVm = ChatLogViewModel(channel,contact.uid,
                 observer = { msg ->
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
@@ -145,5 +150,10 @@ class ChatLogActivity : AppCompatActivity() {
                 Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "onDestroy: DESTROOOOOOOOOOOOOOOY TESTTTTTTTTTTTTTTT")
     }
 }

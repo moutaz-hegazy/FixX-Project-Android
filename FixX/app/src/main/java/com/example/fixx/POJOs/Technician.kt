@@ -7,4 +7,5 @@ class Technician(phoneNumber: String = "", accountType: String = "", name: Strin
     var rating: Double? = null
     var monthlyRating: Int? = null
     var jobsCount : Int = 0
+    var reviewCount:Int = 0
 }

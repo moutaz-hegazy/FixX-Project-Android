@@ -28,11 +28,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
 
-<!--        <receiver-->
-<!--            android:name=".Support.PushNotificationReceiver"-->
-<!--            -->
-<!--            android:enabled="true"-->
-<!--            android:exported="true" />-->
+        <receiver
+            android:name=".Support.PushNotificationReceiver"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".WorkAddresses.view.AddWorkAddress" />
         <activity android:name=".WorkAddresses.view.MyWorkAddresses" />

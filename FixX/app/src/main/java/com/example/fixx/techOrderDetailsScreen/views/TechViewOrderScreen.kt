@@ -238,6 +238,8 @@ class TechViewOrderScreen : AppCompatActivity() {
     }
 
     private fun displayBidderInfoBottom(){
+        binding.techViewOrderConfirmPriceLayout.visibility = View.INVISIBLE
+        binding.techViewOrderTotalAccountLayout.visibility = View.INVISIBLE
         binding.techViewOrderBidFactLayout.visibility = View.VISIBLE
         binding.techViewBiddingValueLbl.text = job?.bidders?.get(USER_OBJECT?.uid)
         binding.techViewOrderCancelBiddingBtn.setOnClickListener {
@@ -253,6 +255,8 @@ class TechViewOrderScreen : AppCompatActivity() {
     }
 
     private fun displayBiddingDetailsBottom(){
+        binding.techViewOrderBidFactLayout.visibility = View.INVISIBLE
+        binding.techViewOrderTotalAccountLayout.visibility = View.INVISIBLE
         binding.techViewOrderConfirmPriceLayout.visibility = View.VISIBLE
         binding.techViewOrderConfirmBtn.setOnClickListener {
             if (binding.techViewOrderPriceTxt.text.isNullOrEmpty()) {
@@ -285,6 +289,8 @@ class TechViewOrderScreen : AppCompatActivity() {
     }
 
     private fun displayCompleteJobBottom(){
+        binding.techViewOrderConfirmPriceLayout.visibility = View.INVISIBLE
+        binding.techViewOrderBidFactLayout.visibility = View.INVISIBLE
         binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
         binding.techViewOrderAccountLbl.text = job?.price.toString()
         binding.techViewOrderCompletedBtn.setOnClickListener {
@@ -293,10 +299,11 @@ class TechViewOrderScreen : AppCompatActivity() {
                 setBackgroundColor(Color.GRAY)
             }
             val currentDate = SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time)
-            val newRating = (((USER_OBJECT!! as Technician).rating ?: 2.5) + 4)/2
             val jobCount = (USER_OBJECT!! as Technician).jobsCount++
             val increase = ((job?.price?.toDouble()?:0.0) * 0.1) + (((job?.price?.toDouble()?:0.0)*(0.8))/5)
             val monthlyRating = ((USER_OBJECT!! as Technician).monthlyRating?.toDouble() ?: 0.0) + increase
+            val reviews = (USER_OBJECT!! as Technician).reviewCount + 1
+            val newRating = calculateRating((USER_OBJECT!! as Technician).rating ?: 2.5,4.0,reviews)
             viewModel.completeJob(job!!.jobId,currentDate,onSuccessBinding = {
                 contact?.token?.let {token ->
                     TechReplyPushNotification(
@@ -322,6 +329,9 @@ class TechViewOrderScreen : AppCompatActivity() {
             })
         }
     }
+
+    private fun calculateRating(oldRating : Double, newRating : Double,reviews : Int)
+        = ((newRating - oldRating)/reviews) + oldRating
 
     private fun cancelJobDialog(title : Int,message:Int,onAcceptHandler:()->Unit){
         val builder = AlertDialog.Builder(this)
