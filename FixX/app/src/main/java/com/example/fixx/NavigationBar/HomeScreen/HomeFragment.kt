@@ -10,11 +10,13 @@ import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ServiceItem
 import com.example.fixx.NavigationBar.notification.NotificationActivity
 import com.example.fixx.R
+import com.example.fixx.Support.PushNotificationReceiver
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.example.fixx.jobs.views.JobsActivity
@@ -65,13 +67,20 @@ class HomeFragment : Fragment(){
               NotificationCounter(rootView.findViewById(R.id.homefragment_notificationcounter_card_view))
         // Inflate the layout for this fragment
 
-        button?.setOnClickListener(View.OnClickListener { notificationCounter!!.increaseNumber() })
+        button?.setOnClickListener(View.OnClickListener { notificationCounter!!.increaseNumber()
+            Intent(context?.applicationContext,PushNotificationReceiver::class.java).apply{
+                action = Constants.CHAT_RECEIVER_FILTER
+            }.also {
+//                context?.applicationContext?.sendBroadcast(it)
+                LocalBroadcastManager.getInstance(context!!).sendBroadcast(it)
+            }
+        })
 
 
         chatBtn = rootView.findViewById(R.id.homefragment_chat_image_view)
         chatBtn?.setOnClickListener{
-            val intent = Intent (getActivity(), NewMessageActivity::class.java)
-            getActivity()?.startActivity(intent)
+            val intent = Intent (activity, NewMessageActivity::class.java)
+            activity?.startActivity(intent)
         }
 
         if (USER_OBJECT?.accountType == "Technician") {

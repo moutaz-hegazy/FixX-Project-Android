@@ -19,6 +19,10 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,11 +46,15 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
 object FirestoreService {
-    var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
     var auth = Firebase.auth
-    var storage = Firebase.storage
-    var storageRef = storage.reference
+    private var storage = Firebase.storage
+    private var storageRef = storage.reference
     var imagesRef: StorageReference? = null
+
+    val database = Firebase.database
+    val contactsRef = database.getReference("Contacts")
+    val chatsRef = database.getReference("Chats")
 
     lateinit var googleSignInClient: GoogleSignInClient
 
@@ -87,57 +95,251 @@ object FirestoreService {
         }
     }
 
-    fun fetchChatUsers(onCompletion: (chatUsers: List<String>?, chatChannels: ArrayList<String>) -> Unit) {
-        var contactedUsersIds = ArrayList<String>()
-        var chatChannels = ArrayList<String>()
-        auth.currentUser?.uid?.let { uid ->
-            db.collection("Chats").whereArrayContains("users", uid)
-                .get().addOnSuccessListener { snapShot ->
-                    snapShot.forEach { document ->
-                        (document.data["users"] as? List<String>)?.find { it != uid }?.let {
-                            contactedUsersIds.add(it)
-                            chatChannels.add(document.reference.id)
-                        }
+
+    fun fetchChatUsersTest(onCompletion: (contacts : List<ContactInfo>) -> Unit){
+        val contacts = mutableListOf<ContactInfo>()
+        contactsRef.child(auth.uid!!).get().addOnSuccessListener {
+            if(it.exists()){
+                it.children.forEach { contactSnapShot ->
+                    val contact = contactSnapShot.getValue(ContactInfo::class.java)
+                    contact?.let {  info->
+                        contacts.add(info)
                     }
-                    onCompletion(contactedUsersIds, chatChannels)
                 }
+            }
+            onCompletion(contacts)
         }
     }
-    fun fetchChatHistoryForChannel(
+
+    fun fetchChatHistoryForChannelTest(
         channelName: String,
         observerHandler: (msg: ChatMessage) -> Unit,
         onCompletion: (chatMsgs: ArrayList<ChatMessage>) -> Unit
-    ) {
-        val msgs = ArrayList<ChatMessage>()
-        var display = false
-        db.collection("Chats").document(channelName)
-            .collection("Messages")
-            .orderBy("timestamp", Query.Direction.ASCENDING).apply {
-                get().addOnSuccessListener { snapShot ->
-                    snapShot.forEach { msgsSnapShot ->
-                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
-                        val msg = msgsSnapShot.toObject<ChatMessage>()
-                        msgs.add(msg)
-                    }
-                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
-                    onCompletion(msgs)
-                }
+        ){
 
-                addSnapshotListener { value, error ->
-                    error?.let {
-                        Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
+        val chatHistory = arrayListOf<ChatMessage>()
+        chatsRef.child(channelName).apply {
+//            get().addOnSuccessListener {
+//                it.children.forEach { msgSnapShot ->
+//                    val msg = msgSnapShot.getValue(ChatMessage::class.java)
+//                    msg?.let { msgValue->
+//                        chatHistory.add(msgValue)
+//                    }
+//                }
+//
+//                onCompletion(chatHistory)
+//            }
+            addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    Log.i("TAG", "onChildAdded: >>>>>>>>>> ${snapshot.value}")
+                    snapshot.getValue(ChatMessage::class.java)?.let {
+                        observerHandler(it)
                     }
-                    val msgs = value?.toObjects<ChatMessage>()
-                    if (!msgs.isNullOrEmpty() && display) {
-                        msgs[msgs.size -1].let {
-                            Log.i("TAG", "fetchChatHistory: " + it)
-                            observerHandler(it)
-                        }
+                }
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
+    }
+
+    fun fetchChatHistoryForInstanceTest(
+        contact: String,
+        observerHandler: (msg: ChatMessage) -> Unit,
+        onCompletion: (chatMsgs: ArrayList<ChatMessage>, channelName: String) -> Unit
+    ){
+        chatsRef.child("${auth.uid}-$contact").get().addOnSuccessListener {
+            if(it.exists()){
+                fetchChatHistoryForChannelTest("${auth.uid}-$contact",observerHandler,onCompletion = {
+                    chatHistory ->
+                    onCompletion(chatHistory,"${auth.uid}-$contact")
+                })
+            }else{
+                chatsRef.child("$contact-${auth.uid}").get().addOnSuccessListener {
+                    if(it.exists()) {
+                        fetchChatHistoryForChannelTest(
+                            "$contact-${auth.uid}",
+                            observerHandler,
+                            onCompletion = { chatHistory ->
+                                onCompletion(chatHistory, "$contact-${auth.uid}")
+                            })
+                    }else{
+                        createChatChannel("${auth.uid}-$contact",contact,
+                            ChatMessage("", auth.uid!!,System.currentTimeMillis()),observerHandler)
                     }
-                    display = true
                 }
             }
+        }
     }
+
+    private fun createChatChannel(channelName : String, contact : String, msg : ChatMessage,
+                                  observerHandler: (msg: ChatMessage) -> Unit){
+
+        chatsRef.child(channelName).apply {
+            child(this.push().key!!).setValue(msg).addOnSuccessListener {
+                contactsRef.child(auth.uid!!).child(contact)
+                    .setValue(ContactInfo(contact,channelName))
+            }
+
+            addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    Log.i("TAG", "onChildAdded: >>>>>>>>>> ${snapshot.value}")
+                    snapshot.getValue(ChatMessage::class.java)?.let {
+                        observerHandler(it)
+                    }
+                }
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
+    }
+
+    fun sendChatMessageTest(channel : String, msg : ChatMessage){
+        chatsRef.child(channel).child(chatsRef.push().key!!).setValue(msg)
+    }
+
+//    fun fetchChatUsers(onCompletion: (chatUsers: List<String>?, chatChannels: ArrayList<String>) -> Unit) {
+//        var contactedUsersIds = ArrayList<String>()
+//        var chatChannels = ArrayList<String>()
+//        auth.currentUser?.uid?.let { uid ->
+//            db.collection("Chats").whereArrayContains("users", uid)
+//                .get().addOnSuccessListener { snapShot ->
+//                    snapShot.forEach { document ->
+//                        (document.data["users"] as? List<String>)?.find { it != uid }?.let {
+//                            contactedUsersIds.add(it)
+//                            chatChannels.add(document.reference.id)
+//                        }
+//                    }
+//                    onCompletion(contactedUsersIds, chatChannels)
+//                }
+//        }
+//    }
+//    fun fetchChatHistoryForChannel(
+//        channelName: String,
+//        observerHandler: (msg: ChatMessage) -> Unit,
+//        onCompletion: (chatMsgs: ArrayList<ChatMessage>) -> Unit
+//    ) {
+//        val msgs = ArrayList<ChatMessage>()
+//        var display = false
+//        db.collection("Chats").document(channelName)
+//            .collection("Messages")
+//            .orderBy("timestamp", Query.Direction.ASCENDING).apply {
+//                get().addOnSuccessListener { snapShot ->
+//                    snapShot.forEach { msgsSnapShot ->
+//                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
+//                        val msg = msgsSnapShot.toObject<ChatMessage>()
+//                        msgs.add(msg)
+//                    }
+//                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
+//                    onCompletion(msgs)
+//                }
+//
+//                addSnapshotListener { value, error ->
+//                    error?.let {
+//                        Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
+//                    }
+//                    val msgs = value?.toObjects<ChatMessage>()
+//                    if (!msgs.isNullOrEmpty() && display) {
+//                        msgs[msgs.size -1].let {
+//                            Log.i("TAG", "fetchChatHistory: " + it)
+//                            observerHandler(it)
+//                        }
+//                    }
+//                    display = true
+//                }
+//            }
+//    }
+
+//    fun fetchChatHistoryForInstance(
+//        contact: String,
+//        observerHandler: (msg: ChatMessage) -> Unit,
+//        onCompletion: (chatMsgs: ArrayList<ChatMessage>, channelName: String) -> Unit
+//    ) {
+//        auth.currentUser?.uid?.let { uid ->
+//            db.collection("Chats").document("$uid-$contact").get().addOnSuccessListener {
+//                if (it.exists()) {
+//                    loadMessagesWithObserver(it, "$uid-$contact",observerHandler,onCompletion)
+//                } else {
+//                    db.collection("Chats").document("$contact-$uid").get()
+//                        .addOnSuccessListener { it2 ->
+//                            if (it2.exists()) {
+//                                loadMessagesWithObserver(it2,"$contact-$uid",observerHandler,onCompletion)
+//                            } else {
+//                                // create new document in Chats
+//                                db.collection("Chats")
+//                                    .document("$uid-$contact").apply {
+//                                        set(mapOf<String, List<String>>("users" to listOf(uid, contact)))
+//                                            .addOnSuccessListener {
+//                                                this.collection("Messages").addSnapshotListener { value, error ->
+//                                                    error?.let {
+//                                                        Log.i(
+//                                                            "TAG",
+//                                                            "fetchChatHistory: Error " + it.localizedMessage
+//                                                        )
+//                                                    }
+//                                                    val msgs = value?.toObjects<ChatMessage>()
+//                                                    if (!msgs.isNullOrEmpty()) {
+//                                                        msgs.last().let {
+//                                                            Log.i("TAG", "fetchChatHistory: " + it)
+//                                                            observerHandler(it)
+//                                                        }
+//                                                    }
+//                                                }
+//                                                onCompletion(arrayListOf(),"$uid-$contact")
+//                                            }
+//                                    }
+//                            }
+//                        }
+//                }
+//            }
+//        }
+//    }
+
+//    private fun loadMessagesWithObserver(document : DocumentSnapshot,channelName: String ,observerHandler: (msg: ChatMessage) -> Unit,
+//                                         onCompletion: (chatMsgs: ArrayList<ChatMessage>, channelName: String) -> Unit){
+//        val msgs = ArrayList<ChatMessage>()
+//        var display = false
+//        document.reference
+//            .collection("Messages")
+//            .orderBy("timestamp", Query.Direction.ASCENDING).apply {
+//                addSnapshotListener { value, error ->
+//                    error?.let {
+//                        Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
+//                    }
+//                    val msgs = value?.toObjects<ChatMessage>()
+//                    if (!msgs.isNullOrEmpty() && display) {
+//                        msgs?.last()?.let {
+//                            Log.i("TAG", "fetchChatHistory: " + it)
+//                            observerHandler(it)
+//                        }
+//                    }
+//                    display = true
+//                }
+//                get().addOnSuccessListener { snapShot ->
+//                    snapShot.forEach { msgsSnapShot ->
+//                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
+//                        val msg = msgsSnapShot.toObject<ChatMessage>()
+//                        msgs.add(msg)
+//                    }
+//                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
+//                    onCompletion(msgs, channelName)
+//                }
+//            }
+//    }
+
+//    fun sendChatMessage(msg: ChatMessage, toChannel: String) {
+//        val map = HashMap<String, Any?>()
+//        msg::class.memberProperties.forEach {
+//            map[it.name] = (it as KProperty1<Any, Any>).get(msg)
+//            Log.i("TAG", "save: inside for each  ${it.name} = ${it.get(msg)}")
+//        }
+//        db.collection("Chats").document(toChannel).collection("Messages").add(map)
+//            .addOnSuccessListener { Log.i("TAG", "Message successfully written!") }
+//            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
+//    }
 
     fun addRatingAndComment(techId:String, rating : Double, extraRating: Double, comment: Comment,
                             onSuccessHandler: () -> Unit, onFailHandler: () -> Unit) {
@@ -185,93 +387,7 @@ object FirestoreService {
             .update(mapOf("techID" to techId, "price" to price.toInt() , "bidders" to null , "status" to Job.JobStatus.Accepted.rawValue))
     }
 
-    fun fetchChatHistoryForInstance(
-        contact: String,
-        observerHandler: (msg: ChatMessage) -> Unit,
-        onCompletion: (chatMsgs: ArrayList<ChatMessage>, channelName: String) -> Unit
-    ) {
-        auth.currentUser?.uid?.let { uid ->
-            db.collection("Chats").document("$uid-$contact").get().addOnSuccessListener {
-                if (it.exists()) {
-                    loadMessagesWithObserver(it, "$uid-$contact",observerHandler,onCompletion)
-                } else {
-                    db.collection("Chats").document("$contact-$uid").get()
-                        .addOnSuccessListener { it2 ->
-                            if (it2.exists()) {
-                                loadMessagesWithObserver(it2,"$contact-$uid",observerHandler,onCompletion)
-                            } else {
-                                // create new document in Chats
-                                db.collection("Chats")
-                                    .document("$uid-$contact").apply {
-                                        set(mapOf<String, List<String>>("users" to listOf(uid, contact)))
-                                            .addOnSuccessListener {
-                                                this.collection("Messages").addSnapshotListener { value, error ->
-                                                    error?.let {
-                                                        Log.i(
-                                                            "TAG",
-                                                            "fetchChatHistory: Error " + it.localizedMessage
-                                                        )
-                                                    }
-                                                    val msgs = value?.toObjects<ChatMessage>()
-                                                    if (!msgs.isNullOrEmpty()) {
-                                                        msgs.last().let {
-                                                            Log.i("TAG", "fetchChatHistory: " + it)
-                                                            observerHandler(it)
-                                                        }
-                                                    }
-                                                }
-                                                onCompletion(arrayListOf(),"$uid-$contact")
-                                            }
-                                    }
-                            }
-                        }
-                }
-            }
-        }
-    }
 
-    private fun loadMessagesWithObserver(document : DocumentSnapshot,channelName: String ,observerHandler: (msg: ChatMessage) -> Unit,
-                                         onCompletion: (chatMsgs: ArrayList<ChatMessage>, channelName: String) -> Unit){
-        val msgs = ArrayList<ChatMessage>()
-        var display = false
-        document.reference
-            .collection("Messages")
-            .orderBy("timestamp", Query.Direction.ASCENDING).apply {
-                addSnapshotListener { value, error ->
-                    error?.let {
-                        Log.i("TAG", "fetchChatHistory: Error " + it.localizedMessage)
-                    }
-                    val msgs = value?.toObjects<ChatMessage>()
-                    if (!msgs.isNullOrEmpty() && display) {
-                        msgs?.last()?.let {
-                            Log.i("TAG", "fetchChatHistory: " + it)
-                            observerHandler(it)
-                        }
-                    }
-                    display = true
-                }
-                get().addOnSuccessListener { snapShot ->
-                    snapShot.forEach { msgsSnapShot ->
-                        Log.i("wezza", "fetchChatHistory: HERE 1 >> ")
-                        val msg = msgsSnapShot.toObject<ChatMessage>()
-                        msgs.add(msg)
-                    }
-                    Log.i("wezza", "fetchChatHistory: HERE 4 >> " + msgs.size)
-                    onCompletion(msgs, channelName)
-                }
-            }
-    }
-
-    fun sendChatMessage(msg: ChatMessage, toChannel: String) {
-        val map = HashMap<String, Any?>()
-        msg::class.memberProperties.forEach {
-            map[it.name] = (it as KProperty1<Any, Any>).get(msg)
-            Log.i("TAG", "save: inside for each  ${it.name} = ${it.get(msg)}")
-        }
-        db.collection("Chats").document(toChannel).collection("Messages").add(map)
-            .addOnSuccessListener { Log.i("TAG", "Message successfully written!") }
-            .addOnFailureListener { e -> Log.i("TAG", "Error writing document", e) }
-    }
 
     fun fetchJobById(jobId : String, onSuccessHandler: (job : Job) -> Unit, onFailHandler: () -> Unit){
         db.collection("Jobs").document(jobId).get()

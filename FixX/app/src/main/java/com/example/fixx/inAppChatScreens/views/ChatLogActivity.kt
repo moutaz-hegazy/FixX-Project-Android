@@ -1,11 +1,19 @@
 package com.example.fixx.inAppChatScreens.views
 
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ChatMessage
 import com.example.fixx.POJOs.Person
+import com.example.fixx.Support.PushNotificationReceiver
 import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityChatLogBinding
@@ -34,11 +42,23 @@ class ChatLogActivity : AppCompatActivity() {
     private var channel : String? = null
     private lateinit var chatLogVm : ChatLogViewModel
 
+    private val chatReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+            val channelId = intent?.getIntExtra(Constants.CHAT_CHANNEL_ID,-1)
+            channelId?.let {
+                if(it != -1){
+                    Log.i(TAG, "onReceive: >>>>>>> $it")
+                    val nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    nManager.cancelAll()
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         recyclerview_chat_log.adapter = adapter
         channel = intent.getStringExtra(Constants.TRANS_CHAT_CHANNEL)
 
@@ -81,6 +101,7 @@ class ChatLogActivity : AppCompatActivity() {
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
                     displayMsg(msg)
                     adapter.notifyDataSetChanged()
+                    setButton()
                 },onCompletion = { msgs ->
                     setButton()
                     Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
@@ -94,6 +115,15 @@ class ChatLogActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this).registerReceiver(chatReceiver, IntentFilter(Constants.CHAT_RECEIVER_FILTER))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(chatReceiver)
+    }
     private fun setButton(){
         binding.sendButtonChatLog.setOnClickListener {
             val txt = binding.edittextChatLog.text.toString()
@@ -114,16 +144,18 @@ class ChatLogActivity : AppCompatActivity() {
         }
     }
     private fun displayMsg(msg : ChatMessage){
-        if(msg.fromId == USER_OBJECT?.uid){
-            USER_OBJECT?.let {
-                adapter.add(ChatToItem(msg.text, it))
-                binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount -1)
-                Log.i("TAG", "displayMsg: HERE 1 >>> ${msg.text}")
+        if(!msg.text.isNullOrEmpty()) {
+            if (msg.fromId == USER_OBJECT?.uid) {
+                USER_OBJECT?.let {
+                    adapter.add(ChatToItem(msg.text, it))
+                    binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
+                    Log.i("TAG", "displayMsg: HERE 1 >>> ${msg.text}")
+                }
+            } else {
+                adapter.add(ChatFromItem(msg.text, contact))
+                binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount - 1)
+                Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
             }
-        }else{
-            adapter.add(ChatFromItem(msg.text,contact))
-            binding.recyclerviewChatLog.smoothScrollToPosition(adapter.itemCount -1)
-            Log.i("TAG", "displayMsg: HERE 2 >>> ${msg.text}")
         }
     }
 }

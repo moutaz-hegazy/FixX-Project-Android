@@ -1,8 +1,8 @@
 package com.example.fixx.Support
 
 import android.app.*
+import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.NotificationManager.IMPORTANCE_HIGH
-import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,16 +12,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
-import com.example.fixx.inAppChatScreens.views.ChatLogActivity
-import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import kotlin.random.Random
-import kotlin.reflect.jvm.internal.impl.load.java.Constant
+
 
 class FirebaseService : FirebaseMessagingService() {
 
@@ -32,10 +29,10 @@ class FirebaseService : FirebaseMessagingService() {
 
         var token:String?
         get(){
-            return sharedPref?.getString("token","")
+            return sharedPref?.getString("token", "")
         }
         set(value){
-            sharedPref?.edit()?.putString("token",value)?.apply()
+            sharedPref?.edit()?.putString("token", value)?.apply()
         }
     }
 
@@ -49,7 +46,7 @@ class FirebaseService : FirebaseMessagingService() {
 
 
         Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> MESSAGE RECEIVED <<<<<<<<")
-        val intent = Intent(this,NavigationBarActivity::class.java)
+        val intent = Intent(this, NavigationBarActivity::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chatNotificationId = 500
 
@@ -59,23 +56,27 @@ class FirebaseService : FirebaseMessagingService() {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         when(p0.data["type"]){
-            Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM ->{
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM -> {
                 val bundle = Bundle().apply {
-                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                    putString(Constants.TRANS_JOB, p0.data["jobId"])
                 }
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
-                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
-                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM))
-                notificationManager.notify(chatNotificationId,notification)
+                notification = createNotification(
+                    getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM)
+                )
+                notificationManager.notify(chatNotificationId, notification)
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
                 val bundle = Bundle()
-                bundle.putString(Constants.TRANS_JOB,p0.data["jobId"])
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
-                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}"
-                    ,startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST))
-                notificationManager.notify(chatNotificationId,notification)
+                bundle.putString(Constants.TRANS_JOB, p0.data["jobId"])
+                notification = createNotification(
+                    getString(p0.data["title"]?.toInt() ?: 0),
+                    "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST)
+                )
+                notificationManager.notify(chatNotificationId, notification)
             }
 
             Constants.NOTIFICATION_TYPE_CHAT_MESSAGE -> {
@@ -90,48 +91,61 @@ class FirebaseService : FirebaseMessagingService() {
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_CHAT_MESSAGE)
                 )
                 val channelId = p0.data["id"]?.toInt() ?: 0
-                Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> $channelId")
                 notificationManager.notify(channelId, notification)
+                Intent(this,PushNotificationReceiver::class.java).apply {
+                    action = Constants.CHAT_RECEIVER_FILTER
+                    putExtra(Constants.CHAT_CHANNEL_ID,channelId)
+                }.also {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                }
             }
 
             Constants.NOTIFICATION_TYPE_USER_ACCEPT -> {
                 val bundle = Bundle().apply {
-                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                    putString(Constants.TRANS_JOB, p0.data["jobId"])
                 }
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                notification = createNotification(
+                    getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_USER_ACCEPT))
-                notificationManager.notify(chatNotificationId,notification)
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_USER_ACCEPT)
+                )
+                notificationManager.notify(chatNotificationId, notification)
             }
 
-            Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY ->{
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY -> {
                 val bundle = Bundle().apply {
-                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                    putString(Constants.TRANS_JOB, p0.data["jobId"])
                 }
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                notification = createNotification(
+                    getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY))
-                notificationManager.notify(chatNotificationId,notification)
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY)
+                )
+                notificationManager.notify(chatNotificationId, notification)
             }
 
-            Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL ->{
+            Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL -> {
                 val bundle = Bundle().apply {
-                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                    putString(Constants.TRANS_JOB, p0.data["jobId"])
                 }
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                notification = createNotification(
+                    getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL))
-                notificationManager.notify(chatNotificationId,notification)
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL)
+                )
+                notificationManager.notify(chatNotificationId, notification)
             }
 
             Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
                 val bundle = Bundle().apply {
-                    putString(Constants.TRANS_JOB,p0.data["jobId"])
+                    putString(Constants.TRANS_JOB, p0.data["jobId"])
                 }
-                notification = createNotification(getString(p0.data["title"]?.toInt() ?: 0),
+                notification = createNotification(
+                    getString(p0.data["title"]?.toInt() ?: 0),
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
-                    startHomeActivity(bundle,Constants.NOTIFICATION_TYPE_JOB_COMPLETED))
-                notificationManager.notify(chatNotificationId,notification)
+                    startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_JOB_COMPLETED)
+                )
+                notificationManager.notify(chatNotificationId, notification)
             }
 
             else ->{}
@@ -139,23 +153,41 @@ class FirebaseService : FirebaseMessagingService() {
 
     }
 
-    private fun startHomeActivity(bundle : Bundle, notificationType : String) : PendingIntent{
+//    private fun applicationInForeground(): Boolean {
+//        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+//        val services = activityManager.runningAppProcesses
+//        var isActivityFound = false
+//        if (services[0].processName.equals(packageName, ignoreCase = true)
+//            && services[0].importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+//        ) {
+//            isActivityFound = true
+//        }
+////        Log.i("TAG", "applicationInForeground: >>>>>>>>>>>>${activityManager.getRunningTasks(1).get(0).topActivity?.packageName}")
+//        return isActivityFound
+//    }
+
+    private fun startHomeActivity(bundle: Bundle, notificationType: String) : PendingIntent{
         var pendingIntent : PendingIntent
         TaskStackBuilder.create(applicationContext).apply {
-            addNextIntentWithParentStack(Intent(applicationContext,NavigationBarActivity::class.java))
+            addNextIntentWithParentStack(
+                Intent(
+                    applicationContext,
+                    NavigationBarActivity::class.java
+                )
+            )
             editIntentAt(0).apply {
-                putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
-                putExtra(Constants.TRANSIT_FROM_NOTIFICATION,true)
-                putExtra(Constants.TRANS_NOTIFICATION_TYPE,notificationType)
+                putExtra(Constants.TRANS_DATA_BUNDLE, bundle)
+                putExtra(Constants.TRANSIT_FROM_NOTIFICATION, true)
+                putExtra(Constants.TRANS_NOTIFICATION_TYPE, notificationType)
             }
-            pendingIntent = getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT)
+            pendingIntent = getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
         }
         return pendingIntent
     }
 
 
-    private fun createNotification(title : String, content:String, pendingIntent : PendingIntent)
-    =    NotificationCompat.Builder(this,CHANNEL_ID)
+    private fun createNotification(title: String, content: String, pendingIntent: PendingIntent)
+    =    NotificationCompat.Builder(this, CHANNEL_ID)
         .setContentTitle(title)
         .setContentText(content)
         .setSmallIcon(R.drawable.ic_baseline_notifications_24)
@@ -170,11 +202,13 @@ class FirebaseService : FirebaseMessagingService() {
         .setContentText("Two new messages")
         .setSmallIcon(R.drawable.call_icon)
         //build summary info into InboxStyle template
-        .setStyle(NotificationCompat.InboxStyle()
-            .addLine("Alex Faarborg Check this out")
-            .addLine("Jeff Chang Launch Party")
-            .setBigContentTitle("2 new messages")
-            .setSummaryText("janedoe@example.com"))
+        .setStyle(
+            NotificationCompat.InboxStyle()
+                .addLine("Alex Faarborg Check this out")
+                .addLine("Jeff Chang Launch Party")
+                .setBigContentTitle("2 new messages")
+                .setSummaryText("janedoe@example.com")
+        )
         //specify which group this notification belongs to
         .setGroup(Constants.NOTIFICATION_GROUP)
         //set this notification as the summary for the group
@@ -184,7 +218,7 @@ class FirebaseService : FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager){
         val channelName = "ChannelFirebaseChat"
-        val channel = NotificationChannel(CHANNEL_ID,channelName,IMPORTANCE_HIGH).apply {
+        val channel = NotificationChannel(CHANNEL_ID, channelName, IMPORTANCE_HIGH).apply {
             description="FIREBASE CHAT DESCRIPTION"
             enableLights(true)
             lightColor = Color.WHITE

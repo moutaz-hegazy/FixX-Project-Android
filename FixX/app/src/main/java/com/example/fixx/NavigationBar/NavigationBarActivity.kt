@@ -1,8 +1,10 @@
 package com.example.fixx.NavigationBar
 
 import android.app.usage.ConfigurationStats
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +12,14 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.NavigationBar.OrdersScreen.views.OrdersFragment
 import com.example.fixx.NavigationBar.viewmodels.NavBarViewmodel
 import com.example.fixx.POJOs.Person
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
+import com.example.fixx.Support.PushNotificationReceiver
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.ChatLogActivity
 import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
@@ -31,6 +35,8 @@ class NavigationBarActivity : AppCompatActivity() {
         var USER_OBJECT : Person? = null
         var CURRENT_LANGUAGE = "en"
     }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,7 +75,6 @@ class NavigationBarActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_navigation_bar)
-
         supportActionBar?.hide()
 
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -92,6 +97,7 @@ class NavigationBarActivity : AppCompatActivity() {
 
             true
         }
+
     }
 
     private fun navigateToActivity(activity : Class<*>, bundle : Bundle?){

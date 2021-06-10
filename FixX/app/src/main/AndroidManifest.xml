@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.fixx">
+
     <!-- added for maps -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,12 +27,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".WorkAddresses.view.AddWorkAddress"></activity>
+
+<!--        <receiver-->
+<!--            android:name=".Support.PushNotificationReceiver"-->
+<!--            -->
+<!--            android:enabled="true"-->
+<!--            android:exported="true" />-->
+
+        <activity android:name=".WorkAddresses.view.AddWorkAddress" />
         <activity android:name=".WorkAddresses.view.MyWorkAddresses" />
         <activity android:name=".NavigationBar.notification.NotificationActivity" />
         <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity" />
-        <activity android:name=".techOrderDetailsScreen.views.TechViewOrderScreen"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".techOrderDetailsScreen.views.TechViewOrderScreen"
+            android:windowSoftInputMode="adjustPan" />
 
         <service
             android:name=".Support.FirebaseService"

@@ -19,15 +19,22 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
     fun fetchChatHistory(){
         if(channel != null){
             Log.i("TAG", ">>>> : with channel ")
-            FirestoreService.fetchChatHistoryForChannel(channel!!, observer, onCompletion)
+            //FirestoreService.fetchChatHistoryForChannel(channel!!, observer, onCompletion)
+            FirestoreService.fetchChatHistoryForChannelTest(channel!!,observer,onCompletion)
         }else{
             contact?.let {
-                FirestoreService.fetchChatHistoryForInstance(it, observer,
+//                FirestoreService.fetchChatHistoryForInstance(it, observer,
+//                    onCompletion = {
+//                            chatMsgs, channelName ->
+//                        channel = channelName
+//                        onCompletion(chatMsgs)
+//                    })
+                FirestoreService.fetchChatHistoryForInstanceTest(it,observer,
                     onCompletion = {
-                            chatMsgs, channelName ->
+                        chatMsgs, channelName ->
                         channel = channelName
                         onCompletion(chatMsgs)
-                    })
+                })
             }
         }
     }
@@ -39,7 +46,8 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
     fun sendMessage(message: ChatMessage){
         channel?.let {
             ch->
-            FirestoreService.sendChatMessage(message, ch)
+//            FirestoreService.sendChatMessage(message, ch)
+            FirestoreService.sendChatMessageTest(ch,message)
         }
     }
 
