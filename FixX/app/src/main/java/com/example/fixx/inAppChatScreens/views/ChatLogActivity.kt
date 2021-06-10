@@ -44,12 +44,12 @@ class ChatLogActivity : AppCompatActivity() {
 
     private val chatReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
-            val channelId = intent?.getIntExtra(Constants.CHAT_CHANNEL_ID,-1)
+            val channelId = intent?.getIntExtra(Constants.CHANNEL_ID,-1)
             channelId?.let {
                 if(it != -1){
                     Log.i(TAG, "onReceive: >>>>>>> $it")
                     val nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    nManager.cancelAll()
+                    nManager.cancel(it)
                 }
             }
         }
@@ -74,11 +74,6 @@ class ChatLogActivity : AppCompatActivity() {
                     Log.i("TAG", "onCreate: New Msg ->>>> ${msg.text}")
                     displayMsg(msg)
                     adapter.notifyDataSetChanged()
-                }, onCompletion = { msgs ->
-                    msgs.forEach { msg ->
-                        displayMsg(msg)
-                        adapter.notifyDataSetChanged()
-                    }
                 })
             chatLogVm.fetchContact() {
                 contact = it!!
@@ -103,14 +98,6 @@ class ChatLogActivity : AppCompatActivity() {
                     displayMsg(msg)
                     adapter.notifyDataSetChanged()
                     setButton()
-                },onCompletion = { msgs ->
-                    setButton()
-                    Log.i("TAG", "onCreate: msgs   ALL >>>>>> $msgs")
-                    msgs.forEach {
-                            msg ->
-                        displayMsg(msg)
-                        adapter.notifyDataSetChanged()
-                    }
                 })
             chatLogVm.fetchChatHistory()
         }

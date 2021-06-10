@@ -53,7 +53,9 @@ sealed class Constants {
         const val TRANS_DATA_BUNDLE = "dataBundle"
         const val NOTIFICATION_GROUP = "fixXNotGroup"
         const val CHAT_RECEIVER_FILTER = "chatReceiverFilter"
-        const val CHAT_CHANNEL_ID = "channelId"
+        const val TECH_ORDER_DETAILS_FILTER = "techOrdersFilter"
+        const val USER_JOB_DETAILS_FILTER = "userJobFilter"
+        const val CHANNEL_ID = "channelId"
 
         val cities = arrayOf("City","Cairo", "Alexandria")
         val citiesInArabic = arrayOf("مدينة","القاهرة", "الإسكندرية")

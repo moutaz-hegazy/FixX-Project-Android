@@ -1,7 +1,11 @@
 package com.example.fixx.JobDetailsDisplay.views
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +16,7 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
@@ -41,6 +46,27 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
     private lateinit var viewmodel : JobDetailsViewModel
     private lateinit var loadedJob: Job
 
+    private val changesReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val jobId = intent?.getStringExtra(Constants.TRANS_JOB)
+            val channelId = intent?.getIntExtra(Constants.CHANNEL_ID,-1)
+            channelId?.let {
+                if(it != -1){
+                    val nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    nManager.cancel(it)
+                }
+            }
+            jobId?.let{
+                viewmodel = JobDetailsViewModel(it)
+                viewmodel.fetchJobfromDB(onSuccessBinding = { job ->
+                    displayJobOnScreen(job)
+                }, onFailBinding = {
+
+                })
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJobDetailsDisplayBinding.inflate(layoutInflater)
@@ -63,6 +89,18 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 })
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this).registerReceiver(changesReceiver,
+            IntentFilter(Constants.USER_JOB_DETAILS_FILTER)
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(changesReceiver)
     }
 
 

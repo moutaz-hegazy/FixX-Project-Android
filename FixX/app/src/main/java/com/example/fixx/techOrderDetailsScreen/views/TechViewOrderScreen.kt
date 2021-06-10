@@ -1,8 +1,8 @@
 package com.example.fixx.techOrderDetailsScreen.views
 
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.Intent
+import android.app.NotificationManager
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.Image
@@ -13,8 +13,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Person
@@ -47,6 +49,27 @@ class TechViewOrderScreen : AppCompatActivity() {
 
     var contact : Person? = null
 
+    private val changesReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val jobId = intent?.getStringExtra(Constants.TRANS_JOB)
+            val channelId = intent?.getIntExtra(Constants.CHANNEL_ID,-1)
+            channelId?.let {
+                if(it != -1){
+                    val nManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    nManager.cancel(it)
+                }
+            }
+            jobId?.let{
+                jobId.let {    jobID ->
+                    viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob->
+                        displayJobDetails(returnedJob)
+                    }, onFailBinding = {
+                        finish()
+                    })
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +100,16 @@ class TechViewOrderScreen : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this).registerReceiver(changesReceiver,
+            IntentFilter(Constants.TECH_ORDER_DETAILS_FILTER))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(changesReceiver)
+    }
 
     private fun displayJobDetails(passedJob : Job){
         this.job = passedJob

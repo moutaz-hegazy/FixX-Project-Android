@@ -3,6 +3,7 @@ package com.example.fixx.Support
 import android.app.*
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.NotificationManager.IMPORTANCE_HIGH
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,6 +19,7 @@ import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlin.random.Random
 
 
 class FirebaseService : FirebaseMessagingService() {
@@ -48,7 +50,7 @@ class FirebaseService : FirebaseMessagingService() {
         Log.i("TAG", "onMessageReceived: >>>>>>>>>>>> MESSAGE RECEIVED <<<<<<<<")
         val intent = Intent(this, NavigationBarActivity::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chatNotificationId = 500
+        val notificationId = Random.nextInt()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             createNotificationChannel(notificationManager)
@@ -65,7 +67,15 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CONFIRM)
                 )
-                notificationManager.notify(chatNotificationId, notification)
+                notificationManager.notify(notificationId, notification)
+
+                Intent(this,BroadcastReceiver::class.java).apply {
+                    action = Constants.USER_JOB_DETAILS_FILTER
+                    putExtra(Constants.CHANNEL_ID,notificationId)
+                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                }.also {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                }
             }
 
             Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST -> {
@@ -76,7 +86,7 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_USER_JOB_REQUEST)
                 )
-                notificationManager.notify(chatNotificationId, notification)
+                notificationManager.notify(notificationId, notification)
             }
 
             Constants.NOTIFICATION_TYPE_CHAT_MESSAGE -> {
@@ -92,9 +102,9 @@ class FirebaseService : FirebaseMessagingService() {
                 )
                 val channelId = p0.data["id"]?.toInt() ?: 0
                 notificationManager.notify(channelId, notification)
-                Intent(this,PushNotificationReceiver::class.java).apply {
+                Intent(this,BroadcastReceiver::class.java).apply {
                     action = Constants.CHAT_RECEIVER_FILTER
-                    putExtra(Constants.CHAT_CHANNEL_ID,channelId)
+                    putExtra(Constants.CHANNEL_ID,channelId)
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
@@ -109,7 +119,15 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_USER_ACCEPT)
                 )
-                notificationManager.notify(chatNotificationId, notification)
+                notificationManager.notify(notificationId, notification)
+                Intent(this,BroadcastReceiver::class.java).apply {
+                    action = Constants.TECH_ORDER_DETAILS_FILTER
+                    putExtra(Constants.CHANNEL_ID,notificationId)
+                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                }.also {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                }
+
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY -> {
@@ -121,7 +139,15 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_DENY)
                 )
-                notificationManager.notify(chatNotificationId, notification)
+                notificationManager.notify(notificationId, notification)
+
+                Intent(this,BroadcastReceiver::class.java).apply {
+                    action = Constants.USER_JOB_DETAILS_FILTER
+                    putExtra(Constants.CHANNEL_ID,notificationId)
+                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                }.also {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                }
             }
 
             Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL -> {
@@ -133,7 +159,15 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_TECH_REPLY_CANCEL)
                 )
-                notificationManager.notify(chatNotificationId, notification)
+                notificationManager.notify(notificationId, notification)
+
+                Intent(this,BroadcastReceiver::class.java).apply {
+                    action = Constants.USER_JOB_DETAILS_FILTER
+                    putExtra(Constants.CHANNEL_ID,notificationId)
+                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                }.also {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                }
             }
 
             Constants.NOTIFICATION_TYPE_JOB_COMPLETED -> {
@@ -145,7 +179,15 @@ class FirebaseService : FirebaseMessagingService() {
                     "${p0.data["user"]} ${getString(p0.data["message"]?.toInt() ?: 0)}",
                     startHomeActivity(bundle, Constants.NOTIFICATION_TYPE_JOB_COMPLETED)
                 )
-                notificationManager.notify(chatNotificationId, notification)
+                notificationManager.notify(notificationId, notification)
+
+                Intent(this,BroadcastReceiver::class.java).apply {
+                    action = Constants.USER_JOB_DETAILS_FILTER
+                    putExtra(Constants.CHANNEL_ID,notificationId)
+                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                }.also {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                }
             }
 
             else ->{}

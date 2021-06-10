@@ -14,27 +14,17 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class ChatLogViewModel (var channel : String? = null, private val contact : String? = null,
-                        private val observer : (msg : ChatMessage)->Unit,
-                        private val onCompletion : (msgs : ArrayList<ChatMessage>)->Unit){
+                        private val observer : (msg : ChatMessage)->Unit){
 
     fun fetchChatHistory(){
         if(channel != null){
             Log.i("TAG", ">>>> : with channel ")
-            //FirestoreService.fetchChatHistoryForChannel(channel!!, observer, onCompletion)
-            FirestoreService.fetchChatHistoryForChannelTest(channel!!,observer,onCompletion)
+            FirestoreService.fetchChatHistoryForChannelTest(channel!!,observer)
         }else{
             contact?.let {
-//                FirestoreService.fetchChatHistoryForInstance(it, observer,
-//                    onCompletion = {
-//                            chatMsgs, channelName ->
-//                        channel = channelName
-//                        onCompletion(chatMsgs)
-//                    })
                 FirestoreService.fetchChatHistoryForInstanceTest(it,observer,
-                    onCompletion = {
-                        chatMsgs, channelName ->
+                    onCompletion = { channelName ->
                         channel = channelName
-                        onCompletion(chatMsgs)
                 })
             }
         }
