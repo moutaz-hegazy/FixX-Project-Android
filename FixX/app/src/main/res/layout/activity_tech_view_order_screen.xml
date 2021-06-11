@@ -54,7 +54,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="428dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/tech_view_order_confirmPrice_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tech_view_order_date_lbl"
@@ -105,11 +105,11 @@
                 android:id="@+id/tech_view_order_jobPrice_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/red"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.035"
-                android:textColor="@color/red"
-                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/tech_view_order_priceTitle_lbl"
                 app:layout_constraintTop_toTopOf="@+id/tech_view_order_priceTitle_lbl"
                 tools:text="500 LE" />
@@ -193,7 +193,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tech_view_order_images_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="10dp"
@@ -223,6 +223,20 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/tech_view_order_description_lbl"
                 app:layout_constraintTop_toBottomOf="@+id/tech_view_order_description_lbl" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tech_view_extensions_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tech_view_order_images_recycler" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

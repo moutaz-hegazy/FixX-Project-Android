@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-class OrderImagesAdapter(var data : List<String>) : RecyclerView.Adapter<OrderImagesAdapter.VH>() {
+class OrderImagesAdapter(var data : MutableList<String>) : RecyclerView.Adapter<OrderImagesAdapter.VH>() {
     lateinit var context: Context
     private var images = ArrayList<Bitmap?>()
     class VH(var binding: CustomizeOrderImageRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root)

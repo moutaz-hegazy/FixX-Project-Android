@@ -1,6 +1,7 @@
 package com.example.fixx.JobDetailsDisplay.views
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -21,10 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
-import com.example.fixx.POJOs.Comment
-import com.example.fixx.POJOs.Job
-import com.example.fixx.POJOs.Technician
+import com.example.fixx.POJOs.*
 import com.example.fixx.R
+import com.example.fixx.addExtensionScreen.views.AddJobExtensionActivity
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityJobDetailsDisplayBinding
 import com.example.fixx.inAppChatScreens.views.ChatLogActivity
@@ -58,8 +58,8 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             }
             jobId?.let{
                 viewmodel = JobDetailsViewModel(it)
-                viewmodel.fetchJobfromDB(onSuccessBinding = { job ->
-                    displayJobOnScreen(job)
+                viewmodel.fetchJobfromDB(onSuccessBinding = { job,exts ->
+                    displayJobOnScreen(job,exts)
                 }, onFailBinding = {
 
                 })
@@ -78,12 +78,18 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
 
         if(jobObject != null){
             viewmodel = JobDetailsViewModel(jobObject.jobId)
-            displayJobOnScreen(jobObject)
+            viewmodel.fetchExtensionForJob(onSuccessBinding = {
+                displayJobOnScreen(jobObject,it)
+            },onFailBinding = {
+                displayJobOnScreen(jobObject, listOf())
+                Toast.makeText(this,R.string.ExtendFetchFail,Toast.LENGTH_SHORT).show()
+            })
+
         }else{
             jobId?.let {
                 viewmodel = JobDetailsViewModel(it)
-                viewmodel.fetchJobfromDB(onSuccessBinding = { job ->
-                    displayJobOnScreen(job)
+                viewmodel.fetchJobfromDB(onSuccessBinding = { job,exts ->
+                    displayJobOnScreen(job,exts)
                 }, onFailBinding = {
 
                 })
@@ -104,7 +110,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
     }
 
 
-    private fun displayJobOnScreen(job : Job){
+    private fun displayJobOnScreen(job : Job, exts: List<Extension>){
         loadedJob = job
         binding.jobDetailsJobImage.setImageResource(getImageResourse(job.type) ?: 0)
         binding.jobDetailsDateLbl.text = getDateFor(job.status, job)
@@ -123,7 +129,12 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         job.price?.let {
             binding.jobDetailsFinalPriceTitleLbl.visibility = View.VISIBLE
             binding.jobDetailsFinalPriceLbl.visibility = View.VISIBLE
-            binding.jobDetailsFinalPriceLbl.text = "$it ${getString(R.string.LE)}"
+            var price = 0
+            exts.forEach {
+                price += it.price ?: 0
+            }
+            price += it
+            binding.jobDetailsFinalPriceLbl.text = "$price ${getString(R.string.LE)}"
         }
         if(!job.images.isNullOrEmpty()){
             binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
@@ -132,12 +143,21 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(applicationContext).apply {
                     orientation = RecyclerView.HORIZONTAL
                 }
-                adapter = OrderImagesAdapter(job.images!!.map { it.second })
+                var allImages = mutableListOf<StringPair>()
+                allImages.addAll(job.images!!)
+                exts.forEach {
+                    allImages.addAll(it.images!!)
+                }
+                adapter = OrderImagesAdapter(allImages.map { it.second }.toMutableList())
             }
         }
-        if(!job.description.isNullOrEmpty()){
+        var desc = if(!job.description.isNullOrEmpty()) job.description+"\n"; else ""    // land mine <<<<<<
+        exts.forEach {
+            desc += "Extension : ${it.description}\n"
+        }
+        if(!desc.isNullOrEmpty()){
+            binding.jobDetailsDescriptionLbl.text = desc
             binding.jobDetailsDescTitleLbl.visibility = View.VISIBLE
-            binding.jobDetailsDescriptionLbl.text = job.description
             binding.jobDetailsDescriptionLbl.visibility = View.VISIBLE
         }
 
@@ -364,6 +384,11 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
 
                     R.id.accepted_job_menu_extend ->{
                         // extend activity.
+                        Intent(this@JobDetailsDisplayActivity, AddJobExtensionActivity::class.java).apply{
+                            putExtra(Constants.TRANS_JOB, loadedJob.jobId)
+                        }.also {
+                            startActivityForResult(it,Constants.EXTEND_ACTIVIVTY_REQUEST_CODE)
+                        }
                         true
                     }
 
@@ -371,6 +396,24 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
                 }
             }
             show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == Constants.EXTEND_ACTIVIVTY_REQUEST_CODE){
+            val extension = data?.getSerializableExtra(Constants.TRANS_EXTENSION) as? Extension
+            extension?.let {
+                it.images?.let {    images ->
+                    (binding.jobDetailsImagesRecycler.adapter as? OrderImagesAdapter)?.apply {
+                        this.data.addAll(images.map { it.second })
+                        notifyDataSetChanged()
+                    }
+                }
+                if(!it.description.isNullOrEmpty()){
+                    binding.jobDetailsDescriptionLbl.append("Extension : "+it.description+"\n")
+                }
+            }
         }
     }
 

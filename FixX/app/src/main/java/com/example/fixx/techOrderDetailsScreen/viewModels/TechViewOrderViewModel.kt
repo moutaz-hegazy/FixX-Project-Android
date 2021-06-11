@@ -1,6 +1,7 @@
 package com.example.fixx.techOrderDetailsScreen.viewModels
 
 import android.util.Log
+import com.example.fixx.POJOs.Extension
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Person
 import com.example.fixx.Support.FirestoreService
@@ -33,8 +34,27 @@ class TechViewOrderViewModel() {
         }
     }
 
-    fun fetchJobFromDB(jobId : String, onSuccessBinding: (job: Job) -> Unit, onFailBinding : () -> Unit){
-        FirestoreService.fetchJobById(jobId,onSuccessBinding,onFailBinding)
+    fun fetchJobFromDB(jobId : String, onSuccessBinding: (job: Job, exts:List<Extension>) -> Unit, onFailBinding : () -> Unit){
+        FirestoreService.fetchJobById(jobId,
+            onSuccessHandler = {    job ->
+                FirestoreService.fetchExtensionsForJob(jobId,onSuccessHandler = {   exts ->
+                    onSuccessBinding(job,exts)
+                },onFailHandler = {})
+            },onFailHandler = {
+                onFailBinding()
+            })
+    }
+
+    fun fetchExtensionsForJob(jobId: String,onSuccessBinding: (exts:List<Extension>) -> Unit, onFailBinding: () -> Unit){
+        FirestoreService.fetchExtensionsForJob(jobId,onSuccessBinding,onFailBinding)
+    }
+
+    fun updateExtensionPrice(jobId: String, extId:String, price : Int, onSuccessBinding: () -> Unit,onFailBinding: () -> Unit){
+        FirestoreService.updateExtensionPrice(jobId,extId,price,onSuccessBinding,onFailBinding)
+    }
+
+    fun removeExtension(jobId: String,extId: String,onSuccessBinding: () -> Unit,onFailBinding: () -> Unit){
+        FirestoreService.removeExtension(jobId,extId,onSuccessBinding,onFailBinding)
     }
 
     fun addToBidders(jobId : String,bidders: Map<String,String> , onSuccessBinding: () -> Unit){

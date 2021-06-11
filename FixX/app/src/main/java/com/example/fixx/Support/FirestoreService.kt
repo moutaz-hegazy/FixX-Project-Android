@@ -131,6 +131,49 @@ object FirestoreService {
             }
     }
 
+    fun addExtensionToJob(jobId : String, ext : Extension, onSuccessHandler: (ext:Extension) -> Unit, onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).collection("Extensions").add(ext)
+            .addOnSuccessListener {
+                it.update("extId" , it.id)
+                ext.extId = it.id
+                onSuccessHandler(ext)
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
+    fun updateExtensionPrice(jobId: String,extId:String,price:Int,onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).collection("Extensions")
+            .document(extId).update("price" , price).addOnSuccessListener {
+                onSuccessHandler()
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
+    fun removeExtension(jobId: String,extId:String,onSuccessHandler: () -> Unit,onFailHandler: () -> Unit){
+        db.collection("Jobs").document(jobId).collection("Extensions")
+            .document(extId).delete().addOnSuccessListener {
+                onSuccessHandler()
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
+    fun fetchExtensionsForJob(jobId : String, onSuccessHandler: (exts : List<Extension>) -> Unit, onFailHandler: () -> Unit){
+        val exts = mutableListOf<Extension>()
+        db.collection("Jobs").document(jobId).collection("Extensions")
+            .get().addOnSuccessListener {   query ->
+                query.forEach { doc ->
+                    val ext = doc.toObject<Extension>()
+                    exts.add(ext)
+                }
+                onSuccessHandler(exts)
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
+
     fun fetchChatUsersTest(onCompletion: (contacts : List<ContactInfo>) -> Unit){
         val contacts = mutableListOf<ContactInfo>()
         contactsRef.child(auth.uid!!).get().addOnSuccessListener {

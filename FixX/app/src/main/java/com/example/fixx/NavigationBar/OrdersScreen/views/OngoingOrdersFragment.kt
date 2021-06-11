@@ -41,7 +41,7 @@ class OngoingOrdersFragment : Fragment() {
         jobsAdapter.deleteHandler = {   position ->
             viewmodel.deleteJob(jobs[position].jobId, onSuccessBinder = {
                 jobs.removeAt(position)
-                jobsAdapter.notifyItemRemoved(position)
+                jobsAdapter.notifyDataSetChanged()
             }, onFaiBinder = {
                 Toast.makeText(context,context?.getString(R.string.JobRemoveFail),Toast.LENGTH_SHORT).show()
             })

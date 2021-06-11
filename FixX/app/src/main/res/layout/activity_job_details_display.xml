@@ -15,7 +15,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"/>
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/jobDetails_location_lbl"
@@ -40,86 +40,16 @@
 
 
     <TextView
-        android:id="@+id/jobDetails_description_lbl"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/textview_border"
-        android:maxLines="3"
-        android:scrollbars="vertical"
-        android:textSize="20sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/jobDetails_descTitle_lbl"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_descTitle_lbl" />
-
-    <TextView
-        android:id="@+id/jobDetails_descTitle_lbl"
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/description"
-        android:textColor="@color/red"
-        android:visibility="gone"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/jobDetails_job_image"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_date_lbl" />
-
-    <TextView
-        android:id="@+id/jobDetails_imagesTitle_lbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/images"
-        android:textColor="@color/red"
-        android:textSize="20sp"
-        android:visibility="gone"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/jobDetails_description_lbl"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_description_lbl" />
-
-    <TextView
-        android:id="@+id/jobDetails_biddersTitle_lbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/bidders"
-        android:textColor="@color/red"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/jobDetails_job_image"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_images_recycler" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/jobDetails_bidders_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/textview_border"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_biddersTitle_lbl"
-        app:layout_constraintVertical_bias="0.0">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/jobDetails_finalPrice_lbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:visibility="invisible"
-        android:text="Job Price"
+        android:text="@string/to"
+        android:textColor="@color/red"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/jobDetails_date_lbl"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/textView8"
@@ -132,18 +62,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
         app:layout_constraintTop_toBottomOf="@+id/jobDetails_location_lbl" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/to"
-        android:textColor="@color/red"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/jobDetails_job_image"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/jobDetails_status_lbl"
@@ -184,153 +102,16 @@
         app:layout_constraintStart_toStartOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/jobDetails_images_recycler"
-        android:layout_width="0dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
-        app:layout_constraintHorizontal_bias="0.136"
-        app:layout_constraintStart_toStartOf="@+id/jobDetails_imagesTitle_lbl"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_imagesTitle_lbl" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/jobDetails_tech_layout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/jobDetails_finalPrice_lbl"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:visibility="gone"
-        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:text="Job Price"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/jobDetails_bidders_recycler">
-
-        <ImageView
-            android:id="@+id/bidderItem_tech_imageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:visibility="invisible"
-            android:background="@drawable/rounded_outline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/bidderItem_tech_imageLbl"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_blue"
-            android:gravity="center"
-            android:textColor="#fff"
-            android:textSize="35sp"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/bidderItem_techName_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="TextView"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/bidderItem_tech_imageView"
-            app:layout_constraintTop_toTopOf="@+id/bidderItem_tech_imageView" />
-
-        <RatingBar
-            android:id="@+id/bidderItem_tech_rating"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="28dp"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:rating="2.4"
-            app:layout_constraintBottom_toBottomOf="@+id/bidderItem_techName_lbl"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <ImageButton
-            android:id="@+id/bidderItem_techChat_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@+id/bidderItem_techName_lbl"
-            app:layout_constraintTop_toBottomOf="@+id/bidderItem_techName_lbl"
-            app:srcCompat="@drawable/chat_icon" />
-
-        <ImageButton
-            android:id="@+id/bidderItem_techCall_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="12dp"
-            app:layout_constraintStart_toEndOf="@+id/bidderItem_techChat_btn"
-            app:layout_constraintTop_toTopOf="@+id/bidderItem_techChat_btn"
-            app:srcCompat="@drawable/call_icon" />
-
-        <TextView
-            android:id="@+id/bidderItem_confirmPriceTitle_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="visible"
-            android:text="@string/OfferedPrice"
-            app:layout_constraintEnd_toEndOf="@+id/bidderItem_tech_rating"
-            app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating" />
-
-        <TextView
-            android:id="@+id/bidderItem_confirmPrice_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="TextView"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="@+id/bidderItem_confirmPriceTitle_lbl"
-            app:layout_constraintTop_toBottomOf="@+id/bidderItem_confirmPriceTitle_lbl"
-            tools:text="999" />
-
-        <Button
-            android:id="@+id/jobDetails_techAccept_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/Accept"
-            android:visibility="visible"
-            app:backgroundTint="#009688"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bidderItem_techChat_btn" />
-
-        <Button
-            android:id="@+id/jobDetails_techCancel_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="60dp"
-            android:text="@string/Cancel"
-            android:visibility="visible"
-            app:backgroundTint="#ED1808"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
-
-        <Button
-            android:id="@+id/jobDetails_techRate_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="@string/RateTech"
-            android:visibility="invisible"
-            app:backgroundTint="@color/turquoise"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="@id/jobDetails_date_lbl" />
 
     <TextView
         android:id="@+id/jobDetails_finalPriceTitle_lbl"
@@ -341,6 +122,240 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/jobDetails_finalPrice_lbl"
         app:layout_constraintTop_toTopOf="@+id/jobDetails_finalPrice_lbl" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jobDetails_date_lbl">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/jobDetails_description_lbl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="20dp"
+                android:scrollbars="vertical"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/jobDetails_descTitle_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_descTitle_lbl" />
+
+            <TextView
+                android:id="@+id/jobDetails_descTitle_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/description"
+                android:textColor="@color/red"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/jobDetails_imagesTitle_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/images"
+                android:textColor="@color/red"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/jobDetails_description_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_description_lbl" />
+
+            <TextView
+                android:id="@+id/jobDetails_biddersTitle_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/bidders"
+                android:textColor="@color/red"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/jobDetails_descTitle_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_images_recycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/jobDetails_bidders_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/textview_border"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_biddersTitle_lbl"
+                app:layout_constraintVertical_bias="0.0">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/jobDetails_images_recycler"
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.136"
+                app:layout_constraintStart_toStartOf="@+id/jobDetails_imagesTitle_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_imagesTitle_lbl" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/jobDetails_tech_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_bidders_recycler">
+
+                <ImageView
+                    android:id="@+id/bidderItem_tech_imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_outline"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/bidderItem_tech_imageLbl"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_blue"
+                    android:gravity="center"
+                    android:textColor="#fff"
+                    android:textSize="35sp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/bidderItem_techName_lbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="TextView"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/bidderItem_tech_imageView"
+                    app:layout_constraintTop_toTopOf="@+id/bidderItem_tech_imageView" />
+
+                <RatingBar
+                    android:id="@+id/bidderItem_tech_rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="28dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="2.4"
+                    app:layout_constraintBottom_toBottomOf="@+id/bidderItem_techName_lbl"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/bidderItem_techChat_btn"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="@+id/bidderItem_techName_lbl"
+                    app:layout_constraintTop_toBottomOf="@+id/bidderItem_techName_lbl"
+                    app:srcCompat="@drawable/chat_icon" />
+
+                <ImageButton
+                    android:id="@+id/bidderItem_techCall_btn"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintStart_toEndOf="@+id/bidderItem_techChat_btn"
+                    app:layout_constraintTop_toTopOf="@+id/bidderItem_techChat_btn"
+                    app:srcCompat="@drawable/call_icon" />
+
+                <TextView
+                    android:id="@+id/bidderItem_confirmPriceTitle_lbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/OfferedPrice"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="@+id/bidderItem_tech_rating"
+                    app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating" />
+
+                <TextView
+                    android:id="@+id/bidderItem_confirmPrice_lbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="TextView"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="@+id/bidderItem_confirmPriceTitle_lbl"
+                    app:layout_constraintTop_toBottomOf="@+id/bidderItem_confirmPriceTitle_lbl"
+                    tools:text="999" />
+
+                <Button
+                    android:id="@+id/jobDetails_techAccept_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/Accept"
+                    android:visibility="visible"
+                    app:backgroundTint="#009688"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bidderItem_techChat_btn" />
+
+                <Button
+                    android:id="@+id/jobDetails_techCancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="60dp"
+                    android:text="@string/Cancel"
+                    android:visibility="visible"
+                    app:backgroundTint="#ED1808"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
+
+                <Button
+                    android:id="@+id/jobDetails_techRate_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/RateTech"
+                    android:visibility="invisible"
+                    app:backgroundTint="@color/turquoise"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fixx.JobDetailsDisplay.viewModels.JobDetailsViewModel
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
+import com.example.fixx.POJOs.Extension
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Person
 import com.example.fixx.POJOs.Technician
@@ -61,8 +62,8 @@ class TechViewOrderScreen : AppCompatActivity() {
             }
             jobId?.let{
                 jobId.let {    jobID ->
-                    viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob->
-                        displayJobDetails(returnedJob)
+                    viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob, exts->
+                        displayJobDetails(returnedJob,exts)
                     }, onFailBinding = {
                         finish()
                     })
@@ -87,13 +88,17 @@ class TechViewOrderScreen : AppCompatActivity() {
         }
 
         if(job != null){
-            displayJobDetails(job!!)
+            viewModel.fetchExtensionsForJob(job!!.jobId,onSuccessBinding = {
+                displayJobDetails(job!!,it)
+            },onFailBinding = {
+                Toast.makeText(this,getString(R.string.ExtendFetchFail),Toast.LENGTH_SHORT).show()
+            })
         }else{
             jobId?.let {    jobID ->
-                viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob->
-                    displayJobDetails(returnedJob)
+                viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob, exts->
+                    job = returnedJob
+                    displayJobDetails(returnedJob,exts)
                 }, onFailBinding = {
-
                     finish()
                 })
             }
@@ -111,8 +116,7 @@ class TechViewOrderScreen : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(changesReceiver)
     }
 
-    private fun displayJobDetails(passedJob : Job){
-        this.job = passedJob
+    private fun displayJobDetails(passedJob : Job, exts:List<Extension>){
         configurebottomLayout()
         fetchAndDisplayUserData()
         configureDenyButton()
@@ -138,7 +142,24 @@ class TechViewOrderScreen : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(applicationContext).apply {
                     orientation = RecyclerView.HORIZONTAL
                 }
-                adapter = OrderImagesAdapter(job?.images!!.map { it.second })
+                adapter = OrderImagesAdapter(job?.images!!.map { it.second }.toMutableList())
+            }
+        }
+
+        displayExtensions(exts)
+    }
+
+    private fun displayExtensions(exts:List<Extension>){
+        if(!exts.isNullOrEmpty()){
+            binding.techViewExtensionsRecycler.apply {
+                visibility = View.VISIBLE
+                adapter = ExtensionsAdapter(exts.toMutableList(),updatePriceHandler = {
+                    ext, onSuccess, onFail ->
+                    viewModel.updateExtensionPrice(job!!.jobId, ext.extId!!,ext.price!!,onSuccess,onFail)
+                },cancelExtensionHandler = {
+                    ext, onSuccess, onFail ->
+                    viewModel.removeExtension(job!!.jobId,ext.extId!!,onSuccess,onFail)
+                })
             }
         }
     }

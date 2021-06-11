@@ -204,10 +204,9 @@
     <string name="leaveDialogTitle">Confirm Leave</string>
     <string name="leaveDialogMsg">if you leave,your address will not saved.</string>
     <string name="leaveOrderDialogMsg">if you leave,your order will remove.</string>
-    
+
     <string name="deleteImageDialogTitle">Confirm Delete</string>
     <string name="deleteImageDialogMsg">Are you sure you want to delete this image?</string>
-
 
 
     <string name="addressTitleHint">Title for you address</string>
@@ -361,6 +360,14 @@
     <string name="CommentLoadFail">Failed to load comments</string>
     <string name="DoneJobs">Done Jobs</string>
     <string name="WorkProfile">My Work Profile</string>
+    <string name="AddExtension">Add Extension</string>
+    <string name="ExtensionDataMissing">Please Add Data about the job</string>
+    <string name="ExtendUploadFail">Failed to upload extension</string>
+    <string name="ExtendFetchFail">Failed to load Extensions</string>
+    <string name="Uploading">Uploading . . .</string>
+    <string name="EnterPrice">Enter your estimated price</string>
+    <string name="ExtensionUpdataFail">failed to update price</string>
+    <string name="ExtensionRemoveFail">Failed to delete extension</string>
 
 
 </resources>

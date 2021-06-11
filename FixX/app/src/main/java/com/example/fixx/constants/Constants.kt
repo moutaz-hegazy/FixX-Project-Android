@@ -16,6 +16,7 @@ sealed class Constants {
         const val LOCATION_TO_TECH = "locationToTech"
         const val JOB_TYPE_TO_TECH = "jobTypeToTech"
         const val RC_SIGN_IN = 9001
+        const val EXTEND_ACTIVIVTY_REQUEST_CODE = 900
         const val START_ADDRESS_ACTIVITY_REQUEST_CODE = 5
         const val START_ADDRESS_MAP_REQUEST_CODE = 6
         const val TRANS_ADDRESS = "address"
@@ -26,6 +27,7 @@ sealed class Constants {
         const val TRANS_CHAT_CHANNEL = "ChatChannelName"
         const val TRANS_CONTACT_UID = "contactUid"
         const val TRANS_JOB_OBJECT = "transJobObject"
+        const val TRANS_EXTENSION = "transExt"
         const val CHAT_TOPIC = "chats"
         const val USERS_COLLECTION = "Users"
         const val JOBS_COLLECTION = "Jobs"

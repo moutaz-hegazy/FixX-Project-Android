@@ -3,6 +3,7 @@ package com.example.fixx.JobDetailsDisplay.viewModels
 import android.provider.SyncStateContract
 import android.util.Log
 import com.example.fixx.POJOs.Comment
+import com.example.fixx.POJOs.Extension
 import com.example.fixx.POJOs.Job
 import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
@@ -24,8 +25,19 @@ import java.util.*
 class JobDetailsViewModel(private val jobId : String) {
 
     private var userObserver : ListenerRegistration? = null
-    fun fetchJobfromDB(onSuccessBinding : (job : Job)->Unit, onFailBinding : () -> Unit){
-        FirestoreService.fetchJobById(jobId, onSuccessBinding, onFailBinding)
+    fun fetchJobfromDB(onSuccessBinding : (job : Job, List<Extension>)->Unit, onFailBinding : () -> Unit){
+        FirestoreService.fetchJobById(jobId,
+            onSuccessHandler = {    job ->
+                fetchExtensionForJob(onSuccessBinding = {   exts ->
+                    onSuccessBinding(job, exts)
+                },onFailBinding = {})
+        }, onFailHandler = {
+            onFailBinding()
+        })
+    }
+
+    fun fetchExtensionForJob(onSuccessBinding: (exts : List<Extension>) -> Unit,onFailBinding: () -> Unit){
+        FirestoreService.fetchExtensionsForJob(jobId,onSuccessBinding,onFailBinding)
     }
 
     fun getTechnician(techId : String, onSuccessBinding: (tech: Technician) -> Unit, onFailBinding: () -> Unit){

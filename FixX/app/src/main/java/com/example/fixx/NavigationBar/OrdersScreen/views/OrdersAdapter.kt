@@ -15,6 +15,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.fixx.JobDetailsDisplay.views.JobDetailsDisplayActivity
 import com.example.fixx.POJOs.Job
 import com.example.fixx.R
+import com.example.fixx.addExtensionScreen.views.AddJobExtensionActivity
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.CompletedOrdersRecyclerRowBinding
 import com.example.fixx.databinding.OngoingOrderRecyclerRowBinding
@@ -197,7 +198,11 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     }
 
                     R.id.accepted_job_menu_extend ->{
-                        // extend activity.
+                        Intent(context, AddJobExtensionActivity::class.java).apply{
+                            putExtra(Constants.TRANS_JOB, this@OrdersAdapter.data[position].jobId)
+                        }.also {
+                            context.startActivity(it)
+                        }
                         true
                     }
 

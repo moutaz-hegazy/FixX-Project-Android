@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.fixx">
-
     <!-- added for maps -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
+        <activity android:name=".addExtensionScreen.views.AddJobExtensionActivity"></activity>
 
         <receiver
             android:name=".Support.PushNotificationReceiver"
