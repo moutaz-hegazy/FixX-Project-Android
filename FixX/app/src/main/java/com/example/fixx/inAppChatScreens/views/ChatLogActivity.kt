@@ -155,5 +155,6 @@ class ChatLogActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy: DESTROOOOOOOOOOOOOOOY TESTTTTTTTTTTTTTTT")
+        chatLogVm.removeObserver()
     }
 }

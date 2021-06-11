@@ -358,6 +358,9 @@
     <string name="Submit">Submit Rating</string>
     <string name="GiveRating">Please give rating.</string>
     <string name="CommentFail">Failed to upload comment</string>
+    <string name="CommentLoadFail">Failed to load comments</string>
+    <string name="DoneJobs">Done Jobs</string>
+    <string name="WorkProfile">My Work Profile</string>
 
 
 </resources>

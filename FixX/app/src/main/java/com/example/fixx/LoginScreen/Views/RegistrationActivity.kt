@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT_OBSERVER
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
@@ -183,14 +184,16 @@ class RegistrationActivity : AppCompatActivity(){
             FirestoreService.checkIfEmailExists(email){
                 exists ->
                 if(exists){
-                    FirestoreService.fetchUserFromDB{ person ->
+                    FirestoreService.fetchUserFromDB(onCompletion = { person ->
                         USER_OBJECT = person
-                        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-                            FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",token,person!!.uid!!)
-                            USER_OBJECT?.token = token
-                            startActivity(Intent(this, NavigationBarActivity::class.java))
-                            finish()
-                        }
+                    },passRegister = {
+                        USER_OBJECT_OBSERVER = it
+                    })
+
+                    FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                        FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",token,FirestoreService.auth.uid!!)
+                        startActivity(Intent(this, NavigationBarActivity::class.java))
+                        finish()
                     }
                 }
                 else{
@@ -207,7 +210,7 @@ class RegistrationActivity : AppCompatActivity(){
         super.onStart()
         if(FirebaseAuth.getInstance().currentUser == null){
             FirestoreService.loginWithEmailAndPassword(Constants.DEFAULT_EMAIL,Constants.DEFAULT_PASSWORD,
-                onSuccessHandler = {}, onFailHandler = {})
+                onSuccessHandler = {}, onFailHandler = {},passRegister = {})
         }
     }
 

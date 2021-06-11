@@ -52,6 +52,9 @@ class TechnicianProfileActivity : AppCompatActivity() {
     val imagesUris = mutableListOf<Uri>()
     private var editMode = false
 
+    private lateinit var jobsCountLbl : TextView
+    private lateinit var reviewsCountLbl : TextView
+
     private var jobUploaded = false
 
 
@@ -72,6 +75,8 @@ class TechnicianProfileActivity : AppCompatActivity() {
         imageLbl = findViewById(R.id.technician_profile_img_lbl)
         bookBtn = findViewById(R.id.technician_profile_book_btn)
         ratingBar = findViewById(R.id.technician_profile_ratingBar)
+        jobsCountLbl = findViewById(R.id.technician_profile_number_of_jobs_lbl)
+        reviewsCountLbl = findViewById(R.id.technician_profile_number_of_reviews_lbl)
 
         if(!showOnly){
             bookBtn?.visibility = View.VISIBLE
@@ -89,6 +94,9 @@ class TechnicianProfileActivity : AppCompatActivity() {
             imageLbl.text = technicianData?.name?.first()?.toUpperCase().toString()
         }
         techName?.text = technicianData?.name
+
+        jobsCountLbl.text = technicianData?.jobsCount.toString()
+        reviewsCountLbl.text = technicianData?.reviewCount.toString()
 
         bookBtn?.setOnClickListener {
             imagesPaths?.forEach { image ->
@@ -136,7 +144,9 @@ class TechnicianProfileActivity : AppCompatActivity() {
         techProfileRecycler = findViewById(R.id.technician_profile_recyclerView)
 
         technicianData?.let {   tech ->
-            val factory = TechnicianProfileViewModelFactory(tech)
+            val factory = TechnicianProfileViewModelFactory(tech){
+                Toast.makeText(this,R.string.CommentLoadFail, Toast.LENGTH_SHORT).show()
+            }
             try {
                 viewModel = ViewModelProvider(this, factory).get(TechnicianProfileViewModel::class.java)
             }catch (error : IllegalArgumentException){

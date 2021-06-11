@@ -21,15 +21,18 @@ import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJEC
 import com.example.fixx.NavigationBar.SettingsScreen.HelpActivity
 import com.example.fixx.NavigationBar.SettingsScreen.ProfileActivity
 import com.example.fixx.NavigationBar.viewmodels.SettingsViewmodel
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.WorkAddresses.view.MyWorkAddresses
 import com.example.fixx.constants.Constants
 import com.example.fixx.inAppChatScreens.views.NewMessageActivity
+import com.example.fixx.technicianProfileScreen.view.TechnicianProfileActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.bottom_sheet_language.view.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import java.util.*
+import kotlin.reflect.jvm.internal.impl.load.java.Constant
 
 
 class SettingsFragment : Fragment() {
@@ -144,6 +147,18 @@ class SettingsFragment : Fragment() {
                 setOnClickListener {
                     // open work locations view.
                     Intent(context, MyWorkAddresses::class.java).also {
+                        context.startActivity(it)
+                    }
+                }
+            }
+
+            rootView.settings_work_profile_layOut.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    Intent(context,TechnicianProfileActivity::class.java).apply {
+                        putExtra(Constants.TRANS_USERDATA, (USER_OBJECT as? Technician))
+                        putExtra(Constants.TRANS_RESPONSE_BOOL, true)
+                    }.also {
                         context.startActivity(it)
                     }
                 }

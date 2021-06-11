@@ -26,6 +26,7 @@ import com.example.fixx.techOrderDetailsScreen.views.TechViewOrderScreen
 import com.example.project.bottom_navigation_fragments.HomeFragment
 import com.example.project.bottom_navigation_fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 
 
@@ -34,6 +35,7 @@ class NavigationBarActivity : AppCompatActivity() {
     companion object{
         var USER_OBJECT : Person? = null
         var CURRENT_LANGUAGE = "en"
+        var USER_OBJECT_OBSERVER : ListenerRegistration? = null
     }
 
 
@@ -52,7 +54,7 @@ class NavigationBarActivity : AppCompatActivity() {
         )
 
         if (intent.getBooleanExtra(Constants.TRANSIT_FROM_NOTIFICATION, false)) {
-            NavBarViewmodel().fetchUser() { person ->
+            NavBarViewmodel().fetchUser(onCompletionBinder = { person ->
                 USER_OBJECT = person
                 when (intent.getStringExtra(Constants.TRANS_NOTIFICATION_TYPE)) {
                     Constants.NOTIFICATION_TYPE_JOB_COMPLETED ->
@@ -71,7 +73,9 @@ class NavigationBarActivity : AppCompatActivity() {
                         navigateToActivity(ChatLogActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
                     else -> {}
                 }
-            }
+            },passReg = {
+                USER_OBJECT_OBSERVER = it
+            })
         }
 
         setContentView(R.layout.activity_navigation_bar)
@@ -121,6 +125,7 @@ class NavigationBarActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i("TAG", "onDestroy: Destroyed <<<<<<<<<<<<<<<")
+        USER_OBJECT_OBSERVER?.remove()
     }
 
     private fun makeCurrentFragment(fragment: Fragment) = supportFragmentManager.beginTransaction().apply {

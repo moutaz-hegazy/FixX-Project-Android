@@ -11,6 +11,7 @@ import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.constants.Constants
 import com.example.fixx.techOrderDetailsScreen.models.ReplyNotificationData
 import com.example.fixx.techOrderDetailsScreen.models.TechReplyPushNotification
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.gson.Gson
 import com.squareup.okhttp.Dispatcher
@@ -22,12 +23,13 @@ import java.util.*
 
 class JobDetailsViewModel(private val jobId : String) {
 
+    private var userObserver : ListenerRegistration? = null
     fun fetchJobfromDB(onSuccessBinding : (job : Job)->Unit, onFailBinding : () -> Unit){
         FirestoreService.fetchJobById(jobId, onSuccessBinding, onFailBinding)
     }
 
     fun getTechnician(techId : String, onSuccessBinding: (tech: Technician) -> Unit, onFailBinding: () -> Unit){
-        FirestoreService.fetchUserFromDB(techId){   person ->
+        FirestoreService.fetchUserFromDB(techId,onCompletion = {   person ->
             Log.i("TAG", "getTechnician: HERE 2")
             val tech = person as? Technician
             if(tech != null){
@@ -35,6 +37,15 @@ class JobDetailsViewModel(private val jobId : String) {
             }else{
                 onFailBinding()
             }
+        },passRegister = {
+            userObserver = it
+        })
+    }
+
+    fun unregisterObserver(){
+        userObserver?.let{
+            Log.i("TAG", "unregisterObserver: <<<<<<<%% UNREGISTER USER")
+            it.remove()
         }
     }
 

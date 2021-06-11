@@ -413,6 +413,11 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }else{
             ((oldRating * reviews) - 4)/reviews -1
         }
-        return ((newRating - oldValue)/reviews) + oldRating
+        return ((newRating - oldValue)/reviews) + oldValue
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewmodel.unregisterObserver()
     }
 }

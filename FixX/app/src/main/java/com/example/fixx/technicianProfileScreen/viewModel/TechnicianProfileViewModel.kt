@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fixx.POJOs.Comment
-import com.example.fixx.POJOs.Technician
+import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.RetrofitInstance
 import com.example.fixx.showTechnicianScreen.models.JobRequestData
 import com.example.fixx.showTechnicianScreen.models.SingleJobRequestPushNotification
@@ -14,26 +14,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class TechnicianProfileViewModel(val tech : Technician) : ViewModel() {
+class TechnicianProfileViewModel(private val tech : String,private val token: String?,
+                                 private val onFailBinding: ()->Unit) : ViewModel() {
     var recyclerListData = MutableLiveData<MutableList<Comment>>()
     var newList : MutableList<Comment> = mutableListOf()
 
     init {
-        newList = mutableListOf(
-            Comment("noha", "aaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                Comment("noha tany", "bbbbbbbbbbbbb"),
-                Comment("yomna", "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"),
-                Comment("noha tany2", "wwwwwwwwwwwwwwwwwwwwwwwwwwwww"),
-                Comment("noha tany3", "bbbbbbbbbbbbb"),
-                Comment("noha tany3", "bbbbbbbbbbbbb"),
-                Comment("noha tany3", "bbbbbbbbbbbbb")
-        )
-        recyclerListData.value = newList
+        FirestoreService.fetchCommentsForTech(tech, onSuccessHandler = {
+            recyclerListData.value =
+                it.filter { it.commentContent.isNullOrEmpty() != true } as? MutableList<Comment>
+            Log.i("TAG", ">>>>>>>>>>>>>>>> :  ${recyclerListData.value} ")
+        }, onFailHandler = {
+            onFailBinding()
+        })
     }
 
     fun sendNotification(notificationData: JobRequestData) = CoroutineScope(
         Dispatchers.IO).launch {
-        tech.token?.let {  token ->
+        token?.let {  token ->
             val notification = SingleJobRequestPushNotification(notificationData, arrayOf(token))
             try {
                 val response = RetrofitInstance.api.postSingleJobNotification(notification)

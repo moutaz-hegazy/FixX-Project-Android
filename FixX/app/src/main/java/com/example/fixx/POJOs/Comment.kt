@@ -6,3 +6,5 @@ data class Comment(var username : String = "", var commentContent : String? = nu
                    var reply : String? = null,
                    var timestamp : Long? = null,
                    var rating : Double? = null)
+
+data class CommentData(val comment : Comment? = null)

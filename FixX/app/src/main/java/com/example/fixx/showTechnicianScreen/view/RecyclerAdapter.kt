@@ -34,6 +34,8 @@ class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Conte
         var image : ImageView = holder.binding.technicianItemImg
         var imageLbl : TextView = holder.binding.technicianItemImgLbl
         var ratingBar : RatingBar = holder.binding.bidderItemTechRating
+        var jobsCountLbl : TextView = holder.binding.technicianItemDoneJobsLbl
+        var reviewsLbl : TextView = holder.binding.technicianItemReviewLbl
 
         name.text = arrayList[position].name
 
@@ -49,6 +51,8 @@ class RecyclerAdapter(val arrayList: MutableList<Technician>, val context: Conte
         }
 
         ratingBar.rating = arrayList[position].rating?.toFloat() ?: 0F
+        jobsCountLbl.text = arrayList[position].jobsCount.toString()
+        reviewsLbl.text = arrayList[position].reviewCount.toString()
 
         holder.itemView.setOnClickListener{
             Toast.makeText(context,"clicked ${name.text}",Toast.LENGTH_SHORT).show()

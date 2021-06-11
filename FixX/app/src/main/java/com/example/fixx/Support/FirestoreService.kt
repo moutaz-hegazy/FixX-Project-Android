@@ -22,11 +22,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
@@ -50,7 +48,6 @@ object FirestoreService {
     var auth = Firebase.auth
     private var storage = Firebase.storage
     private var storageRef = storage.reference
-    var imagesRef: StorageReference? = null
 
     val database = Firebase.database
     val contactsRef = database.getReference("Contacts")
@@ -77,6 +74,29 @@ object FirestoreService {
 
     fun fetchUserFromDB(
         uid: String? = auth.currentUser?.uid,
+        onCompletion: (user: Person?) -> Unit,
+        passRegister : (reg : ListenerRegistration) -> Unit
+    ) {
+        uid?.let {
+            db.collection("Users").document(it).apply {
+                addSnapshotListener {
+                        value, error ->
+                    val type = value?.data?.get("accountType") as? String
+                    type?.let {
+                        when (it) {
+                            "User" -> onCompletion(value.toObject<User>())
+                            "Technician" -> onCompletion(value.toObject<Technician>())
+                        }
+                    }
+                }.also {
+                    passRegister(it)
+                }
+            }
+        }
+    }
+
+    fun fetchUserOnce(
+        uid: String? = auth.currentUser?.uid,
         onCompletion: (user: Person?) -> Unit
     ) {
         uid?.let {
@@ -95,6 +115,21 @@ object FirestoreService {
         }
     }
 
+    fun fetchCommentsForTech(techId : String = auth.uid!!,onSuccessHandler: (comments : ArrayList<Comment>) -> Unit,
+                             onFailHandler: () -> Unit){
+        val comments = arrayListOf<Comment>()
+        db.collection("Users").document(techId).collection("Comments")
+            .orderBy("comment.timestamp",Query.Direction.DESCENDING)
+            .get().addOnSuccessListener { query ->
+                query.forEach { document ->
+                    val commentData = document.toObject<CommentData>()
+                    comments.add(commentData.comment!!)
+                }
+                onSuccessHandler(comments)
+            }.addOnFailureListener {
+                onFailHandler()
+            }
+    }
 
     fun fetchChatUsersTest(onCompletion: (contacts : List<ContactInfo>) -> Unit){
         val contacts = mutableListOf<ContactInfo>()
@@ -113,11 +148,12 @@ object FirestoreService {
 
     fun fetchChatHistoryForChannelTest(
         channelName: String,
-        observerHandler: (msg: ChatMessage) -> Unit
+        observerHandler: (msg: ChatMessage) -> Unit,
+        chatRegHandler : (reg : ChildEventListener,ref:DatabaseReference) ->Unit
         ){
-
-        val chatHistory = arrayListOf<ChatMessage>()
+        val ref : DatabaseReference
         chatsRef.child(channelName).apply {
+            ref = this
             addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     Log.i("TAG", "onChildAdded: >>>>>>>>>> ${snapshot.value}")
@@ -129,24 +165,27 @@ object FirestoreService {
                 override fun onChildRemoved(snapshot: DataSnapshot) {}
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
                 override fun onCancelled(error: DatabaseError) {}
-            })
+            }).also {
+                chatRegHandler(it,ref)
+            }
         }
     }
 
     fun fetchChatHistoryForInstanceTest(
         contact: String,
         observerHandler: (msg: ChatMessage) -> Unit,
-        onCompletion: (channelName: String) -> Unit
+        onCompletion: (channelName: String) -> Unit,
+        chatRegHandler : (reg : ChildEventListener,ref:DatabaseReference) ->Unit
     ){
         chatsRef.child("${auth.uid}-$contact").get().addOnSuccessListener {
             if(it.exists()){
-                fetchChatHistoryForChannelTest("${auth.uid}-$contact",observerHandler)
+                fetchChatHistoryForChannelTest("${auth.uid}-$contact",observerHandler,chatRegHandler)
             }else{
                 chatsRef.child("$contact-${auth.uid}").get().addOnSuccessListener {
                     if(it.exists()) {
                         fetchChatHistoryForChannelTest(
                             "$contact-${auth.uid}",
-                            observerHandler)
+                            observerHandler,chatRegHandler)
                     }else{
                         createChatChannel("${auth.uid}-$contact",contact,
                             ChatMessage("", auth.uid!!,System.currentTimeMillis()),observerHandler)
@@ -257,24 +296,20 @@ object FirestoreService {
         email: String,
         password: String,
         onSuccessHandler: (person : Person?) -> Unit,
-        onFailHandler: () -> Unit
+        onFailHandler: () -> Unit,
+        passRegister : ((reg : ListenerRegistration) -> Unit)
     ) {
         Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
                 if (task.isSuccessful && email != Constants.DEFAULT_EMAIL) {
-                    fetchUserFromDB(auth.currentUser?.uid,onSuccessHandler)
+                    fetchUserFromDB(auth.currentUser?.uid,onSuccessHandler,passRegister)
                 } else {
                     Log.i("TAG", "login: error!!!!")
                     onFailHandler()
                 }
             })
     }
-
-//    fun updateJobDetails(jobId:String, changes : MutableMap<String,Object>){
-//        //db.collection("Jobs").document(jobId).update()
-//    }
-
 
     fun saveJobDetails(job: Job, onSuccessHandler: (jobs: Job) -> Unit, onFailHandler: () -> Unit) {
         val map = HashMap<String, Any?>()

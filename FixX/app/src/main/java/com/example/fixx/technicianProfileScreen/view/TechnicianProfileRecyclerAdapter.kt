@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,7 @@ class TechnicianProfileRecyclerAdapter(val arrayList: MutableList<Comment>, val 
         var image : ImageView = holder.binding.commentItemProfileImg
         var comment : TextView = holder.binding.commentItemCommentBodyLbl
         var date : TextView = holder.binding.commentItemDateLbl
-
+        var rating : RatingBar = holder.binding.commentItemRatingBar
         name.text = arrayList[position].username
 
         if(arrayList[position].profilePicture != null){
@@ -47,6 +48,7 @@ class TechnicianProfileRecyclerAdapter(val arrayList: MutableList<Comment>, val 
             imageLbl.text = arrayList[position].username?.first()?.toUpperCase().toString()
         }
 
+        rating.rating = arrayList[position].rating?.toFloat() ?: 0.0f
         comment.text = arrayList[position].commentContent
         date.text = arrayList[position].date
     }

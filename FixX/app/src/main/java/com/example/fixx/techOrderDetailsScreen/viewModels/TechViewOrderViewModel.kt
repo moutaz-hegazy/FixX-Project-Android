@@ -17,7 +17,7 @@ import java.util.*
 
 class TechViewOrderViewModel() {
     fun fetchUserFromDB(uid: String?, onSuccessBinding: (user: Person?) -> Unit) {
-        FirestoreService.fetchUserFromDB(uid, onSuccessBinding)
+        FirestoreService.fetchUserOnce(uid, onSuccessBinding)
     }
 
     fun sendReplyNotification(notification : TechReplyPushNotification) = CoroutineScope(Dispatchers.IO).launch {
