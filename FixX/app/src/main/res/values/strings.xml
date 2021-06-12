@@ -368,6 +368,7 @@
     <string name="EnterPrice">Enter your estimated price</string>
     <string name="ExtensionUpdataFail">failed to update price</string>
     <string name="ExtensionRemoveFail">Failed to delete extension</string>
+    <string name="AddExtensionPrices">Add Extensions prices</string>
 
 
 </resources>

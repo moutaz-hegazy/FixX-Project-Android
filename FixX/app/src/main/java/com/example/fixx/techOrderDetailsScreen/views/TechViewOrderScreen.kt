@@ -50,6 +50,10 @@ class TechViewOrderScreen : AppCompatActivity() {
 
     var contact : Person? = null
 
+    private var totalPrice = 0
+
+    lateinit var extensions : MutableList<Extension>
+
     private val changesReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
             val jobId = intent?.getStringExtra(Constants.TRANS_JOB)
@@ -63,6 +67,7 @@ class TechViewOrderScreen : AppCompatActivity() {
             jobId?.let{
                 jobId.let {    jobID ->
                     viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob, exts->
+                        extensions = exts.toMutableList()
                         displayJobDetails(returnedJob,exts)
                     }, onFailBinding = {
                         finish()
@@ -89,6 +94,7 @@ class TechViewOrderScreen : AppCompatActivity() {
 
         if(job != null){
             viewModel.fetchExtensionsForJob(job!!.jobId,onSuccessBinding = {
+                extensions = it.toMutableList()
                 displayJobDetails(job!!,it)
             },onFailBinding = {
                 Toast.makeText(this,getString(R.string.ExtendFetchFail),Toast.LENGTH_SHORT).show()
@@ -96,6 +102,7 @@ class TechViewOrderScreen : AppCompatActivity() {
         }else{
             jobId?.let {    jobID ->
                 viewModel.fetchJobFromDB(jobID, onSuccessBinding = {    returnedJob, exts->
+                    extensions = exts.toMutableList()
                     job = returnedJob
                     displayJobDetails(returnedJob,exts)
                 }, onFailBinding = {
@@ -146,20 +153,49 @@ class TechViewOrderScreen : AppCompatActivity() {
             }
         }
 
-        displayExtensions(exts)
+        displayExtensions()
     }
 
-    private fun displayExtensions(exts:List<Extension>){
-        if(!exts.isNullOrEmpty()){
+    private fun displayExtensions(){
+        if(!extensions.isNullOrEmpty()){
+            checkEctensions()
             binding.techViewExtensionsRecycler.apply {
                 visibility = View.VISIBLE
-                adapter = ExtensionsAdapter(exts.toMutableList(),updatePriceHandler = {
+                adapter = ExtensionsAdapter(extensions,updatePriceHandler = {
                     ext, onSuccess, onFail ->
-                    viewModel.updateExtensionPrice(job!!.jobId, ext.extId!!,ext.price!!,onSuccess,onFail)
+                    viewModel.updateExtensionPrice(job!!.jobId, ext.extId!!,ext.price!!,onSuccessBinding = {
+                        onSuccess()
+                        binding.techViewOrderAccountLbl.text = (totalPrice +(ext.price ?:0)).toString()
+                        checkEctensions()
+                    },onFailBinding = onFail)
                 },cancelExtensionHandler = {
                     ext, onSuccess, onFail ->
                     viewModel.removeExtension(job!!.jobId,ext.extId!!,onSuccess,onFail)
                 })
+                layoutManager = LinearLayoutManager(this@TechViewOrderScreen)
+            }
+        }
+    }
+
+    private fun checkEctensions(){
+        var allPriced = true
+        extensions.forEach {
+            if(it.price != null){
+                totalPrice += it.price ?: 0
+            }else{
+                allPriced = false
+                binding.techViewOrderCompletedBtn.apply {
+                    isClickable = false
+                    setBackgroundColor(Color.GRAY)
+                    text = getString(R.string.AddExtensionPrices)
+                }
+            }
+        }
+        if(allPriced){
+            binding.techViewOrderCompletedBtn.apply {
+                isClickable = true
+                setBackgroundColor(Color.BLUE)
+                text = getString(R.string.JobCompleted)
             }
         }
     }
@@ -313,7 +349,8 @@ class TechViewOrderScreen : AppCompatActivity() {
         binding.techViewOrderConfirmPriceLayout.visibility = View.INVISIBLE
         binding.techViewOrderBidFactLayout.visibility = View.INVISIBLE
         binding.techViewOrderTotalAccountLayout.visibility = View.VISIBLE
-        binding.techViewOrderAccountLbl.text = job?.price.toString()
+        totalPrice += job?.price ?:0
+        binding.techViewOrderAccountLbl.text = totalPrice.toString()
         binding.techViewOrderCompletedBtn.setOnClickListener {
             binding.techViewOrderCompletedBtn.apply {
                 isClickable = false
