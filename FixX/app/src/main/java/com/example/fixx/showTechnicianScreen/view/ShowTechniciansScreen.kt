@@ -69,8 +69,7 @@ class ShowTechniciansScreen : AppCompatActivity() {
         }
 
         techRecycler = findViewById(R.id.showTechniciansScreen_recyclerView)
-        val application = requireNotNull(this).application
-        val factory = RecyclerViewModelFactory(job?.location,job?.type)
+        val factory = RecyclerViewModelFactory(job?.areaLocation,job?.type)
         try {
             viewModel = ViewModelProvider(this, factory).get(RecyclerActivityViewModel::class.java)
         }catch (error : IllegalArgumentException){

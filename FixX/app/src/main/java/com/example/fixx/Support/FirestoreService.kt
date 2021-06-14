@@ -222,16 +222,18 @@ object FirestoreService {
     ){
         chatsRef.child("${auth.uid}-$contact").get().addOnSuccessListener {
             if(it.exists()){
+                onCompletion("${auth.uid}-$contact")
                 fetchChatHistoryForChannelTest("${auth.uid}-$contact",observerHandler,chatRegHandler)
             }else{
                 chatsRef.child("$contact-${auth.uid}").get().addOnSuccessListener {
                     if(it.exists()) {
+                        onCompletion("$contact-${auth.uid}")
                         fetchChatHistoryForChannelTest(
                             "$contact-${auth.uid}",
                             observerHandler,chatRegHandler)
                     }else{
                         createChatChannel("${auth.uid}-$contact",contact,
-                            ChatMessage("", auth.uid!!,System.currentTimeMillis()),observerHandler)
+                            ChatMessage("", auth.uid!!,System.currentTimeMillis()),observerHandler,chatRegHandler)
                         onCompletion("${auth.uid}-$contact")
                     }
                 }
@@ -240,7 +242,8 @@ object FirestoreService {
     }
 
     private fun createChatChannel(channelName : String, contact : String, msg : ChatMessage,
-                                  observerHandler: (msg: ChatMessage) -> Unit){
+                                  observerHandler: (msg: ChatMessage) -> Unit,
+                                  chatRegHandler : (reg : ChildEventListener,ref:DatabaseReference) ->Unit){
 
         chatsRef.child(channelName).apply {
             child(this.push().key!!).setValue(msg).addOnSuccessListener {
@@ -248,7 +251,7 @@ object FirestoreService {
                     .setValue(ContactInfo(contact,channelName))
             }
 
-            addChildEventListener(object : ChildEventListener {
+            val reg = addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     Log.i("TAG", "onChildAdded: >>>>>>>>>> ${snapshot.value}")
                     snapshot.getValue(ChatMessage::class.java)?.let {
@@ -260,6 +263,7 @@ object FirestoreService {
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
                 override fun onCancelled(error: DatabaseError) {}
             })
+            chatRegHandler(reg,this)
         }
     }
 

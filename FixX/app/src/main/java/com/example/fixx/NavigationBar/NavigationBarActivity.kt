@@ -42,6 +42,8 @@ class NavigationBarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        Log.i("TAG", "onCreate: >>>>>>>>>> TOKEN >>>>>> ${USER_OBJECT?.token}")
         val languageToLoad = getSharedPreferences(Constants.LANGUAGE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
             .getString(Constants.CURRENT_LANGUAGE,"en")  ?: "en"// your language
         val locale = Locale(languageToLoad)

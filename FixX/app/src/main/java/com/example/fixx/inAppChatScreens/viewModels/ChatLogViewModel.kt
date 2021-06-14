@@ -23,7 +23,6 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
 
     fun fetchChatHistory(){
         if(channel != null){
-            Log.i("TAG", ">>>> : with channel ")
             FirestoreService.fetchChatHistoryForChannelTest(channel!!,observer,
                 chatRegHandler = {  reg,ref ->
                     chatObserver = reg
@@ -34,6 +33,7 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
                 FirestoreService.fetchChatHistoryForInstanceTest(it,observer,
                     onCompletion = { channelName ->
                         channel = channelName
+                        addContactToList(contact)
                 },chatRegHandler = {    reg,ref ->
                         chatObserver = reg
                         chatRef = ref
@@ -55,7 +55,6 @@ class ChatLogViewModel (var channel : String? = null, private val contact : Stri
     fun sendMessage(message: ChatMessage){
         channel?.let {
             ch->
-//            FirestoreService.sendChatMessage(message, ch)
             FirestoreService.sendChatMessageTest(ch,message)
         }
     }

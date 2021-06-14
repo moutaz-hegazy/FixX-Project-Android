@@ -136,21 +136,25 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             price += it
             binding.jobDetailsFinalPriceLbl.text = "$price ${getString(R.string.LE)}"
         }
-        if(!job.images.isNullOrEmpty()){
-            binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
-            binding.jobDetailsImagesRecycler.apply {
-                visibility = View.VISIBLE
-                layoutManager = LinearLayoutManager(applicationContext).apply {
-                    orientation = RecyclerView.HORIZONTAL
-                }
-                var allImages = mutableListOf<StringPair>()
-                allImages.addAll(job.images!!)
-                exts.forEach {
-                    allImages.addAll(it.images!!)
-                }
-                adapter = OrderImagesAdapter(allImages.map { it.second }.toMutableList())
+
+        // display images.
+        var allImages = mutableListOf<StringPair>()
+        binding.jobDetailsImagesRecycler.apply {
+            visibility = View.VISIBLE
+            layoutManager = LinearLayoutManager(applicationContext).apply {
+                orientation = RecyclerView.HORIZONTAL
             }
+            allImages.addAll(job.images ?: mutableListOf())
+            exts.forEach {
+                allImages.addAll(it.images ?: mutableListOf())
+            }
+            adapter = OrderImagesAdapter(allImages.map { it.second }.toMutableList())
         }
+        if(!allImages.isNullOrEmpty() ){
+            binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
+        }
+        //----------------------------------------------------------------------------------
+
         var desc = if(!job.description.isNullOrEmpty()) job.description+"\n"; else ""    // land mine <<<<<<
         exts.forEach {
             desc += "Extension : ${it.description}\n"
