@@ -1,6 +1,8 @@
 package com.example.fixx.NavigationBar.OrdersScreen.views
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -184,7 +187,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                     R.id.image_menu_delete,
                     R.id.accepted_job_menu_delete,
                     R.id.onRequest_menu_delete  -> {
-                        deleteHandler(position)
+                        confirmDeleteDialog(position)
                         true
                     }
 
@@ -213,5 +216,38 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
         }
     }
 
+    private fun confirmDeleteDialog(position: Int){
+        val builder = AlertDialog.Builder(context)
+        //set title for alert dialog
+        builder.setTitle(context.getString(R.string.deleteJobRequest))
+        //set message for alert dialog
+        builder.setMessage(context.getString(R.string.deleteJobRequestQuestion))
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton(context.getString(R.string.yes)){ _, _ ->
+            Log.i("TAG", "confirmDeleteDialog: try to remove <<<<<<<<<<<")
+            deleteHandler(position)
+        }
+        //performing negative action
+        builder.setNegativeButton(context.getString(R.string.no)){ _, _ ->
+
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+
+        val positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        with(positiveButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.red))
+        }
+        val negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        with(negativeButton) {
+            setTextColor(ContextCompat.getColor(context, R.color.green))
+        }
+    }
     override fun getItemCount() = data.size
 }

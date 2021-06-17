@@ -2,6 +2,8 @@ package com.example.fixx.inAppChatScreens.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
@@ -19,7 +21,6 @@ class NewMessageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Chat"
 
-
         val adapter = GroupAdapter<ViewHolder>().apply {
             setOnItemClickListener { item, view ->
 
@@ -34,6 +35,8 @@ class NewMessageActivity : AppCompatActivity() {
         recyclerview_newmessage.adapter = adapter
 
         NewMessageViewModel { person, channel ->
+            val progressBar : ProgressBar= findViewById(R.id.chatList_progressBar)
+            progressBar.visibility = View.INVISIBLE
             adapter.add(UserItem(person, channel))
             adapter.notifyDataSetChanged()
         }

@@ -8,10 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.fixx.HomeActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
@@ -33,6 +30,7 @@ class LoginTabFragment: Fragment() {
     private var passwordEditText: EditText? = null
     private var forgotPassword: TextView? = null
     private var loginButton: Button? = null
+    private var progressBar : ProgressBar? = null
 
     private val passwordRegex =
             Pattern.compile(
@@ -55,6 +53,7 @@ class LoginTabFragment: Fragment() {
         passwordEditText = root.findViewById<EditText>(R.id.pass)
         forgotPassword = root.findViewById<TextView>(R.id.forgotPass)
         loginButton = root.findViewById<Button>(R.id.login_button)
+        progressBar = root.findViewById(R.id.login_progressBar)
 
         emailEditText?.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -90,6 +89,9 @@ class LoginTabFragment: Fragment() {
             if (password.isEmpty())
                 passwordEditText?.error = "This field is required"
             else {
+                loginButton?.visibility = View.INVISIBLE
+                progressBar?.visibility = View.VISIBLE
+
                 FirestoreService.loginWithEmailAndPassword(email, password, onSuccessHandler = {
                     person ->
                     USER_OBJECT = person
@@ -98,6 +100,8 @@ class LoginTabFragment: Fragment() {
                     activity?.finish()
                 },
                     onFailHandler = {
+                        progressBar?.visibility = View.INVISIBLE
+                        loginButton?.visibility = View.VISIBLE
                         Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
                 },passRegister = {
                     USER_OBJECT_OBSERVER = it
