@@ -106,10 +106,10 @@ class RecycleAdapter(private val addressList: MutableList<String>, private val l
 
         //performing positive action
         builder.setPositiveButton(context.getString(R.string.yes)){dialogInterface, which ->
-            val address = list[position]
+            val address = addressList[position]
             FirestoreService.removeLocation(address)
             USER_OBJECT?.locations?.removeAt(position)
-            list.removeAt(position)
+            addressList.removeAt(position)
             notifyDataSetChanged()
         }
         //performing negative action

@@ -499,6 +499,12 @@ object FirestoreService {
         }
     }
 
+    fun addReplyToComment(userId:String, reply : String, onSuccessHandler: () -> Unit){
+        db.collection("Users").document(auth.uid!!).collection("Comments")
+            .document(userId).update("comment.reply", reply).addOnSuccessListener {
+                onSuccessHandler()
+            }
+    }
     fun fetchMyCompletedOrderedJobs(onSuccessHandler : (jobs : List<Job>)-> Unit, onFailureHandler : ()->Unit){
         val retrievedJobs = ArrayList<Job>()
         db.collection("Jobs").whereEqualTo("uid",auth.currentUser?.uid)

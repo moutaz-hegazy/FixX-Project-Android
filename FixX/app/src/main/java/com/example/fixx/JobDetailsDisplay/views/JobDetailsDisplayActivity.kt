@@ -431,7 +431,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             }else{
                 val comment = bottomSheet.rootView.bootom_sheet_comment_txt.text.toString()
                 val commentValue = if(comment.isNullOrEmpty())null; else comment    //<<<<<<<<<<<< take care land mine
-                val commentObj = Comment(USER_OBJECT!!.name,commentValue, USER_OBJECT?.profilePicture?.second
+                val commentObj = Comment(USER_OBJECT!!.name, USER_OBJECT!!.uid,commentValue, USER_OBJECT?.profilePicture?.second
                     ,SimpleDateFormat("dd-MMM-YYYY").format(Calendar.getInstance().time),null
                     , System.currentTimeMillis(), rating.toDouble())
                 val reviews = tech.reviewCount + 1
