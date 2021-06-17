@@ -6,11 +6,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
+import android.provider.SyncStateContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.CustomizeOrderImageRecyclerItemBinding
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
@@ -35,7 +37,7 @@ class OrderImagesAdapter(var data : MutableList<String>) : RecyclerView.Adapter<
             setOnClickListener {
                 val imagePath = images[position]?.let {getImageUriFromBitmap(context, it) }
                 Intent().apply {
-                    setAction(android.content.Intent.ACTION_VIEW)
+                    action = android.content.Intent.ACTION_VIEW
                     setDataAndType(imagePath, "image/*")
                 }.also {
                     context.startActivity(it)

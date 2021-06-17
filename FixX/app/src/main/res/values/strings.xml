@@ -369,6 +369,7 @@
     <string name="ExtensionUpdataFail">failed to update price</string>
     <string name="ExtensionRemoveFail">Failed to delete extension</string>
     <string name="AddExtensionPrices">Add Extensions prices</string>
+    <string name="Reply">reply</string>
 
 
 </resources>
