@@ -17,9 +17,10 @@ import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJEC
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.regex.Pattern
-import kotlin.reflect.jvm.internal.impl.load.java.Constant
+
 
 class LoginTabFragment: Fragment() {
 
@@ -34,18 +35,22 @@ class LoginTabFragment: Fragment() {
 
     private val passwordRegex =
             Pattern.compile(
-                    "^" +
-                            //"(?=.*[0-9])" +         //at least 1 digit
-                            //"(?=.*[a-z])" +         //at least 1 lower case letter
-                            //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                            //"(?=.*[a-zA-Z])" +      //any letter
-                            //"(?=.*[@#$%^&+=])" +    //at least 1 special character
-                            "(?=\\S+$)" +           //no white spaces
-                            ".{6,}" +               //at least 6 characters
-                            "$"
+                "^" +
+                        //"(?=.*[0-9])" +         //at least 1 digit
+                        //"(?=.*[a-z])" +         //at least 1 lower case letter
+                        //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                        //"(?=.*[a-zA-Z])" +      //any letter
+                        //"(?=.*[@#$%^&+=])" +    //at least 1 special character
+                        "(?=\\S+$)" +           //no white spaces
+                        ".{6,}" +               //at least 6 characters
+                        "$"
             )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val root = layoutInflater.inflate(R.layout.fragment_login_tab, container, false)
 
@@ -55,7 +60,7 @@ class LoginTabFragment: Fragment() {
         loginButton = root.findViewById<Button>(R.id.login_button)
         progressBar = root.findViewById(R.id.login_progressBar)
 
-        emailEditText?.addTextChangedListener(object: TextWatcher {
+        emailEditText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -65,7 +70,7 @@ class LoginTabFragment: Fragment() {
             }
         })
 
-        passwordEditText?.addTextChangedListener(object: TextWatcher {
+        passwordEditText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -76,14 +81,21 @@ class LoginTabFragment: Fragment() {
         })
 
         forgotPassword?.setOnClickListener(View.OnClickListener {
-            Toast.makeText(context, "Oops, forgot my password!!!", Toast.LENGTH_SHORT).show()
+            val email = emailEditText?.text.toString()
+            if (!email.isNullOrEmpty()) {
+                Log.i("TAG", "onCreateView: <<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>")
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnSuccessListener {
+                        Log.i("TAG", "onCreateView: EMAIL SENT <<<<<<<<<<<<<<<<<,")
+                    }
+            } else {
+                Toast.makeText(context, R.string.EnterEmail, Toast.LENGTH_SHORT).show()
+            }
         })
 
         loginButton?.setOnClickListener(View.OnClickListener {
             email = emailEditText?.text.toString()
             password = passwordEditText?.text.toString()
-//            validateLoginForm(email, password)
-
             if (email.isEmpty())
                 emailEditText?.error = "This field is required"
             if (password.isEmpty())
@@ -92,23 +104,30 @@ class LoginTabFragment: Fragment() {
                 loginButton?.visibility = View.INVISIBLE
                 progressBar?.visibility = View.VISIBLE
 
-                FirestoreService.loginWithEmailAndPassword(email, password, onSuccessHandler = {
-                    person ->
-                    USER_OBJECT = person
-                    val home = Intent(context, NavigationBarActivity::class.java)
-                    startActivity(home)
-                    activity?.finish()
-                },
+                FirestoreService.loginWithEmailAndPassword(email,
+                    password,
+                    onSuccessHandler = { person ->
+                        USER_OBJECT = person
+                        val home = Intent(context, NavigationBarActivity::class.java)
+                        startActivity(home)
+                        activity?.finish()
+                    },
                     onFailHandler = {
                         progressBar?.visibility = View.INVISIBLE
                         loginButton?.visibility = View.VISIBLE
                         Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
-                },passRegister = {
-                    USER_OBJECT_OBSERVER = it
-                })
+                    },
+                    passRegister = {
+                        USER_OBJECT_OBSERVER = it
+                    })
 
                 FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-                    FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",token,FirestoreService.auth.uid!!)
+                    FirestoreService.updateDocumentField(
+                        Constants.USERS_COLLECTION,
+                        "token",
+                        token,
+                        FirestoreService.auth.uid!!
+                    )
                 }
             }
         })
@@ -124,7 +143,9 @@ class LoginTabFragment: Fragment() {
         loginButton?.alpha = alpha.toFloat()
 
         emailEditText?.animate()?.translationX(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(400)?.start()
-        passwordEditText?.animate()?.translationX(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(600)?.start()
+        passwordEditText?.animate()?.translationX(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(
+            600
+        )?.start()
         forgotPassword?.animate()?.translationX(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(600)?.start()
         loginButton?.animate()?.translationX(0F)?.alpha(1F)?.setDuration(1000)?.setStartDelay(800)?.start()
 

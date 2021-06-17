@@ -11,15 +11,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <EditText
-            android:id="@+id/phoneNumber_id"
+            android:id="@+id/userName_onboarding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:background="@drawable/edit_text_bg"
-            android:hint="@string/enter_phone_number"
-            android:inputType="number"
+            android:hint="@string/username"
+            android:visibility="gone"
             android:maxLines="1"
+            android:layout_marginTop="25dp"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingRight="20dp"
@@ -31,6 +32,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <EditText
+            android:id="@+id/phoneNumber_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_bg"
+            android:hint="@string/enter_phone_number"
+            android:inputType="number"
+            android:maxLines="1"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/blue"
+            android:textColorHint="@color/grey"
+            android:textDirection="locale"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userName_onboarding"
             app:layout_constraintWidth_percent="0.8" />
 
         <TextView

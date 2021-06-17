@@ -26,7 +26,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".addExtensionScreen.views.AddJobExtensionActivity"></activity>
+        <activity android:name=".LoginScreen.Views.SignUpWithGoogleActivity"></activity>
+        <activity android:name=".addExtensionScreen.views.AddJobExtensionActivity" />
 
         <receiver
             android:name=".Support.PushNotificationReceiver"
@@ -99,7 +100,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
 
-        <activity android:name=".LoginScreen.Views.RegistrationActivity" />
+        <activity android:name=".LoginScreen.Views.RegistrationActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".LoadingActivity" />
         <activity android:name=".HomeActivity" />
 

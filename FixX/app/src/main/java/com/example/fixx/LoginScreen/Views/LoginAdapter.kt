@@ -11,24 +11,18 @@ import com.example.fixx.LoginScreen.Views.SignUpOnBoardingFragment
 class LoginAdapter: FragmentPagerAdapter {
 
     private var context: Context? = null
-    var totalTabs = 0
+    private var fragments = listOf<Fragment>()
 
-    constructor(fm: FragmentManager, context: Context?, totalTabs: Int?) : super(fm) {
+    constructor(fm: FragmentManager, context: Context?, fragments : List<Fragment>) : super(fm) {
         this.context = context
-        if (totalTabs != null) {
-            this.totalTabs = totalTabs
-        }
+        this.fragments = fragments
     }
 
     override fun getCount(): Int {
-        return totalTabs
+        return fragments.size
     }
 
     override fun getItem(position: Int): Fragment {
-        return when(position){
-            0 -> LoginTabFragment()
-            1 -> SignUpOnBoardingFragment()
-            else -> Fragment()
-        }
+        return fragments[position]
     }
 }

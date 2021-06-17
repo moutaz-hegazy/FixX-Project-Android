@@ -1,5 +1,6 @@
 package com.example.fixx.LoginScreen.Views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,8 +11,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fixx.Addresses.view.MySpinnerAdapter
 import com.example.fixx.LoginScreen.viewmodels.RegisterViewmodel
+import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.POJOs.Details
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
+import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_tecnician_address.*
 import kotlinx.android.synthetic.main.fragment_tecnician_address.technician_address_fragment_recycler_view
 
@@ -24,12 +30,17 @@ class TechnicianAddressFragment : Fragment() {
     var cairoArea = mutableListOf<String>()
     var alexArea = mutableListOf<String>()
     val emptyArea = arrayOf("")
-
+    private var fromGoogle = false
 
     private val adapter = TechnicianAddressAdapter(addresses)
+    private val viewmodel : RegisterViewmodel by lazy {
+        RegisterViewmodel()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fromGoogle = arguments?.getBoolean(Constants.TRANS_GOOGLE_BOOL,false) ?: false
 
         cities.addAll(
             arrayOf(
@@ -154,11 +165,16 @@ class TechnicianAddressFragment : Fragment() {
 
         pick_address_fragment_next_btn.setOnClickListener {
             if(addresses.isNotEmpty()){
-                arguments?.putStringArrayList(Constants.TRANS_ADDRESS,addresses)
-                SignUpTabFragment().apply {
-                    this.arguments = this@TechnicianAddressFragment.arguments
-                }.also {
-                    fragmentManager?.beginTransaction()?.replace(R.id.pick_tecnician_address_fragment, it)?.commit()
+                if(fromGoogle){
+                    uploadUserData()
+                }else {
+                    arguments?.putStringArrayList(Constants.TRANS_ADDRESS, addresses)
+                    SignUpTabFragment().apply {
+                        this.arguments = this@TechnicianAddressFragment.arguments
+                    }.also {
+                        fragmentManager?.beginTransaction()
+                            ?.replace(R.id.pick_tecnician_address_fragment, it)?.commit()
+                    }
                 }
             }else{
                 Toast.makeText(context, getString(R.string.AddAddress),Toast.LENGTH_SHORT).show()
@@ -166,6 +182,39 @@ class TechnicianAddressFragment : Fragment() {
         }
     }
 
+    private fun uploadUserData(){
+        val technician: Technician = createTechnicianObject()
+        FirestoreService.saveUserData(technician,
+            onSuccessHandler = {
+                    person ->
+                (person as? Technician)?.apply {
+                    workLocations?.forEach {
+                        viewmodel.subscribeToTopic(this.jobTitle+getWorkTopic(it))
+                    }
+                }
+                NavigationBarActivity.USER_OBJECT = person
+                startActivity(Intent(context, NavigationBarActivity::class.java))
+                activity?.finish()
+            },onFailHandler = {
+                Toast.makeText(context,"Register failed",Toast.LENGTH_SHORT)
+            })
+    }
+
+    private fun createTechnicianObject() : Technician{
+        val userData = arguments?.getSerializable(Constants.TRANS_USERDATA) as Details
+        val passedPhoneNumber = userData.phoneNumber
+        val passedAccountType = userData.accountType
+        val username = arguments?.getString(Constants.TRANS_USER_NAME) ?: ""
+        val email = FirebaseAuth.getInstance().currentUser?.email!!
+
+        return Technician(passedPhoneNumber, passedAccountType, username, email).apply {
+            jobTitle = arguments?.getString(Constants.TRANS_JOB)
+            workLocations = arrayListOf()
+            addresses.forEach {
+                workLocations?.add("${getCityEnglishName(it.substringBefore(","))},${getAreaEnglishName(it.substringAfter(","),it.substringBefore(","))}")
+            }
+        }
+    }
     private fun showAddressList(){
         technician_address_fragment_recycler_view.adapter = adapter
         technician_address_fragment_recycler_view.layoutManager = LinearLayoutManager(context)
@@ -254,5 +303,44 @@ class TechnicianAddressFragment : Fragment() {
                 setAreaSpinner()
             }
         }
+    }
+
+    fun getWorkTopic(location: String) : String{
+        val city = location.substringBefore(",")
+        val area = location.substringAfter(",")
+
+        return "%"+getCityEnglishName(city).replace(" ","_", true)+"."+
+                getAreaEnglishName(area,city).replace(" ","_",true).
+                replace("-","_",true)
+    }
+
+    private fun getCityEnglishName(city: String): String {
+        var myCity = city
+        for (iterator in Constants.citiesInArabic.indices) {
+            if (city.equals(Constants.citiesInArabic[iterator])) {
+                myCity = Constants.cities[iterator]
+            }
+        }
+        return myCity
+    }
+
+    private fun getAreaEnglishName(area: String, city: String): String {
+        var myArea = area
+
+        if (city.equals(getString(R.string.Cairo))) {
+            for (iterator in Constants.cairoAreaInArabic.indices) {
+                if (area.equals(Constants.cairoAreaInArabic[iterator])) {
+                    myArea = Constants.cairoArea[iterator]
+                }
+            }
+        } else if (city.equals(getString(R.string.Alexandria))) {
+            for (iterator in Constants.alexAreaInArabic.indices) {
+                if (area.equals(Constants.alexAreaInArabic[iterator])) {
+                    myArea = Constants.alexArea[iterator]
+                }
+            }
+        }
+
+        return myArea
     }
 }

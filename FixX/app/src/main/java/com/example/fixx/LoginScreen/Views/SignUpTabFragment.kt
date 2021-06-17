@@ -232,7 +232,10 @@ class SignUpTabFragment: Fragment() {
 
     private fun createTechnicianObject() = Technician(passedPhoneNumber, passedAccountType, username, email).apply {
         jobTitle = arguments?.getString(Constants.TRANS_JOB)
-        workLocations = arguments?.getStringArrayList(Constants.TRANS_ADDRESS)
+        workLocations = arrayListOf()
+        arguments?.getStringArrayList(Constants.TRANS_ADDRESS)?.forEach {
+            workLocations?.add("${getCityEnglishName(it.substringBefore(","))},${getAreaEnglishName(it.substringAfter(","),it.substringBefore(","))}")
+        }
     }
 
     fun getWorkTopic(location: String) : String{

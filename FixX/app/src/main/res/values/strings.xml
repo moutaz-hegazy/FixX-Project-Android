@@ -372,6 +372,10 @@
     <string name="ExtensionRemoveFail">Failed to delete extension</string>
     <string name="AddExtensionPrices">Add Extensions prices</string>
     <string name="Reply">reply</string>
+    <string name="GoogleSignIn">SignIn with Google</string>
+    <string name="enterUserName">enter your name</string>
+    <string name="CreateAccFail">Failed to create an account</string>
+    <string name="EnterEmail">Enter your e-mail</string>
 
 
 </resources>

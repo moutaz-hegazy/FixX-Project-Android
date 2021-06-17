@@ -11,10 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.example.fixx.NavigationBar.NavigationBarActivity
+import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.Details
+import com.example.fixx.POJOs.User
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
+import com.google.firebase.auth.FirebaseAuth
 import java.util.regex.Pattern
 
 class SignUpOnBoardingFragment : Fragment() {
@@ -30,6 +34,8 @@ class SignUpOnBoardingFragment : Fragment() {
     private var userChoice: TextView? = null
     private var techChoice: TextView? = null
     private var nextButton: Button? = null
+    private var userNameTxt : EditText? = null
+    var fromGoogle = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -40,10 +46,14 @@ class SignUpOnBoardingFragment : Fragment() {
         userChoice = root.findViewById(R.id.userChoice)
         techChoice = root.findViewById(R.id.techieChoice)
         nextButton = root.findViewById(R.id.next_button_id)
+        userNameTxt = root.findViewById(R.id.userName_onboarding)
 
         userAvatar?.setImageResource(R.drawable.colored_avatar_user)
         techAvatar?.setImageResource(R.drawable.colored_avatar_technician)
 
+        if(fromGoogle){
+            userNameTxt?.visibility = View.VISIBLE
+        }
 
         phoneNumberEditText?.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -54,7 +64,6 @@ class SignUpOnBoardingFragment : Fragment() {
                 phoneNumberEditText?.error = null
             }
         })
-
 
         userAvatar?.setOnClickListener(View.OnClickListener {
             isProfileTypeSelected = true
@@ -86,8 +95,24 @@ class SignUpOnBoardingFragment : Fragment() {
                         phoneNumberEditText?.text?.clear()
                         Toast.makeText(context , "this phone number already exists.",Toast.LENGTH_SHORT).show()
                     }else {
-                        passAppUserData(phoneNumber, accountType)
-                        //nextButton?.visibility = View.GONE
+                        if(fromGoogle && accountType == "User"){
+                            val userObj = User()
+                            userObj.name = userNameTxt?.text.toString()
+                            userObj.email = FirebaseAuth.getInstance().currentUser?.email!!
+                            userObj.accountType = "User"
+                            userObj.phoneNumber = phoneNumber
+                            FirestoreService.saveUserData(userObj,onSuccessHandler = {
+                                USER_OBJECT = it
+                                Intent(context?.applicationContext,NavigationBarActivity::class.java).also {
+                                    context?.startActivity(it)
+                                    activity?.finish()
+                                }
+                            },onFailHandler = {
+                                Toast.makeText(context,R.string.CreateAccFail,Toast.LENGTH_SHORT).show()
+                            })
+                        }else {
+                            passAppUserData(phoneNumber, accountType)
+                        }
                     }
                 }
             }
@@ -115,12 +140,17 @@ class SignUpOnBoardingFragment : Fragment() {
 
     private fun validateSignUpForm1(): Boolean {
         var flag: Boolean = false
-        if (validatePhoneNumber(phoneNumber) && isProfileTypeSelected)
+        if (validatePhoneNumber(phoneNumber) && isProfileTypeSelected) {
             flag = true
-        else if (phoneNumber.isEmpty())
+            if(fromGoogle && userNameTxt?.text.isNullOrEmpty()){
+                flag = false
+                Toast.makeText(context,R.string.enterUserName,Toast.LENGTH_SHORT).show()
+            }
+        }else if (phoneNumber.isEmpty()) {
             phoneNumberEditText?.error = "This field is required."
-        else if (validatePhoneNumber(phoneNumber) && !isProfileTypeSelected)
+        }else if (validatePhoneNumber(phoneNumber) && !isProfileTypeSelected) {
             Toast.makeText(context, "Please, choose profile type.", Toast.LENGTH_LONG).show()
+        }
         return flag
     }
 
@@ -136,6 +166,10 @@ class SignUpOnBoardingFragment : Fragment() {
     private fun passAppUserData(phoneNumber: String, accountType: String){
         var data = Details(phoneNumber, accountType)
         val sentDataBundle = Bundle()
+        if(fromGoogle) {
+            sentDataBundle.putBoolean(Constants.TRANS_GOOGLE_BOOL, true)
+            sentDataBundle.putString(Constants.TRANS_USER_NAME,userNameTxt?.text.toString())
+        }
         sentDataBundle.putSerializable(Constants.TRANS_USERDATA, data)
         if(getAppUserAccountType() == "Technician"){
             PickJob().apply {
