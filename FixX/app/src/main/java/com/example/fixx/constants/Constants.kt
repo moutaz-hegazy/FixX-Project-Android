@@ -12,6 +12,7 @@ sealed class Constants {
         const val serviceName = "serviceName"
         const val CAMERA_PERMISSION_REQUEST_CODE = 200
         const val GALLERY_PERMISSION_REQUEST_CODE = 201
+        const val EXTERNAL_STORAGE_REQUEST_CODE = 203
         const val PLACES_AUTOCOMPLETE_REQUEST_CODE = 100
         const val LOCATION_TO_TECH = "locationToTech"
         const val JOB_TYPE_TO_TECH = "jobTypeToTech"

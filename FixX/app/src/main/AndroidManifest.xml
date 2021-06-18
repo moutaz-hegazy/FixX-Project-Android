@@ -30,6 +30,7 @@
         <activity android:name=".LoginScreen.Views.SignUpWithGoogleActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".addExtensionScreen.views.AddJobExtensionActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
 
         <receiver

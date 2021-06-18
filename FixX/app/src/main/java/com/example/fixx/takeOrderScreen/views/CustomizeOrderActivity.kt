@@ -534,19 +534,22 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet.rootView)
         btnsheet.bottomSheet_camera_layout.setOnClickListener {
-
-            checkForPermission(android.Manifest.permission.CAMERA,"Camera",
-                Constants.CAMERA_PERMISSION_REQUEST_CODE){
-                val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(
-                    takePicture,
-                    Constants.cameraPickerRequestCode
-                )
+            checkForPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,"Save"
+                ,Constants.EXTERNAL_STORAGE_REQUEST_CODE){
+                checkForPermission(android.Manifest.permission.CAMERA,"Camera",
+                    Constants.CAMERA_PERMISSION_REQUEST_CODE){
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(
+                        takePicture,
+                        Constants.cameraPickerRequestCode
+                    )
+                }
             }
+
             dialog.dismiss()
         }
         btnsheet.bottomSheet_gallery_layout.setOnClickListener {
-            checkForPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,"Gallery",
+            checkForPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,"Gallery",
                 Constants.GALLERY_PERMISSION_REQUEST_CODE){
                 val pickPhoto = Intent(
                     Intent.ACTION_PICK,
@@ -616,6 +619,17 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         when(requestCode){
+            Constants.EXTERNAL_STORAGE_REQUEST_CODE ->{
+                checkForPermission(android.Manifest.permission.CAMERA,"Camera",
+                    Constants.CAMERA_PERMISSION_REQUEST_CODE){
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(
+                        takePicture,
+                        Constants.cameraPickerRequestCode
+                    )
+                }
+            }
+
             Constants.CAMERA_PERMISSION_REQUEST_CODE -> {
                 if (innerCheck("Camera")){
                     val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

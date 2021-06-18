@@ -151,6 +151,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
         if(!allImages.isNullOrEmpty() ){
             binding.jobDetailsImagesTitleLbl.visibility = View.VISIBLE
+            binding.jobDetailsImagesRecycler.visibility = View.VISIBLE
         }
         //----------------------------------------------------------------------------------
 
