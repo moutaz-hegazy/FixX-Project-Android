@@ -69,10 +69,10 @@ class FirebaseService : FirebaseMessagingService() {
                 )
                 notificationManager.notify(notificationId, notification)
 
-                Intent(this,BroadcastReceiver::class.java).apply {
+                Intent(this, BroadcastReceiver::class.java).apply {
                     action = Constants.USER_JOB_DETAILS_FILTER
-                    putExtra(Constants.CHANNEL_ID,notificationId)
-                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    putExtra(Constants.CHANNEL_ID, notificationId)
+                    putExtra(Constants.TRANS_JOB, p0.data["jobId"])
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
@@ -121,10 +121,10 @@ class FirebaseService : FirebaseMessagingService() {
                     navigateToActivity(bundle, Constants.NOTIFICATION_TYPE_USER_ACCEPT)
                 )
                 notificationManager.notify(notificationId, notification)
-                Intent(this,BroadcastReceiver::class.java).apply {
+                Intent(this, BroadcastReceiver::class.java).apply {
                     action = Constants.TECH_ORDER_DETAILS_FILTER
-                    putExtra(Constants.CHANNEL_ID,notificationId)
-                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    putExtra(Constants.CHANNEL_ID, notificationId)
+                    putExtra(Constants.TRANS_JOB, p0.data["jobId"])
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
@@ -142,10 +142,10 @@ class FirebaseService : FirebaseMessagingService() {
                 )
                 notificationManager.notify(notificationId, notification)
 
-                Intent(this,BroadcastReceiver::class.java).apply {
+                Intent(this, BroadcastReceiver::class.java).apply {
                     action = Constants.USER_JOB_DETAILS_FILTER
-                    putExtra(Constants.CHANNEL_ID,notificationId)
-                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    putExtra(Constants.CHANNEL_ID, notificationId)
+                    putExtra(Constants.TRANS_JOB, p0.data["jobId"])
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
@@ -162,10 +162,10 @@ class FirebaseService : FirebaseMessagingService() {
                 )
                 notificationManager.notify(notificationId, notification)
 
-                Intent(this,BroadcastReceiver::class.java).apply {
+                Intent(this, BroadcastReceiver::class.java).apply {
                     action = Constants.USER_JOB_DETAILS_FILTER
-                    putExtra(Constants.CHANNEL_ID,notificationId)
-                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    putExtra(Constants.CHANNEL_ID, notificationId)
+                    putExtra(Constants.TRANS_JOB, p0.data["jobId"])
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
@@ -182,10 +182,10 @@ class FirebaseService : FirebaseMessagingService() {
                 )
                 notificationManager.notify(notificationId, notification)
 
-                Intent(this,BroadcastReceiver::class.java).apply {
+                Intent(this, BroadcastReceiver::class.java).apply {
                     action = Constants.USER_JOB_DETAILS_FILTER
-                    putExtra(Constants.CHANNEL_ID,notificationId)
-                    putExtra(Constants.TRANS_JOB,p0.data["jobId"])
+                    putExtra(Constants.CHANNEL_ID, notificationId)
+                    putExtra(Constants.TRANS_JOB, p0.data["jobId"])
                 }.also {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                 }
@@ -205,19 +205,22 @@ class FirebaseService : FirebaseMessagingService() {
         ) {
             isActivityFound = true
         }
-        Log.i("TAG", "applicationInForeground: >>>>>>>>>>>>${activityManager.getRunningTasks(1)[0].topActivity?.className}")
+        Log.i(
+            "TAG",
+            "applicationInForeground: >>>>>>>>>>>>${activityManager.getRunningTasks(1)[0].topActivity?.className}"
+        )
         return isActivityFound
     }
 
     private fun navigateToActivity(bundle: Bundle, notificationType: String) : PendingIntent{
         var pendingIntent : PendingIntent
         if(applicationInForeground()){
-            Intent(applicationContext,PushNotificationReceiver::class.java).apply {
-                putExtra(Constants.TRANS_DATA_BUNDLE,bundle)
+            Intent(applicationContext, PushNotificationReceiver::class.java).apply {
+                putExtra(Constants.TRANS_DATA_BUNDLE, bundle)
                 putExtra(Constants.TRANS_NOTIFICATION_TYPE, notificationType)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }.also {
-                pendingIntent = PendingIntent.getBroadcast(applicationContext,70,it,0)
+                pendingIntent = PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_CANCEL_CURRENT)
             }
         }else{
             TaskStackBuilder.create(applicationContext).apply {
