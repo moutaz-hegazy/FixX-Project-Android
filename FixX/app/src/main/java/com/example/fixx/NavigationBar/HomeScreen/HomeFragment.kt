@@ -6,19 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.GridView
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.fixx.NavigationBar.HomeScreen.NotificationCounter
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
 import com.example.fixx.POJOs.ServiceItem
-import com.example.fixx.NavigationBar.notification.NotificationActivity
 import com.example.fixx.R
-import com.example.fixx.Support.PushNotificationReceiver
 import com.example.fixx.constants.Constants
-import com.example.fixx.inAppChatScreens.views.NewMessageActivity
 import com.example.fixx.jobs.views.JobsActivity
 import com.example.fixx.takeOrderScreen.views.CustomizeOrderActivity
 import com.example.project.ServiceAdapter
@@ -31,11 +24,7 @@ class HomeFragment : Fragment(){
     private var gridView: GridView? = null
     private var arrayList = ArrayList<ServiceItem>()
     private var serviceAdapter : ServiceAdapter? =null
-    var button: Button? = null
-    var notificationbtn : ImageView? = null
-    var notificationCounter: NotificationCounter? = null
     var floatingActionButton: FloatingActionButton? = null
-    var chatBtn : ImageView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,34 +42,6 @@ class HomeFragment : Fragment(){
             setOnItemClickListener { parent, view, position, id ->
                 startCustomizeOrderActivity(position)
             }
-        }
-
-
-        button = rootView.findViewById(R.id.homefragment_notificationcounter_button)
-        notificationbtn = rootView.findViewById(R.id.homefragment_notification_image_view)
-
-        notificationbtn?.setOnClickListener {
-            startActivity(Intent (requireActivity(), NotificationActivity::class.java))
-        }
-
-       notificationCounter =
-              NotificationCounter(rootView.findViewById(R.id.homefragment_notificationcounter_card_view))
-        // Inflate the layout for this fragment
-
-        button?.setOnClickListener(View.OnClickListener { notificationCounter!!.increaseNumber()
-            Intent(context?.applicationContext,PushNotificationReceiver::class.java).apply{
-                action = Constants.CHAT_RECEIVER_FILTER
-            }.also {
-//                context?.applicationContext?.sendBroadcast(it)
-                LocalBroadcastManager.getInstance(context!!).sendBroadcast(it)
-            }
-        })
-
-
-        chatBtn = rootView.findViewById(R.id.homefragment_chat_image_view)
-        chatBtn?.setOnClickListener{
-            val intent = Intent (activity, NewMessageActivity::class.java)
-            activity?.startActivity(intent)
         }
 
         if (USER_OBJECT?.accountType == "Technician") {
