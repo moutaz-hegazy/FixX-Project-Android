@@ -35,7 +35,6 @@ class NavigationBarActivity : AppCompatActivity() {
     companion object{
         var USER_OBJECT : Person? = null
         var CURRENT_LANGUAGE = "en"
-        var USER_OBJECT_OBSERVER : ListenerRegistration? = null
     }
 
 
@@ -75,8 +74,6 @@ class NavigationBarActivity : AppCompatActivity() {
                         navigateToActivity(ChatLogActivity::class.java,intent.getBundleExtra(Constants.TRANS_DATA_BUNDLE))
                     else -> {}
                 }
-            },passReg = {
-                USER_OBJECT_OBSERVER = it
             })
         }
 
@@ -127,7 +124,6 @@ class NavigationBarActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i("TAG", "onDestroy: Destroyed <<<<<<<<<<<<<<<")
-        USER_OBJECT_OBSERVER?.remove()
     }
 
     private fun makeCurrentFragment(fragment: Fragment) = supportFragmentManager.beginTransaction().apply {

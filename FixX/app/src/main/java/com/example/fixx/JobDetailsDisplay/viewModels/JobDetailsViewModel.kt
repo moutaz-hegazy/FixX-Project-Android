@@ -41,7 +41,7 @@ class JobDetailsViewModel(private val jobId : String) {
     }
 
     fun getTechnician(techId : String, onSuccessBinding: (tech: Technician) -> Unit, onFailBinding: () -> Unit){
-        FirestoreService.fetchUserFromDB(techId,onCompletion = {   person ->
+        FirestoreService.fetchUserOnce(techId) {   person ->
             Log.i("TAG", "getTechnician: HERE 2")
             val tech = person as? Technician
             if(tech != null){
@@ -49,9 +49,7 @@ class JobDetailsViewModel(private val jobId : String) {
             }else{
                 onFailBinding()
             }
-        },passRegister = {
-            userObserver = it
-        })
+        }
     }
 
     fun unregisterObserver(){

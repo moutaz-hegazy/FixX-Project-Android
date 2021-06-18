@@ -103,6 +103,6 @@ class ProfileViewmodel (val person : Person){
                 onSuccessBinding()
             },onFailHandler = {
                 onFailBinding()
-            },passRegister = {})
+            })
     }
 }

@@ -22,23 +22,4 @@ class RegisterViewmodel() {
                 Log.i("TAG", "checkLogin: FALIURE <<<<<<<<<<<<<<< " + it.localizedMessage)
             }
     }
-
-    fun unsubscribeFromTopic(topic : String){
-        FirebaseMessaging.getInstance()
-            .unsubscribeFromTopic("$topic").addOnSuccessListener {
-                Log.i("TAG", "checkLogin: UNSUBSCRIPED <<<<<<<<<<<<<<<")
-            }.addOnCompleteListener { task ->
-                Log.i("TAG", "checkLogin: COMPLETE <<<<<<<<<<<<<<<")
-                var msg = "SUCCESS !!"
-                if (!task.isSuccessful) {
-                    msg = "FAIL !!"
-                }
-                Log.d("TAG", msg)
-                //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-            }.addOnCanceledListener {
-                Log.i("TAG", "checkLogin: CANCELED <<<<<<<<<<<<<<<")
-            }.addOnFailureListener {
-                Log.i("TAG", "checkLogin: FALIURE <<<<<<<<<<<<<<< " + it.localizedMessage)
-            }
-    }
 }

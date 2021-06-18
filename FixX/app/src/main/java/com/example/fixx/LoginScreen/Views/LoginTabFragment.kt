@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import com.example.fixx.HomeActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
-import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT_OBSERVER
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
@@ -108,27 +107,22 @@ class LoginTabFragment: Fragment() {
                     password,
                     onSuccessHandler = { person ->
                         USER_OBJECT = person
-                        val home = Intent(context, NavigationBarActivity::class.java)
-                        startActivity(home)
-                        activity?.finish()
+                        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                            FirestoreService.updateDocumentField(Constants.USERS_COLLECTION, "token",
+                                token, FirestoreService.auth.uid!!)
+
+                            USER_OBJECT?.token = token
+                            val home = Intent(context, NavigationBarActivity::class.java)
+                            startActivity(home)
+                            activity?.finish()
+                        }
                     },
                     onFailHandler = {
                         progressBar?.visibility = View.INVISIBLE
                         loginButton?.visibility = View.VISIBLE
                         Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show()
-                    },
-                    passRegister = {
-                        USER_OBJECT_OBSERVER = it
                     })
 
-                FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-                    FirestoreService.updateDocumentField(
-                        Constants.USERS_COLLECTION,
-                        "token",
-                        token,
-                        FirestoreService.auth.uid!!
-                    )
-                }
             }
         })
 

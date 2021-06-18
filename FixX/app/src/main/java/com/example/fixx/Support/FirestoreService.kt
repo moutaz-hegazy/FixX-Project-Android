@@ -72,28 +72,28 @@ object FirestoreService {
             })
     }
 
-    fun fetchUserFromDB(
-        uid: String? = auth.currentUser?.uid,
-        onCompletion: (user: Person?) -> Unit,
-        passRegister : (reg : ListenerRegistration) -> Unit
-    ) {
-        uid?.let {
-            db.collection("Users").document(it).apply {
-                addSnapshotListener {
-                        value, error ->
-                    val type = value?.data?.get("accountType") as? String
-                    type?.let {
-                        when (it) {
-                            "User" -> onCompletion(value.toObject<User>())
-                            "Technician" -> onCompletion(value.toObject<Technician>())
-                        }
-                    }
-                }.also {
-                    passRegister(it)
-                }
-            }
-        }
-    }
+//    fun fetchUserFromDB(
+//        uid: String? = auth.currentUser?.uid,
+//        onCompletion: (user: Person?) -> Unit,
+//        passRegister : (reg : ListenerRegistration) -> Unit
+//    ) {
+//        uid?.let {
+//            db.collection("Users").document(it).apply {
+//                addSnapshotListener {
+//                        value, error ->
+//                    val type = value?.data?.get("accountType") as? String
+//                    type?.let {
+//                        when (it) {
+//                            "User" -> onCompletion(value.toObject<User>())
+//                            "Technician" -> onCompletion(value.toObject<Technician>())
+//                        }
+//                    }
+//                }.also {
+//                    passRegister(it)
+//                }
+//            }
+//        }
+//    }
 
     fun fetchUserOnce(
         uid: String? = auth.currentUser?.uid,
@@ -343,14 +343,15 @@ object FirestoreService {
         email: String,
         password: String,
         onSuccessHandler: (person : Person?) -> Unit,
-        onFailHandler: () -> Unit,
-        passRegister : ((reg : ListenerRegistration) -> Unit)
+        onFailHandler: () -> Unit
     ) {
         Log.i("TAG", "loginWithEmailAndPassword: Received >>>$email<< >>$password<<")
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(OnCompleteListener<AuthResult> { task ->
                 if (task.isSuccessful && email != Constants.DEFAULT_EMAIL) {
-                    fetchUserFromDB(auth.currentUser?.uid,onSuccessHandler,passRegister)
+                    fetchUserOnce{
+                        onSuccessHandler(it)
+                    }
                 } else {
                     Log.i("TAG", "login: error!!!!")
                     onFailHandler()

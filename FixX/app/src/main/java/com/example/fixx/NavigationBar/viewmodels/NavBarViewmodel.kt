@@ -6,11 +6,9 @@ import com.example.fixx.Support.FirestoreService
 import com.google.firebase.firestore.ListenerRegistration
 
 class NavBarViewmodel() {
-    fun fetchUser(onCompletionBinder : (Person?)->Unit, passReg : (reg : ListenerRegistration)->Unit){
-        FirestoreService.fetchUserFromDB(onCompletion = {
+    fun fetchUser(onCompletionBinder : (Person?)->Unit){
+        FirestoreService.fetchUserOnce {
             onCompletionBinder(it)
-        },passRegister = {
-            passReg(it)
-        })
+        }
     }
 }

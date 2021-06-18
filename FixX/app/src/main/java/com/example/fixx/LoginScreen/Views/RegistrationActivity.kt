@@ -4,39 +4,26 @@ import android.app.Application
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT
-import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.USER_OBJECT_OBSERVER
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
-import com.facebook.*
-import com.facebook.AccessToken
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.*
-import com.google.firebase.auth.FacebookAuthProvider.*
 import com.google.firebase.messaging.FirebaseMessaging
-import java.math.BigDecimal
 import java.util.*
 
 @Suppress("DEPRECATION")
 class RegistrationActivity : AppCompatActivity(){
 
-    var callbackManager: CallbackManager? = null
+
     var firebaseAuth: FirebaseAuth? = null
 //    var mAppEventsLogger: AppEventsLogger? = null
 
@@ -57,8 +44,6 @@ class RegistrationActivity : AppCompatActivity(){
         supportActionBar?.hide()
 
         firebaseAuth = FirebaseAuth.getInstance()
-
-        initializeFacebook(application)
 
         tabLayout = findViewById(R.id.myOrders_tablayout)
         viewPager = findViewById(R.id.myOrders_viewPager)
@@ -101,23 +86,20 @@ class RegistrationActivity : AppCompatActivity(){
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        callbackManager?.onActivityResult(requestCode, resultCode, data)//Facebook Login...
         FirestoreService.googleSignInRequestResult(requestCode, data, onSuccessHandler = {
             email ->
             FirestoreService.checkIfEmailExists(email){
                 exists ->
                 if(exists){
-                    FirestoreService.fetchUserFromDB(onCompletion = { person ->
+                    FirestoreService.fetchUserOnce{ person->
                         USER_OBJECT = person
-                    },passRegister = {
-                        USER_OBJECT_OBSERVER = it
-                    })
-
-                    FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-                        FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",
-                            token,FirestoreService.auth.uid!!)
-                        startActivity(Intent(this, NavigationBarActivity::class.java))
-                        finish()
+                        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                            FirestoreService.updateDocumentField(Constants.USERS_COLLECTION,"token",
+                                token,FirestoreService.auth.uid!!)
+                            USER_OBJECT?.token = token
+                            startActivity(Intent(this, NavigationBarActivity::class.java))
+                            finish()
+                        }
                     }
                 }
                 else{
@@ -137,7 +119,7 @@ class RegistrationActivity : AppCompatActivity(){
         super.onStart()
         if(FirebaseAuth.getInstance().currentUser == null){
             FirestoreService.loginWithEmailAndPassword(Constants.DEFAULT_EMAIL,Constants.DEFAULT_PASSWORD,
-                onSuccessHandler = {}, onFailHandler = {},passRegister = {})
+                onSuccessHandler = {}, onFailHandler = {})
         }
     }
 
@@ -158,11 +140,6 @@ class RegistrationActivity : AppCompatActivity(){
         if(FirebaseAuth.getInstance().currentUser?.email == Constants.DEFAULT_EMAIL){
             FirebaseAuth.getInstance().signOut()
         }
-    }
-
-    private fun initializeFacebook(application: Application) {
-        FacebookSdk.sdkInitialize(application)
-        AppEventsLogger.activateApp(application, application.getString(R.string.facebook_app_id))
     }
 
     private fun setLanguage(lang : String){

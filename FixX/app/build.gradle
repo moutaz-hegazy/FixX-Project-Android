@@ -99,9 +99,5 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    //noinspection GradleCompatible
-    //compile 'com.android.support:appcompat-v7:23.2.0'
-    //noinspection GradleCompatible
-    //implementation 'com.android.support:design:26.1.0'
-    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+
 }

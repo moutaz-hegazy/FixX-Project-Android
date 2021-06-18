@@ -69,7 +69,7 @@ class SplashScreen : AppCompatActivity() {
         if(FirestoreService.auth.currentUser != null
             && FirestoreService.auth.currentUser?.email != "defaultaccount@default.com"){
             Log.i("TAG", "checkLogin: HEERREE <<<<<<<<<<<<<<< ${FirestoreService.auth?.currentUser?.email} ")
-            FirestoreService.fetchUserFromDB (onCompletion = {
+            FirestoreService.fetchUserOnce(onCompletion = {
                     person ->
                 NavigationBarActivity.USER_OBJECT = person
                 FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
@@ -77,8 +77,6 @@ class SplashScreen : AppCompatActivity() {
                     startActivity(it)
                     finish()
                 }
-            },passRegister = {
-                NavigationBarActivity.USER_OBJECT_OBSERVER = it
             })
         }else{
             Handler().postDelayed({
