@@ -140,7 +140,6 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         // display images.
         var allImages = mutableListOf<StringPair>()
         binding.jobDetailsImagesRecycler.apply {
-            visibility = View.VISIBLE
             layoutManager = LinearLayoutManager(applicationContext).apply {
                 orientation = RecyclerView.HORIZONTAL
             }

@@ -604,6 +604,7 @@ class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         fun innerCheck(name: String) : Boolean{
             return if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this,"$name permission refused",Toast.LENGTH_SHORT)
