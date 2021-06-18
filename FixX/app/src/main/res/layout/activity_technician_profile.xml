@@ -8,7 +8,7 @@
     android:layout_marginEnd="5dp"
     tools:context=".technicianProfileScreen.view.TechnicianProfileActivity">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/technician_profile_img"
         android:layout_width="80dp"
         android:layout_height="80dp"
