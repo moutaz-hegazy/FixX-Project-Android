@@ -238,7 +238,7 @@ class SignUpTabFragment: Fragment() {
         }
     }
 
-    fun getWorkTopic(location: String) : String{
+    private fun getWorkTopic(location: String) : String{
         val city = location.substringBefore(",")
         val area = location.substringAfter(",")
 

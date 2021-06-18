@@ -11,8 +11,10 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.fixx.LoginScreen.viewmodels.RegisterViewmodel
 import com.example.fixx.NavigationBar.NavigationBarActivity
 import com.example.fixx.NavigationBar.NavigationBarActivity.Companion.CURRENT_LANGUAGE
+import com.example.fixx.POJOs.Technician
 import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.Support.FirebaseService
@@ -22,6 +24,9 @@ import java.util.*
 @Suppress("DEPRECATION")
 class SplashScreen : AppCompatActivity() {
 
+    private val viewMoedel : RegisterViewmodel by lazy {
+        RegisterViewmodel()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -69,11 +74,17 @@ class SplashScreen : AppCompatActivity() {
         if(FirestoreService.auth.currentUser != null
             && FirestoreService.auth.currentUser?.email != "defaultaccount@default.com"){
             Log.i("TAG", "checkLogin: HEERREE <<<<<<<<<<<<<<< ${FirestoreService.auth?.currentUser?.email} ")
-            FirestoreService.fetchUserOnce(onCompletion = {
-                    person ->
+            FirestoreService.fetchUserOnce(onCompletion = { person ->
                 NavigationBarActivity.USER_OBJECT = person
-                FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-                Intent(applicationContext,NavigationBarActivity::class.java).also {
+                (person as? Technician)?.apply {
+                    workLocations?.forEach {
+                        viewMoedel.subscribeToTopic(this.jobTitle + getWorkTopic(it))
+                        Log.i("TAG", "checkLogin: >>>>>>>>>>>>>>>>>>>"+this.jobTitle + getWorkTopic(it))
+                    }
+                }
+                FirebaseService.sharedPref =
+                    getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+                Intent(applicationContext, NavigationBarActivity::class.java).also {
                     startActivity(it)
                     finish()
                 }
@@ -115,6 +126,14 @@ class SplashScreen : AppCompatActivity() {
         alertDialog.setCancelable(false)
         alertDialog.show()
         alertDialog.window!!.setBackgroundDrawableResource(R.drawable.btn_border)
+    }
 
+    private fun getWorkTopic(location: String) : String{
+        val city = location.substringBefore(",")
+        val area = location.substringAfter(",")
+
+        return "%"+city.replace(" ","_", true)+"."+
+                area.replace(" ","_",true).
+                replace("-","_",true)
     }
 }
