@@ -26,20 +26,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FixX">
-        <activity android:name=".LoginScreen.Views.SignUpWithGoogleActivity"></activity>
-        <activity android:name=".addExtensionScreen.views.AddJobExtensionActivity" />
+        <activity android:name=".LoginScreen.Views.SignUpWithGoogleActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".addExtensionScreen.views.AddJobExtensionActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Support.PushNotificationReceiver"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".WorkAddresses.view.AddWorkAddress" />
-        <activity android:name=".WorkAddresses.view.MyWorkAddresses" />
-        <activity android:name=".NavigationBar.notification.NotificationActivity" />
-        <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity" />
+        <activity android:name=".WorkAddresses.view.AddWorkAddress"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".WorkAddresses.view.MyWorkAddresses"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.notification.NotificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".techOrderDetailsScreen.views.ImageFullScreenActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".techOrderDetailsScreen.views.TechViewOrderScreen"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <service
@@ -51,29 +58,42 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".jobs.views.JobsActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.TermsActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.HelpActivity" />
-        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity" />
-        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity" />
-        <activity android:name=".NavigationBar.NavigationBarActivity" />
-        <activity android:name=".JobDetailsDisplay.views.JobDetailsDisplayActivity" />
-        <activity android:name=".inAppChatScreens.views.NewMessageActivity">
+        <activity android:name=".jobs.views.JobsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.SettingsScreen.TermsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.SettingsScreen.SafetyTipsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.SettingsScreen.AboutUsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.SettingsScreen.HelpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".takeOrderScreen.views.CustomizeOrderActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.SettingsScreen.ProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationBar.NavigationBarActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".JobDetailsDisplay.views.JobDetailsDisplayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".inAppChatScreens.views.NewMessageActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NavigationBar.NavigationBarActivity" />
         </activity>
         <activity
             android:name=".inAppChatScreens.views.ChatLogActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".inAppChatScreens.views.NewMessageActivity" />
         </activity>
-        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity" />
-        <activity android:name=".LoginScreen.Views.SplashScreen">
+        <activity android:name=".technicianProfileScreen.view.TechnicianProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginScreen.Views.SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,13 +102,18 @@
         </activity>
         <activity
             android:name=".Addresses.view.MapActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".Addresses.view.AddAddressActivity"
-            android:label="Add Address" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen" />
-        <activity android:name=".Addresses.view.MyAddresses" /> <!-- added for maps -->
+            android:label="Add Address"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".showTechnicianScreen.view.ShowTechniciansScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Addresses.view.MyAddresses"
+            android:screenOrientation="portrait"/> <!-- added for maps -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -101,9 +126,12 @@
             android:value="@string/google_maps_api_key" />
 
         <activity android:name=".LoginScreen.Views.RegistrationActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".LoadingActivity" />
-        <activity android:name=".HomeActivity" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoadingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
