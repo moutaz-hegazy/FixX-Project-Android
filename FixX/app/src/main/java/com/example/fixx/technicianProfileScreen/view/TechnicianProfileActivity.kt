@@ -179,8 +179,10 @@ class TechnicianProfileActivity : AppCompatActivity() {
 
     fun observeData(){
 
-        viewModel.recyclerListData.observe(this, Observer{
-            adapter = TechnicianProfileRecyclerAdapter(technicianData?.uid!!, it as MutableList<Comment> , this)
+        viewModel.recyclerListData.observe(this, Observer{list ->
+            technicianData?.let {
+                adapter = TechnicianProfileRecyclerAdapter(it, list as MutableList<Comment> , this)
+            }
 
             adapter.notifyDataSetChanged()
             techProfileRecycler.adapter= adapter
