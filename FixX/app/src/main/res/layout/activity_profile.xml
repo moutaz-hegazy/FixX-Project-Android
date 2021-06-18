@@ -16,7 +16,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="Profile"
+            app:title="@string/Profile"
             app:titleTextColor="@color/white"
             >
         </androidx.appcompat.widget.Toolbar>
@@ -79,7 +79,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Name"
+                        android:text="@string/Name"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="18sp"/>
@@ -140,7 +140,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Email"
+                        android:text="@string/email"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="18sp"/>
@@ -202,7 +202,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Phone"
+                        android:text="@string/phone_number"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="18sp"/>
@@ -266,7 +266,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Password"
+                        android:text="@string/password"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="18sp"/>

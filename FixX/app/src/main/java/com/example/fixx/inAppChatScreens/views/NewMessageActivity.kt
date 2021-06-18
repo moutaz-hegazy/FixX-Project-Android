@@ -19,7 +19,7 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
-        supportActionBar?.title = "Chat"
+        supportActionBar?.title = getString(R.string.Chats)
 
         val adapter = GroupAdapter<ViewHolder>().apply {
             setOnItemClickListener { item, view ->

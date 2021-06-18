@@ -122,7 +122,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
         }
         binding.jobDetailsFromTimeLbl.text = job.fromTime
         binding.jobDetailsToTimeLbl.text = job.toTime
-        binding.jobDetailsStatusLbl.text = job.status.rawValue
+        binding.jobDetailsStatusLbl.text = getString(getStatusStringResource(job.status))
         binding.jobDisplayMenuBtn.setOnClickListener {
             showPopupMenu(it, job.status)
         }
@@ -224,7 +224,7 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             visibility = View.VISIBLE
             setOnClickListener {
                 viewmodel.removeSingleBidder()
-                binding.jobDetailsTechLayout.visibility = View.INVISIBLE
+                binding.jobDetailsTechLayout.visibility = View.GONE
                 // show dialog Edit or delete job.
             }
         }
@@ -420,6 +420,14 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun getStatusStringResource(status : Job.JobStatus) =
+        when(status){
+            Job.JobStatus.OnRequest -> R.string.onRequest
+            Job.JobStatus.Accepted -> R.string.accepted
+            Job.JobStatus.Completed -> R.string.completed
+        }
+
 
     private fun showBottomSheetDialog(tech : Technician,jobId:String, price: Int){
         val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_rating, null)

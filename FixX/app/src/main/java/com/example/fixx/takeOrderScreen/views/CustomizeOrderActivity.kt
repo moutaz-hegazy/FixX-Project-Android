@@ -15,7 +15,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -34,7 +33,6 @@ import com.example.fixx.R
 import com.example.fixx.Support.FirestoreService
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.ActivityCustomizeOrderBinding
-import com.example.fixx.inAppChatScreens.model.ChatPushNotification
 import com.example.fixx.showTechnicianScreen.models.JobRequestData
 import com.example.fixx.showTechnicianScreen.models.MultiJobRequestPushNotification
 import com.example.fixx.showTechnicianScreen.view.ShowTechniciansScreen
@@ -44,19 +42,21 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_customize_order.*
 import kotlinx.android.synthetic.main.bottom_sheet_pick.view.*
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class CustomizeOrderActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener ,DateSelected {
 
     private lateinit var binding: ActivityCustomizeOrderBinding
-    private val values = arrayListOf<String>("Select Location", "Add new Location")
+    private val values : ArrayList<String> by lazy{
+        arrayListOf<String>(getString(R.string.selectLocation), getString(R.string.AddLocation))
+    }
     private val images = arrayListOf<Bitmap>()
     private val viewModel : CustomizeOrderViewModel by lazy{
         CustomizeOrderViewModel()

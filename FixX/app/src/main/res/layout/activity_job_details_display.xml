@@ -137,6 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/jobDetails_description_lbl"
                 android:layout_width="0dp"
@@ -182,7 +183,7 @@
                 android:id="@+id/jobDetails_biddersTitle_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/bidders"
                 android:textColor="@color/red"
                 android:textSize="20sp"
@@ -190,6 +191,18 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/jobDetails_descTitle_lbl"
                 app:layout_constraintTop_toBottomOf="@+id/jobDetails_images_recycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/jobDetails_images_recycler"
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.136"
+                app:layout_constraintStart_toStartOf="@+id/jobDetails_imagesTitle_lbl"
+                app:layout_constraintTop_toBottomOf="@+id/jobDetails_imagesTitle_lbl" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/jobDetails_bidders_recycler"
@@ -206,18 +219,6 @@
                 app:layout_constraintVertical_bias="0.0">
 
             </androidx.recyclerview.widget.RecyclerView>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/jobDetails_images_recycler"
-                android:layout_width="0dp"
-                android:layout_height="85dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.136"
-                app:layout_constraintStart_toStartOf="@+id/jobDetails_imagesTitle_lbl"
-                app:layout_constraintTop_toBottomOf="@+id/jobDetails_imagesTitle_lbl" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/jobDetails_tech_layout"
@@ -304,7 +305,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/OfferedPrice"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="@+id/bidderItem_tech_rating"
                     app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating" />
 
@@ -314,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="TextView"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="@+id/bidderItem_confirmPriceTitle_lbl"
                     app:layout_constraintTop_toBottomOf="@+id/bidderItem_confirmPriceTitle_lbl"
                     tools:text="999" />
@@ -326,7 +327,7 @@
                     android:layout_marginStart="60dp"
                     android:layout_marginTop="10dp"
                     android:text="@string/Accept"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:backgroundTint="#009688"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bidderItem_techChat_btn" />
@@ -337,7 +338,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="60dp"
                     android:text="@string/Cancel"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:backgroundTint="#ED1808"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/jobDetails_techAccept_btn" />

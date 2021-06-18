@@ -15,7 +15,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
 
-        android:text="Select the language"/>
+        android:text="@string/SelectLanguage"/>
 
 
     <LinearLayout

@@ -20,7 +20,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp">
 
 
             <ImageView
@@ -28,11 +29,12 @@
                 android:layout_width="104dp"
                 android:layout_height="88dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/rounded_outline"
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/alumetal"
-                tools:layout_editor_absoluteY="7dp" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/alumetal" />
 
             <TextView
                 android:id="@+id/completed_orders_jobType_lbl"
@@ -83,14 +85,15 @@
                 android:id="@+id/completedOrderAddressLbl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:maxLines="3"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="10dp"
+                android:maxLines="3"
                 android:text="TextView"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/completed_order_job_image"
-                app:layout_constraintTop_toBottomOf="@+id/completed_order_job_image"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
                 tools:text="Alexandria,elmandraQuebly,20thst" />
 
             <TextView

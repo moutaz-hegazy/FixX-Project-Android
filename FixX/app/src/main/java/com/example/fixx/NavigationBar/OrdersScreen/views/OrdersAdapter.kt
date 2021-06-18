@@ -56,7 +56,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                         text = context.getString(R.string.onRequest)
                         setTextColor(Color.GREEN)
                     }
-                    view?.ongoingOrdersJobTypeLbl?.text = data[position].type
+                    view?.ongoingOrdersJobTypeLbl?.text = context.getString(getStringResourse(data[position].type)!!)
                     getImageResourse(data[position].type)?.let {
                         view?.ongoingOrderJobImage?.setImageResource(it)
                     }
@@ -95,7 +95,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                         text = context.getString(R.string.accepted)
                         setTextColor(Color.BLUE)
                     }
-                    view.ongoingOrdersJobTypeLbl.text = data[position].type
+                    view.ongoingOrdersJobTypeLbl.text = context.getString(getStringResourse(data[position].type)!!)
                     getImageResourse(data[position].type)?.let {
                         view.ongoingOrderJobImage.setImageResource(it)
                     }
@@ -123,7 +123,7 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
                 mRoot?.let { view ->
                     view.completedOrderDateLbl.text = data[position].completionDate
                     view.completedOrderPriceLbl.text = data[position].price.toString()
-                    view.completedOrdersJobTypeLbl.text = data[position].type
+                    view.completedOrdersJobTypeLbl.text = context.getString(getStringResourse(data[position].type)!!)
                     getImageResourse(data[position].type)?.let {
                         view.completedOrderJobImage.setImageResource(it)
                     }
@@ -168,6 +168,30 @@ class OrdersAdapter(val data: ArrayList<Job>, val type : Job.JobStatus) : Recycl
             "Pest_Control" -> R.drawable.pestcontrol
             "Wood_Painter" -> R.drawable.woodpainter
             "Swimming_pool" -> R.drawable.swimmingpool
+            else -> null
+        }
+    }
+
+    private fun getStringResourse(type : String) : Int?{
+        return when(type){
+            "Painter" -> R.string.Painter
+            "Plumber" -> R.string.Plumber
+            "Electrician" -> R.string.Electrician
+            "Carpenter" -> R.string.Carpenter
+            "Tiles_Handyman" -> R.string.Tiles_Handyman
+            "Parquet" -> R.string.Parquet
+            "Smith" -> R.string.Smith
+            "Decoration_Stones" -> R.string.Decoration_Stones
+            "Alumetal" -> R.string.Alumetal
+            "Air_Conditioner" -> R.string.Air_Conditioner
+            "Curtains" -> R.string.Curtains
+            "Glass" -> R.string.Glass
+            "Satellite" -> R.string.Satellite
+            "Gypsum_Works" -> R.string.Gypsum_Works
+            "Marble" -> R.string.Marble
+            "Pest_Control" -> R.string.Pest_Control
+            "Wood_Painter" -> R.string.Wood_Painter
+            "Swimming_pool" -> R.string.Swimming_pool
             else -> null
         }
     }

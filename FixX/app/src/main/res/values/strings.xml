@@ -377,6 +377,12 @@
     <string name="CreateAccFail">Failed to create an account</string>
     <string name="EnterEmail">Enter your e-mail</string>
     <string name="AddReply">write your reply</string>
+    <string name="Profile">Profile</string>
+    <string name="Name">Name</string>
+    <string name="SelectLanguage">Select language</string>
+    <string name="PickImage">Pick an image</string>
+    <string name="selectLocation">Select Location</string>
+    <string name="AddLocation">Add new Location</string>
 
 
 </resources>
