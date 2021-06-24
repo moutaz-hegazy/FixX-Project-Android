@@ -1,7 +1,9 @@
 package com.example.fixx.NavigationBar.SettingsScreen
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,6 +11,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -92,6 +95,16 @@ class ProfileActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         var image : Bitmap? = null
         if(resultCode == Activity.RESULT_OK){
+
+            val builder = AlertDialog.Builder(this)
+            val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            @SuppressLint("InflateParams") val view: View = inflater.inflate(R.layout.layout_custom_progress_bar, null)
+            builder.setView(view)
+
+            val dialog = builder.create()
+            dialog.setCancelable(false)
+            dialog.show()
+
             when (requestCode) {
                 Constants.cameraPickerRequestCode -> {
                     image = data?.extras?.get("data") as? Bitmap
@@ -111,6 +124,7 @@ class ProfileActivity : AppCompatActivity() {
                         image?.let {
                             profile_profilepicture_image_view.setImageBitmap(it)
                         }
+                        dialog.hide()
                     },onFailBinding = {
                         Toast.makeText(this,getString(R.string.ImageUploadFailed),Toast.LENGTH_LONG).show()
                     })

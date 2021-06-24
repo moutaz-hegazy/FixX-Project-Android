@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible"/>
 
-    <ImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/comment_item_profile_img"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -30,7 +30,8 @@
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        />
 
 
     <TextView

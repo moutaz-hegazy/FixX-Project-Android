@@ -83,9 +83,6 @@ class TechnicianProfileActivity : AppCompatActivity() {
         }
 
         if (technicianData?.profilePicture != null){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                image.clipToOutline = true
-            }
             image.visibility = View.VISIBLE
             Picasso.get().load(technicianData?.profilePicture?.second).into(image)
         }

@@ -48,9 +48,6 @@ class TechnicianProfileRecyclerAdapter(val tech : Technician,val arrayList: Muta
         name.text = arrayList[position].username
 
         if(arrayList[position].profilePicture != null){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                image.clipToOutline = true
-            }
             image.visibility = View.VISIBLE
             Picasso.get().load(arrayList[position].profilePicture).into(image)
         } else{
