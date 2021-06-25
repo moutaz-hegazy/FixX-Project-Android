@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NavigationBar.OrdersScreen.views.CompletedOrdersFragment" >
+    tools:context=".NavigationBar.OrdersScreen.views.CompletedOrdersFragment"
+    android:background="@drawable/gardient_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/completed_recycler"

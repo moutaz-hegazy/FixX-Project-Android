@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NavigationBar.SettingsScreen.HelpActivity">
+    tools:context=".NavigationBar.SettingsScreen.HelpActivity"
+    android:background="@drawable/gardient_background">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"

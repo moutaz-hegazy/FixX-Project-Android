@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".showTechnicianScreen.view.ShowTechniciansScreen">
+    tools:context=".showTechnicianScreen.view.ShowTechniciansScreen"
+    android:background="@drawable/gardient_background">
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
@@ -17,10 +18,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/showTechniciansScreen_recyclerView"
         android:layout_width="411dp"
-        android:layout_height="689dp"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

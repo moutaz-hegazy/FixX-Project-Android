@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".JobDetailsDisplay.views.JobDetailsDisplayActivity">
+    tools:context=".JobDetailsDisplay.views.JobDetailsDisplayActivity"
+    android:background="@drawable/gardient_background">
 
     <ImageView
         android:id="@+id/jobDetails_job_image"

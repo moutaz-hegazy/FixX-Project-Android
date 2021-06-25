@@ -21,24 +21,24 @@ class PickJob : Fragment() {
         super.onCreate(savedInstanceState)
 
         jobs.add(getString(R.string.Job))
-        jobs.add(getJobType(R.string.Plumber))
-        jobs.add(getJobType(R.string.Painter))
-        jobs.add(getJobType(R.string.Electrician))
-        jobs.add(getJobType(R.string.Carpenter))
-        jobs.add(getJobType(R.string.Tiles_Handyman))
-        jobs.add(getJobType(R.string.Parquet))
-        jobs.add(getJobType(R.string.Smith))
-        jobs.add(getJobType(R.string.Decoration_Stones))
-        jobs.add(getJobType(R.string.Alumetal))
-        jobs.add(getJobType(R.string.Air_Conditioner))
-        jobs.add(getJobType(R.string.Curtains))
-        jobs.add(getJobType(R.string.Glass))
-        jobs.add(getJobType(R.string.Satellite))
-        jobs.add(getJobType(R.string.Gypsum_Works))
-        jobs.add(getJobType(R.string.Marble))
-        jobs.add(getJobType(R.string.Pest_Control))
-        jobs.add(getJobType(R.string.Wood_Painter))
-        jobs.add(getJobType(R.string.Swimming_pool))
+        jobs.add(getString(R.string.Plumber))
+        jobs.add(getString(R.string.Painter))
+        jobs.add(getString(R.string.Electrician))
+        jobs.add(getString(R.string.Carpenter))
+        jobs.add(getString(R.string.Tiles_Handyman))
+        jobs.add(getString(R.string.Parquet))
+        jobs.add(getString(R.string.Smith))
+        jobs.add(getString(R.string.Decoration_Stones))
+        jobs.add(getString(R.string.Alumetal))
+        jobs.add(getString(R.string.Air_Conditioner))
+        jobs.add(getString(R.string.Curtains))
+        jobs.add(getString(R.string.Glass))
+        jobs.add(getString(R.string.Satellite))
+        jobs.add(getString(R.string.Gypsum_Works))
+        jobs.add(getString(R.string.Marble))
+        jobs.add(getString(R.string.Pest_Control))
+        jobs.add(getString(R.string.Wood_Painter))
+        jobs.add(getString(R.string.Swimming_pool))
     }
 
 
@@ -99,26 +99,4 @@ class PickJob : Fragment() {
         }
     }
 
-
-    private fun getJobType(id: Int) = when(id){
-            R.string.Painter ->  "Painter"
-            R.string.Plumber ->  "Plumber"
-            R.string.Electrician -> "Electrician"
-            R.string.Carpenter -> "Carpenter"
-            R.string.Tiles_Handyman -> "Tiles_Handyman"
-            R.string.Parquet -> "Parquet"
-            R.string.Smith -> "Smith"
-            R.string.Decoration_Stones -> "Decoration_Stones"
-            R.string.Alumetal -> "Alumetal"
-            R.string.Air_Conditioner -> "Air_Conditioner"
-            R.string.Curtains -> "Curtains"
-            R.string.Glass -> "Glass"
-            R.string.Satellite -> "Satellite"
-            R.string.Gypsum_Works -> "Gypsum_Works"
-            R.string.Marble -> "Marble"
-            R.string.Pest_Control -> "Pest_Control"
-            R.string.Wood_Painter -> "Wood_Painter"
-            R.string.Swimming_pool -> "Swimming_pool"
-            else -> ""
-    }
 }

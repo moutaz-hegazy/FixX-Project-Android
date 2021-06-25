@@ -383,6 +383,17 @@
     <string name="PickImage">Pick an image</string>
     <string name="selectLocation">Select Location</string>
     <string name="AddLocation">Add new Location</string>
+    <string name="your_email">your email</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="your_name">your name</string>
+    <string name="enter_your_new_password">Enter your new password</string>
+    <string name="your_password">your password</string>
+    <string name="re_enter_your_new_password">Re enter your new password</string>
+    <string name="enter_your_old_password">Enter your old password</string>
+    <string name="enter_your_phone">Enter your phone</string>
+    <string name="your_phone">your phone</string>
 
 
 </resources>

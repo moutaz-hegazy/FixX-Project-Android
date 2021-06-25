@@ -1,148 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="10dp"
-    android:layout_marginTop="8dp">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/comment_item_rounded_letter_lbl"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="28dp"
-        android:background="@drawable/bg_blue"
-        android:gravity="center"
-        android:textColor="#fff"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
-
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/comment_item_profile_img"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="28dp"
-        android:background="@drawable/rounded_outline"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"
-        />
-
-
-    <TextView
-        android:id="@+id/comment_item_username_lbl"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:hint="Noha Abbass"
-        app:layout_constraintBottom_toBottomOf="@+id/comment_item_rounded_letter_lbl"
-        app:layout_constraintStart_toEndOf="@+id/comment_item_rounded_letter_lbl"
-        app:layout_constraintTop_toTopOf="@+id/comment_item_rounded_letter_lbl" />
-
-    <RatingBar
-        android:id="@+id/comment_item_ratingBar"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="12dp"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:rating="2.4"
-        app:layout_constraintStart_toStartOf="@+id/comment_item_rounded_letter_lbl"
-        app:layout_constraintTop_toBottomOf="@+id/comment_item_rounded_letter_lbl" />
-
-    <TextView
-        android:id="@+id/comment_item_date_lbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:hint="29.04.21"
-        app:layout_constraintBottom_toBottomOf="@+id/comment_item_ratingBar"
-        app:layout_constraintStart_toEndOf="@+id/comment_item_ratingBar"
-        app:layout_constraintTop_toTopOf="@+id/comment_item_ratingBar" />
-
-    <TextView
-        android:id="@+id/comment_item_comment_body_lbl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="10dp"
-        android:background="#E4E2E2"
-        android:paddingBottom="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/comment_item_ratingBar"
-        app:layout_constraintTop_toBottomOf="@+id/comment_item_ratingBar" />
-    <ImageView
-        android:id="@+id/comment_item_reply_profile_img"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:background="@drawable/rounded_outline"
-        android:src="@drawable/ic_launcher_background"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/comment_item_reply_lbl"
-        app:layout_constraintStart_toStartOf="@+id/comment_item_comment_body_lbl"
-        app:layout_constraintTop_toTopOf="@+id/comment_item_reply_lbl" />
-
-
-    <TextView
-        android:id="@+id/comment_item_reply_rounded_letter_lbl"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="25dp"
-        android:background="@drawable/bg_blue"
-        android:gravity="center"
-        android:textColor="#fff"
-        android:textSize="14sp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/comment_item_comment_body_lbl"
-        app:layout_constraintTop_toTopOf="@+id/comment_item_reply_lbl" />
-
-    <EditText
-        android:id="@+id/comment_item_reply_Txt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="10dp"
-        android:background="@android:color/transparent"
-        android:hint="write a reply"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/comment_item_reply_btn"
-        app:layout_constraintStart_toEndOf="@+id/comment_item_reply_rounded_letter_lbl"
-        app:layout_constraintTop_toBottomOf="@+id/comment_item_comment_body_lbl" />
-
-    <TextView
-        android:id="@+id/comment_item_reply_lbl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="10dp"
-        android:background="#E4E2E2"
         android:paddingTop="5dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/comment_item_reply_btn"
-        app:layout_constraintStart_toStartOf="@+id/comment_item_comment_body_lbl"
-        app:layout_constraintTop_toBottomOf="@+id/comment_item_comment_body_lbl" />
+        android:paddingBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp">
 
-    <Button
-        android:id="@+id/comment_item_reply_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Reply"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/comment_item_reply_Txt"
-        app:layout_constraintEnd_toEndOf="@+id/comment_item_comment_body_lbl"
-        app:layout_constraintTop_toTopOf="@+id/comment_item_reply_Txt" />
+        <TextView
+            android:id="@+id/comment_item_rounded_letter_lbl"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/bg_blue"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"/>
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/comment_item_profile_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/rounded_outline"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
+            />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/comment_item_username_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:hint="Noha Abbass"
+            app:layout_constraintBottom_toBottomOf="@+id/comment_item_rounded_letter_lbl"
+            app:layout_constraintStart_toEndOf="@+id/comment_item_rounded_letter_lbl"
+            app:layout_constraintTop_toTopOf="@+id/comment_item_rounded_letter_lbl" />
+
+        <RatingBar
+            android:id="@+id/comment_item_ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="12dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="2.4"
+            app:layout_constraintStart_toStartOf="@+id/comment_item_rounded_letter_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/comment_item_rounded_letter_lbl" />
+
+        <TextView
+            android:id="@+id/comment_item_date_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="29.04.21"
+            app:layout_constraintBottom_toBottomOf="@+id/comment_item_ratingBar"
+            app:layout_constraintStart_toEndOf="@+id/comment_item_ratingBar"
+            app:layout_constraintTop_toTopOf="@+id/comment_item_ratingBar" />
+
+        <TextView
+            android:id="@+id/comment_item_comment_body_lbl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:background="#E4E2E2"
+            android:paddingBottom="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/comment_item_ratingBar"
+            app:layout_constraintTop_toBottomOf="@+id/comment_item_ratingBar" />
+
+        <ImageView
+            android:id="@+id/comment_item_reply_profile_img"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/rounded_outline"
+            android:src="@drawable/ic_launcher_background"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/comment_item_reply_lbl"
+            app:layout_constraintStart_toStartOf="@+id/comment_item_comment_body_lbl"
+            app:layout_constraintTop_toTopOf="@+id/comment_item_reply_lbl" />
+
+
+        <TextView
+            android:id="@+id/comment_item_reply_rounded_letter_lbl"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="25dp"
+            android:background="@drawable/bg_blue"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/comment_item_comment_body_lbl"
+            app:layout_constraintTop_toTopOf="@+id/comment_item_reply_lbl" />
+
+        <EditText
+            android:id="@+id/comment_item_reply_Txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:hint="write a reply"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/comment_item_reply_btn"
+            app:layout_constraintStart_toEndOf="@+id/comment_item_reply_rounded_letter_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/comment_item_comment_body_lbl" />
+
+        <TextView
+            android:id="@+id/comment_item_reply_lbl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="21dp"
+            android:background="#E4E2E2"
+            android:paddingTop="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/comment_item_reply_btn"
+            app:layout_constraintStart_toStartOf="@+id/comment_item_comment_body_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/comment_item_comment_body_lbl" />
+
+        <Button
+            android:id="@+id/comment_item_reply_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Reply"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/comment_item_reply_Txt"
+            app:layout_constraintEnd_toEndOf="@+id/comment_item_comment_body_lbl"
+            app:layout_constraintTop_toTopOf="@+id/comment_item_reply_Txt" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

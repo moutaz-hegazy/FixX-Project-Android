@@ -372,4 +372,16 @@
     <string name="PickImage">اختر صورة</string>
     <string name="selectLocation">اختر عنوانك</string>
     <string name="AddLocation">اضف عنواناً</string>
+
+    <string name="your_email">البريد الإلكترونى</string>
+    <string name="cancel">إلغاء</string>
+    <string name="save">حفظ</string>
+    <string name="enter_your_name">قم بإدخال اسمك</string>
+    <string name="your_name">اسمك</string>
+    <string name="enter_your_new_password">قم بإدخال كلمة السر الجديدة</string>
+    <string name="your_password">كلمة السر</string>
+    <string name="re_enter_your_new_password">قم بإعادة إدخال كلمة السر الجديدة</string>
+    <string name="enter_your_old_password">قم بإدخال كلمة السر القديمة</string>
+    <string name="enter_your_phone">قم بإدخال رقم هاتفك</string>
+    <string name="your_phone">رقم الهاتف</string>
 </resources>

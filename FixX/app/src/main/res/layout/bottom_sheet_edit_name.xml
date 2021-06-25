@@ -12,7 +12,7 @@
         android:textColor="@android:color/black"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:text="Enter your name"/>
+        android:text="@string/enter_your_name"/>
 
     <EditText
         android:id="@+id/bottom_sheet_edit_name_edit_text"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="40dp"
-        android:hint="your name"/>
+        android:hint="@string/your_name"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/purple_500"
             android:background="@android:color/transparent"
-            android:text="Cancel"/>
+            android:text="@string/cancel"/>
 
         <Button
             android:id="@+id/bottom_sheet_edit_name_save_button"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/purple_500"
             android:background="@android:color/transparent"
-            android:text="Save"/>
+            android:text="@string/save"/>
 
     </LinearLayout>
 

@@ -40,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/email"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:maxLines="1"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
@@ -111,7 +111,7 @@
         android:id="@+id/signup_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="175dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_bg"
         android:text="@string/sign_up"
         android:textAlignment="center"
@@ -121,7 +121,7 @@
         app:backgroundTint="@color/turquoise"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/confirmPass"
         app:layout_constraintWidth_percent="0.8" />
 
     <!--<Button

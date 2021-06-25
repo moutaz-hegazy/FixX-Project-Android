@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".jobs.views.onGoingJobsFragment">
+    tools:context=".jobs.views.onGoingJobsFragment"
+    android:background="@drawable/gardient_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ongoingJobs_recycler"

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="5dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="10dp"
+    android:background="@drawable/gardient_background">
 
     <ImageView
         android:id="@+id/bidderItem_tech_imageView"
