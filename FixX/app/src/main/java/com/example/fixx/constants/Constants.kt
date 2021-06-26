@@ -6,6 +6,7 @@ import com.example.fixx.R
 sealed class Constants {
 
     companion object{
+
         const val START_WORK_ADDRESS_ACTIVITY_REQUEST_CODE = 400
         const val cameraPickerRequestCode = 1
         const val galleryPickerRequestCode = 2
@@ -209,5 +210,11 @@ sealed class Constants {
             "عزبة سعد",
             "أبيس"
         )
+
+        val jobs = arrayOf("Job","Painter","Plumber","Electrician","Carpenter","Tiles Handyman","Parquet","Smith","Decoration Stones","Alumetal",
+        "Air Conditioner","Curtains","Glass","Satellite","Gypsum Works","Marble","Pest Control","Wood Painter","Pool\\n maintain")
+
+        val jobInArabic = arrayOf("صنعة","نقاش","سباك","كهربائى","نجار","سيراميك","باركيه","حداد","واجهات حجرية","الوميتال",
+            "صيانة تكييف","ستائر","زجاج","صيانة دش","اعمال جبس","رخام","مكافحة حشرات","استرجى","حمامات سباحة")
     }
 }

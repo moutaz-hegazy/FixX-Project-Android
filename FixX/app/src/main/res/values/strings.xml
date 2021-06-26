@@ -394,6 +394,7 @@
     <string name="enter_your_old_password">Enter your old password</string>
     <string name="enter_your_phone">Enter your phone</string>
     <string name="your_phone">your phone</string>
+    <string name="select_job">Please select your job</string>
 
 
 </resources>

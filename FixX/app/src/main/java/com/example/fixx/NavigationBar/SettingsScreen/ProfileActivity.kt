@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -141,39 +142,147 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun showBottomSheetDialog() {
+    private fun showBottomSheetDialog(){
         val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_pick, null)
-
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(btnsheet.rootView)
-
-        btnsheet.bottomSheet_gallery_layout.setOnClickListener {
-            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, Constants.galleryPickerRequestCode)
-            dialog.dismiss()
-        }
-
-        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_DENIED
-        )
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.CAMERA),
-                Constants.CAMERA_PERMISSION_REQUEST_CODE
-            )
-
         btnsheet.bottomSheet_camera_layout.setOnClickListener {
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraIntent, Constants.cameraPickerRequestCode)
+            checkForPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,"Save"
+                ,Constants.EXTERNAL_STORAGE_REQUEST_CODE){
+                checkForPermission(android.Manifest.permission.CAMERA,"Camera",
+                    Constants.CAMERA_PERMISSION_REQUEST_CODE){
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(
+                        takePicture,
+                        Constants.cameraPickerRequestCode
+                    )
+                }
+            }
+
             dialog.dismiss()
         }
-
-        btnsheet.setOnClickListener {
+        btnsheet.bottomSheet_gallery_layout.setOnClickListener {
+            checkForPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,"Gallery",
+                Constants.GALLERY_PERMISSION_REQUEST_CODE){
+                val pickPhoto = Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
+                startActivityForResult(pickPhoto, Constants.galleryPickerRequestCode)
+            }
             dialog.dismiss()
         }
-
         dialog.show()
     }
+
+    // camera permission Code ->
+    private fun checkForPermission(permission : String, name : String, requestCode : Int ,onGrantedHandler: ()->Unit){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            when {
+                ContextCompat.checkSelfPermission(applicationContext,permission) == PackageManager.PERMISSION_GRANTED -> {
+
+                    onGrantedHandler()
+                    Toast.makeText(this, "$name Permission Granted", Toast.LENGTH_SHORT).show()
+                }
+                shouldShowRequestPermissionRationale(permission) -> showDialog(permission, name, requestCode)
+
+                else -> ActivityCompat.requestPermissions(this, arrayOf(permission),requestCode)
+            }
+        }
+    }
+
+    private fun showDialog(permission: String, name: String, requestCode: Int){
+        val builder = AlertDialog.Builder(this).apply {
+            title = "Permission Required"
+            setMessage("Permission to access $name is required to continue")
+            setPositiveButton("Ok"){
+                    dialog, which ->
+                ActivityCompat.requestPermissions(this@ProfileActivity, arrayOf(permission), requestCode)
+            }
+        }
+        builder.create().show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        fun innerCheck(name: String) : Boolean{
+            return if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this,"$name permission refused",Toast.LENGTH_SHORT)
+                false
+            }else{
+                Toast.makeText(this,"$name permission accepted",Toast.LENGTH_SHORT)
+                true
+            }
+        }
+
+        when(requestCode){
+            Constants.EXTERNAL_STORAGE_REQUEST_CODE ->{
+                checkForPermission(android.Manifest.permission.CAMERA,"Camera",
+                    Constants.CAMERA_PERMISSION_REQUEST_CODE){
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(
+                        takePicture,
+                        Constants.cameraPickerRequestCode
+                    )
+                }
+            }
+
+            Constants.CAMERA_PERMISSION_REQUEST_CODE -> {
+                if (innerCheck("Camera")){
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(
+                        takePicture,
+                        Constants.cameraPickerRequestCode
+                    )
+                }
+            }
+            Constants.GALLERY_PERMISSION_REQUEST_CODE -> {
+                if(innerCheck("Gallery")){
+                    val pickPhoto = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                    startActivityForResult(pickPhoto, Constants.galleryPickerRequestCode)
+                }
+            }
+        }
+    }
+
+
+
+//    private fun showBottomSheetDialog() {
+//        val btnsheet = layoutInflater.inflate(R.layout.bottom_sheet_pick, null)
+//
+//        val dialog = BottomSheetDialog(this)
+//        dialog.setContentView(btnsheet.rootView)
+//
+//        btnsheet.bottomSheet_gallery_layout.setOnClickListener {
+//            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+//            startActivityForResult(gallery, Constants.galleryPickerRequestCode)
+//            dialog.dismiss()
+//        }
+//
+//        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
+//            == PackageManager.PERMISSION_DENIED
+//        )
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(Manifest.permission.CAMERA),
+//                Constants.CAMERA_PERMISSION_REQUEST_CODE
+//            )
+//
+//        btnsheet.bottomSheet_camera_layout.setOnClickListener {
+//            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//            startActivityForResult(cameraIntent, Constants.cameraPickerRequestCode)
+//            dialog.dismiss()
+//        }
+//
+//        btnsheet.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//
+//        dialog.show()
+//    }
 
     private fun showBottomSheetEditName() {
 

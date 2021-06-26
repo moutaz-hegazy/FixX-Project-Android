@@ -384,4 +384,6 @@
     <string name="enter_your_old_password">قم بإدخال كلمة السر القديمة</string>
     <string name="enter_your_phone">قم بإدخال رقم هاتفك</string>
     <string name="your_phone">رقم الهاتف</string>
+
+    <string name="select_job">من فضلك قم بإختيار صنعتك</string>
 </resources>

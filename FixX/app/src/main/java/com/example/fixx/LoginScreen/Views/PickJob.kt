@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Toast
 import com.example.fixx.Addresses.view.MySpinnerAdapter
 import com.example.fixx.R
 import com.example.fixx.constants.Constants
 import kotlinx.android.synthetic.main.fragment_pick_job.*
+import kotlinx.android.synthetic.main.fragment_sign_up_on_boarding.*
 
 class PickJob : Fragment() {
 
@@ -55,11 +57,15 @@ class PickJob : Fragment() {
         setJobSpinner()
 
         pick_job_fragment_next_btn.setOnClickListener {
-            arguments?.putString(Constants.TRANS_JOB, technicianJob)
-            TechnicianAddressFragment().apply {
-                this.arguments = this@PickJob.arguments
-            }.also {
-                fragmentManager?.beginTransaction()?.replace(R.id.pick_job_fragment, it)?.commit()
+            if(!technicianJob.isNullOrEmpty()){
+                arguments?.putString(Constants.TRANS_JOB, technicianJob)
+                TechnicianAddressFragment().apply {
+                    this.arguments = this@PickJob.arguments
+                }.also {
+                    fragmentManager?.beginTransaction()?.replace(R.id.pick_job_fragment, it)?.commit()
+                }
+            }else{
+                Toast.makeText(context,R.string.select_job,Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -93,10 +99,20 @@ class PickJob : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                technicianJob = pick_job_fragment_job_spinner.selectedItem.toString()
+                technicianJob = getJobEnglishName( pick_job_fragment_job_spinner.selectedItem.toString())
             }
 
         }
+    }
+
+    private fun getJobEnglishName(job: String): String {
+        var myJob = job
+        for (iterator in Constants.jobInArabic.indices) {
+            if (job.equals(Constants.jobInArabic[iterator])) {
+                myJob = Constants.jobs[iterator]
+            }
+        }
+        return myJob
     }
 
 }
