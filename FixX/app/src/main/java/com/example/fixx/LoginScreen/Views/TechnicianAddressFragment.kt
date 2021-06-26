@@ -53,7 +53,6 @@ class TechnicianAddressFragment : Fragment() {
         cairoArea.addAll(
             arrayOf(
                 getString(R.string.Area),
-                getString(R.string.Riyadah),
                 getString(R.string.AlShrouk),
                 getString(R.string.firstSettlement),
                 getString(R.string.FifthSettlement),
@@ -87,6 +86,7 @@ class TechnicianAddressFragment : Fragment() {
         alexArea.addAll(
             arrayOf(
                 getString(R.string.Area),
+                getString(R.string.Riyadah),
                 getString(R.string.MoharamBek),
                 getString(R.string.AbuQir),
                 getString(R.string.Montaza),
@@ -155,10 +155,20 @@ class TechnicianAddressFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }else{
-                addresses.add(pick_address_fragment_city_spinner.selectedItem.toString()+"," + pick_address_fragment_area_spinner.selectedItem.toString())
-                showAddressList()
+                var addressFound = false
+                for (add in addresses.indices){
+                    val address = pick_address_fragment_city_spinner.selectedItem.toString()+"," + pick_address_fragment_area_spinner.selectedItem.toString()
+                    if (address == addresses[add]){
+                        addressFound = true
+                    }
+                }
+                if (!addressFound){
+                    addresses.add(pick_address_fragment_city_spinner.selectedItem.toString()+"," + pick_address_fragment_area_spinner.selectedItem.toString())
+                    showAddressList()
+                }
                 pick_address_fragment_city_spinner.setSelection(0)
                 pick_address_fragment_area_spinner.setSelection(0)
+
             }
 
         }

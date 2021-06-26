@@ -40,6 +40,7 @@ class SignUpTabFragment: Fragment() {
     var passwordEditText: EditText? = null
     var confirmPasswordEditText: EditText? = null
     var signUpButton: Button? = null
+    var progressBar: ProgressBar? = null
 
     var dummyButton: Button? = null
 
@@ -71,6 +72,7 @@ class SignUpTabFragment: Fragment() {
         passwordEditText = root.findViewById(R.id.pass)
         confirmPasswordEditText = root.findViewById(R.id.confirmPass)
         signUpButton = root.findViewById(R.id.signup_button)
+        progressBar = root.findViewById(R.id.signup_progressBar)
 
         //dummyButton = root.findViewById(R.id.dummy_button)
 
@@ -146,6 +148,9 @@ class SignUpTabFragment: Fragment() {
                         confirmPasswordEditText?.text?.clear()
                         Toast.makeText(context, "this email already exists.", Toast.LENGTH_SHORT).show()
                     }else{
+                        signUpButton?.visibility = View.INVISIBLE
+                        progressBar?.visibility = View.VISIBLE
+
                         FirebaseAuth.getInstance().signOut()
                         FirestoreService.registerUser(email,password, onSuccessHandler = {
                             if (passedAccountType == "User"){
@@ -175,10 +180,15 @@ class SignUpTabFragment: Fragment() {
                                         activity?.finish()
                                     },onFailHandler = {
                                         Toast.makeText(context,"Register failed",Toast.LENGTH_SHORT)
+
+                                        signUpButton?.visibility = View.VISIBLE
+                                        progressBar?.visibility = View.INVISIBLE
                                     })
                             }
                         }, onFailHandler = {
                             Toast.makeText(context, "Register fail.",Toast.LENGTH_SHORT).show()
+                            signUpButton?.visibility = View.VISIBLE
+                            progressBar?.visibility = View.INVISIBLE
                         })
                     }
                 }

@@ -65,7 +65,9 @@
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/bidderItem_techName_lbl"
         app:layout_constraintTop_toBottomOf="@+id/bidderItem_tech_rating"
-        app:srcCompat="@drawable/chat_icon" />
+        app:srcCompat="@drawable/msg"
+        android:background="@null"
+        android:scaleType="fitCenter"/>
 
     <ImageButton
         android:id="@+id/bidderItem_techCall_btn"
@@ -74,7 +76,9 @@
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toEndOf="@+id/bidderItem_techChat_btn"
         app:layout_constraintTop_toTopOf="@+id/bidderItem_techChat_btn"
-        app:srcCompat="@drawable/call_icon" />
+        app:srcCompat="@drawable/phone"
+        android:scaleType="fitCenter"
+        android:background="@null"/>
 
     <TextView
         android:id="@+id/bidderItem_confirmPriceTitle_lbl"

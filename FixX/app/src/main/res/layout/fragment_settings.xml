@@ -107,14 +107,15 @@
                 android:id="@+id/settings_work_profile_layOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:padding="15sp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:visibility="gone">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_baseline_work_24"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_baseline_work_24" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -203,14 +204,15 @@
                 android:id="@+id/settings_WorkLocations_layOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:orientation="horizontal"
                 android:padding="15sp"
-                android:orientation="horizontal">
+                android:visibility="gone">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/work_location_icon"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/work" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

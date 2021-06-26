@@ -47,10 +47,12 @@
         android:id="@+id/tech_view_order_chat_btn"
         android:layout_width="48dp"
         android:layout_height="34dp"
-        android:background="@color/white"
+        android:background="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tech_view_order_user_imageView"
         app:layout_constraintStart_toStartOf="@+id/tech_view_order_user_name_lbl"
-        app:srcCompat="@drawable/chat_icon" />
+        app:srcCompat="@drawable/msg"
+        android:scaleType="fitCenter"
+        />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -424,9 +426,9 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@android:color/holo_red_dark"
-        android:visibility="invisible"
         android:text="@string/Deny"
         android:textSize="12sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/tech_view_order_chat_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

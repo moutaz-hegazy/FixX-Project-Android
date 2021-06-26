@@ -7,14 +7,16 @@
     android:layout_height="wrap_content"
     android:background="#00FFFFFF">
 
-    <ImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/cutomize_order_recycler_image_view"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/black"/>
     <ImageButton
         android:id="@+id/order_image_optionsBtn"
         android:layout_width="20dp"

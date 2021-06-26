@@ -5,8 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.fixx.NavigationBar.NavigationBarActivity
@@ -33,6 +32,10 @@ class RegistrationActivity : AppCompatActivity(){
     var viewPager: ViewPager? = null
 
     var google: Button? = null
+    var progressBar: ProgressBar? = null
+
+    var googleTxt: TextView? = null
+    var googleImg: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,9 @@ class RegistrationActivity : AppCompatActivity(){
         viewPager = findViewById(R.id.myOrders_viewPager)
 
         google = findViewById(R.id.register_google_btn)
+        progressBar = findViewById(R.id.google_progressBar)
+        googleImg = findViewById(R.id.google_img)
+        googleTxt = findViewById(R.id.google_txt)
 
 
         tabLayout?.newTab()?.setText(R.string.login)?.let {
@@ -91,6 +97,12 @@ class RegistrationActivity : AppCompatActivity(){
             FirestoreService.checkIfEmailExists(email){
                 exists ->
                 if(exists){
+
+                    google?.visibility = View.INVISIBLE
+                    googleTxt?.visibility = View.INVISIBLE
+                    googleImg?.visibility = View.INVISIBLE
+                    progressBar?.visibility = View.VISIBLE
+
                     FirestoreService.fetchUserOnce{ person->
                         USER_OBJECT = person
                         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
@@ -103,6 +115,10 @@ class RegistrationActivity : AppCompatActivity(){
                     }
                 }
                 else{
+                    google?.visibility = View.INVISIBLE
+                    googleTxt?.visibility = View.INVISIBLE
+                    googleImg?.visibility = View.INVISIBLE
+                    progressBar?.visibility = View.VISIBLE
                     // sign up activity to enter extra data (phone, type, username)
                     Intent(this,SignUpWithGoogleActivity::class.java).also {
                         startActivity(it)
@@ -112,6 +128,10 @@ class RegistrationActivity : AppCompatActivity(){
             }
         }, onFailHandler = {
             Toast.makeText(this, "Failed to login", Toast.LENGTH_SHORT).show()
+            google?.visibility = View.VISIBLE
+            googleTxt?.visibility = View.VISIBLE
+            googleImg?.visibility = View.VISIBLE
+            progressBar?.visibility = View.INVISIBLE
         })
     }
 

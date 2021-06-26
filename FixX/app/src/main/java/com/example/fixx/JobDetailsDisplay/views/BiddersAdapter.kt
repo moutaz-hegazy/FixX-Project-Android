@@ -14,6 +14,7 @@ import com.example.fixx.POJOs.Technician
 import com.example.fixx.constants.Constants
 import com.example.fixx.databinding.BidderRecyclerItemBinding
 import com.example.fixx.inAppChatScreens.views.ChatLogActivity
+import com.example.fixx.technicianProfileScreen.view.TechnicianProfileActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_job_details_display.view.*
 
@@ -64,6 +65,13 @@ class JobDetailsBiddersAdapter(val data : List<Technician>, val prices : Map<Str
 
         holder.binding.bidderItemAcceptBtn.setOnClickListener {
             onAcceptHandler(data[position], prices[data[position].uid]!!)
+        }
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context,TechnicianProfileActivity::class.java)
+            intent.putExtra(Constants.TRANS_USERDATA,data[position])
+            intent.putExtra(Constants.TRANS_RESPONSE_BOOL,true)
+            context.startActivity(intent)
         }
     }
 

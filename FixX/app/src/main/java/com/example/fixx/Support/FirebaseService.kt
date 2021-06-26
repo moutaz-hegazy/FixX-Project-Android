@@ -256,7 +256,7 @@ class FirebaseService : FirebaseMessagingService() {
         .setContentTitle("SUMMARY")
         //set content text to support devices running API level < 24
         .setContentText("Two new messages")
-        .setSmallIcon(R.drawable.call_icon)
+        .setSmallIcon(R.drawable.phone)
         //build summary info into InboxStyle template
         .setStyle(
             NotificationCompat.InboxStyle()
