@@ -463,12 +463,17 @@ class JobDetailsDisplayActivity : AppCompatActivity() {
     }
 
     private fun calculateRating(oldRating : Double, newRating : Double,reviews : Int) :Double{
+        Log.i("TAG", "calculateRating: old : ${oldRating}, new ${newRating}, reviews ${reviews}")
         var oldValue = if(reviews == 1){
             2.5
         }else{
-            ((oldRating * reviews) - 4)/reviews -1
+            ((oldRating * reviews) - 4)/(reviews -1)
         }
-        return ((newRating - oldValue)/reviews) + oldValue
+        Log.i("TAG", "calculateRating: old : ${oldRating}, new ${newRating}, reviews ${reviews}, oldvalue : ${oldValue}")
+        val rating = ((newRating - oldValue)/reviews) + oldValue
+        Log.i("TAG", "calculateRating: old : ${oldRating}, new ${newRating}, reviews ${reviews}")
+        Log.i("TAG", "calculateRating: rating ${rating}")
+        return rating
     }
 
     override fun onDestroy() {
